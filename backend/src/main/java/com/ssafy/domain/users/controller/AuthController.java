@@ -1,4 +1,4 @@
-package com.ssafy.api.controller;
+package com.ssafy.domain.users.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,13 +8,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.api.request.UserLoginPostReq;
-import com.ssafy.api.response.UserLoginPostRes;
-import com.ssafy.api.service.UserService;
+import com.ssafy.domain.users.requestDto.UserLoginPostReq;
+import com.ssafy.domain.users.responseDto.UserLoginPostRes;
+import com.ssafy.domain.users.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
-import com.ssafy.db.entity.User;
-import com.ssafy.db.repository.UserRepositorySupport;
+import com.ssafy.domain.users.entity.User;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

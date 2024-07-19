@@ -1,8 +1,8 @@
-package com.ssafy.db.repository;
+package com.ssafy.domain.users.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.db.entity.QUser;
-import com.ssafy.db.entity.User;
+import com.ssafy.domain.users.entity.User;
 
 import java.util.Optional;
 

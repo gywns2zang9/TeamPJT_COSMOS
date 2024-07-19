@@ -1,4 +1,4 @@
-package com.ssafy.db.entity;
+package com.ssafy.domain.users.entity;
 
 import lombok.Getter;
 import lombok.Setter;

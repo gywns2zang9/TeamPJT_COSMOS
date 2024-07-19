@@ -1,4 +1,4 @@
-package com.ssafy.api.response;
+package com.ssafy.domain.users.responseDto;
 
 import com.ssafy.common.model.response.BaseResponseBody;
 
