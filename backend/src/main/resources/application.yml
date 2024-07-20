@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: A708
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/A708?serverTimezone=UTC&characterEncoding=UTF-8
+    username: ssafy
+    password: ssafyssafy
+
+  jpa:
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 1000
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: create-drop
+
+server:
+  servlet:
+    context-path: /
+  port: '8080'
+
+logging:
+  level:
+    root: info
