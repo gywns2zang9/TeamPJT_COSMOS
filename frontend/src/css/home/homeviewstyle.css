@@ -1,0 +1,55 @@
+#home-card-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+#home-description {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: transparent;
+    width: 50%; 
+}
+#home-text {
+    background-color: transparent;
+}
+#home-text h3 {
+    margin-top: 100%;
+    text-align: center; 
+    background-color: transparent;
+    color: white;
+    font-family: 'Times New Roman', serif;
+    font-size: 50px;
+}
+
+#highlight-word {
+    color: #2F95DC;
+}
+
+#home-img-card {
+    width: 50%;
+    background-color: transparent;
+    position: relative;
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+}
+
+#home-img {
+    display: block;
+    width: 100%;
+    border-radius: 30%;
+    clip-path: inset(10% 0 10% 0);
+}
+
+#start-service {
+    position: absolute;
+    top: 70%;
+    left: 48%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 13px;
+    background-color: transparent; 
+}

@@ -1,0 +1,27 @@
+#navbar {
+    background-color: #0D0220;
+    border-bottom: 2px white solid;
+}
+
+#navbar-container {
+    background-color: transparent !important;;
+    padding: 10px;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    
+}
+
+#nav-brand-name {
+    color: #2F95DC;
+}
+
+#logo-img {
+    width: 2rem;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+#nav-link-contatiner * {
+    color: white;
+}
