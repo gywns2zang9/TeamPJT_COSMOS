@@ -11,7 +11,7 @@ public enum ErrorCode {
     INTERNAL_SERVER(HttpStatus.UNPROCESSABLE_ENTITY, "internal", "server error."),
 
     // Team
-    USER_NOT_FOUND(HttpStatus.UNPROCESSABLE_ENTITY, "UserNotFound", "The specified user does not exist.");
+    TEAM_NOT_JOINED(HttpStatus.UNPROCESSABLE_ENTITY, "Team Not Joined", "the user is not a member of this team.");
 
     private final HttpStatus code;
     private final String body;

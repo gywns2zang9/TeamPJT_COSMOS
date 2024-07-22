@@ -20,4 +20,10 @@ public class ErrorResponse  {
         return new ErrorResponse(errors);
     }
 
+    public static ErrorResponse of(ErrorCode e) {
+        final HashMap<String, String> errors = new HashMap<>();
+        errors.put(e.getBody(), e.getMessage());
+        return new ErrorResponse(errors);
+    }
+
 }
