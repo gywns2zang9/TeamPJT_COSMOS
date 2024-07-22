@@ -22,10 +22,10 @@ public class Study {
     private Long id;
 
     @Column(nullable = false)
-    private Long year;
+    private Integer year;
 
     @Column(nullable = false)
-    private Long month;
+    private Integer month;
 
     @Column(nullable = false)
     private Integer times;

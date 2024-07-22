@@ -20,7 +20,9 @@ public class Code {
 
     private String content;
 
-    private String language;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Language language;
 
     @CreatedDate
     @Column(updatable = false)
