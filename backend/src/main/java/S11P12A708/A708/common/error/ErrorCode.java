@@ -3,15 +3,20 @@ package S11P12A708.A708.common.error;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+
 @Getter
 public enum ErrorCode {
 
     // Global
-    REQUEST_INVALID(HttpStatus.UNPROCESSABLE_ENTITY, "request", "invalid."),
-    INTERNAL_SERVER(HttpStatus.UNPROCESSABLE_ENTITY, "internal", "server error."),
+    REQUEST_INVALID(UNPROCESSABLE_ENTITY, "request", "invalid."),
+    INTERNAL_SERVER(UNPROCESSABLE_ENTITY, "internal", "server error."),
+
+    // User
+    USER_NOT_FOUND(UNPROCESSABLE_ENTITY, "user", "user not found."),
 
     // Team
-    TEAM_NOT_JOINED(HttpStatus.UNPROCESSABLE_ENTITY, "Team Not Joined", "the user is not a member of this team.");
+    TEAM_NOT_FOUND(UNPROCESSABLE_ENTITY, "Team Not Joined", "the user is not a member of this team.");
 
     private final HttpStatus code;
     private final String body;

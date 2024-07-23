@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -22,12 +23,12 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String name;
 
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String teamCode;
 
     @CreatedDate
@@ -46,8 +47,10 @@ public class Team {
     @OneToMany(mappedBy = "team")
     private List<Study> studies = new ArrayList<>();
 
-    public Team(String name) {
+    public Team(String name, String description) {
         this.name = name;
+        this.description = description;
+        this.teamCode = UUID.randomUUID().toString(); // TODO : 랜덤으로만 하는 경우 중복이 발생할 수도
     }
 
 }

@@ -10,6 +10,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
+import static S11P12A708.A708.domain.team.entity.TeamUserRole.LEADER;
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 지연 로딩 proxy 을 위해서
@@ -29,7 +31,7 @@ public class TeamUser {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private TeamUserRole teamCode;
+    private TeamUserRole role;
 
     @CreatedDate
     @Column(updatable = false)
@@ -37,5 +39,15 @@ public class TeamUser {
 
     @LastModifiedDate
     private LocalDateTime modifiedAt;
+
+    public TeamUser(User user, Team team, TeamUserRole role) {
+        this.user = user;
+        this.team = team;
+        this.role = role;
+    }
+
+    public static TeamUser create(User user, Team team) {
+        return new TeamUser(user, team, LEADER);
+    }
 
 }

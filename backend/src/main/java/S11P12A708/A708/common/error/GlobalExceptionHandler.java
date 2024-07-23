@@ -20,12 +20,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
+        log.error(e.getMessage(), e);
         final ErrorResponse errorResponse = ErrorResponse.of(e);
         return new ResponseEntity<>(errorResponse, e.getHttpStatus());
     }
 
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
+        log.error(e.getMessage(), e);
         final ErrorResponse errorResponse = ErrorResponse.of(INTERNAL_SERVER);
         return new ResponseEntity<>(errorResponse, INTERNAL_SERVER.getCode());
     }
@@ -39,6 +41,7 @@ public class GlobalExceptionHandler {
             HttpRequestMethodNotSupportedException.class
     })
     public ResponseEntity<ErrorResponse> handleRequestException(Exception e) {
+        log.error(e.getMessage(), e);
         final ErrorResponse errorResponse = ErrorResponse.of(REQUEST_INVALID);
         return new ResponseEntity<>(errorResponse, REQUEST_INVALID.getCode());
     }
