@@ -5,6 +5,8 @@ import static S11P12A708.A708.domain.team.entity.QTeamUser.teamUser;
 import static S11P12A708.A708.domain.user.entity.QUser.user;
 
 import S11P12A708.A708.domain.team.entity.Team;
+import S11P12A708.A708.domain.team.entity.TeamUser;
+import S11P12A708.A708.domain.team.entity.TeamUserRole;
 import S11P12A708.A708.domain.user.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +43,24 @@ public class TeamQueryRepositoryImpl implements TeamQueryRepository {
                 .where(teamUser.team.id.eq(id))
                 .fetch()
                 .stream().toList();
+    }
+
+    @Override
+    public TeamUser findLeaderUserByTeamId(Long teamId) {
+        // SELECT * FROM team_user where team_id = 1 and role = "LEADER";
+        return queryFactory
+                .selectFrom(teamUser)
+                .where(teamUser.team.id.eq(teamId), teamUser.role.eq(TeamUserRole.LEADER))
+                .fetchOne();
+    }
+
+    @Override
+    public TeamUser findTeamUserByIds(Long teamId, Long userId) {
+        // SELECT * FROM team_user where user_id = 1 and team_id = 1;
+        return queryFactory
+                .selectFrom(teamUser)
+                .where(teamUser.user.id.eq(userId), teamUser.team.id.eq(teamId))
+                .fetchOne();
     }
 
 }

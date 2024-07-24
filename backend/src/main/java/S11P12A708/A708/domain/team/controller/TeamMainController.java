@@ -1,6 +1,7 @@
 package S11P12A708.A708.domain.team.controller;
 
 import S11P12A708.A708.domain.team.request.TeamInfoRequest;
+import S11P12A708.A708.domain.team.request.TeamLeaderRequest;
 import S11P12A708.A708.domain.team.response.TeamDetailResponse;
 import S11P12A708.A708.domain.team.response.TeamMemberResponse;
 import S11P12A708.A708.domain.team.service.TeamMainService;
@@ -39,6 +40,21 @@ public class TeamMainController {
             @RequestBody TeamInfoRequest request) {
         teamMainService.updateTeamDetail(teamId, request);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/teams/{teamId}/leader")
+    public ResponseEntity<Void> updateTeamLeader(
+            @PathVariable("teamId") Long teamId,
+            @RequestBody TeamLeaderRequest request) {
+        teamMainService.updateTeamLeader(teamId, request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/teams/{teamId}/leader")
+    public ResponseEntity<Boolean> checkTeamLeader(@PathVariable("teamId") Long teamId) {
+        final Long loginId = 1L; // TODO : 로그인된 유저 정보 가져오기
+        final Boolean isLeader = teamMainService.checkTeamLeader(teamId, loginId);
+        return new ResponseEntity<>(isLeader, HttpStatus.OK);
     }
 
 }

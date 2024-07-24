@@ -2,9 +2,11 @@ package S11P12A708.A708.domain.team.service;
 
 import S11P12A708.A708.common.error.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.entity.Team;
+import S11P12A708.A708.domain.team.entity.TeamUser;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
 import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
 import S11P12A708.A708.domain.team.request.TeamInfoRequest;
+import S11P12A708.A708.domain.team.request.TeamLeaderRequest;
 import S11P12A708.A708.domain.team.response.TeamDetailResponse;
 import S11P12A708.A708.domain.team.response.TeamMemberResponse;
 import S11P12A708.A708.domain.user.entity.User;
@@ -13,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static S11P12A708.A708.domain.team.entity.TeamUserRole.LEADER;
+import static S11P12A708.A708.domain.team.entity.TeamUserRole.MEMBER;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +52,23 @@ public class TeamMainService {
 
         final Team updateTeam = Team.of(teamId, request);
         teamRepository.save(updateTeam);
+    }
+
+    public void updateTeamLeader(final Long teamId, final TeamLeaderRequest request) {
+        validateTeamId(teamId);
+
+        // TODO : 로그인한 유저가 리더인지 확인
+        final TeamUser leaderTeamUser = teamQueryRepository.findLeaderUserByTeamId(teamId);
+        final TeamUser updateTeamUser = teamQueryRepository.findTeamUserByIds(teamId, request.getUserId());
+
+        leaderTeamUser.changeRole(MEMBER);
+        updateTeamUser.changeRole(LEADER);
+    }
+
+    public Boolean checkTeamLeader(final Long teamId, final Long loginId) {
+        final TeamUser teamUser = teamQueryRepository.findLeaderUserByTeamId(teamId);
+
+        return teamUser.isLeader(loginId);
     }
 
     private List<TeamMemberResponse> convertUsersToTeamMemberResponse(final List<User> users) {

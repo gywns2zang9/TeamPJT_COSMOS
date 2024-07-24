@@ -10,8 +10,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
-import static S11P12A708.A708.domain.team.entity.TeamUserRole.LEADER;
-
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 지연 로딩 proxy 을 위해서
@@ -46,8 +44,12 @@ public class TeamUser {
         this.role = role;
     }
 
-    public static TeamUser create(User user, Team team) {
-        return new TeamUser(user, team, LEADER);
+    public Boolean isLeader(final Long userId) {
+        return this.user.getId().equals(userId);
+    }
+
+    public void changeRole(final TeamUserRole role) {
+        this.role = role;
     }
 
 }

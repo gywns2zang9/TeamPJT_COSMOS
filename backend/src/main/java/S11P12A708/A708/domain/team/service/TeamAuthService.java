@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+import static S11P12A708.A708.domain.team.entity.TeamUserRole.LEADER;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -39,7 +41,7 @@ public class TeamAuthService {
     public void createTeam(Long userId, TeamInfoRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Team team = teamRepository.save(requestToEntity(request));
-        teamUserRepository.save(TeamUser.create(user, team));
+        teamUserRepository.save(new TeamUser(user, team, LEADER));
     }
 
     public TeamCodeResponse getTeamCode(Long teamId) {
