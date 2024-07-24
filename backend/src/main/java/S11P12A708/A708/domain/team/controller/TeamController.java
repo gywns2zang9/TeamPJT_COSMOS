@@ -42,4 +42,13 @@ public class TeamController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/teams/auth/{teamId}/teamCode")
+    public ResponseEntity<TeamCodeResponse> getTeamCode(
+            // TODO: user token에서 유저 정보 받아오는 과정 필요
+            @PathVariable Long teamId) {
+
+        final TeamCodeResponse response = teamService.getTeamCode(teamId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

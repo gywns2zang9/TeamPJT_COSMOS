@@ -2,6 +2,7 @@ package S11P12A708.A708.domain.team.entity;
 
 import S11P12A708.A708.domain.calendar.entity.Calendar;
 import S11P12A708.A708.domain.study.entity.Study;
+import S11P12A708.A708.domain.team.service.TeamCodeGenerator;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,7 +13,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Entity
@@ -28,7 +28,7 @@ public class Team {
 
     private String description;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String teamCode;
 
     @CreatedDate
@@ -50,7 +50,10 @@ public class Team {
     public Team(String name, String description) {
         this.name = name;
         this.description = description;
-        this.teamCode = UUID.randomUUID().toString(); // TODO : 랜덤으로만 하는 경우 중복이 발생할 수도
+    }
+
+    public String setTeamCode(TeamCodeGenerator generator) {
+        return this.teamCode = generator.generate(this.id);
     }
 
 }
