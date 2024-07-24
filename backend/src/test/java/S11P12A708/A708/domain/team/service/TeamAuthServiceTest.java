@@ -29,7 +29,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class TeamServiceTest {
+class TeamAuthServiceTest {
 
     private final TeamRepository teamRepository = BDDMockito.mock(TeamRepository.class);
     private final TeamUserRepository teamUserRepository  = BDDMockito.mock(TeamUserRepository.class);
@@ -38,7 +38,7 @@ class TeamServiceTest {
 
     TeamCodeGenerator generator = new TeamCodeUUIDGenerator();
 
-    private final TeamService teamService = new TeamService(
+    private final TeamAuthService teamAuthService = new TeamAuthService(
             teamRepository,
             teamUserRepository,
             userRepository,
@@ -59,7 +59,7 @@ class TeamServiceTest {
             given(teamQueryRepository.findAllByUserId(DODO.getId())).willReturn(Optional.of(teams));
 
             // when
-            List<TeamResponse> results = teamService.getTeamsByUserId(DODO.getId());
+            List<TeamResponse> results = teamAuthService.getTeamsByUserId(DODO.getId());
 
             // then
             assertThat(results.get(0).getId()).isEqualTo(TEAM1.getId());
@@ -87,7 +87,7 @@ class TeamServiceTest {
             given(teamRepository.save(TEAM1.생성())).willReturn(TEAM1.생성());
 
             // when & then
-            assertDoesNotThrow(() -> teamService.createTeam(DODO.getId(),
+            assertDoesNotThrow(() -> teamAuthService.createTeam(DODO.getId(),
                     new TeamCreateRequest(
                             TEAM1.getGroupName(),
                             TEAM1.getDescription())));
@@ -111,7 +111,7 @@ class TeamServiceTest {
             given(teamRepository.findById(TEAM1.getId())).willReturn(Optional.of(TEAM1.생성()));
 
             // when
-            TeamCodeResponse response = teamService.getTeamCode(TEAM1.getId());
+            TeamCodeResponse response = teamAuthService.getTeamCode(TEAM1.getId());
 
             // then
             assertAll(() -> {
@@ -129,7 +129,7 @@ class TeamServiceTest {
             given(teamRepository.findById(TEAM1.getId())).willReturn(Optional.of(team1));
 
             // when
-            TeamCodeResponse response = teamService.getTeamCode(TEAM1.getId());
+            TeamCodeResponse response = teamAuthService.getTeamCode(TEAM1.getId());
 
             // then
             assertThat(response.getTeamCode()).isEqualTo(team1.getTeamCode());

@@ -1,6 +1,6 @@
 package S11P12A708.A708.domain.team.controller;
 
-import S11P12A708.A708.domain.team.service.TeamService;
+import S11P12A708.A708.domain.team.service.TeamAuthService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -9,11 +9,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(TeamController.class)
-class TeamControllerTest {
+@WebMvcTest(TeamAuthController.class)
+class TeamAuthControllerTest {
 
     @MockBean
-    private TeamService teamService;
+    private TeamAuthService teamAuthService;
 
     @Autowired
     private MockMvc mockMvc;
