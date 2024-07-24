@@ -2,8 +2,10 @@ package S11P12A708.A708.domain.team.repository.query;
 
 import static S11P12A708.A708.domain.team.entity.QTeam.team;
 import static S11P12A708.A708.domain.team.entity.QTeamUser.teamUser;
+import static S11P12A708.A708.domain.user.entity.QUser.user;
 
 import S11P12A708.A708.domain.team.entity.Team;
+import S11P12A708.A708.domain.user.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -27,6 +29,18 @@ public class TeamQueryRepositoryImpl implements TeamQueryRepository {
                 .where(team.id.eq(teamUser.team.id))
                 .fetch()
                 .stream().toList());
+    }
+
+    @Override
+    public List<User> findUsersByTeamId(Long id) {
+        //SELECT u.* FROM user u JOIN teamuser tu ON u.id = tu.user_id WHERE tu.team_id = 1;
+        return queryFactory
+                .selectFrom(user)
+                .join(teamUser)
+                .on(teamUser.user.id.eq(user.id))
+                .where(teamUser.team.id.eq(id))
+                .fetch()
+                .stream().toList();
     }
 
 }
