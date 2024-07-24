@@ -2,6 +2,7 @@ package S11P12A708.A708.domain.team.entity;
 
 import S11P12A708.A708.domain.calendar.entity.Calendar;
 import S11P12A708.A708.domain.study.entity.Study;
+import S11P12A708.A708.domain.team.request.TeamInfoRequest;
 import S11P12A708.A708.domain.team.service.TeamCodeGenerator.TeamCodeGenerator;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -47,13 +48,26 @@ public class Team {
     @OneToMany(mappedBy = "team")
     private List<Study> studies = new ArrayList<>();
 
-    public Team(String name, String description) {
+    public Team(Long id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
 
+    public Team(String name, String description) {
+        this(null, name, description);
+    }
+
     public String setTeamCode(TeamCodeGenerator generator) {
         return this.teamCode = generator.generate(this.id);
+    }
+
+    public static Team of(Long teamId, TeamInfoRequest request) {
+        return new Team(
+                teamId,
+                request.getGroupName(),
+                request.getDescription()
+        );
     }
 
 }

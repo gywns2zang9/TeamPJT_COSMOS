@@ -1,5 +1,6 @@
 package S11P12A708.A708.domain.team.controller;
 
+import S11P12A708.A708.domain.team.request.TeamInfoRequest;
 import S11P12A708.A708.domain.team.response.TeamDetailResponse;
 import S11P12A708.A708.domain.team.response.TeamMemberResponse;
 import S11P12A708.A708.domain.team.service.TeamMainService;
@@ -8,9 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,6 +31,14 @@ public class TeamMainController {
     public ResponseEntity<List<TeamMemberResponse>> teamMembers(@PathVariable("teamId") Long teamId) {
         final List<TeamMemberResponse> response = teamMainService.getTeamMembers(teamId);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PatchMapping("/teams/{teamId}")
+    public ResponseEntity<Void> updateTeamDetail(
+            @PathVariable("teamId") Long teamId,
+            @RequestBody TeamInfoRequest request) {
+        teamMainService.updateTeamDetail(teamId, request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

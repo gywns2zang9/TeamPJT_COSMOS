@@ -1,6 +1,6 @@
 package S11P12A708.A708.domain.team.controller;
 
-import S11P12A708.A708.domain.team.request.TeamCreateRequest;
+import S11P12A708.A708.domain.team.request.TeamInfoRequest;
 import S11P12A708.A708.domain.team.response.TeamCodeResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
 import S11P12A708.A708.domain.team.service.TeamAuthService;
@@ -33,7 +33,7 @@ public class TeamAuthController {
     public ResponseEntity<Void> teamList(
             // TODO: user token에서 유저 정보 받아오는 과정 필요
             @PathVariable Long userId,
-            @Valid @RequestBody TeamCreateRequest request) {
+            @Valid @RequestBody TeamInfoRequest request) {
 
         teamAuthService.createTeam(userId, request);
         return new ResponseEntity<>(HttpStatus.OK);

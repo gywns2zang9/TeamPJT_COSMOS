@@ -7,18 +7,20 @@ import S11P12A708.A708.domain.team.entity.TeamUser;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
 import S11P12A708.A708.domain.team.repository.TeamUserRepository;
 import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
-import S11P12A708.A708.domain.team.request.TeamCreateRequest;
+import S11P12A708.A708.domain.team.request.TeamInfoRequest;
 import S11P12A708.A708.domain.team.response.TeamCodeResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
 import S11P12A708.A708.domain.team.service.TeamCodeGenerator.TeamCodeGenerator;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TeamAuthService {
 
     private final TeamRepository teamRepository;
@@ -34,7 +36,7 @@ public class TeamAuthService {
         return teams.stream().map(TeamResponse::of).toList();
      }
 
-    public void createTeam(Long userId, TeamCreateRequest request) {
+    public void createTeam(Long userId, TeamInfoRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Team team = teamRepository.save(requestToEntity(request));
         teamUserRepository.save(TeamUser.create(user, team));
@@ -56,7 +58,7 @@ public class TeamAuthService {
         return userId.equals(AuthId);
     }
 
-    private Team requestToEntity(TeamCreateRequest request) {
+    private Team requestToEntity(TeamInfoRequest request) {
         return new Team(
                 request.getGroupName(),
                 request.getDescription()

@@ -4,7 +4,7 @@ import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
 import S11P12A708.A708.domain.team.repository.TeamUserRepository;
 import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
-import S11P12A708.A708.domain.team.request.TeamCreateRequest;
+import S11P12A708.A708.domain.team.request.TeamInfoRequest;
 import S11P12A708.A708.domain.team.response.TeamCodeResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
 import S11P12A708.A708.domain.team.service.TeamCodeGenerator.TeamCodeGenerator;
@@ -90,7 +90,7 @@ class TeamAuthServiceTest {
 
             // when & then
             assertDoesNotThrow(() -> teamAuthService.createTeam(DODO.getId(),
-                    new TeamCreateRequest(
+                    new TeamInfoRequest(
                             TEAM1.getGroupName(),
                             TEAM1.getDescription())));
         }
