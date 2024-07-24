@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface TeamQueryRepository {
 
-    Optional<List<Team>> findAllByUserId(Long userId);
+    Optional<List<Team>> findTeamsByUserId(Long userId);
 
 }

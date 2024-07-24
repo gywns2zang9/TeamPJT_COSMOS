@@ -18,11 +18,13 @@ public class TeamQueryRepositoryImpl implements TeamQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Optional<List<Team>> findAllByUserId(Long userId) {
-        return Optional.ofNullable(queryFactory
+    public Optional<List<Team>> findTeamsByUserId(Long userId) {
+        // select * from team t join team_user tu on tu.user_id=1 where t.id = tu.team_id
+        return Optional.of(queryFactory
                 .selectFrom(team)
                 .join(teamUser)
                 .on(teamUser.user.id.eq(userId))
+                .where(team.id.eq(teamUser.team.id))
                 .fetch()
                 .stream().toList());
     }

@@ -7,6 +7,8 @@ import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
 import S11P12A708.A708.domain.team.request.TeamCreateRequest;
 import S11P12A708.A708.domain.team.response.TeamCodeResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
+import S11P12A708.A708.domain.team.service.TeamCodeGenerator.TeamCodeGenerator;
+import S11P12A708.A708.domain.team.service.TeamCodeGenerator.TeamCodeUUIDGenerator;
 import S11P12A708.A708.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -56,7 +58,7 @@ class TeamAuthServiceTest {
             List<Team> teams = new ArrayList<>();
             teams.add(TEAM1.생성());
 
-            given(teamQueryRepository.findAllByUserId(DODO.getId())).willReturn(Optional.of(teams));
+            given(teamQueryRepository.findTeamsByUserId(DODO.getId())).willReturn(Optional.of(teams));
 
             // when
             List<TeamResponse> results = teamAuthService.getTeamsByUserId(DODO.getId());

@@ -10,6 +10,7 @@ import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
 import S11P12A708.A708.domain.team.request.TeamCreateRequest;
 import S11P12A708.A708.domain.team.response.TeamCodeResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
+import S11P12A708.A708.domain.team.service.TeamCodeGenerator.TeamCodeGenerator;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class TeamAuthService {
     private final TeamCodeGenerator generator;
 
     public List<TeamResponse> getTeamsByUserId(Long userId) throws RuntimeException {
-        final List<Team> teams = teamQueryRepository.findAllByUserId(userId)
+        final List<Team> teams = teamQueryRepository.findTeamsByUserId(userId)
                 .orElseThrow(TeamNotFoundException::new);
         return teams.stream().map(TeamResponse::of).toList();
      }
