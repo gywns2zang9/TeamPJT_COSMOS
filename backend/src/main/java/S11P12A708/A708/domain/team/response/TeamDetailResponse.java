@@ -16,12 +16,12 @@ public class TeamDetailResponse {
     private final String description;
     private final List<TeamMemberResponse> members;
 
-    static public TeamDetailResponse of(Team team, List<User> users) {
+    static public TeamDetailResponse of(final Team team, final List<TeamMemberResponse> members) {
         return new TeamDetailResponse(
                 team.getId(),
                 team.getName(),
                 team.getDescription(),
-                users.stream().map(TeamMemberResponse::of).toList());
+                members);
     }
 
 }
