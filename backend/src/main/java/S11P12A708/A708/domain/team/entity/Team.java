@@ -2,6 +2,7 @@ package S11P12A708.A708.domain.team.entity;
 
 import S11P12A708.A708.domain.calendar.entity.Calendar;
 import S11P12A708.A708.domain.study.entity.Study;
+import S11P12A708.A708.domain.team.service.TeamCodeGenerator;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,12 +23,12 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String name;
 
     private String description;
 
-    @Column(nullable = false)
+    @Column(unique = true)
     private String teamCode;
 
     @CreatedDate
@@ -46,8 +47,13 @@ public class Team {
     @OneToMany(mappedBy = "team")
     private List<Study> studies = new ArrayList<>();
 
-    public Team(String name) {
+    public Team(String name, String description) {
         this.name = name;
+        this.description = description;
+    }
+
+    public String setTeamCode(TeamCodeGenerator generator) {
+        return this.teamCode = generator.generate(this.id);
     }
 
 }
