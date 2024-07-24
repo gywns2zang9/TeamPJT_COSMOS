@@ -1,6 +1,7 @@
 package S11P12A708.A708.domain.team.controller;
 
 import S11P12A708.A708.domain.team.request.TeamCreateRequest;
+import S11P12A708.A708.domain.team.response.TeamCodeResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
 import S11P12A708.A708.domain.team.service.TeamService;
 import S11P12A708.A708.domain.user.entity.User;
