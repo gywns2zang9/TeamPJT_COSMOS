@@ -4,9 +4,6 @@ import S11P12A708.A708.domain.team.request.TeamCreateRequest;
 import S11P12A708.A708.domain.team.response.TeamCodeResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
 import S11P12A708.A708.domain.team.service.TeamService;
-import S11P12A708.A708.domain.user.entity.User;
-import S11P12A708.A708.domain.user.entity.UserType;
-import S11P12A708.A708.domain.user.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +19,6 @@ import java.util.List;
 public class TeamController {
 
     private final TeamService teamService;
-    private final UserRepository userRepository;
 
     @GetMapping("/users/{userId}/groups")
     public ResponseEntity<List<TeamResponse>> teamList(
