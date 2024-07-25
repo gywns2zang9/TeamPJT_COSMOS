@@ -2,6 +2,7 @@ package S11P12A708.A708.domain.auth.service;
 
 import S11P12A708.A708.common.error.exception.UserNotFoundException;
 import S11P12A708.A708.common.util.JwtTokenUtil;
+import S11P12A708.A708.domain.auth.request.AuthUserDto;
 import S11P12A708.A708.domain.auth.request.LoginRequest;
 import S11P12A708.A708.domain.auth.request.SignUpRequest;
 import S11P12A708.A708.domain.auth.response.LoginResponse;
@@ -12,6 +13,9 @@ import S11P12A708.A708.domain.user.response.UserInfo;
 import S11P12A708.A708.domain.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -59,11 +63,7 @@ public class AuthService {
         throw new RuntimeException("Invalid email or password");
     }
 
-    public String refreshToken(String refreshToken) {
-        if (jwtTokenUtil.validateToken(refreshToken)) {
-            String email = jwtTokenUtil.getEmailFromToken(refreshToken);
-            return jwtTokenUtil.createAccessToken(email);
-        }
-        throw new RuntimeException("Invalid refresh token");
+    public String refreshToken(AuthUserDto authUser) {
+        return jwtTokenUtil.createAccessToken(authUser.getEmail());
     }
 }

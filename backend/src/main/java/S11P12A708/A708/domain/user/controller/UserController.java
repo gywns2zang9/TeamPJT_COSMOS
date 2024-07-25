@@ -1,5 +1,7 @@
 package S11P12A708.A708.domain.user.controller;
 
+import S11P12A708.A708.domain.auth.annotation.AuthUser;
+import S11P12A708.A708.domain.auth.request.AuthUserDto;
 import S11P12A708.A708.domain.user.response.UserInfo;
 import S11P12A708.A708.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +20,9 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<UserInfo> getUserInfo(@PathVariable Long userId) {
+    public ResponseEntity<UserInfo> getUserInfo(@AuthUser AuthUserDto authUser, @PathVariable Long userId) {
         log.info("정보 불러오기");
-        UserInfo userInfo = userService.getUserInfoByUserId(userId);
+        UserInfo userInfo = userService.getUserInfoByUserId(authUser, userId);
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 }

@@ -51,6 +51,8 @@ public class JwtTokenUtil {
     }
 
     public String getEmailFromToken(String token) {
+        log.info("getEmail");
+        log.info(token);
         Claims claims = Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
