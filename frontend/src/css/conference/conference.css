@@ -1,0 +1,165 @@
+.conference {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 10px;
+  min-width: 800px;
+  min-height: 600px;
+}
+
+.video {
+  display: flex; /* 플렉스 박스 사용 */
+  justify-content: center; /* 가로 방향 중앙 정렬 */
+  align-items: center; /* 세로 방향 중앙 정렬 */
+  flex: 0.2; /* 플렉스 비율 설정 */
+  width: 100%; /* 가로 폭을 부모 컨테이너에 맞춤 */
+  height: 100vh; /* 높이를 화면 전체 높이에 맞춤 */
+  margin: 0 auto; /* 양옆 자동 여백 설정으로 중앙 정렬 */
+  transition: max-height 0.3s ease-in-out;
+  overflow: hidden;
+}
+
+.video.open {
+  max-height: 100%; /* 비디오 컨테이너가 열릴 때 최대 높이 */
+}
+
+.video.closed {
+  max-height: 0; /* 비디오 컨테이너가 닫힐 때 높이 0 */
+}
+
+.code-paint-space {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.left-space {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #0e253d;
+  color: white; /* 텍스트 색상 */
+  padding: 10px; /* 내부 여백 */
+  border-radius: 8px; /* 모서리 둥글게 */
+}
+
+.code-upper-space {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.code-space {
+  flex: 1;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  color: black;
+}
+
+.right-space {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #0e253d;
+  color: white; /* 텍스트 색상 */
+  padding: 10px; /* 내부 여백 */
+  border-radius: 8px; /* 모서리 둥글게 */
+}
+
+.paint-upper-space {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.paint-space {
+  flex: 1;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  color: black;
+}
+
+.paint-lower-space {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.code-lower-space {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.button {
+  margin-right: 10px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #2f5074;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.button:hover {
+  background-color: #3a6695;
+}
+
+.button-share {
+  margin-right: 10px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #0953a2;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.button-share:hover {
+  background-color: #1664b7;
+}
+
+.button-quit {
+  margin-right: 10px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #be1515;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.button-quit:hover {
+  background-color: #ff1f1f;
+}
+
+.video-volume {
+  display: flex;
+  padding: 0px 10px;
+  gap: 10px;
+}
+
+.share-quit-buttons {
+  display: flex;
+}
+
+.volume-slider {
+  padding: 0px 10px;
+}
+
+/* 미디어 쿼리: 화면 너비가 900픽셀 이하일 때 .volume-slider 숨기기 */
+@media (max-width: 900px) {
+  .volume-slider {
+    display: none;
+  }
+}
