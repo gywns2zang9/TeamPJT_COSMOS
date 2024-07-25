@@ -1,17 +1,23 @@
 import React from "react";
-import HomeView from "./views/HomeView";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from './components/home/navBar.jsx';
 import Footer from './components/home/footer.jsx';
-
+import HomeRoutes from './routes/homeRoutes.js';
+import GroupRoutes from './routes/groupRoutes.js';
 import './App.css';
 
 function App() {
   return (
-    <div className="App" id="App">
-      <NavBar />
-      <HomeView />
-      <Footer />
-    </div>
+    <Router>
+      <div className="App" id="App">
+        <NavBar />
+        <Routes>
+          <Route path="*" element={<HomeRoutes />} />
+          <Route path="/group/*" element={<GroupRoutes />} />
+        </Routes>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

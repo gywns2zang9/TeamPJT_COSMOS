@@ -1,17 +1,14 @@
-// #import# react
 import React from "react";
-
-// #import# bootstrap
-import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import '../../css/home/navbar/style.css';
-
-// #import# logo image
 import logo from '../../assets/media/logo.jpeg';
 
-// Main Component
+// 로그인된 사용자면 로그아웃, 마이페이지가 보이고
+// 비로그인 사용자면 로그인, 회원가입이 보이게 하기
+
 function NavBar(props) {
     return (
         <>
