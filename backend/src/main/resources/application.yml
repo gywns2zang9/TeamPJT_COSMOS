@@ -4,9 +4,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/A708?serverTimezone=UTC&characterEncoding=UTF-8
-    username: ssafy
-    password: ssafyssafy
+    url: ${DB_URL}
+    username: ${DB_USER_NAME}
+    password: ${DB_PASSWORD}
 
   jpa:
     show-sql: true
@@ -17,7 +17,7 @@ spring:
         default_batch_fetch_size: 1000
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 
 server:
   servlet:
@@ -27,3 +27,10 @@ server:
 logging:
   level:
     root: info
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access:
+    expiration: 3600000
+  refresh:
+    expiration: 604800000

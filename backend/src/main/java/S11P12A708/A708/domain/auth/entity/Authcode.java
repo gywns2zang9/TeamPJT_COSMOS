@@ -1,5 +1,6 @@
-package S11P12A708.A708.domain.user.entity;
+package S11P12A708.A708.domain.auth.entity;
 
+import S11P12A708.A708.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
