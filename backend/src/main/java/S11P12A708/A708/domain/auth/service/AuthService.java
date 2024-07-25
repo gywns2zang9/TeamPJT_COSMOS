@@ -39,7 +39,7 @@ public class AuthService {
 
     // 로그인 테스트용
     public boolean signUp(SignUpRequest req) {
-        User user = userService.getUserInfoByEmail(req.getEmail())
+        User user = userService.getUserByEmail(req.getEmail())
                 .orElse(new User(req.getEmail(), req.getPassword(), UserType.NORMAL, req.getNickName()));
 
         user.hashPassword(bCryptPasswordEncoder);
@@ -49,7 +49,7 @@ public class AuthService {
     }
 
     public LoginResponse login(LoginRequest req) {
-        User user = userService.getUserInfoByEmail(req.getEmail()).orElseThrow(UserNotFoundException::new);
+        User user = userService.getUserByEmail(req.getEmail()).orElseThrow(UserNotFoundException::new);
         boolean userCheck = user.checkPassword(req.getPassword(), bCryptPasswordEncoder);
 
         if (userCheck) {

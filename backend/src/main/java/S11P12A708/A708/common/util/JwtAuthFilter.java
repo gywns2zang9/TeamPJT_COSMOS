@@ -41,7 +41,7 @@ public class JwtAuthFilter implements Filter {
 
         if (token != null && jwtTokenUtil.validateToken(token)) {
             String email = jwtTokenUtil.getEmailFromToken(token);
-            User user = userService.getUserInfoByEmail(email).orElseThrow(UserNotFoundException::new);
+            User user = userService.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
             Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

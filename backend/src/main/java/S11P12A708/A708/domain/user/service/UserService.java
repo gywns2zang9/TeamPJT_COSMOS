@@ -29,7 +29,7 @@ public class UserService {
         throw new UserInvalidException();
     }
 
-    public Optional<User> getUserInfoByEmail(String email) throws RuntimeException {
+    public Optional<User> getUserByEmail(String email) throws RuntimeException {
         return userRepository.findByEmail(email);
     }
 }
