@@ -21,7 +21,6 @@ public class UserService {
 
     public UserInfo getUserInfoByUserId(AuthUserDto authUser, Long userId) throws RuntimeException {
         final User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        log.info(String.valueOf(authUser.getId()));
         if (Objects.equals(authUser.getId(), userId)) return new UserInfo(user);
 
         throw new UserInvalidException();

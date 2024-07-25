@@ -13,7 +13,6 @@ import S11P12A708.A708.domain.user.repository.UserRepository;
 import S11P12A708.A708.domain.user.response.UserInfo;
 import S11P12A708.A708.domain.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,19 +20,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     private final PasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public AuthService(PasswordEncoder bCryptPasswordEncoder) {
+    public AuthService(PasswordEncoder bCryptPasswordEncoder, JwtTokenUtil jwtTokenUtil,
+                       UserService userService, UserRepository userRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     // 로그인 테스트용

@@ -16,12 +16,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping("/users/{userId}")
     public ResponseEntity<UserInfo> getUserInfo(@AuthUser AuthUserDto authUser, @PathVariable Long userId) {
-        log.info("정보 불러오기");
         UserInfo userInfo = userService.getUserInfoByUserId(authUser, userId);
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
