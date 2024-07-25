@@ -23,13 +23,13 @@ public class TeamMainController {
     private final UserRepository userRepository;
 
     @GetMapping("/teams/{teamId}")
-    public ResponseEntity<TeamDetailResponse> teamDetail(@PathVariable("teamId") Long teamId) {
+    public ResponseEntity<TeamDetailResponse> getTeamDetail(@PathVariable("teamId") Long teamId) {
         final TeamDetailResponse response = teamMainService.getTeamDetail(teamId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/teams/{teamId}/users")
-    public ResponseEntity<List<TeamMemberResponse>> teamMembers(@PathVariable("teamId") Long teamId) {
+    public ResponseEntity<List<TeamMemberResponse>> getTeamMembers(@PathVariable("teamId") Long teamId) {
         final List<TeamMemberResponse> response = teamMainService.getTeamMembers(teamId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

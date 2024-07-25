@@ -21,7 +21,7 @@ public class TeamAuthController {
     private final TeamAuthService teamAuthService;
 
     @GetMapping("/users/{userId}/groups")
-    public ResponseEntity<List<TeamResponse>> teamList(
+    public ResponseEntity<List<TeamResponse>> getTeamList(
             // TODO: user token에서 유저 정보 받아오는 과정 필요
             @PathVariable Long userId) {
 
@@ -30,7 +30,7 @@ public class TeamAuthController {
     }
 
     @PostMapping("/users/{userId}/groups")
-    public ResponseEntity<Void> teamList(
+    public ResponseEntity<Void> createTeam(
             // TODO: user token에서 유저 정보 받아오는 과정 필요
             @PathVariable Long userId,
             @Valid @RequestBody TeamInfoRequest request) {

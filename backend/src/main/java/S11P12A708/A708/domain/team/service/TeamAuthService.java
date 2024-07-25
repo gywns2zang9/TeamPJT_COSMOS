@@ -33,8 +33,7 @@ public class TeamAuthService {
     private final TeamCodeGenerator generator;
 
     public List<TeamResponse> getTeamsByUserId(Long userId) throws RuntimeException {
-        final List<Team> teams = teamQueryRepository.findTeamsByUserId(userId)
-                .orElseThrow(TeamNotFoundException::new);
+        final List<Team> teams = teamQueryRepository.findTeamsByUserId(userId).orElse(List.of());
         return teams.stream().map(TeamResponse::of).toList();
      }
 

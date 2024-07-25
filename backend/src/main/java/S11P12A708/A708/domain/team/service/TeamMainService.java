@@ -82,6 +82,7 @@ public class TeamMainService {
             if(isNotEmpty) throw new LeaderLeaveException();
 
             teamRepository.deleteById(teamId); // 비어 있으므로 팀 제거
+            // TODO : 팀내의 폴더 및 파일 등 추가 정보들도 제거 필요
         }
 
         teamUserRepository.deleteById(teamUser.getId());
