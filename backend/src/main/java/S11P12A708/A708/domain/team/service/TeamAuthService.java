@@ -18,7 +18,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TeamService {
+public class TeamAuthService {
 
     private final TeamRepository teamRepository;
     private final TeamUserRepository teamUserRepository;
