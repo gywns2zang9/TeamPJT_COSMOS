@@ -63,7 +63,7 @@ public class AuthService {
         throw new RuntimeException("Invalid email or password");
     }
 
-    public String refreshToken(AuthUserDto authUser) {
+    public String getRefreshToken(AuthUserDto authUser) {
         return jwtTokenUtil.createAccessToken(authUser.getEmail());
     }
 }
