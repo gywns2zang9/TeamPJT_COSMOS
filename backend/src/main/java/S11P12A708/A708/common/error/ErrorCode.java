@@ -15,6 +15,7 @@ public enum ErrorCode {
     // User
     USER_NOT_FOUND(UNPROCESSABLE_ENTITY, "user", "user not found."),
     USER_INVALID(UNPROCESSABLE_ENTITY, "user", "incorrect user request error"),
+    INVALID_PASSWORD(UNPROCESSABLE_ENTITY, "user", "incorrect password"),
 
     // Team
     TEAM_NOT_FOUND(UNPROCESSABLE_ENTITY, "Team Not Joined", "the user is not a member of this team.");

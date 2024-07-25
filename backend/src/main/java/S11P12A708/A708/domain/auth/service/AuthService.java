@@ -1,5 +1,6 @@
 package S11P12A708.A708.domain.auth.service;
 
+import S11P12A708.A708.common.error.exception.InvalidPasswordException;
 import S11P12A708.A708.common.error.exception.UserNotFoundException;
 import S11P12A708.A708.common.util.JwtTokenUtil;
 import S11P12A708.A708.domain.auth.request.AuthUserDto;
@@ -60,7 +61,7 @@ public class AuthService {
             return new LoginResponse(accessToken, refreshToken, userInfo);
         }
 
-        throw new RuntimeException("Invalid email or password");
+        throw new InvalidPasswordException();
     }
 
     public String getRefreshToken(AuthUserDto authUser) {
