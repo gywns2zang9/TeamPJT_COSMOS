@@ -27,7 +27,7 @@ const UserInfo = () => {
       <div id="info-title">내 정보</div>
       <div id="info-box">
         <div id="img-group">
-          <img id="info-img" src="Ellipse 363_147.png" alt="profile-img" />
+          <img id="info-img" src="" alt="profile-img" />
         </div>
 
         <div id="info-group">

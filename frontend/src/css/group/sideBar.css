@@ -12,12 +12,76 @@
     position: relative;
 }
 
+
 /* 사이드바가 닫힐 때의 스타일 */
 .sidebar.closed {
     width: 50px;
 }
 
 /* 사이드바 헤더 */
+.sidebar-head {
+    background-color: gray;
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    position: relative;
+}
+
+.sidebar-head:hover {
+    cursor: none;
+}
+
+.sidebar-head::after {
+    content: "";
+    display: none;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid transparent;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.sidebar-head::before {
+    content: "\f04b"; /* Unicode for the play icon */
+    font-family: "Font Awesome 5 Free"; /* Ensure you are using the correct Font Awesome version */
+    font-weight: 900;
+    color: red;
+    position: absolute;
+    display: none;
+    font-size: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.sidebar-head:hover::after {
+    display: block;
+    animation: rotate-segment 2s linear infinite;
+    background: radial-gradient(circle, transparent 60%, black 60%), transparent;
+    mask: conic-gradient(from 0deg at 50% 50%, black 60deg, transparent 60deg 360deg);
+    -webkit-mask: conic-gradient(from 0deg at 50% 50%, black 60deg, transparent 60deg 360deg);
+}
+
+.sidebar-head:hover::before {
+    display: block;
+}
+
+@keyframes rotate-segment {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
 .sidebar-header {
     display: flex;
     justify-content: center;
@@ -26,7 +90,6 @@
     background-color: #495057;
     cursor: pointer;
 }
-
 /* 사이드바 내용 */
 .sidebar-content {
     flex-grow: 1;

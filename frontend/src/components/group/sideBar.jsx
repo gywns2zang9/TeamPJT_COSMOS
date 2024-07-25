@@ -4,7 +4,7 @@ import { Button, Modal, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 import GroupSettingsModal from "../../modals/GroupSettingsModal";
 import InviteGroupModal from "../../modals/InviteGroupModal";
-import { FaFolderPlus, FaFileAlt, FaTrashAlt, FaCog, FaUserPlus, FaFolder, FaFile, FaAngleDoubleLeft, FaAngleDoubleRight, FaChevronDown, FaChevronRight } from 'react-icons/fa'; 
+import { FaFolderPlus, FaFileAlt, FaTrashAlt, FaCog, FaPlay, FaUserPlus, FaFolder, FaFile, FaAngleDoubleLeft, FaAngleDoubleRight, FaChevronDown, FaChevronRight } from 'react-icons/fa'; 
 import MainPageTemplates from "./mainPageTemplates.jsx";
 import '../../css/group/sideBar.css'
 
@@ -37,6 +37,7 @@ function SideBar({ groupId }) {
     const sidebarRef = useRef(null);
     const resizerRef = useRef(null);
     const navigate = useNavigate(); 
+    const [showConfirmVideoStart, setShowConfirmVideoStart] = useState(false);
 
     // 사이드바 토글 
     const toggleSideBar = () => {
@@ -211,6 +212,20 @@ function SideBar({ groupId }) {
         }));
     };
 
+    // 화상회의시작하기
+    const handleOpenVideoStartModal = () => {
+        setShowConfirmVideoStart(true);
+    };
+
+    const handleCloseVideoStartModal = () => {
+        setShowConfirmVideoStart(false);
+    };
+
+    const handleStartVideo = () => {
+        // 화상 회의 시작 로직 추가
+        setShowConfirmVideoStart(false);
+    };
+
     // 트리 렌더링
     const renderTree = (parentId, depth = 0) => {
         return (
@@ -302,6 +317,11 @@ function SideBar({ groupId }) {
     return (
         <>
             <div ref={sidebarRef} className={`sidebar ${sidebarWidth <= 100 ? 'closed' : 'open'}`} style={{ width: `${sidebarWidth}px` }}>
+                <div className='sidebar-head' style={{backgroundColor:'gray', padding:'3px'}} onClick={handleOpenVideoStartModal}>
+                    화상회의 시작하기 <FaPlay style={{fontSize:'12px'}}/>
+                </div>
+
+
                 <div className="sidebar-header" onClick={toggleSideBar}>
                     {sidebarWidth <= 100 ? (
                         <FaAngleDoubleRight  className="toggle-btn" /> // 오른쪽 아이콘
@@ -333,8 +353,26 @@ function SideBar({ groupId }) {
                 }
                 <div ref={resizerRef} className="resizer"></div>
             </div>
+            {/* 그룹설정모달 */}
             <GroupSettingsModal show={showSettingsModal} handleClose={handleCloseSettingsModal} />
+            {/* 그룹초대모달 */}
             <InviteGroupModal show={showInviteModal} handleClose={handleCloseInviteModal} />
+            {/* 화상회의 시작 모달 */}
+            <Modal show={showConfirmVideoStart} onHide={handleCloseVideoStartModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>화상회의 시작</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>화상회의를 시작하시겠습니까?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseVideoStartModal}>
+                        돌아가기
+                    </Button>
+                    <Button variant="primary" onClick={handleStartVideo}>
+                        시작하기
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            {/* 아이템 삭제 모달 */}
             <Modal show={showConfirmDelete} onHide={handleCancelDelete}>
                 <Modal.Header closeButton>
                     <Modal.Title>!주의!</Modal.Title>
