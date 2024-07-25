@@ -1,9 +1,11 @@
 package S11P12A708.A708.domain.team.service;
 
 import S11P12A708.A708.common.error.exception.TeamNotFoundException;
+import S11P12A708.A708.common.error.exception.LeaderLeaveException;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.entity.TeamUser;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
+import S11P12A708.A708.domain.team.repository.TeamUserRepository;
 import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
 import S11P12A708.A708.domain.team.request.TeamInfoRequest;
 import S11P12A708.A708.domain.team.request.TeamLeaderRequest;
@@ -26,6 +28,7 @@ public class TeamMainService {
 
     private final TeamRepository teamRepository;
     private final TeamQueryRepository teamQueryRepository;
+    private final TeamUserRepository teamUserRepository;
 
     // TODO : 로그인한 유저가 team의 멤버인지(권한 문제)
 
@@ -68,7 +71,20 @@ public class TeamMainService {
     public Boolean checkTeamLeader(final Long teamId, final Long loginId) {
         final TeamUser teamUser = teamQueryRepository.findLeaderUserByTeamId(teamId);
 
-        return teamUser.isLeader(loginId);
+        return teamUser.sameUser(loginId);
+    }
+
+    public void exitTeam(final Long teamId, final Long loginId) {
+        final TeamUser teamUser = teamQueryRepository.findTeamUserByIds(teamId, loginId);
+
+        if(teamUser.isLeader()) { // 팀 리더라면 비어있을 때에만 나갈 수 있음
+            final boolean isNotEmpty = teamQueryRepository.findUsersByTeamId(teamId).size() > 1;
+            if(isNotEmpty) throw new LeaderLeaveException();
+
+            teamRepository.deleteById(teamId); // 비어 있으므로 팀 제거
+        }
+
+        teamUserRepository.deleteById(teamUser.getId());
     }
 
     private List<TeamMemberResponse> convertUsersToTeamMemberResponse(final List<User> users) {

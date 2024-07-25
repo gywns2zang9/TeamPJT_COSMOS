@@ -16,7 +16,9 @@ public enum ErrorCode {
     USER_NOT_FOUND(UNPROCESSABLE_ENTITY, "user", "user not found."),
 
     // Team
-    TEAM_NOT_FOUND(UNPROCESSABLE_ENTITY, "Team Not Joined", "This Team is not exist");
+    TEAM_NOT_FOUND(UNPROCESSABLE_ENTITY, "Team Not Joined", "This Team is not exist"),
+    LEADER_LEAVE_EXCEPTION(UNPROCESSABLE_ENTITY, "Leader Cannot Leave", "Team Leader cannot leave team");
+
 
     private final HttpStatus code;
     private final String body;

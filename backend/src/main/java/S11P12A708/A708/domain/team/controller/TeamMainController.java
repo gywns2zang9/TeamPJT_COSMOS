@@ -57,4 +57,11 @@ public class TeamMainController {
         return new ResponseEntity<>(isLeader, HttpStatus.OK);
     }
 
+    @DeleteMapping("/teams/{teamId}")
+    public ResponseEntity<Void> exitTeam(@PathVariable("teamId") Long teamId) {
+        final Long loginId = 1L; // TODO : 로그인된 유저 정보 가져오기
+        teamMainService.exitTeam(teamId, loginId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
