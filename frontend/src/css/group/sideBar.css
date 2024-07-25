@@ -1,0 +1,91 @@
+/* 사이드바 기본 스타일 */
+.sidebar {
+    transition: width 0.3s;
+    overflow: hidden;
+    background-color: #343a40;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    max-height: 100vh;
+    position: relative;
+}
+
+/* 사이드바가 닫힐 때의 스타일 */
+.sidebar.closed {
+    width: 50px;
+}
+
+/* 사이드바 헤더 */
+.sidebar-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: #495057;
+    cursor: pointer;
+}
+
+/* 사이드바 내용 */
+.sidebar-content {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+/* 사이드바 푸터 */
+.sidebar-footer {
+    padding: 10px;
+    text-align: center;
+    background-color: #e9ecef;
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+}
+.sidebar-footer.closed {
+    display: flex;
+    justify-content: space-around;
+}
+/* 열기/닫기 버튼 */
+.toggle-btn {
+    font-size: 1.5rem;
+    color: white;
+    background: none;
+    border: none;
+}
+
+/* 사이드바의 아이콘 */
+.icon {
+    margin-right: 5px;
+}
+
+/* 버튼 스타일 */
+.add-folder-btn,
+.add-page-btn,
+.delete-btn {
+    font-size: 16px;
+    margin: 0 2px;
+    padding: 0;
+    line-height: 1;
+}
+
+/* 사이드바 조절 핸들 스타일 */
+.resizer {
+    width: 5px;
+    height: 100%;
+    background-color: #ddd;
+    cursor: ew-resize;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.no-style-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.no-style-list li {
+    margin-bottom: 5px;
+}

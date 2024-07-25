@@ -1,0 +1,38 @@
+/* 그룹 설정 모달 스타일 */
+.modal-content {
+    background-color: #0D0220;
+    color: white;
+}
+
+.modal-header, .modal-footer {
+    border: none;
+}
+
+.modal-footer .btn-secondary {
+    background-color: #2F95DC; /* 닫기 버튼 */
+    color: #fff; /* 닫기 버튼 */
+}
+
+.modal-footer .btn-primary {
+    background-color: #2F95DC; /* 저장 버튼 */
+    color: #fff; /* 저장 버튼 */
+}
+
+.modal-body {
+    color: white;
+}
+
+.form-control {
+    background-color: #282c34;
+    color: white;
+    border: 1px solid #555;
+}
+
+.form-control::placeholder {
+    color: #aaa;
+}
+
+.form-label {
+    color: #bbb;
+}
+
