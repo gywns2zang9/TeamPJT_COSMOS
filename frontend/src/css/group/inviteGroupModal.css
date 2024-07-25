@@ -1,0 +1,42 @@
+/* InviteGroupModal.css */
+.modal-content {
+    background-color: #0D0220; /* 모달 배경색 */
+    color: white; /* 텍스트 색상 */
+}
+
+.modal-header, .modal-footer {
+    border: none;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    color: white; /* 레이블 색상 */
+}
+
+.form-control {
+    background-color: #1D1F27; /* 입력 필드 배경색 */
+    color: white; /* 입력 필드 텍스트 색상 */
+    border: 1px solid #2F95DC; /* 입력 필드 테두리 색상 */
+}
+
+.form-control:focus {
+    border-color: #2F95DC; /* 포커스 시 테두리 색상 */
+    box-shadow: 0 0 0 0.2rem rgba(47, 149, 220, 0.25); /* 포커스 시 그림자 색상 */
+}
+
+.btn-primary {
+    background-color: #2F95DC; /* 초대하기 버튼 색상 */
+    border-color: #2F95DC; /* 초대하기 버튼 테두리 색상 */
+}
+
+.btn-secondary {
+    background-color: #2F95DC; /* 나가기 버튼 색상 */
+    border-color: #2F95DC; /* 나가기 버튼 테두리 색상 */
+}

@@ -1,0 +1,75 @@
+#group-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 16px;
+    color: white;
+}
+
+#group-list .card {
+    margin: 5%;
+    flex: 1 1 calc(30%);
+    max-width: calc(40%);
+    box-sizing: border-box;
+    border: 5px solid transparent;
+    background-color: transparent;
+    color: inherit;
+    border-image: linear-gradient(to right, #ffffff, #0D0220); 
+    border-image-slice: 1; 
+}
+
+#group-auth {
+    border-top: 1px solid rgb(146, 197, 255) ;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    background-color: transparent;
+    color: white;
+}
+
+#group-auth .card {
+    margin: 5%;
+    box-sizing: border-box;
+    border: 5px solid transparent;
+    background-color: transparent;
+    color: inherit;
+    border-image: linear-gradient(to right, #ffffff, #0D0220); 
+    border-image-slice: 1; 
+}
+
+/* modal */
+
+#modal-background .modal-content {
+    background-color: #0D0220 ; 
+    color: white; 
+}
+
+#modal-footer-button .btn-secondary {
+    background-color: #2F95DC; /* 닫기 버튼 */
+    color: #fff; /* 닫기 버튼 */
+}
+
+#modal-footer-button .btn-primary {
+    background-color: #2F95DC; /* 생성 버튼 */
+    color: #fff; /* 생성 버튼 */
+}
+
+#modal-body {
+    color: white; 
+}
+
+
+/* 그룹상세페이지 */
+#group-detail-main {
+    display: flex;
+}
+
+#page-detail{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+#group-info {
+    color: white;
+}
+

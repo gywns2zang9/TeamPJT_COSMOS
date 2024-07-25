@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../css/home/footer/style.css';
 import logo from '../../assets/media/logo.jpeg';
 
+// 개인정보처리방침, 이용약관 페이지, Contact Us 만들어서 링크 걸기
+
 function Footer(props) {
     return (
         <footer className="footer">
