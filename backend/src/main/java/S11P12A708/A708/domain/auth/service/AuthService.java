@@ -14,9 +14,6 @@ import S11P12A708.A708.domain.user.response.UserInfo;
 import S11P12A708.A708.domain.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +28,7 @@ public class AuthService {
     private UserService userService;
 
     private final PasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
     private UserRepository userRepository;
 
