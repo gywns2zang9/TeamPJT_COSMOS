@@ -1,5 +1,4 @@
 import React from "react";
-import "../css/home/homeviewstyle.css";
 import homeImg from "../assets/media/mainImg.png";
 import "../css/home/style.css";
 import Card from "react-bootstrap/Card";
