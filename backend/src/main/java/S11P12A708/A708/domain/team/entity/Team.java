@@ -48,13 +48,26 @@ public class Team {
     @OneToMany(mappedBy = "team")
     private List<Study> studies = new ArrayList<>();
 
-    public Team(String name, String description) {
+    public Team(Long id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
 
+    public Team(String name, String description) {
+        this(null, name, description);
+    }
+
     public String setTeamCode(TeamCodeGenerator generator) {
         return this.teamCode = generator.generate(this.id);
+    }
+
+    public static Team of(Long teamId, TeamInfoRequest request) {
+        return new Team(
+                teamId,
+                request.getGroupName(),
+                request.getDescription()
+        );
     }
 
 }
