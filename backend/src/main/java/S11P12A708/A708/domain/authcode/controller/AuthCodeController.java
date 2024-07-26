@@ -29,7 +29,6 @@ public class AuthCodeController {
     public ResponseEntity<Boolean> verifySignUpAuthCode(@RequestBody VerifyAuthCodeRequest request) {
         final boolean response = authCodeService.verifyAuthCode(request, AuthType.SIGN_UP);
         return new ResponseEntity<>(response, HttpStatus.OK);
-
     }
 }
 
