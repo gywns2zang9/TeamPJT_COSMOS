@@ -2,7 +2,7 @@ spring:
   application:
     name: A708
   mail:
-    host: smtp.naver.com
+    host: smtp.gmail.com
     port: 587
     username: ${EMAIL}
     password: ${EMAIL_PASSWORD}
