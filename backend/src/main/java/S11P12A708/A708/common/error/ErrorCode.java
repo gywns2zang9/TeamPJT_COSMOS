@@ -15,7 +15,6 @@ public enum ErrorCode {
     // User
     USER_NOT_FOUND(UNPROCESSABLE_ENTITY, "user", "user not found."),
     USER_INVALID(UNPROCESSABLE_ENTITY, "user", "user request is incorrect."),
-    INVALID_PASSWORD(UNPROCESSABLE_ENTITY, "user", "password is incorrect."),
     USER_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "user", "email is already exist."),
 
     // Auth-Code
@@ -23,6 +22,14 @@ public enum ErrorCode {
     AUTH_CODE_NOT_FOUND(UNPROCESSABLE_ENTITY, "auth-code", "auth code not found."),
     AUTH_CODE_EXPIRED(UNPROCESSABLE_ENTITY, "auth-code", "auth code expired."),
     INVALID_AUTH_CODE(UNPROCESSABLE_ENTITY, "auth-code", "auth code is incorrect."),
+
+    // Auth
+    AUTH_NECESSARY(UNPROCESSABLE_ENTITY, "auth", "User did not verify the email."),
+    NICKNAME_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "auth", "Nickname is already exist."),
+    INVALID_PASSWORD(UNPROCESSABLE_ENTITY, "user", "password is incorrect."),
+    INVALID_NICKNAME(UNPROCESSABLE_ENTITY, "user", "nickname is incorrect."),
+    FAIL_SING_UP(UNPROCESSABLE_ENTITY, "auth", "Sign up failed due to validation errors."),
+    KAKAO_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "auth", "Sign up failed due to validation errors."),
 
     // Team
     TEAM_NOT_FOUND(UNPROCESSABLE_ENTITY, "Team Not Joined", "the user is not a member of this team.");
