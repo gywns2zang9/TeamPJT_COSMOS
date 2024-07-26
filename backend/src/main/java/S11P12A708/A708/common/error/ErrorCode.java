@@ -14,12 +14,15 @@ public enum ErrorCode {
 
     // User
     USER_NOT_FOUND(UNPROCESSABLE_ENTITY, "user", "user not found."),
-    USER_INVALID(UNPROCESSABLE_ENTITY, "user", "incorrect user request error"),
-    INVALID_PASSWORD(UNPROCESSABLE_ENTITY, "user", "incorrect password"),
-    USER_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "user", "Email is already exist"),
+    USER_INVALID(UNPROCESSABLE_ENTITY, "user", "user request is incorrect."),
+    INVALID_PASSWORD(UNPROCESSABLE_ENTITY, "user", "password is incorrect."),
+    USER_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "user", "email is already exist."),
 
-    // Auth
-    FAIL_MAIL(UNPROCESSABLE_ENTITY, "auth-code", "Failed to send email"),
+    // Auth-Code
+    FAIL_MAIL(UNPROCESSABLE_ENTITY, "auth-code", "failed to send email."),
+    AUTH_CODE_NOT_FOUND(UNPROCESSABLE_ENTITY, "auth-code", "auth code not found."),
+    AUTH_CODE_EXPIRED(UNPROCESSABLE_ENTITY, "auth-code", "auth code expired."),
+    INVALID_AUTH_CODE(UNPROCESSABLE_ENTITY, "auth-code", "auth code is incorrect."),
 
     // Team
     TEAM_NOT_FOUND(UNPROCESSABLE_ENTITY, "Team Not Joined", "the user is not a member of this team.");

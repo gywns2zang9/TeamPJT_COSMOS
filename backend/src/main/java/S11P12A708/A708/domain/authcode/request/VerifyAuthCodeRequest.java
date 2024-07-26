@@ -1,4 +1,4 @@
-package S11P12A708.A708.domain.auth.request;
+package S11P12A708.A708.domain.authcode.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

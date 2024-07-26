@@ -1,11 +1,14 @@
 package S11P12A708.A708.domain.authcode.service;
 
-import S11P12A708.A708.common.error.exception.FailMailException;
+import S11P12A708.A708.domain.authcode.exception.AuthCodeExpiredException;
+import S11P12A708.A708.domain.authcode.exception.AuthCodeNotFoundException;
+import S11P12A708.A708.domain.authcode.exception.FailMailException;
+import S11P12A708.A708.domain.authcode.exception.InvalidAuthCodeException;
+import S11P12A708.A708.domain.authcode.request.VerifyAuthCodeRequest;
+import S11P12A708.A708.domain.user.exception.UserAlreadyExistException;
+import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
-import S11P12A708.A708.common.error.exception.UserAlreadyExistException;
-import S11P12A708.A708.common.error.exception.UserInvalidException;
-import S11P12A708.A708.common.error.exception.UserNotFoundException;
 import S11P12A708.A708.domain.authcode.entity.AuthType;
 import S11P12A708.A708.domain.authcode.entity.Authcode;
 import S11P12A708.A708.domain.authcode.repository.AuthCodeRepository;
@@ -19,6 +22,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,6 +34,9 @@ public class AuthCodeService {
     @Value("${spring.mail.username}")
     private String from;
 
+    @Value("${app.expired-time}")
+    private int expiredTime;
+
     private final AuthCodeRepository authCodeRepository;
     private final AuthCodeQueryRepository authCodeQueryRepository;
     private final UserRepository userRepository;
@@ -36,7 +44,6 @@ public class AuthCodeService {
 
     public SendEmailResponse generateAuthCode(String email, AuthType type) throws RuntimeException {
         String code = UUID.randomUUID().toString();
-        int expiredAt = 5;
 
         errIfExistEmailOrNot(email, type);
         Optional<Authcode> foundAuthCode = authCodeQueryRepository.findByEmailAndType(email, type);
@@ -45,22 +52,13 @@ public class AuthCodeService {
             Authcode authCode = foundAuthCode.get();
             authCode.setAuthToken(code);
             authCodeRepository.save(authCode);
-        } else if (type == AuthType.SIGN_UP) {
-            Optional<Authcode> existingCode = authCodeQueryRepository.findByEmailAndType(email, AuthType.SIGN_UP_ABLE);
-
-            if (existingCode.isPresent()) {
-                throw new UserInvalidException();
-            } else {
-                Authcode newAuthCode = new Authcode(email, type, code);
-                authCodeRepository.save(newAuthCode);
-            }
         } else {
-            Authcode newAuthCode = new Authcode(email, type, code);
+            Authcode newAuthCode = new Authcode(email, type, code, LocalDateTime.now());
             authCodeRepository.save(newAuthCode);
         }
 
-        sendAuthMail(type, email, code, expiredAt);
-        return new SendEmailResponse(expiredAt);
+        sendAuthMail(type, email, code, expiredTime);
+        return new SendEmailResponse(expiredTime);
     }
 
     private void errIfExistEmailOrNot(String email, AuthType type) {
@@ -109,6 +107,36 @@ public class AuthCodeService {
             mailSender.send(message);
         } catch (Exception e) {
             throw new FailMailException();
+        }
+    }
+
+    public boolean verifyAuthCode(VerifyAuthCodeRequest req, AuthType type) {
+        Optional<Authcode> foundAuthCodeOpt = authCodeQueryRepository.findByEmailAndType(req.getEmail(), type);
+        if (foundAuthCodeOpt.isEmpty()) throw new AuthCodeNotFoundException();
+
+        Authcode foundAuthCode = foundAuthCodeOpt.get();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime createdAt = foundAuthCode.getUpdatedAt();
+        long diffMinute = ChronoUnit.MINUTES.between(createdAt, now);
+
+        if (diffMinute > expiredTime) {
+            authCodeRepository.deleteById(foundAuthCode.getId());
+            throw new AuthCodeExpiredException();
+        } else if (!foundAuthCode.getAuthToken().equals(req.getAuthCode())) {
+            throw new InvalidAuthCodeException();
+        }
+
+        approveAuthCode(foundAuthCode, type);
+        return true;
+    }
+
+    private void approveAuthCode(Authcode authcode, AuthType type) {
+        if (type == AuthType.FIND_PW) {
+            authCodeRepository.deleteById(authcode.getId());
+        } else if (type == AuthType.SIGN_UP) {
+            authcode.setType(AuthType.SIGN_UP_ABLE);
+            authcode.setAuthToken(null);
+            authCodeRepository.save(authcode);
         }
     }
 }

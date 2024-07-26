@@ -1,12 +1,11 @@
 package S11P12A708.A708.domain.authcode.entity;
 
-import S11P12A708.A708.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -27,12 +26,17 @@ public class Authcode {
     @Enumerated(EnumType.STRING)
     private AuthType type;
 
-    @Column(nullable = false)
+    @Column()
     private String authToken;
 
-    public Authcode(String email, AuthType type, String authToken) {
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    public Authcode(String email, AuthType type, String authToken, LocalDateTime updatedAt) {
         this.email = email;
         this.type = type;
         this.authToken = authToken;
+        this.updatedAt = updatedAt;
     }
 }

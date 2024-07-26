@@ -1,7 +1,7 @@
 package S11P12A708.A708.domain.team.service;
 
 import S11P12A708.A708.common.error.exception.TeamNotFoundException;
-import S11P12A708.A708.common.error.exception.UserNotFoundException;
+import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.entity.TeamUser;
 import S11P12A708.A708.domain.team.repository.TeamRepository;

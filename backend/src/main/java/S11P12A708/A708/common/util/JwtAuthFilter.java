@@ -1,6 +1,6 @@
 package S11P12A708.A708.common.util;
 
-import S11P12A708.A708.common.error.exception.UserNotFoundException;
+import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.service.UserService;
 import jakarta.servlet.*;
@@ -27,12 +27,14 @@ public class JwtAuthFilter implements Filter {
         this.userService = userService;
     }
 
+    // TODO: auth, auth-token filter 처리에 대해서 추후 작업 필요
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String path = httpRequest.getRequestURI();
-        if (path.startsWith("/auth/signup") || path.startsWith("/auth/login") || path.startsWith("/auth-codes/send-code")) {
+        if (path.startsWith("/auth/signup") || path.startsWith("/auth/login") || path.startsWith("/auth-codes/send-code")
+        || path.startsWith("/auth-codes/verify-code")) {
             chain.doFilter(request, response);
             return;
         }

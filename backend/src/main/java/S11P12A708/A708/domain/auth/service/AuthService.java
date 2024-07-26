@@ -1,7 +1,7 @@
 package S11P12A708.A708.domain.auth.service;
 
-import S11P12A708.A708.common.error.exception.InvalidPasswordException;
-import S11P12A708.A708.common.error.exception.UserNotFoundException;
+import S11P12A708.A708.domain.auth.exception.InvalidPasswordException;
+import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.common.util.JwtTokenUtil;
 import S11P12A708.A708.domain.auth.request.AuthUserDto;
 import S11P12A708.A708.domain.auth.request.LoginRequest;
