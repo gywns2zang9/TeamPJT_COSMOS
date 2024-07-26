@@ -32,7 +32,7 @@ public class JwtAuthFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String path = httpRequest.getRequestURI();
-        if (path.startsWith("/auth/signup") || path.startsWith("/auth/login")) {
+        if (path.startsWith("/auth/signup") || path.startsWith("/auth/login") || path.startsWith("/auth-codes/send-code")) {
             chain.doFilter(request, response);
             return;
         }

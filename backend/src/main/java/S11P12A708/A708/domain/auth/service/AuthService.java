@@ -21,11 +21,8 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final JwtTokenUtil jwtTokenUtil;
-
-    private final UserService userService;
-
     private final PasswordEncoder bCryptPasswordEncoder;
-
+    private final UserService userService;
     private final UserRepository userRepository;
 
     public AuthService(PasswordEncoder bCryptPasswordEncoder, JwtTokenUtil jwtTokenUtil,
