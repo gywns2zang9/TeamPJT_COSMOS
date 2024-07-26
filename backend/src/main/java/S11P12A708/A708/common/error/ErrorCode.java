@@ -18,7 +18,9 @@ public enum ErrorCode {
     INVALID_PASSWORD(UNPROCESSABLE_ENTITY, "user", "incorrect password"),
 
     // Team
-    TEAM_NOT_FOUND(UNPROCESSABLE_ENTITY, "Team Not Joined", "the user is not a member of this team.");
+    TEAM_NOT_FOUND(UNPROCESSABLE_ENTITY, "Team Not Joined", "This Team is not exist"),
+    LEADER_LEAVE_EXCEPTION(UNPROCESSABLE_ENTITY, "Leader Cannot Leave", "Team Leader cannot leave team");
+
 
     private final HttpStatus code;
     private final String body;

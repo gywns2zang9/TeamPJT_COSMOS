@@ -46,8 +46,16 @@ public class TeamUser {
         this.role = role;
     }
 
-    public static TeamUser create(User user, Team team) {
-        return new TeamUser(user, team, LEADER);
+    public Boolean isLeader() {
+        return this.role.equals(LEADER);
+    }
+
+    public Boolean sameUser(Long userId) {
+        return this.user.getId().equals(userId);
+    }
+
+    public void changeRole(final TeamUserRole role) {
+        this.role = role;
     }
 
 }
