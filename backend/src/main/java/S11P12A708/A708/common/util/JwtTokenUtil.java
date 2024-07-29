@@ -20,11 +20,7 @@ public class JwtTokenUtil {
     @Value("${jwt.refresh.expiration}")
     private long refreshTokenExpirationTime; // 7일
 
-    private final UserService userService;
-
-    public JwtTokenUtil(UserService userService) {
-        this.userService = userService;
-    }
+    public JwtTokenUtil() {}
 
     public String createAccessToken(String userId) {
         Date now = new Date();
