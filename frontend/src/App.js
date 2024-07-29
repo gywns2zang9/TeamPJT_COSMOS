@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import HomeView from "./views/HomeView";
 import ConferenceView from "./views/ConferenceView.jsx";
-import GroupPageView from "./views/GroupPageView.jsx";
 import NavBar from "./components/home/navBar.jsx";
 import Footer from "./components/home/footer.jsx";
 import Login from "./components/accounts/login.jsx";

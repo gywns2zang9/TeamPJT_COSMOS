@@ -1,5 +1,5 @@
 import React from "react";
-import homeImg from "../assets/media/mainImg.png";
+import homeImg from "../assets/media/mainImg.jpeg";
 import "../css/home/style.css";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
@@ -18,13 +18,13 @@ function HomeView(props) {
         </Card>
       </div>
       <div id="home-img-card">
+          <Link to="/group" id="group-page-link">
         <img src={homeImg} alt="" id="home-img" />
         <div id="start-service">
           {/* 비로그인 사용자일 때, 로그인페이지로 이동하게 할 것 */}
-          <Link to="/group" id="group-page-link">
             <span>서비스 시작하기</span>
-          </Link>
         </div>
+          </Link>
       </div>
     </div>
   );

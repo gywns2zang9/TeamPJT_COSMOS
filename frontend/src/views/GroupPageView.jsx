@@ -1,24 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import { useNavigate } from "react-router-dom"
 import '../css/group/style.css';
 import { Card } from "react-bootstrap";
 import CreateGroupModal from '../modals/CreateGroupModal.jsx'
 import JoinGroupModal from '../modals/JoinGroupModal.jsx'
-
-
-// 그룹 목록 -> api 요청으로 받아올 것
-const groups = [
-    { id: 1, name: "A708" },
-    { id: 2, name: "알고리즘 코드 챌린지" },
-    { id: 3, name: "그룹그룹목록목록" },
-    { id: 4, name: "그룹그룹목록목록1" },
-    { id: 5, name: "그룹그룹목록목록2" },
-    { id: 6, name: "그룹그룹목록목록3" },
-    { id: 7, name: "그룹그룹목록목록4" },
-    { id: 8, name: "그룹그룹목록목록5" },
-];
+import useGroupStore from "../store/group.js";
 
 function GroupPageView(props) {
+    // 그룹 목록
+    const [groups, setGroups] = useGroupStore([]);
+    const loadGroupList = useGroupStore((state) => state.loadGroupList);
+
+    useEffect(() => {
+        const fetchGroups = async () => {
+            try {
+                const response = await loadGroupList();
+                const transformedData = response.map(team => ({
+                    groupId: team.teamId,
+                    groupName: team.teamName,
+                    groupDescription: team.teamDescription,
+                }));
+                setGroups(transformedData);
+            } catch (error) {
+                console.error('그룹 목록 불러오기 에러:', error);
+            }
+        };
+        fetchGroups();
+    }, [loadGroupList]);
+
     // 그룹 생성, 참여 모달 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showJoinModal, setShowJoinModal] = useState(false);
@@ -31,8 +40,8 @@ function GroupPageView(props) {
     const handleShowJoinModal = () => setShowJoinModal(true);
     const handleCloseJoinModal = () => setShowJoinModal(false);
 
-    const navigateToGroupDetail = (id) => {
-        navigate(`/group/${id}/0/`);
+    const navigateToGroupDetail = (groupId) => {
+        navigate(`/group/${groupId}/0/`);
     };
 
     return (
@@ -40,14 +49,15 @@ function GroupPageView(props) {
             {/* 그룹 목록 */}
             <div id="group-list">
                 {groups.map(group => (
-                    <Card key={group.id} onClick={() => navigateToGroupDetail(group.id)}>
+                    <Card key={group.groupId} onClick={() => navigateToGroupDetail(group.groupId)}>
                         <Card.Body>
-                            <Card.Title>{group.name}</Card.Title>
+                            <Card.Title>{group.groupName}</Card.Title>
+                            <Card.Text>{group.groupDescription}</Card.Text>
                         </Card.Body>
                     </Card>
                 ))}    
             </div>
-            
+
             {/* 그룹 생성 및 참여 */}
             <div id="group-auth">
                 <Card onClick={handleShowCreateModal}>
