@@ -8,6 +8,7 @@ import S11P12A708.A708.domain.authcode.request.VerifyAuthCodeRequest;
 import S11P12A708.A708.domain.user.exception.UserAlreadyExistException;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import S11P12A708.A708.domain.authcode.entity.AuthType;
 import S11P12A708.A708.domain.authcode.entity.Authcode;
@@ -21,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -29,7 +32,6 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class AuthCodeService {
     @Value("${spring.mail.username}")
     private String from;
@@ -41,8 +43,22 @@ public class AuthCodeService {
     private final AuthCodeQueryRepository authCodeQueryRepository;
     private final UserRepository userRepository;
     private final JavaMailSender mailSender;
+    private final TemplateEngine templateEngine;
+
+    public AuthCodeService(AuthCodeRepository authCodeRepository,
+                           AuthCodeQueryRepository authCodeQueryRepository,
+                           UserRepository userRepository,
+                           JavaMailSender mailSender,
+                           @Qualifier("customTemplateEngine") TemplateEngine templateEngine) {
+        this.authCodeRepository = authCodeRepository;
+        this.authCodeQueryRepository = authCodeQueryRepository;
+        this.userRepository = userRepository;
+        this.mailSender = mailSender;
+        this.templateEngine = templateEngine;
+    }
 
     public SendEmailResponse generateAuthCode(String email, AuthType type) throws RuntimeException {
+        log.info("generateAuthCode");
         String code = UUID.randomUUID().toString();
 
         errIfExistEmailOrNot(email, type);
@@ -57,7 +73,7 @@ public class AuthCodeService {
             authCodeRepository.save(newAuthCode);
         }
 
-        sendAuthMail(type, email, code, expiredTime);
+        sendAuthMail(type, email, code);
         return new SendEmailResponse(expiredTime);
     }
 
@@ -71,41 +87,33 @@ public class AuthCodeService {
         }
     }
 
-    private void sendAuthMail(AuthType type, String email, String code, int expiredAt) {
-        MimeMessage message = mailSender.createMimeMessage();
+    private void sendAuthMail(AuthType type, String email, String code) {
+        log.info("sendAuthMail");
         try {
+            MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setFrom(from);
             helper.setTo(email);
 
             String subject = "";
-            String text = "";
-
             if (type == AuthType.SIGN_UP) {
                 subject = "[COSMOS] 회원가입 인증 메일";
-                text = String.format(
-                        "<p>COSMOS에서 당신을 초대하기 위한 인증 코드를 보냈습니다!</p>" +
-                                "<p>아래 인증 코드를 COSMOS 홈페이지에서 입력해주세요.</p>" +
-                                "<p><strong>인증 코드: %s</strong></p>" +
-                                "<p>인증 코드는 이메일 발송 시점으로부터 %d분 동안 유효합니다.</p>",
-                        code, expiredAt
-                );
             } else if (type == AuthType.FIND_PW) {
                 subject = "[COSMOS] 비밀번호 변경 인증 메일";
-                text = String.format(
-                        "<p>COSMOS에서 비밀번호 변경을 위한 인증 코드를 보냈습니다!</p>" +
-                                "<p>아래 인증 코드를 COSMOS 홈페이지에서 입력해주세요.</p>" +
-                                "<p><strong>인증 코드: %s</strong></p>" +
-                                "<p>인증 코드는 이메일 발송 시점으로부터 %d분 동안 유효합니다.</p>",
-                        code, expiredAt
-                );
             }
-
             helper.setSubject(subject);
+
+            Context context = new Context();
+            context.setVariable("type", type);
+            context.setVariable("code", code);
+            context.setVariable("expiredAt", expiredTime);
+
+            String text = templateEngine.process("mail", context);
             helper.setText(text, true);
 
             mailSender.send(message);
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new FailMailException();
         }
     }
