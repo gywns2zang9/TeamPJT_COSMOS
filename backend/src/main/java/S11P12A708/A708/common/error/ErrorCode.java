@@ -12,10 +12,11 @@ public enum ErrorCode {
     REQUEST_INVALID(UNPROCESSABLE_ENTITY, "request", "invalid."),
     INTERNAL_SERVER(UNPROCESSABLE_ENTITY, "internal", "server error."),
 
-    // User
+    // User,
     USER_NOT_FOUND(UNPROCESSABLE_ENTITY, "user", "user not found."),
     USER_INVALID(UNPROCESSABLE_ENTITY, "user", "user request is incorrect."),
     USER_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "user", "email is already exist."),
+    INVALID_ACCESS(UNPROCESSABLE_ENTITY, "auth", "Token userId does not match URL userId."),
 
     // Auth-Code
     FAIL_MAIL(UNPROCESSABLE_ENTITY, "auth-code", "failed to send email."),
