@@ -8,8 +8,12 @@ const GroupDetailView = () => {
     const { pageId, groupId } = useParams();
     return (
         <div id="group-detail-info">
+            <div id="sidebar">
             <SideBar groupId={groupId}/>
+            </div>
+            <div id='group-detail-info-page'>
             <GroupDetailInfo pageId={pageId} groupId={groupId}/>
+            </div>
         </div>
     );
 };

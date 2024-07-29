@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+// 그룹페이지로 요청보낼때, group -> team 으로 바꿔서 요청보낼것 
+
 // Axios 인스턴스 설정
 const api = axios.create({
     baseURL: '',
