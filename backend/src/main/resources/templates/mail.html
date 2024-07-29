@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>COSMOS 인증 메일</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; line-height: 1.6;">
+<div style="max-width: 600px; margin: 20px auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <div style="background-color: #0953a2; color: #fff; padding: 10px 0; text-align: center; border-radius: 8px 8px 0 0;">
+        <h1>COSMOS 인증 메일</h1>
+    </div>
+    <div style="margin: 20px 0;">
+        <p th:if="${type == 'SIGN_UP'}" style="margin: 0;">안녕하세요! COSMOS에 가입해 주셔서 감사합니다.</p>
+        <p th:if="${type == 'FIND_PW'}" style="margin: 0;">안녕하세요! COSMOS 비밀번호 변경 요청을 받았습니다.</p>
+        <p style="margin: 0;">아래의 인증 코드를 COSMOS 홈페이지에서 입력해 주세요.</p>
+
+        <div style="background-color: #e0e0e0; padding: 10px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+            <p style="font-size: 24px; font-weight: bold; color: #333; margin: 0;" th:text="${code}"></p>
+        </div>
+
+        <p style="margin: 20px 0 0 0; font-size: 14px; color: #555;">인증 코드는 이메일 발송 시점으로부터 <span th:text="${expiredAt}"></span>분 동안 유효합니다.</p>
+    </div>
+    <div style="background-color: #f1f1f1; text-align: center; padding: 10px 0; border-radius: 0 0 8px 8px; font-size: 12px; color: #555;">
+        <p style="margin: 0;">문의 사항이 있으시면 언제든지 저희 <a href="mailto:cosmosa708@gmail.com" style="color: #0953a2; text-decoration: none;">COSMOS</a>에 연락해 주세요.</p>
+        <p style="margin: 0;">© 2024 COSMOS. All rights reserved.</p>
+    </div>
+</div>
+</body>
+</html>

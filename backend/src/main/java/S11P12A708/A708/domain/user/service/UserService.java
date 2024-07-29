@@ -1,7 +1,7 @@
 package S11P12A708.A708.domain.user.service;
 
-import S11P12A708.A708.common.error.exception.UserInvalidException;
-import S11P12A708.A708.common.error.exception.UserNotFoundException;
+import S11P12A708.A708.domain.user.exception.UserInvalidException;
+import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.auth.request.AuthUserDto;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.repository.UserRepository;

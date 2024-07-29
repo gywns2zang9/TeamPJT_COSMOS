@@ -8,6 +8,8 @@ import S11P12A708.A708.domain.auth.response.LoginResponse;
 import S11P12A708.A708.domain.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -19,13 +21,15 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public boolean signUp(@RequestBody SignUpRequest signUpRequest) {
-        return authService.signUp(signUpRequest);
+    public ResponseEntity<Boolean> signUp(@RequestBody SignUpRequest signUpRequest) {
+        final boolean response = authService.signUp(signUpRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest loginRequest) {
-        return authService.login(loginRequest);
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+        final LoginResponse response = authService.login(loginRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/refresh")

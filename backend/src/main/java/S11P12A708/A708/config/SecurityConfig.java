@@ -30,6 +30,7 @@ public class SecurityConfig {
         this.userService = userService;
     }
 
+    // TODO: auth, auth-token filter 처리에 대해서 추후 작업 필요
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         JwtAuthFilter accessTokenFilter = new JwtAuthFilter(jwtTokenUtil, userService);
@@ -42,7 +43,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/auth/signup", "/auth/login").permitAll()
+                                .requestMatchers("/auth/signup", "/auth/login", "/auth-codes/send-code", "/auth-codes/verify-code").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement ->
