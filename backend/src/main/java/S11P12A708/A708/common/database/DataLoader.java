@@ -12,18 +12,18 @@ public class DataLoader implements CommandLineRunner {
 
     private final UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder bCryptPasswordEncoder;
 
-    public DataLoader(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DataLoader(UserRepository userRepository, PasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
     public void run(String... args) throws Exception {
         if (userRepository.count() == 0) {
-            String encodedPassword = passwordEncoder.encode("pass");
-            User user = new User("test", encodedPassword, UserType.NORMAL, "test");
+            User user = new User("test", "test", UserType.NORMAL, "test");
+            user.hashPassword(bCryptPasswordEncoder);
             userRepository.save(user);
         }
     }
