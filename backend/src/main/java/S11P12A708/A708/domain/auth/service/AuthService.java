@@ -109,8 +109,8 @@ public class AuthService {
         boolean userCheck = user.checkPassword(req.getPassword(), bCryptPasswordEncoder);
 
         if (userCheck) {
-            String accessToken = jwtTokenUtil.createAccessToken(req.getEmail());
-            String refreshToken = jwtTokenUtil.createRefreshToken(req.getEmail());
+            String accessToken = jwtTokenUtil.createAccessToken(String.valueOf(user.getId()));
+            String refreshToken = jwtTokenUtil.createRefreshToken(String.valueOf(user.getId()));
             UserInfo userInfo = new UserInfo(user);
 
             return new LoginResponse(accessToken, refreshToken, userInfo);
@@ -120,6 +120,6 @@ public class AuthService {
     }
 
     public String getRefreshToken(AuthUserDto authUser) {
-        return jwtTokenUtil.createAccessToken(authUser.getEmail());
+        return jwtTokenUtil.createAccessToken(String.valueOf(authUser.getId()));
     }
 }

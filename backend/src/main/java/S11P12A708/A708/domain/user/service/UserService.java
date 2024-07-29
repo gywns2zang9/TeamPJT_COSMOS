@@ -21,9 +21,7 @@ public class UserService {
 
     public UserInfo getUserInfoByUserId(AuthUserDto authUser, Long userId) throws RuntimeException {
         final User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        if (Objects.equals(authUser.getId(), userId)) return new UserInfo(user);
-
-        throw new UserInvalidException();
+        return new UserInfo(user);
     }
 
     public Optional<User> getUserByEmail(String email) throws RuntimeException {
