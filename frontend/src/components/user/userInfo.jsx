@@ -2,6 +2,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../../css/user/userInfo.css";
+import defaultImg from "../../assets/media/defaultimg.png";
 
 const UserInfo = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const UserInfo = () => {
       <div id="info-title">내 정보</div>
       <div id="info-box">
         <div id="img-group">
-          <img id="info-img" src="" alt="profile-img" />
+          <img id="info-img" src={defaultImg} alt="profile-img" />
         </div>
 
         <div id="info-group">

@@ -99,6 +99,7 @@ const useSignUp = () => {
   // 이메일 전송 핸들러
   const handleSendEmail = async () => {
     try {
+      console.log(email);
       await axios.post(
         "http://localhost:8080/auth-codes/send-code",
         { email },
@@ -144,15 +145,12 @@ const useSignUp = () => {
   // 인증 토큰 검사 핸들러
   const handleAuthToken = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8080/auth-codes/verify-code",
-        {
-          params: {
-            email,
-            authCode: authToken,
-          },
-        }
-      );
+      const response = await axios.get("http://localhost:8080/verify-code", {
+        params: {
+          email,
+          authCode: authToken,
+        },
+      });
 
       if (response.status === 200) {
         setAuthVerified(true); // 인증 성공 시 상태 true로 설정
@@ -226,7 +224,7 @@ const useSignUp = () => {
       const { accessToken, refreshToken, user } = response.data;
       console.log("회원가입 성공:", { accessToken, refreshToken, user });
       // 로그인 성공 후 추가 작업 (예: 상태 업데이트, 페이지 이동 등)
-      navigate("/dashboard"); // 예를 들어, 대시보드 페이지로 이동
+      navigate("/user"); // 예를 들어, 대시보드 페이지로 이동
     } catch (error) {
       console.error(
         "회원가입 오류:",

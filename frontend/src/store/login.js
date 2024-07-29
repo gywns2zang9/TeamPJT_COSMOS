@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +9,8 @@ const useLogin = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false); // 로그인 요청 상태
   const [accessToken, setAccessToken] = useState(""); // 액세스 토큰 상태
   const [refreshToken, setRefreshToken] = useState(""); // 리프레시 토큰 상태
-  const [user, setUser] = useState(null); // 사용자 정보 상태
+  const [userInfo, setUserInfo] = useState(null); // 사용자 정보 상태
+  const navigate = useNavigate(); // 네비게이션 훅
 
   // 이메일 입력 핸들러
   const handleEmailChange = (event) => {
@@ -27,18 +28,8 @@ const useLogin = () => {
     setLoginError(""); // 로그인 오류 메시지 초기화
 
     // 이메일과 비밀번호 입력 여부 검사
-    if (!email && !password) {
-      setLoginError("이메일과 비밀번호를 입력해주세요."); // 둘 다 입력되지 않았을 때의 메시지
-      setIsLoggingIn(false); // 로그인 요청 상태 false로 설정
-      return;
-    }
-    if (!email) {
-      setLoginError("이메일을 입력해주세요."); // 이메일이 비어 있을 때의 메시지
-      setIsLoggingIn(false); // 로그인 요청 상태 false로 설정
-      return;
-    }
-    if (!password) {
-      setLoginError("비밀번호를 입력해주세요."); // 비밀번호가 비어 있을 때의 메시지
+    if (!email || !password) {
+      setLoginError("이메일과 비밀번호를 입력해주세요."); // 입력되지 않았을 때의 메시지
       setIsLoggingIn(false); // 로그인 요청 상태 false로 설정
       return;
     }
@@ -52,11 +43,14 @@ const useLogin = () => {
 
       // 로그인 성공 시
       console.log("로그인 성공:", response.data);
-      const { accessToken, refreshToken, user } = response.data;
+      const { accessToken, refreshToken, userInfo } = response.data;
       setAccessToken(accessToken); // 액세스 토큰 상태 업데이트
       setRefreshToken(refreshToken); // 리프레시 토큰 상태 업데이트
-      setUser(user); // 사용자 정보 상태 업데이트
+      setUserInfo(userInfo); // 사용자 정보 상태 업데이트
       setLoginError(""); // 오류 메시지 초기화
+
+      // 리다이렉션
+      navigate("/user");
     } catch (error) {
       // 로그인 실패 시
       console.error(
@@ -108,7 +102,7 @@ const useLogin = () => {
     isLoggingIn,
     accessToken,
     refreshToken,
-    user,
+    userInfo,
     handleEmailChange,
     handlePasswordChange,
     handleLoginClick,

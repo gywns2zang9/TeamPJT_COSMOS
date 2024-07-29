@@ -16,7 +16,7 @@ const Login = () => {
     handlePasswordFindClick,
     handleNaverLoginClick,
     handleKakaoLoginClick,
-    handleKeyDown, // useLogin 훅에서 가져온 handleKeyDown
+    handleKeyDown,
   } = useLogin(); // 훅에서 상태와 핸들러 가져오기
 
   return (
@@ -34,7 +34,7 @@ const Login = () => {
             placeholder="이메일을 입력하세요"
             value={email}
             onChange={handleEmailChange}
-            onKeyDown={handleKeyDown} // 엔터키 이벤트 추가
+            onKeyDown={handleKeyDown}
           />
         </div>
 
