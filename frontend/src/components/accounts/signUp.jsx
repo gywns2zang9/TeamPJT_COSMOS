@@ -1,5 +1,7 @@
 import useSignUp from "../../store/signUp.js";
 import "../../css/accounts/signUp.css";
+import naverIcon from "../../assets/media/navericon.png";
+import kakaoIcon from "../../assets/media/kakaoicon.png";
 
 const SignUp = () => {
   const {
@@ -171,20 +173,12 @@ const SignUp = () => {
           <div id="social-signup-title">소셜 회원가입</div>
           <div id="social-signup-btns">
             <button id="social-signup-btn-naver">
-              <img
-                src=""
-                // alt="네이버 아이콘"
-                id="social-icon-naver"
-              />
+              <img id="social-icon-naver" src={naverIcon} alt="네이버 아이콘" />
               <span>네이버로 회원가입</span>
             </button>
 
             <button id="social-signup-btn-kakao">
-              <img
-                src=""
-                // alt="카카오 아이콘"
-                id="social-icon-kakao"
-              />
+              <img id="social-icon-kakao" src={kakaoIcon} alt="카카오 아이콘" />
               <span>카카오로 회원가입</span>
             </button>
           </div>

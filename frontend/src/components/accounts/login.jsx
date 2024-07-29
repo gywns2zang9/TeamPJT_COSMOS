@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import useLogin from "../../store/login.js";
 import "../../css/accounts/login.css";
+import naverIcon from "../../assets/media/navericon.png";
+import kakaoIcon from "../../assets/media/kakaoicon.png";
 
 const Login = () => {
   const {
@@ -14,7 +16,6 @@ const Login = () => {
     handlePasswordFindClick,
     handleNaverLoginClick,
     handleKakaoLoginClick,
-    toSignUp,
     handleKeyDown, // useLogin 훅에서 가져온 handleKeyDown
   } = useLogin(); // 훅에서 상태와 핸들러 가져오기
 
@@ -77,29 +78,16 @@ const Login = () => {
           <div id="social-login-title">소셜 로그인</div>
           <div id="social-login-btns">
             <button id="social-login-btn-naver" onClick={handleNaverLoginClick}>
-              <img
-                id="social-icon-naver"
-                src=""
-                // alt="네이버 아이콘"
-              />
+              <img id="social-icon-naver" src={naverIcon} alt="네이버 아이콘" />
               <span>네이버로 로그인</span>
             </button>
 
             <button id="social-login-btn-kakao" onClick={handleKakaoLoginClick}>
-              <img
-                id="social-icon-kakao"
-                src=""
-                // alt="카카오 아이콘"
-              />
+              <img id="social-icon-kakao" src={kakaoIcon} alt="카카오 아이콘" />
               <span>카카오로 로그인</span>
             </button>
           </div>
         </div>
-
-        {/* 회원가입 페이지로 이동 버튼 */}
-        <button onClick={toSignUp} id="sign-up-btn">
-          회원가입
-        </button>
       </div>
     </div>
   );

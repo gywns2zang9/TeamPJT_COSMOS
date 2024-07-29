@@ -138,7 +138,7 @@
 /* 소셜 버튼 hover 상태 스타일 */
 #social-login-btn-naver:hover,
 #social-login-btn-kakao:hover {
-  background-color: #b0b0b0;
+  background-color: #fff;
 }
 
 /* 네이버 버튼 색상 */

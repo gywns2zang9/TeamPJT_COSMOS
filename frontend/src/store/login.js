@@ -10,7 +10,6 @@ const useLogin = () => {
   const [accessToken, setAccessToken] = useState(""); // 액세스 토큰 상태
   const [refreshToken, setRefreshToken] = useState(""); // 리프레시 토큰 상태
   const [user, setUser] = useState(null); // 사용자 정보 상태
-  const navigate = useNavigate(); // navigate 훅 사용
 
   // 이메일 입력 핸들러
   const handleEmailChange = (event) => {
@@ -94,12 +93,6 @@ const useLogin = () => {
     console.log("카카오로 로그인으로 이동");
   };
 
-  // 회원가입 페이지로 이동
-  const toSignUp = () => {
-    console.log("회원가입으로 이동");
-    navigate("/signUp");
-  };
-
   // 엔터키로 로그인 처리
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -122,7 +115,6 @@ const useLogin = () => {
     handlePasswordFindClick,
     handleNaverLoginClick,
     handleKakaoLoginClick,
-    toSignUp,
     handleKeyDown,
   };
 };
