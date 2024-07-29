@@ -231,7 +231,7 @@ function SideBar({ groupId }) {
         return (
             <ul className="no-style-list">
                 {structure.folders.filter(folder => folder.parentId === parentId).map(folder => (
-                    <li key={folder.id} style={{ marginLeft: `${depth * 12}px` }}>
+                    <li key={folder.id} style={{ marginLeft: `${depth * 20}px` }}> {/* 변경된 부분 */}
                         {editingItemId === folder.id ? (
                             <input
                                 type="text"
@@ -284,7 +284,7 @@ function SideBar({ groupId }) {
                     </li>
                 ))}
                 {structure.files.filter(file => file.parentId === parentId).map(file => (
-                    <li key={file.id} style={{ marginLeft: `${depth * 5}px` }}>
+                    <li key={file.id} style={{ marginLeft: `${depth * 20}px` }}>
                         {editingItemId === file.id ? (
                             <input
                                 type="text"
@@ -314,10 +314,12 @@ function SideBar({ groupId }) {
         );
     };
 
+
+
     return (
         <>
             <div ref={sidebarRef} className={`sidebar ${sidebarWidth <= 100 ? 'closed' : 'open'}`} style={{ width: `${sidebarWidth}px` }}>
-                <div className='sidebar-head' style={{backgroundColor:'gray', padding:'3px'}} onClick={handleOpenVideoStartModal}>
+                <div className='sidebar-head' onClick={handleOpenVideoStartModal}>
                     화상회의 시작하기 <FaPlay style={{fontSize:'12px'}}/>
                 </div>
 

@@ -48,11 +48,15 @@ function ConferenceView(props) {
   const [isOpen, setIsOpen] = useState(true);
   const [room, setRoom] = useState(undefined);
   const [localTrack, setLocalTrack] = useState(undefined);
+  const [isVideoEnabled, setIsVideoEnabled] = useState(true);
+  const [isMicEnabled, setisMicEnabled] = useState(true);
   const [participantName, setParticipantName] = useState(
     "Participant" + Math.floor(Math.random() * 100)
   );
   const [remoteTracks, setRemoteTracks] = useState([]);
   const [roomName, setRoomName] = useState("GroupName");
+  const VideoToggleIcon = isVideoEnabled ? VideocamOffIcon : VideocamIcon;
+  const MicToggleIcon = isMicEnabled ? MicOffIcon : MicIcon;
 
   const toggleVideo = () => {
     setIsOpen(!isOpen);
@@ -101,10 +105,10 @@ function ConferenceView(props) {
 
       // 카메라와 마이크를 게시합니다
       await room.localParticipant.enableCameraAndMicrophone();
-      setLocalTrack(
-        room.localParticipant.videoTrackPublications.values().next().value
-          .videoTrack
-      );
+      const videoTrack = room.localParticipant.videoTrackPublications
+        .values()
+        .next().value.videoTrack;
+      setLocalTrack(videoTrack);
     } catch (error) {
       console.log("룸에 연결하는 동안 오류가 발생했습니다:", error.message);
       await leaveRoom();
@@ -142,6 +146,23 @@ function ConferenceView(props) {
     return data.token;
   }
 
+  const toggleVideoStream = async () => {
+    if (localTrack) {
+      if (isVideoEnabled) {
+        await localTrack.mute(); // 비디오 스트림 비활성화
+      } else {
+        await localTrack.unmute(); // 비디오 스트림 활성화
+      }
+      setIsVideoEnabled(!isVideoEnabled); // 상태 업데이트
+      // console.log(localTrack);
+      // console.log(remoteTracks);
+    }
+  };
+
+  const toggleMic = async () => {
+    setisMicEnabled(!isMicEnabled);
+  };
+
   return (
     <div className="conference">
       <div className={`video ${isOpen ? "open" : "closed"}`}>
@@ -160,10 +181,12 @@ function ConferenceView(props) {
               participantIdentity={remoteTrack.participantIdentity}
             />
           ) : (
-            <AudioComponent
-              key={remoteTrack.trackPublication.trackSid}
-              track={remoteTrack.trackPublication.audioTrack}
-            />
+            isMicEnabled && (
+              <AudioComponent
+                key={remoteTrack.trackPublication.trackSid}
+                track={remoteTrack.trackPublication.audioTrack}
+              />
+            )
           )
         )}
       </div>
@@ -176,7 +199,7 @@ function ConferenceView(props) {
               <button className="button">SWEA</button>
             </div>
             <div>
-              <button className="button toggle-btn" onClick={toggleVideo}>
+              <button className="button" onClick={toggleVideo}>
                 {isOpen ? "⇑" : "⇓"}
               </button>
             </div>
@@ -205,11 +228,15 @@ function ConferenceView(props) {
             <Paint />
           </div>
           <div className="paint-lower-space">
-            <div className="video-volume">
-              <VideocamOffIcon sx={{ fontSize: 30 }} />
-              <VideocamIcon sx={{ fontSize: 30 }} />
-              <MicIcon sx={{ fontSize: 30 }} />
-              <MicOffIcon sx={{ fontSize: 30 }} />
+            <div className="conference-control">
+              <button className="button" onClick={toggleVideoStream}>
+                <VideoToggleIcon style={{ cursor: "pointer" }} />
+                <span>{isVideoEnabled ? "비디오 종료" : "비디오 시작"}</span>
+              </button>
+              <button className="button" onClick={toggleMic}>
+                <MicToggleIcon style={{ cursor: "pointer" }} />
+                <span>{isMicEnabled ? "음소거 해제" : "음소거"}</span>
+              </button>
               {/* <div className="volume-slider">
                 <VolumeSlider />
               </div> */}
