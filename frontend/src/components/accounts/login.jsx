@@ -1,14 +1,22 @@
-// src/components/accounts/login.jsx
-import React from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import useLogin from "../../store/login.js";
 import "../../css/accounts/login.css";
 
 const Login = () => {
-  console.log("login");
-  const navigate = useNavigate();
-  const toSignUp = () => {
-    navigate("/signUp");
-  };
+  const {
+    email,
+    password,
+    loginError,
+    isLoggingIn,
+    handleEmailChange,
+    handlePasswordChange,
+    handleLoginClick,
+    handlePasswordFindClick,
+    handleNaverLoginClick,
+    handleKakaoLoginClick,
+    toSignUp,
+    handleKeyDown, // useLogin 훅에서 가져온 handleKeyDown
+  } = useLogin(); // 훅에서 상태와 핸들러 가져오기
 
   return (
     <div id="login-container">
@@ -23,6 +31,9 @@ const Login = () => {
             id="login-email-input"
             type="email"
             placeholder="이메일을 입력하세요"
+            value={email}
+            onChange={handleEmailChange}
+            onKeyDown={handleKeyDown} // 엔터키 이벤트 추가
           />
         </div>
 
@@ -34,13 +45,29 @@ const Login = () => {
             id="login-pw-input"
             type="password"
             placeholder="비밀번호를 입력하세요"
+            value={password}
+            onChange={handlePasswordChange}
+            onKeyDown={handleKeyDown} // 엔터키 이벤트 추가
           />
-          <Link to="/password-find" id="pw-find-link">
+          <Link
+            to="/password-find"
+            id="pw-find-link"
+            onClick={handlePasswordFindClick}
+          >
             비밀번호 찾기
           </Link>
         </div>
 
-        <button id="login-btn">로그인</button>
+        {/* 로그인 오류 메시지 표시 */}
+        {loginError && <p id="login-error-msg">{loginError}</p>}
+
+        <button
+          id="login-btn"
+          onClick={handleLoginClick} // 로그인 버튼 클릭 핸들러
+          disabled={isLoggingIn} // 로그인 중에는 버튼 비활성화
+        >
+          {isLoggingIn ? "로그인 중..." : "로그인"}
+        </button>
 
         {/* 구분선 */}
         <div id="login-separator-line"></div>
@@ -49,7 +76,7 @@ const Login = () => {
         <div id="social-login-box">
           <div id="social-login-title">소셜 로그인</div>
           <div id="social-login-btns">
-            <button id="social-login-btn-naver">
+            <button id="social-login-btn-naver" onClick={handleNaverLoginClick}>
               <img
                 id="social-icon-naver"
                 src=""
@@ -58,8 +85,7 @@ const Login = () => {
               <span>네이버로 로그인</span>
             </button>
 
-            {/* 카카오 로그인 버튼 */}
-            <button id="social-login-btn-kakao">
+            <button id="social-login-btn-kakao" onClick={handleKakaoLoginClick}>
               <img
                 id="social-icon-kakao"
                 src=""
@@ -69,6 +95,11 @@ const Login = () => {
             </button>
           </div>
         </div>
+
+        {/* 회원가입 페이지로 이동 버튼 */}
+        <button onClick={toSignUp} id="sign-up-btn">
+          회원가입
+        </button>
       </div>
     </div>
   );

@@ -1,10 +1,38 @@
-// src/components/accounts/SignUp.jsx
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import useSignUp from "../../store/signUp.js";
 import "../../css/accounts/signUp.css";
 
 const SignUp = () => {
-  const navigate = useNavigate();
+  const {
+    email,
+    authToken,
+    password,
+    confirmPassword,
+    nickname,
+    timeLeft,
+    emailSent,
+    authVerified,
+    authError,
+    passwordError,
+    passwordMatchError,
+    passwordMatchSuccess,
+    nicknameError,
+    nicknameCheckError,
+    isNicknameValid,
+    isEmailValid,
+    emailError,
+    handleEmailChange,
+    handleAuthTokenChange,
+    handlePasswordChange,
+    handleConfirmPasswordChange,
+    handleNicknameChange,
+    handleSendEmail,
+    handleAuthToken,
+    handleNicknameCheck,
+    handleSignUp,
+    formatTime,
+    handleResendEmail,
+    isSignUpButtonEnabled,
+  } = useSignUp();
 
   return (
     <div id="signup-container">
@@ -20,9 +48,30 @@ const SignUp = () => {
               id="signup-email-input"
               type="email"
               placeholder="이메일을 입력하세요"
+              value={email}
+              onChange={handleEmailChange}
             />
-            <button id="send-btn">전송</button>
+            <button
+              id="send-btn"
+              onClick={handleSendEmail}
+              disabled={!isEmailValid}
+            >
+              전송
+            </button>
           </div>
+          {emailSent && (
+            <div id="email-send-success-msg">
+              인증번호를 발송했습니다. (유효시간 {formatTime(timeLeft)})
+              <div>
+                인증번호가 오지 않았나요?
+                <b id="email-send-fail-msg" onClick={handleResendEmail}>
+                  {" "}
+                  재전송
+                </b>
+              </div>
+            </div>
+          )}
+          {emailError && <div id="email-fail-msg">{emailError}</div>}
         </div>
 
         <div id="auth-token-group">
@@ -34,9 +83,19 @@ const SignUp = () => {
               id="auth-token-input"
               type="text"
               placeholder="인증번호를 입력하세요"
+              value={authToken}
+              onChange={handleAuthTokenChange}
             />
-            <button id="auth-btn">확인</button>
+            <button
+              id="auth-btn"
+              onClick={handleAuthToken}
+              disabled={authVerified}
+            >
+              확인
+            </button>
           </div>
+          {authVerified && <div id="auth-success-msg">인증되었습니다.</div>}
+          {authError && <div id="auth-fail-msg">{authError}</div>}
         </div>
 
         <div id="signup-pw-group">
@@ -47,7 +106,10 @@ const SignUp = () => {
             id="signup-pw-input"
             type="password"
             placeholder="비밀번호를 입력하세요"
+            value={password}
+            onChange={handlePasswordChange}
           />
+          {passwordError && <div id="pw-fail-msg">{passwordError}</div>}
         </div>
 
         <div id="confirm-pw-group">
@@ -58,7 +120,15 @@ const SignUp = () => {
             id="confirm-pw-input"
             type="password"
             placeholder="비밀번호를 확인하세요"
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
           />
+          {passwordMatchError && (
+            <div id="pw-confirm-fail-msg">{passwordMatchError}</div>
+          )}
+          {passwordMatchSuccess && (
+            <div id="pw-confirm-success-msg">{passwordMatchSuccess}</div>
+          )}
         </div>
 
         <div id="signup-nickname-group">
@@ -70,17 +140,33 @@ const SignUp = () => {
               id="signup-nickname-input"
               type="text"
               placeholder="닉네임을 입력하세요"
+              value={nickname}
+              onChange={handleNicknameChange}
             />
-            <button id="nickname-btn">검사</button>
+            <button
+              id="nickname-btn"
+              onClick={handleNicknameCheck}
+              disabled={!isNicknameValid}
+            >
+              검사
+            </button>
           </div>
+          {nicknameError && <div id="nickname-fail-msg">{nicknameError}</div>}
+          {nicknameCheckError && (
+            <div id="nickname-check-fail-msg">{nicknameCheckError}</div>
+          )}
         </div>
 
-        <button id="signup-btn">회원가입</button>
+        <button
+          id="signup-btn"
+          onClick={handleSignUp}
+          disabled={!isSignUpButtonEnabled}
+        >
+          회원가입
+        </button>
 
-        {/* 구분선 */}
         <div id="signup-separator-line"></div>
 
-        {/* 소셜 회원가입 섹션 */}
         <div id="social-signup-box">
           <div id="social-signup-title">소셜 회원가입</div>
           <div id="social-signup-btns">

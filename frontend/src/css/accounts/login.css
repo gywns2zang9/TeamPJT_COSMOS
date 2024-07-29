@@ -158,3 +158,20 @@
   width: 20px; /* 아이콘 크기 조정 */
   height: 20px;
 }
+
+/* 안내 메세지 스타일 */
+#login-error-msg {
+  margin-top: 5px; /* 입력 필드와 링크 사이 여백 */
+  margin-bottom: 0;
+  text-decoration: none;
+  font-size: 16px; /* 링크 폰트 사이즈 조정 */
+}
+
+/* 성공 */
+/* {
+  color: #2f95dc;
+} */
+
+#login-error-msg {
+  color: #d32f2f;
+}
