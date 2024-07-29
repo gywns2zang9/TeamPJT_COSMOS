@@ -3,17 +3,18 @@ spring:
     name: A708
   mail:
     host: smtp.gmail.com
-    port: 587
+    port: 465
     username: ${EMAIL}
     password: ${EMAIL_PASSWORD}
     properties:
       mail:
         smtp:
           auth: true
-          ssl:
-            enable: true
           starttls:
             enable: true
+          ssl:
+            enable: true
+            trust: smtp.gmail.com
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
