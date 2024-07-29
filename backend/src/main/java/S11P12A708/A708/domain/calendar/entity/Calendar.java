@@ -7,13 +7,15 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 지연 로딩 proxy 을 위해서
+@EntityListeners(AuditingEntityListener.class)
 public class Calendar {
 
     @Id
@@ -26,7 +28,7 @@ public class Calendar {
     private String memo;
 
     @Column(nullable = false)
-    private Date time;
+    private LocalDate time;
 
     @CreatedDate
     @Column(updatable = false)
@@ -35,5 +37,19 @@ public class Calendar {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
+
+    public Calendar(String title, String memo, LocalDate time, Team team) {
+        this.title = title;
+        this.memo = memo;
+        this.time = time;
+        this.team = team;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public void update(Calendar updateCalendar) {
+        this.title = updateCalendar.getTitle();
+        this.memo = updateCalendar.getMemo();
+        this.time = updateCalendar.getTime();
+    }
 
 }
