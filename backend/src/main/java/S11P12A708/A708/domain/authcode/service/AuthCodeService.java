@@ -1,9 +1,13 @@
 package S11P12A708.A708.domain.authcode.service;
 
+import S11P12A708.A708.domain.auth.exception.AuthNecessaryException;
+import S11P12A708.A708.domain.auth.exception.InvalidPasswordException;
+import S11P12A708.A708.domain.auth.service.AuthService;
 import S11P12A708.A708.domain.authcode.exception.AuthCodeExpiredException;
 import S11P12A708.A708.domain.authcode.exception.AuthCodeNotFoundException;
 import S11P12A708.A708.domain.authcode.exception.FailMailException;
 import S11P12A708.A708.domain.authcode.exception.InvalidAuthCodeException;
+import S11P12A708.A708.domain.authcode.request.FindPwRequest;
 import S11P12A708.A708.domain.authcode.request.VerifyAuthCodeRequest;
 import S11P12A708.A708.domain.user.exception.UserAlreadyExistException;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
@@ -17,11 +21,12 @@ import S11P12A708.A708.domain.authcode.repository.query.AuthCodeQueryRepository;
 import S11P12A708.A708.domain.authcode.response.SendEmailResponse;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -42,31 +47,38 @@ public class AuthCodeService {
     private final AuthCodeRepository authCodeRepository;
     private final AuthCodeQueryRepository authCodeQueryRepository;
     private final UserRepository userRepository;
+    private final AuthService authService;
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
+    private final PasswordEncoder bCryptPasswordEncoder;
 
     public AuthCodeService(AuthCodeRepository authCodeRepository,
                            AuthCodeQueryRepository authCodeQueryRepository,
                            UserRepository userRepository,
+                           AuthService authService,
                            JavaMailSender mailSender,
-                           @Qualifier("customTemplateEngine") TemplateEngine templateEngine) {
+                           @Qualifier("customTemplateEngine") TemplateEngine templateEngine,
+                           PasswordEncoder bCryptPasswordEncoder) {
         this.authCodeRepository = authCodeRepository;
         this.authCodeQueryRepository = authCodeQueryRepository;
         this.userRepository = userRepository;
+        this.authService = authService;
         this.mailSender = mailSender;
         this.templateEngine = templateEngine;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public SendEmailResponse generateAuthCode(String email, AuthType type) throws RuntimeException {
-        log.info("generateAuthCode");
         String code = UUID.randomUUID().toString();
 
         errIfExistEmailOrNot(email, type);
-        Optional<Authcode> foundAuthCode = authCodeQueryRepository.findByEmailAndType(email, type);
+        Optional<Authcode> foundAuthCode = authCodeRepository.findByEmail(email);
 
         if (foundAuthCode.isPresent()) {
             Authcode authCode = foundAuthCode.get();
+            authCode.setType(type);
             authCode.setAuthToken(code);
+            authCode.setUpdatedAt(LocalDateTime.now());
             authCodeRepository.save(authCode);
         } else {
             Authcode newAuthCode = new Authcode(email, type, code, LocalDateTime.now());
@@ -88,7 +100,6 @@ public class AuthCodeService {
     }
 
     private void sendAuthMail(AuthType type, String email, String code) {
-        log.info("sendAuthMail");
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -113,7 +124,6 @@ public class AuthCodeService {
 
             mailSender.send(message);
         } catch (Exception e) {
-            log.error(e.getMessage());
             throw new FailMailException();
         }
     }
@@ -140,11 +150,44 @@ public class AuthCodeService {
 
     private void approveAuthCode(Authcode authcode, AuthType type) {
         if (type == AuthType.FIND_PW) {
-            authCodeRepository.deleteById(authcode.getId());
+            authcode.setType(AuthType.FIND_PW_ABLE);
+            authcode.setAuthToken(null);
+            authCodeRepository.save(authcode);
         } else if (type == AuthType.SIGN_UP) {
             authcode.setType(AuthType.SIGN_UP_ABLE);
             authcode.setAuthToken(null);
             authCodeRepository.save(authcode);
         }
     }
+
+    @Transactional
+    public boolean changePassword(FindPwRequest req) {
+        User user = userRepository.findByEmail(req.getEmail()).orElseThrow(UserNotFoundException::new);
+
+        if (errIfNotVerifyEmail(req.getEmail()) && authService.pwCheck(req.getNewPassword())) {
+            user.setPassword(req.getNewPassword());
+            user.hashPassword(bCryptPasswordEncoder);
+
+            authCodeRepository.deleteByEmail(req.getEmail());
+            userRepository.save(user);
+
+            return true;
+        }
+
+        throw new InvalidPasswordException();
+    }
+
+    private boolean errIfNotVerifyEmail(String email) throws AuthNecessaryException {
+        Optional<Authcode> foundAuthCodeUser = authCodeRepository.findByEmail(email);
+
+        if (foundAuthCodeUser.isPresent()) {
+            Authcode authcode = foundAuthCodeUser.get();
+
+            if (authcode.getType() == AuthType.FIND_PW) {
+                throw new AuthNecessaryException();
+            } else return authcode.getType() == AuthType.FIND_PW_ABLE;
+        }
+        throw new AuthNecessaryException();
+    }
+
 }

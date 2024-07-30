@@ -91,7 +91,7 @@ public class AuthService {
         } else return true;
     }
 
-    private boolean pwCheck(String password) {
+    public boolean pwCheck(String password) {
         // 8~15자리 사이 숫자, 특수문자, 영어 1개 이상씩
         String pattern = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,13}$";
         if (Pattern.compile(pattern).matcher(password).matches()) return true;
