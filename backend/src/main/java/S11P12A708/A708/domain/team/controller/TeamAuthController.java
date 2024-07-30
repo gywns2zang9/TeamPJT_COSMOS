@@ -2,6 +2,7 @@ package S11P12A708.A708.domain.team.controller;
 
 import S11P12A708.A708.domain.team.request.TeamInfoRequest;
 import S11P12A708.A708.domain.team.response.TeamCodeResponse;
+import S11P12A708.A708.domain.team.response.TeamIdResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
 import S11P12A708.A708.domain.team.service.TeamAuthService;
 import jakarta.validation.Valid;
@@ -22,26 +23,23 @@ public class TeamAuthController {
 
     @GetMapping("/users/{userId}/groups")
     public ResponseEntity<List<TeamResponse>> getTeamList(
-            // TODO: user token에서 유저 정보 받아오는 과정 필요
             @PathVariable Long userId) {
 
         final List<TeamResponse> teamResponses = teamAuthService.getTeamsByUserId(userId);
         return new ResponseEntity<>(teamResponses, HttpStatus.OK);
     }
 
-    @PostMapping("/users/{userId}/groups")
-    public ResponseEntity<Void> createTeam(
-            // TODO: user token에서 유저 정보 받아오는 과정 필요
+    @PostMapping("/users/{userId}/group")
+    public ResponseEntity<TeamIdResponse> createTeam(
             @PathVariable Long userId,
             @Valid @RequestBody TeamInfoRequest request) {
 
-        teamAuthService.createTeam(userId, request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        final TeamIdResponse response = teamAuthService.createTeam(userId, request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/teams/auth/{teamId}/teamCode")
     public ResponseEntity<TeamCodeResponse> getTeamCode(
-            // TODO: user token에서 유저 정보 받아오는 과정 필요
             @PathVariable Long teamId) {
 
         final TeamCodeResponse response = teamAuthService.getTeamCode(teamId);

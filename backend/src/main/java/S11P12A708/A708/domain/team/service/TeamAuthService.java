@@ -8,6 +8,7 @@ import S11P12A708.A708.domain.team.repository.TeamUserRepository;
 import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
 import S11P12A708.A708.domain.team.request.TeamInfoRequest;
 import S11P12A708.A708.domain.team.response.TeamCodeResponse;
+import S11P12A708.A708.domain.team.response.TeamIdResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
 import S11P12A708.A708.domain.team.service.TeamCodeGenerator.TeamCodeGenerator;
 import S11P12A708.A708.domain.user.entity.User;
@@ -37,10 +38,11 @@ public class TeamAuthService {
         return teams.stream().map(TeamResponse::of).toList();
      }
 
-    public void createTeam(Long userId, TeamInfoRequest request) {
+    public TeamIdResponse createTeam(Long userId, TeamInfoRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Team team = teamRepository.save(requestToEntity(request));
         teamUserRepository.save(new TeamUser(user, team, LEADER));
+        return TeamIdResponse.of(team);
     }
 
     public TeamCodeResponse getTeamCode(Long teamId) {
