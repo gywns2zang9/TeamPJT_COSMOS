@@ -1,5 +1,6 @@
 package S11P12A708.A708.domain.team.service;
 
+import S11P12A708.A708.domain.team.exception.TeamAlreadyJoinException;
 import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.entity.TeamUser;
@@ -7,6 +8,7 @@ import S11P12A708.A708.domain.team.repository.TeamRepository;
 import S11P12A708.A708.domain.team.repository.TeamUserRepository;
 import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
 import S11P12A708.A708.domain.team.request.TeamInfoRequest;
+import S11P12A708.A708.domain.team.request.TeamJoinRequest;
 import S11P12A708.A708.domain.team.response.TeamCodeResponse;
 import S11P12A708.A708.domain.team.response.TeamIdResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static S11P12A708.A708.domain.team.entity.TeamUserRole.LEADER;
+import static S11P12A708.A708.domain.team.entity.TeamUserRole.MEMBER;
 
 @Service
 @RequiredArgsConstructor
@@ -56,10 +59,20 @@ public class TeamAuthService {
         return new TeamCodeResponse(teamCode);
     }
 
+    public void joinTeam(Long userId, TeamJoinRequest request) {
+        final User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        final Team team = teamRepository.findByTeamCode(request.getTeamCode()).orElseThrow(TeamNotFoundException::new);
+        final TeamUser teamUser = teamUserRepository.findByTeamAndUser(team, user);
+        if(teamUser != null) throw new TeamAlreadyJoinException();
+
+        teamUserRepository.save(new TeamUser(user, team, MEMBER));
+    }
+
     private Team requestToEntity(TeamInfoRequest request) {
         return new Team(
                 request.getGroupName(),
                 request.getDescription()
         );
     }
+
 }

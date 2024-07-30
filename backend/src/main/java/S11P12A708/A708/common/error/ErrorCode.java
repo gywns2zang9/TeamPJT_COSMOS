@@ -37,6 +37,7 @@ public enum ErrorCode {
     LEADER_LEAVE_EXCEPTION(UNPROCESSABLE_ENTITY, "Leader", "Team Leader cannot leave team"),
     LEADER_NOT(UNPROCESSABLE_ENTITY, "Leader", "user is not leader"),
     USER_NOT_TEAM(UNPROCESSABLE_ENTITY, "Team", "this user does not have permission of this team"),
+    TEAM_ALREADY_JOIN(UNPROCESSABLE_ENTITY, "TEAM", "this user already joined"),
 
     // Calendar
     CALENDAR_NOT_FOUND(UNPROCESSABLE_ENTITY, "calendar", "This Calendar is not exist");
