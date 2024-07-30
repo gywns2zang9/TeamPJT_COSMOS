@@ -12,16 +12,34 @@ public enum ErrorCode {
     REQUEST_INVALID(UNPROCESSABLE_ENTITY, "request", "invalid."),
     INTERNAL_SERVER(UNPROCESSABLE_ENTITY, "internal", "server error."),
 
-    // User
+    // User,
     USER_NOT_FOUND(UNPROCESSABLE_ENTITY, "user", "user not found."),
-    USER_INVALID(UNPROCESSABLE_ENTITY, "user", "incorrect user request error"),
-    INVALID_PASSWORD(UNPROCESSABLE_ENTITY, "user", "incorrect password"),
+    USER_INVALID(UNPROCESSABLE_ENTITY, "user", "user request is incorrect."),
+    USER_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "user", "email is already exist."),
+    INVALID_ACCESS(UNPROCESSABLE_ENTITY, "auth", "Token userId does not match URL userId."),
+
+    // Auth-Code
+    FAIL_MAIL(UNPROCESSABLE_ENTITY, "auth-code", "failed to send email."),
+    AUTH_CODE_NOT_FOUND(UNPROCESSABLE_ENTITY, "auth-code", "auth code not found."),
+    AUTH_CODE_EXPIRED(UNPROCESSABLE_ENTITY, "auth-code", "auth code expired."),
+    INVALID_AUTH_CODE(UNPROCESSABLE_ENTITY, "auth-code", "auth code is incorrect."),
+
+    // Auth
+    AUTH_NECESSARY(UNPROCESSABLE_ENTITY, "auth", "User did not verify the email."),
+    NICKNAME_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "auth", "Nickname is already exist."),
+    INVALID_PASSWORD(UNPROCESSABLE_ENTITY, "user", "password is incorrect."),
+    INVALID_NICKNAME(UNPROCESSABLE_ENTITY, "user", "nickname is incorrect."),
+    FAIL_SING_UP(UNPROCESSABLE_ENTITY, "auth", "Sign up failed due to validation errors."),
+    KAKAO_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "auth", "Sign up failed due to validation errors."),
 
     // Team
     TEAM_NOT_FOUND(UNPROCESSABLE_ENTITY, "Team", "This Team is not exist"),
     LEADER_LEAVE_EXCEPTION(UNPROCESSABLE_ENTITY, "Leader", "Team Leader cannot leave team"),
     LEADER_NOT(UNPROCESSABLE_ENTITY, "Leader", "user is not leader"),
-    USER_NOT_TEAM(UNPROCESSABLE_ENTITY, "Team", "this user does not have permission of this team");
+    USER_NOT_TEAM(UNPROCESSABLE_ENTITY, "Team", "this user does not have permission of this team"),
+
+    // Calendar
+    CALENDAR_NOT_FOUND(UNPROCESSABLE_ENTITY, "calendar", "This Calendar is not exist");
 
 
     private final HttpStatus code;

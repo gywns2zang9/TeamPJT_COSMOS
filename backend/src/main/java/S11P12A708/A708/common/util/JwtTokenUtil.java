@@ -20,37 +20,33 @@ public class JwtTokenUtil {
     @Value("${jwt.refresh.expiration}")
     private long refreshTokenExpirationTime; // 7일
 
-    private final UserService userService;
+    public JwtTokenUtil() {}
 
-    public JwtTokenUtil(UserService userService) {
-        this.userService = userService;
-    }
-
-    public String createAccessToken(String email) {
+    public String createAccessToken(String userId) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + accessTokenExpirationTime);
 
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(userId)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
-    public String createRefreshToken(String email) {
+    public String createRefreshToken(String userId) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshTokenExpirationTime);
 
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(userId)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
-    public String getEmailFromToken(String token) {
+    public String getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)

@@ -1,6 +1,20 @@
 spring:
   application:
     name: A708
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: ${EMAIL}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true
+            trust: smtp.gmail.com
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -34,3 +48,6 @@ jwt:
     expiration: 3600000
   refresh:
     expiration: 604800000
+
+app:
+  expired-time: 5

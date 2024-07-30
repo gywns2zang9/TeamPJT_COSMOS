@@ -1,8 +1,9 @@
 package S11P12A708.A708.common.util;
 
-import S11P12A708.A708.common.error.exception.UserNotFoundException;
+import S11P12A708.A708.domain.auth.exception.InvalidAccessException;
+import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.user.entity.User;
-import S11P12A708.A708.domain.user.service.UserService;
+import S11P12A708.A708.domain.user.repository.UserRepository;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -20,11 +21,11 @@ import java.util.Collections;
 public class JwtAuthFilter implements Filter {
 
     private final JwtTokenUtil jwtTokenUtil;
-    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public JwtAuthFilter(JwtTokenUtil jwtTokenUtil, UserService userService) {
+    public JwtAuthFilter(JwtTokenUtil jwtTokenUtil, UserRepository userRepository) {
         this.jwtTokenUtil = jwtTokenUtil;
-        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -32,16 +33,16 @@ public class JwtAuthFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String path = httpRequest.getRequestURI();
-        if (path.startsWith("/auth/signup") || path.startsWith("/auth/login")) {
-            chain.doFilter(request, response);
-            return;
-        }
 
         String token = getJwtFromRequest(httpRequest);
 
         if (token != null && jwtTokenUtil.validateToken(token)) {
-            String email = jwtTokenUtil.getEmailFromToken(token);
-            User user = userService.getUserByEmail(email).orElseThrow(UserNotFoundException::new);
+            String tokenUserId = jwtTokenUtil.getUserIdFromToken(token);
+            String urlUserId = extractUserIdFromUrl(path);
+
+            if (urlUserId != null && !tokenUserId.equals(urlUserId)) throw new InvalidAccessException();
+            User user = userRepository.findById(Long.parseLong(tokenUserId)).orElseThrow(UserNotFoundException::new);
+
             Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
@@ -55,5 +56,31 @@ public class JwtAuthFilter implements Filter {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    private String extractUserIdFromUrl(String path) {
+        String[] pathSegments = path.split("/");
+
+        for (int i = 0; i < pathSegments.length; i++) {
+            if ("users".equals(pathSegments[i]) && i + 1 < pathSegments.length) {
+                String potentialUserId = pathSegments[i + 1];
+                if (isNumeric(potentialUserId)) {
+                    return potentialUserId;
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean isNumeric(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        try {
+            Long.parseLong(str); // long 타입으로 변환해볼 수 있음
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
