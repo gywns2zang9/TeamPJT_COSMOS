@@ -36,6 +36,12 @@ public class AuthCodeController {
         final SendEmailResponse response = authCodeService.generateAuthCode(request.getEmail(), AuthType.FIND_PW);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/verify-pwd")
+    public ResponseEntity<Boolean> verifyFindPwAuthCode(@RequestBody VerifyAuthCodeRequest request) {
+        final boolean response = authCodeService.verifyAuthCode(request, AuthType.FIND_PW);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
 
 

@@ -17,7 +17,6 @@ import S11P12A708.A708.domain.authcode.repository.query.AuthCodeQueryRepository;
 import S11P12A708.A708.domain.authcode.response.SendEmailResponse;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -140,7 +139,9 @@ public class AuthCodeService {
 
     private void approveAuthCode(Authcode authcode, AuthType type) {
         if (type == AuthType.FIND_PW) {
-            authCodeRepository.deleteById(authcode.getId());
+            authcode.setType(AuthType.FIND_PW_ABLE);
+            authcode.setAuthToken(null);
+            authCodeRepository.save(authcode);
         } else if (type == AuthType.SIGN_UP) {
             authcode.setType(AuthType.SIGN_UP_ABLE);
             authcode.setAuthToken(null);
