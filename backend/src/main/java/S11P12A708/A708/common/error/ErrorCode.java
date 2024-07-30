@@ -20,7 +20,8 @@ public enum ErrorCode {
     // Team
     TEAM_NOT_FOUND(UNPROCESSABLE_ENTITY, "Team", "This Team is not exist"),
     LEADER_LEAVE_EXCEPTION(UNPROCESSABLE_ENTITY, "Leader", "Team Leader cannot leave team"),
-    LEADER_NOT(UNPROCESSABLE_ENTITY, "Leader", "user is not leader");
+    LEADER_NOT(UNPROCESSABLE_ENTITY, "Leader", "user is not leader"),
+    USER_NOT_TEAM(UNPROCESSABLE_ENTITY, "Team", "this user does not have permission of this team");
 
 
     private final HttpStatus code;
