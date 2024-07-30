@@ -109,11 +109,6 @@
   font-size: 14px;
 }
 
-.toggle {
-  border-radius: 20px;
-  padding: 4px 12px;
-}
-
 .button:hover {
   background-color: #3a6695;
 }

@@ -1,26 +1,82 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../css/group/groupSettingsModal.css';
+import useGroupStore from '../store/group';
 
-function GroupSettingsModal({ show, handleClose, isLeader }) {
+function GroupSettingsModal({ show, handleClose, groupId }) {
+    // 그룹 코드 받아오기 api 연결해야함
+    
+    const  [isLeader, setIsLeader] = useState(false);
+    
     const [groupName, setGroupName] = useState('');
     const [groupDescription, setGroupDescription] = useState('');
     const [newLeader, setNewLeader] = useState('');
     const [members, setMembers] = useState([]);
-    const teamCode = '12345'; // 팀 코드 서버에서 받아와
+    const [teamCode, setTeamCode] = useState('');
 
+    const groupDetailLoad = useGroupStore((state) => state.groupDetailLoad);
+    const groupMemberListLoad = useGroupStore((state) => state.groupMemberListLoad);
+    const updateGroupInfo = useGroupStore((state) => state.updateGroupInfo);
+    const updateGroupLeader = useGroupStore((state) => state.updateGroupLeader);
+    const checkInviteCode = useGroupStore((state) => state.checkInviteCode);
+    const outGroup = useGroupStore((state) => state.outGroup);
+    const checkGroupLeader = useGroupStore((state) => state.checkGroupLeader);
+
+    // 그룹 정보 받기
     useEffect(() => {
-        // 그룹원 목록을 서버에서 받아오는 로직 추가
-        // 임시 그룹원 목록 사용
-        setMembers(['Member 1', 'Member 2', 'Member 3']);
-    }, []);
+        if (show && groupId) {
+            const loadGroupDetails = async () => {
+                try {
+                    // 그룹 정보 로드
+                    const { teamName, description, teamCode } = await groupDetailLoad({ groupId });
+                    setGroupName(teamName);
+                    setGroupDescription(description);
+                    setTeamCode(teamCode);
 
-    const handleSaveChanges = () => {
-        // 저장 로직 추가
-        console.log('저장된 그룹 이름:', groupName);
-        console.log('저장된 그룹 소개:', groupDescription);
-        console.log('새 그룹장:', newLeader);
-        handleClose();
+                    // 멤버 목록 로드
+                    const memberList = await groupMemberListLoad({ groupId });
+                    setMembers(memberList);
+
+                    // 초대 코드 체크
+                    const inviteCode = await checkInviteCode({ groupId });
+                    setTeamCode(inviteCode);
+
+                    // 그룹장 여부 확인
+                    const leaderResponse = await checkGroupLeader({ groupId });
+                    setIsLeader(leaderResponse.isLeader); 
+                } catch (err) {
+                    console.error('그룹 정보 로드 실패 -> ', err);
+                }
+            };
+
+            loadGroupDetails();
+        }
+    }, [show, groupId, groupDetailLoad, groupMemberListLoad, checkInviteCode, checkGroupLeader]);
+
+    
+    // 그룹 정보 변경
+    const handleSaveChanges = async () => {
+        try {
+            if (isLeader) {
+                await updateGroupInfo({ groupId, groupName, groupDescription });
+                if (newLeader) {
+                    await updateGroupLeader({ groupId, userId: newLeader });
+                }
+            }
+            handleClose();
+        } catch (err) {
+            console.error('변경 내용 저장 실패 -> ', err);
+        }
+    };
+
+    // 그룹 탈퇴
+    const handleLeaveGroup = async () => {
+        try {
+            await outGroup({ groupId });
+            handleClose();
+        } catch (err) {
+            console.error('그룹 탈퇴 실패 -> ', err);
+        }
     };
 
     return (
@@ -58,9 +114,8 @@ function GroupSettingsModal({ show, handleClose, isLeader }) {
                                 onChange={(e) => setNewLeader(e.target.value)}
                             >
                                 <option value="">그룹원을 선택하세요</option>
-                                {/* 그룹원 목록 select에 추가하기 */}
-                                {members.map((member, index) => (
-                                    <option key={index} value={member}>{member}</option>
+                                {members.map((member) => (
+                                    <option key={member.id} value={member.id}>{member.name}</option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
@@ -78,13 +133,21 @@ function GroupSettingsModal({ show, handleClose, isLeader }) {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
-                    {isLeader ? '그룹페이지로 돌아가기' : '닫기'}
+                    {isLeader ? '그룹 페이지로 돌아가기' : '닫기'}
                 </Button>
-                {/* 팀원이 1명도 없는 경우의 수 추가하기 */}
                 {!isLeader && (
-                    <Button variant="danger" onClick={() => alert('그룹을 나가시겠습니까?')}>
-                        그룹 나가기
-                    </Button>
+                    <>
+                        <Button
+                            variant="danger"
+                            onClick={() => {
+                                if (window.confirm('정말로 그룹을 나가시겠습니까?')) {
+                                    handleLeaveGroup();
+                                }
+                            }}
+                        >
+                            그룹 나가기
+                        </Button>
+                    </>
                 )}
                 {isLeader && (
                     <Button variant="primary" onClick={handleSaveChanges}>
@@ -92,6 +155,7 @@ function GroupSettingsModal({ show, handleClose, isLeader }) {
                     </Button>
                 )}
             </Modal.Footer>
+
         </Modal>
     );
 }

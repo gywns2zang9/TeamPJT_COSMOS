@@ -8,7 +8,8 @@ import useGroupStore from "../store/group.js";
 
 function GroupPageView(props) {
     // 그룹 목록
-    const [groups, setGroups] = useGroupStore([]);
+    const groups = useGroupStore((state) => state.groups) || [];
+    const setGroups = useGroupStore((state) => state.setGroups);
     const loadGroupList = useGroupStore((state) => state.loadGroupList);
 
     useEffect(() => {

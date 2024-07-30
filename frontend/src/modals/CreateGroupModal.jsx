@@ -11,9 +11,8 @@ function CreateGroupModal({ show, handleClose }) {
     const [groupName, setGroupName] = useState('');
     const [description, setDescription] = useState('');
     
-    // 로그인된 사용자 정보에서 userId랑, accessToken 받아오기
+    // 로그인된 사용자 정보에서 userId 받아오기
     const userId = 1;
-    const accessToken = '1a2b3c4d5e'
 
     // 그룹생성함수 import
     const makeGroup = useGroupStore((state) => state.makeGroup());
@@ -21,7 +20,7 @@ function CreateGroupModal({ show, handleClose }) {
     // 요청하기, 성공시 그룹 내부 페이지 이동하기 
     const handleGreateGroup = async () => {
         try {
-            const response = await makeGroup({ userId, accessToken, groupName, description });
+            const response = await makeGroup({ userId, groupName, description });
             console.log('그룹 생성 완료', response);
             handleClose(); // 모달 닫기
             const groupId = response.teamId;
