@@ -17,7 +17,6 @@ import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.entity.UserType;
 import S11P12A708.A708.domain.user.repository.UserRepository;
 import S11P12A708.A708.domain.user.response.UserInfo;
-import S11P12A708.A708.domain.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,15 +31,13 @@ public class AuthService {
 
     private final JwtTokenUtil jwtTokenUtil;
     private final PasswordEncoder bCryptPasswordEncoder;
-    private final UserService userService;
     private final UserRepository userRepository;
     private final AuthCodeRepository authCodeRepository;
 
     public AuthService(PasswordEncoder bCryptPasswordEncoder, JwtTokenUtil jwtTokenUtil,
-                       UserService userService, UserRepository userRepository, AuthCodeRepository authCodeRepository) {
+                       UserRepository userRepository, AuthCodeRepository authCodeRepository) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
-        this.userService = userService;
         this.userRepository = userRepository;
         this.authCodeRepository = authCodeRepository;
     }
@@ -111,7 +108,7 @@ public class AuthService {
     }
 
     public LoginResponse login(LoginRequest req) {
-        User user = userService.getUserByEmail(req.getEmail()).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findByEmail(req.getEmail()).orElseThrow(UserNotFoundException::new);
         boolean userCheck = user.checkPassword(req.getPassword(), bCryptPasswordEncoder);
 
         if (userCheck) {
@@ -123,6 +120,12 @@ public class AuthService {
         }
 
         throw new InvalidPasswordException();
+    }
+
+    public boolean deleteUser(Long userId) {
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        userRepository.deleteById(userId);
+        return true;
     }
 
     public String getRefreshToken(AuthUserDto authUser) {

@@ -1,6 +1,7 @@
 package S11P12A708.A708.domain.user.controller;
 
 import S11P12A708.A708.domain.user.request.ChangePwRequest;
+import S11P12A708.A708.domain.user.request.ChangeUserRequest;
 import S11P12A708.A708.domain.user.response.UserInfo;
 import S11P12A708.A708.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,12 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<UserInfo> getUserInfo(@PathVariable Long userId) {
         final UserInfo userInfo = userService.getUserInfoByUserId(userId);
+        return new ResponseEntity<>(userInfo, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{userId}")
+    public ResponseEntity<UserInfo> changeUserInfo(@PathVariable Long userId, @RequestBody ChangeUserRequest changeUserRequest) {
+        final UserInfo userInfo = userService.updateUserInfo(userId, changeUserRequest);
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
