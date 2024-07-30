@@ -1,17 +1,20 @@
 package S11P12A708.A708.domain.team.service;
 
-import S11P12A708.A708.common.error.exception.TeamNotFoundException;
-import S11P12A708.A708.domain.user.exception.UserNotFoundException;
+import S11P12A708.A708.domain.team.exception.TeamAlreadyJoinException;
+import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.entity.TeamUser;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
 import S11P12A708.A708.domain.team.repository.TeamUserRepository;
 import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
 import S11P12A708.A708.domain.team.request.TeamInfoRequest;
+import S11P12A708.A708.domain.team.request.TeamJoinRequest;
 import S11P12A708.A708.domain.team.response.TeamCodeResponse;
+import S11P12A708.A708.domain.team.response.TeamIdResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
 import S11P12A708.A708.domain.team.service.TeamCodeGenerator.TeamCodeGenerator;
 import S11P12A708.A708.domain.user.entity.User;
+import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static S11P12A708.A708.domain.team.entity.TeamUserRole.LEADER;
+import static S11P12A708.A708.domain.team.entity.TeamUserRole.MEMBER;
 
 @Service
 @RequiredArgsConstructor
@@ -37,10 +41,11 @@ public class TeamAuthService {
         return teams.stream().map(TeamResponse::of).toList();
      }
 
-    public void createTeam(Long userId, TeamInfoRequest request) {
+    public TeamIdResponse createTeam(Long userId, TeamInfoRequest request) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Team team = teamRepository.save(requestToEntity(request));
         teamUserRepository.save(new TeamUser(user, team, LEADER));
+        return TeamIdResponse.of(team);
     }
 
     public TeamCodeResponse getTeamCode(Long teamId) {
@@ -54,9 +59,13 @@ public class TeamAuthService {
         return new TeamCodeResponse(teamCode);
     }
 
-    // TODO : 로그인한 유저와 요청한 유저가 같은지
-    private boolean verityUserId(Long userId, Long AuthId) {
-        return userId.equals(AuthId);
+    public void joinTeam(Long userId, TeamJoinRequest request) {
+        final User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        final Team team = teamRepository.findByTeamCode(request.getTeamCode()).orElseThrow(TeamNotFoundException::new);
+        final TeamUser teamUser = teamUserRepository.findByTeamAndUser(team, user);
+        if(teamUser != null) throw new TeamAlreadyJoinException();
+
+        teamUserRepository.save(new TeamUser(user, team, MEMBER));
     }
 
     private Team requestToEntity(TeamInfoRequest request) {
@@ -65,4 +74,5 @@ public class TeamAuthService {
                 request.getDescription()
         );
     }
+
 }

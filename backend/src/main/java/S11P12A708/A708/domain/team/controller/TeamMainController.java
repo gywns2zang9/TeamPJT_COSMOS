@@ -1,11 +1,12 @@
 package S11P12A708.A708.domain.team.controller;
 
+import S11P12A708.A708.domain.auth.annotation.AuthUser;
+import S11P12A708.A708.domain.auth.request.AuthUserDto;
 import S11P12A708.A708.domain.team.request.TeamInfoRequest;
 import S11P12A708.A708.domain.team.request.TeamLeaderRequest;
 import S11P12A708.A708.domain.team.response.TeamDetailResponse;
 import S11P12A708.A708.domain.team.response.TeamMemberResponse;
 import S11P12A708.A708.domain.team.service.TeamMainService;
-import S11P12A708.A708.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,6 @@ import java.util.List;
 public class TeamMainController {
 
     private final TeamMainService teamMainService;
-    private final UserRepository userRepository;
 
     @GetMapping("/teams/{teamId}")
     public ResponseEntity<TeamDetailResponse> getTeamDetail(@PathVariable("teamId") Long teamId) {
@@ -36,31 +36,31 @@ public class TeamMainController {
 
     @PatchMapping("/teams/{teamId}")
     public ResponseEntity<Void> updateTeamDetail(
+            @AuthUser AuthUserDto authUser,
             @PathVariable("teamId") Long teamId,
             @RequestBody TeamInfoRequest request) {
-        teamMainService.updateTeamDetail(teamId, request);
+        teamMainService.updateTeamDetail(authUser.getId(), teamId, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/teams/{teamId}/leader")
     public ResponseEntity<Void> updateTeamLeader(
+            @AuthUser AuthUserDto authUser,
             @PathVariable("teamId") Long teamId,
             @RequestBody TeamLeaderRequest request) {
-        teamMainService.updateTeamLeader(teamId, request);
+        teamMainService.updateTeamLeader(authUser.getId(), teamId, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/teams/{teamId}/leader")
-    public ResponseEntity<Boolean> checkTeamLeader(@PathVariable("teamId") Long teamId) {
-        final Long loginId = 1L; // TODO : 로그인된 유저 정보 가져오기
-        final Boolean isLeader = teamMainService.checkTeamLeader(teamId, loginId);
+    public ResponseEntity<Boolean> checkTeamLeader(@AuthUser AuthUserDto authUser, @PathVariable("teamId") Long teamId) {
+        final Boolean isLeader = teamMainService.checkTeamLeader(teamId, authUser.getId());
         return new ResponseEntity<>(isLeader, HttpStatus.OK);
     }
 
     @DeleteMapping("/teams/{teamId}")
-    public ResponseEntity<Void> exitTeam(@PathVariable("teamId") Long teamId) {
-        final Long loginId = 1L; // TODO : 로그인된 유저 정보 가져오기
-        teamMainService.exitTeam(teamId, loginId);
+    public ResponseEntity<Void> exitTeam(@AuthUser AuthUserDto authUser, @PathVariable("teamId") Long teamId) {
+        teamMainService.exitTeam(teamId, authUser.getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

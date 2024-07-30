@@ -1,5 +1,6 @@
 package S11P12A708.A708.domain.team.entity;
 
+import S11P12A708.A708.domain.team.exception.LeaderNotException;
 import S11P12A708.A708.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -58,4 +59,7 @@ public class TeamUser {
         this.role = role;
     }
 
+    public void verifyTeamLeader() {
+        if(!this.role.equals(LEADER)) throw new LeaderNotException();
+    }
 }
