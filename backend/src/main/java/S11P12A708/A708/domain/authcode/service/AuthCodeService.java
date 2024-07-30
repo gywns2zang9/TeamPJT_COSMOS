@@ -58,15 +58,16 @@ public class AuthCodeService {
     }
 
     public SendEmailResponse generateAuthCode(String email, AuthType type) throws RuntimeException {
-        log.info("generateAuthCode");
         String code = UUID.randomUUID().toString();
 
         errIfExistEmailOrNot(email, type);
-        Optional<Authcode> foundAuthCode = authCodeQueryRepository.findByEmailAndType(email, type);
+        Optional<Authcode> foundAuthCode = authCodeRepository.findByEmail(email);
 
         if (foundAuthCode.isPresent()) {
             Authcode authCode = foundAuthCode.get();
+            authCode.setType(type);
             authCode.setAuthToken(code);
+            authCode.setUpdatedAt(LocalDateTime.now());
             authCodeRepository.save(authCode);
         } else {
             Authcode newAuthCode = new Authcode(email, type, code, LocalDateTime.now());
@@ -88,7 +89,6 @@ public class AuthCodeService {
     }
 
     private void sendAuthMail(AuthType type, String email, String code) {
-        log.info("sendAuthMail");
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
