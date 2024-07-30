@@ -30,6 +30,12 @@ public class AuthCodeController {
         final boolean response = authCodeService.verifyAuthCode(request, AuthType.SIGN_UP);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PostMapping("/find-pwd")
+    public ResponseEntity<SendEmailResponse> sendFindPwEmail(@RequestBody SendEmailRequest request) {
+        final SendEmailResponse response = authCodeService.generateAuthCode(request.getEmail(), AuthType.FIND_PW);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
 
 
