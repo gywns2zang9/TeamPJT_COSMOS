@@ -34,7 +34,7 @@ spring:
       ddl-auto: update
 
 server:
-  servlet:g
+  servlet:
     context-path: /
   port: '8080'
 
