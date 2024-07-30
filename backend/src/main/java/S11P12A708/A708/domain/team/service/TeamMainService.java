@@ -2,7 +2,6 @@ package S11P12A708.A708.domain.team.service;
 
 import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.exception.LeaderLeaveException;
-import S11P12A708.A708.common.error.exception.UserNotFoundException;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.entity.TeamUser;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
@@ -13,6 +12,7 @@ import S11P12A708.A708.domain.team.request.TeamLeaderRequest;
 import S11P12A708.A708.domain.team.response.TeamDetailResponse;
 import S11P12A708.A708.domain.team.response.TeamMemberResponse;
 import S11P12A708.A708.domain.user.entity.User;
+import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +32,6 @@ public class TeamMainService {
     private final TeamQueryRepository teamQueryRepository;
     private final TeamUserRepository teamUserRepository;
     private final UserRepository userRepository;
-
-    // TODO : 로그인한 유저가 team의 멤버인지(권한 문제)
 
     public TeamDetailResponse getTeamDetail(final Long teamId) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
