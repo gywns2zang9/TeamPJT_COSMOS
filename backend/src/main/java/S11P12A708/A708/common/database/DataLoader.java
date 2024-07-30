@@ -20,10 +20,11 @@ public class DataLoader implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         if (userRepository.count() == 0) {
             createTestUser("test");
             createTestUser("test1");
+            createTestUser("test2");
         }
     }
 

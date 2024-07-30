@@ -33,14 +33,14 @@ public enum ErrorCode {
     KAKAO_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "auth", "Sign up failed due to validation errors."),
 
     // Team
-    TEAM_NOT_FOUND(UNPROCESSABLE_ENTITY, "Team", "This Team is not exist"),
-    LEADER_LEAVE_EXCEPTION(UNPROCESSABLE_ENTITY, "Leader", "Team Leader cannot leave team"),
-    LEADER_NOT(UNPROCESSABLE_ENTITY, "Leader", "user is not leader"),
-    USER_NOT_TEAM(UNPROCESSABLE_ENTITY, "Team", "this user does not have permission of this team"),
-    TEAM_ALREADY_JOIN(UNPROCESSABLE_ENTITY, "TEAM", "this user already joined"),
+    TEAM_NOT_FOUND(UNPROCESSABLE_ENTITY, "team", "This Team is not exist"),
+    LEADER_LEAVE_EXCEPTION(UNPROCESSABLE_ENTITY, "team", "Team Leader cannot leave team"),
+    LEADER_NOT(UNPROCESSABLE_ENTITY, "team", "user is not leader"),
+    USER_NOT_TEAM(UNPROCESSABLE_ENTITY, "team", "this user does not have permission of this team"),
+    TEAM_ALREADY_JOIN(UNPROCESSABLE_ENTITY, "team", "this user already joined"),
 
     // Calendar
-    CALENDAR_NOT_FOUND(UNPROCESSABLE_ENTITY, "calendar", "This Calendar is not exist");
+    CALENDAR_NOT_FOUND(UNPROCESSABLE_ENTITY, "Calendar", "This Calendar is not exist");
 
 
     private final HttpStatus code;
