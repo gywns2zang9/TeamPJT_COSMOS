@@ -1,27 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import dayGridPlugin from '@fullcalendar/daygrid';
 import '../../css/group/calendar.css';
 import { Modal, Button, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import useGroupStore from '../../store/group';
+import CalendarModal from '../../modals/CalendarModal.jsx';
 
-function Calendar() {
+function Calendar({ groupId }) {
+  const { loadCalendarScheduleList, createCalendarSchedule, updateCalendarSchedule, deleteCalendarSchedule } = useGroupStore();
   const [events, setEvents] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [newEvent, setNewEvent] = useState({ title: '', start: '', description: '' });
+  const [currentEvent, setCurrentEvent] = useState({ title: '', start: '', description: '' });
   const [isEditing, setIsEditing] = useState(false);
   const [currentEventId, setCurrentEventId] = useState(null);
 
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await loadCalendarScheduleList({ groupId })
+        const formattedEvents = response.map(event => ({
+          id: event.scheduleId,
+          title: event.title,
+          start: new Date(event.startTime).toISOString().slice(0, -1),
+          description: event.memo
+        }))
+        setEvents(formattedEvents);
+      } catch (err) {
+        console.error('일정 불러오기 실패 -> ', err);
+      }
+    };
+    fetchEvents();
+  }, [groupId, loadCalendarScheduleList]);
+
   const handleDateClick = (date) => {
-    setNewEvent({ title: '', start: date.dateStr, description: '' });
+    setCurrentEvent({ title: '', start: date.dateStr, description: '' });
     setIsEditing(false);
     setShowModal(true);
   };
 
   const handleEventClick = (clickInfo) => {
     const event = clickInfo.event;
-    setNewEvent({
+    setCurrentEvent({
       title: event.title,
       start: event.startStr,
       description: event.extendedProps.description || ''
@@ -31,21 +53,43 @@ function Calendar() {
     setShowModal(true);
   };
 
-  const handleSaveEvent = () => {
-    const eventToSave = {
-      ...newEvent,
-      end: newEvent.start // 종료 시간을 시작 시간과 동일하게 설정
-    };
-
-    if (isEditing) {
-      setEvents(events.map(event => 
-        event.id === currentEventId ? { ...eventToSave, id: currentEventId } : event
-      ));
-    } else {
-      setEvents([...events, { ...eventToSave, id: Date.now().toString() }]);
+  const handleSaveEvent = async () => {
+    try {
+      if (isEditing) {
+        await updateCalendarSchedule({
+          groupId,
+          calendarId: currentEventId,
+          title: currentEvent.title,
+          memo: currentEvent.description,
+          time: new Date(currentEvent.start).toISOString()
+        });
+        setEvents(events.map(event => 
+          event.id === currentEventId ? { ...currentEvent, id: currentEventId } : event
+        ));
+      } else {
+        const response = await createCalendarSchedule({
+          groupId,
+          title: currentEvent.title,
+          memo: currentEvent.description,
+          time: new Date(currentEvent.start).toISOString()
+        });
+        setEvents([...events, { ...currentEvent, id: response.calendarId }]);
+      }
+      setShowModal(false);
+      setCurrentEvent({ title: '', start: '', description: '' });
+    } catch (err) {
+      console.error('일정 저장 실패', err);
     }
-    setShowModal(false);
-    setNewEvent({ title: '', start: '', description: '' });
+  };
+
+  const handleDeleteEvent = async () => {
+    try {
+      await deleteCalendarSchedule({ groupId, calendarId: currentEventId });
+      setEvents(events.filter(event => event.id !== currentEventId));
+      setShowDeleteModal(false);
+    } catch (err) {
+      console.error('일정 삭제 실패', err);
+    }
   };
 
   const plugins = [dayGridPlugin, timeGridPlugin, interactionPlugin];
@@ -92,7 +136,7 @@ function Calendar() {
           addEventButton: {
             text: '+',
             click: () => {
-              setNewEvent({ title: '', start: '', description: '' });
+              setCurrentEvent({ title: '', start: '', description: '' });
               setIsEditing(false);
               setShowModal(true);
             }
@@ -119,48 +163,17 @@ function Calendar() {
         dayCellContent={renderDayCellContent} 
       />
 
-      {/* 일정 모달 */}
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>{isEditing ? '일정 수정' : '새 일정 추가'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="formEventTitle">
-              <Form.Label>제목</Form.Label>
-              <Form.Control
-                type="text"
-                value={newEvent.title}
-                onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group controlId="formEventDescription">
-              <Form.Label>내용</Form.Label>
-              <Form.Control
-                type="text"
-                value={newEvent.description}
-                onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
-              />
-            </Form.Group>
-            <Form.Group controlId="formEventStart">
-              <Form.Label>시작 시간</Form.Label>
-              <Form.Control
-                type="datetime-local"
-                value={newEvent.start}
-                onChange={(e) => setNewEvent({ ...newEvent, start: e.target.value })}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            취소
-          </Button>
-          <Button variant="primary" onClick={handleSaveEvent}>
-            저장
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <CalendarModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        showDeleteModal={showDeleteModal}
+        setShowDeleteModal={setShowDeleteModal}
+        currentEvent={currentEvent}
+        setCurrentEvent={setCurrentEvent}
+        isEditing={isEditing}
+        handleSaveEvent={handleSaveEvent}
+        handleDeleteEvent={handleDeleteEvent}
+      />
     </div>
   );
 }
