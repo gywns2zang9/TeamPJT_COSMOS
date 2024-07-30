@@ -11,6 +11,7 @@ const SignUp = () => {
     confirmPassword,
     nickname,
     timeLeft,
+    emailSending,
     emailSent,
     authVerified,
     authError,
@@ -18,6 +19,7 @@ const SignUp = () => {
     passwordMatchError,
     passwordMatchSuccess,
     nicknameError,
+    nicknameChecking,
     nicknameCheckError,
     isNicknameValid,
     isEmailValid,
@@ -61,6 +63,11 @@ const SignUp = () => {
               전송
             </button>
           </div>
+          {emailSending && (
+            <div id="email-sending-msg">
+              인증번호를 전송 중입니다. 잠시만 기다려주세요.
+            </div>
+          )}
           {emailSent && (
             <div id="email-send-success-msg">
               인증번호를 발송했습니다. (유효시간 {formatTime(timeLeft)})
@@ -153,6 +160,11 @@ const SignUp = () => {
               검사
             </button>
           </div>
+          {nicknameChecking && (
+            <div id="nickname-checking-msg">
+              닉네임 검사 중입니다. 잠시만 기다려주세요.
+            </div>
+          )}
           {nicknameError && <div id="nickname-fail-msg">{nicknameError}</div>}
           {nicknameCheckError && (
             <div id="nickname-check-fail-msg">{nicknameCheckError}</div>
