@@ -4,6 +4,8 @@ import S11P12A708.A708.domain.auth.exception.*;
 import S11P12A708.A708.domain.authcode.entity.AuthType;
 import S11P12A708.A708.domain.authcode.entity.Authcode;
 import S11P12A708.A708.domain.authcode.repository.AuthCodeRepository;
+import S11P12A708.A708.domain.auth.exception.InvalidNickNameException;
+import S11P12A708.A708.domain.auth.exception.NicknameAlreadyExistException;
 import S11P12A708.A708.domain.user.exception.UserAlreadyExistException;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.common.util.JwtTokenUtil;
@@ -48,8 +50,8 @@ public class AuthService {
         Optional<User> foundUser = userRepository.findByEmail(req.getEmail());
         foundUser.ifPresent(this::errIfDuplicateEmail);
 
-        if (errIfNotVerifyEmail(req.getEmail()) && errIfDuplicateNickname(req.getNickName())
-        && pwCheck(req.getPassword()) && nickNameFormat(req.getNickName())) {
+        if (errIfNotVerifyEmail(req.getEmail()) && checkNickName(req.getNickName())
+                && pwCheck(req.getPassword())) {
             User user = new User(req.getEmail(), req.getPassword(), UserType.NORMAL, req.getNickName());
             user.hashPassword(bCryptPasswordEncoder);
 
@@ -83,19 +85,23 @@ public class AuthService {
         throw new AuthNecessaryException();
     }
 
+    public boolean pwCheck(String password) {
+        // 8~15자리 사이 숫자, 특수문자, 영어 1개 이상씩
+        String pattern = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,13}$";
+        if (Pattern.compile(pattern).matcher(password).matches()) return true;
+        throw new InvalidPasswordException();
+    }
+
+    public boolean checkNickName(String nickName) {
+        return errIfDuplicateNickname(nickName) && nickNameFormat(nickName);
+    }
+
     private boolean errIfDuplicateNickname(String nickname) {
         Optional<User> foundNicknameUser = userRepository.findByNickname(nickname);
 
         if (foundNicknameUser.isPresent()) {
             throw new NicknameAlreadyExistException();
         } else return true;
-    }
-
-    public boolean pwCheck(String password) {
-        // 8~15자리 사이 숫자, 특수문자, 영어 1개 이상씩
-        String pattern = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,13}$";
-        if (Pattern.compile(pattern).matcher(password).matches()) return true;
-        throw new InvalidPasswordException();
     }
 
     private boolean nickNameFormat(String nickname) {

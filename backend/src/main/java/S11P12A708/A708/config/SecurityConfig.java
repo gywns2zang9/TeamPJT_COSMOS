@@ -33,6 +33,7 @@ public class SecurityConfig {
     private static final String[] PERMIT_ALL_URLS = {
             "/auth/signup",
             "/auth/login",
+            "/auth/check-nickname",
             "/auth-codes/**"
     };
 
