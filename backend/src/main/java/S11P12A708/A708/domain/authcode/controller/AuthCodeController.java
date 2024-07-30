@@ -27,7 +27,7 @@ public class AuthCodeController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/verify-code")
+    @PostMapping("/verify-code")
     public ResponseEntity<Boolean> verifySignUpAuthCode(@RequestBody VerifyAuthCodeRequest request) {
         final boolean response = authCodeService.verifyAuthCode(request, AuthType.SIGN_UP);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -39,7 +39,7 @@ public class AuthCodeController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/verify-pwd")
+    @PostMapping("/verify-pwd")
     public ResponseEntity<Boolean> verifyFindPwAuthCode(@RequestBody VerifyAuthCodeRequest request) {
         final boolean response = authCodeService.verifyAuthCode(request, AuthType.FIND_PW);
         return new ResponseEntity<>(response, HttpStatus.OK);
