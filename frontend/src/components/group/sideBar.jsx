@@ -356,9 +356,9 @@ function SideBar({ groupId }) {
                 <div ref={resizerRef} className="resizer"></div>
             </div>
             {/* 그룹설정모달 */}
-            <GroupSettingsModal show={showSettingsModal} handleClose={handleCloseSettingsModal} />
+            <GroupSettingsModal show={showSettingsModal} handleClose={handleCloseSettingsModal} groupId={groupId}/>
             {/* 그룹초대모달 */}
-            <InviteGroupModal show={showInviteModal} handleClose={handleCloseInviteModal} />
+            <InviteGroupModal show={showInviteModal} handleClose={handleCloseInviteModal} groupId={groupId}/>
             {/* 화상회의 시작 모달 */}
             <Modal show={showConfirmVideoStart} onHide={handleCloseVideoStartModal}>
                 <Modal.Header closeButton>

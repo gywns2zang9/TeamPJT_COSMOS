@@ -19,8 +19,7 @@ function JoinGroupModal({ show, handleClose }) {
     const handleJoinGroup = async () => {
         try {
             const userId = 1;
-            const accessToken = '1a2b3c4d5e'
-            const response = await joinGroup({ accessToken, userId, teamCode});
+            const response = await joinGroup({ userId, teamCode});
 
             if (response.success) {
                 navigate(`/group/${response.team.id}/0`);
