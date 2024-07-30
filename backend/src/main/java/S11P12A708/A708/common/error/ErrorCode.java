@@ -16,7 +16,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(UNPROCESSABLE_ENTITY, "user", "user not found."),
     USER_INVALID(UNPROCESSABLE_ENTITY, "user", "user request is incorrect."),
     USER_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "user", "email is already exist."),
-    INVALID_ACCESS(UNPROCESSABLE_ENTITY, "auth", "Token userId does not match URL userId."),
+    INVALID_ACCESS(UNPROCESSABLE_ENTITY, "user", "Token userId does not match URL userId."),
 
     // Auth-Code
     FAIL_MAIL(UNPROCESSABLE_ENTITY, "auth-code", "failed to send email."),
@@ -27,8 +27,8 @@ public enum ErrorCode {
     // Auth
     AUTH_NECESSARY(UNPROCESSABLE_ENTITY, "auth", "User did not verify the email."),
     NICKNAME_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "auth", "Nickname is already exist."),
-    INVALID_PASSWORD(UNPROCESSABLE_ENTITY, "user", "password is incorrect."),
-    INVALID_NICKNAME(UNPROCESSABLE_ENTITY, "user", "nickname is incorrect."),
+    INVALID_PASSWORD(UNPROCESSABLE_ENTITY, "auth", "password is incorrect."),
+    INVALID_NICKNAME(UNPROCESSABLE_ENTITY, "auth", "nickname is incorrect."),
     FAIL_SING_UP(UNPROCESSABLE_ENTITY, "auth", "Sign up failed due to validation errors."),
     KAKAO_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "auth", "Sign up failed due to validation errors."),
 

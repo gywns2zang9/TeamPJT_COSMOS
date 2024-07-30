@@ -6,6 +6,7 @@ import S11P12A708.A708.domain.auth.request.LoginRequest;
 import S11P12A708.A708.domain.auth.request.SignUpRequest;
 import S11P12A708.A708.domain.auth.response.LoginResponse;
 import S11P12A708.A708.domain.auth.service.AuthService;
+import S11P12A708.A708.domain.auth.request.NickNameRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,12 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<Boolean> signUp(@RequestBody SignUpRequest signUpRequest) {
         final boolean response = authService.signUp(signUpRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/check-nickname")
+    public ResponseEntity<Boolean> confirmDuplicateNickName(@RequestBody NickNameRequest nickNameRequest) {
+        final boolean response = authService.checkNickName(nickNameRequest.getNickName());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
