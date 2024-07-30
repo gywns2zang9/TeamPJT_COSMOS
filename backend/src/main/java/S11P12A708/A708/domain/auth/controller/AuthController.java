@@ -27,7 +27,7 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/check-nickname")
+    @PostMapping("/check-nickname")
     public ResponseEntity<Boolean> confirmDuplicateNickName(@RequestBody NickNameRequest nickNameRequest) {
         final boolean response = authService.checkNickName(nickNameRequest.getNickName());
         return new ResponseEntity<>(response, HttpStatus.OK);
