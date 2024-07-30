@@ -1,7 +1,8 @@
 package S11P12A708.A708.domain.team.service;
 
-import S11P12A708.A708.common.error.exception.TeamNotFoundException;
-import S11P12A708.A708.common.error.exception.LeaderLeaveException;
+import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
+import S11P12A708.A708.domain.team.exception.LeaderLeaveException;
+import S11P12A708.A708.common.error.exception.UserNotFoundException;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.entity.TeamUser;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
@@ -12,6 +13,7 @@ import S11P12A708.A708.domain.team.request.TeamLeaderRequest;
 import S11P12A708.A708.domain.team.response.TeamDetailResponse;
 import S11P12A708.A708.domain.team.response.TeamMemberResponse;
 import S11P12A708.A708.domain.user.entity.User;
+import S11P12A708.A708.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class TeamMainService {
     private final TeamRepository teamRepository;
     private final TeamQueryRepository teamQueryRepository;
     private final TeamUserRepository teamUserRepository;
+    private final UserRepository userRepository;
 
     // TODO : 로그인한 유저가 team의 멤버인지(권한 문제)
 
@@ -42,33 +45,38 @@ public class TeamMainService {
     }
 
     public List<TeamMemberResponse> getTeamMembers(final Long teamId) {
-        validateTeamId(teamId);
+        teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
 
         final List<User> users = teamQueryRepository.findUsersByTeamId(teamId);
 
         return convertUsersToTeamMemberResponse(users);
     }
 
-    public void updateTeamDetail(final Long teamId, TeamInfoRequest request) {
-        validateTeamId(teamId);
-        // TODO : 로그인한 유저가 리더인지 확인
+    public void updateTeamDetail(final Long loginId, final Long teamId, TeamInfoRequest request) {
+        final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        final User user = userRepository.findById(loginId).orElseThrow(UserNotFoundException::new);
+        final TeamUser teamUser = teamUserRepository.findByTeamAndUser(team, user);
+
+        teamUser.verifyTeamLeader();
 
         final Team updateTeam = Team.of(teamId, request);
-        teamRepository.save(updateTeam);
+        team.update(updateTeam);
     }
 
-    public void updateTeamLeader(final Long teamId, final TeamLeaderRequest request) {
-        validateTeamId(teamId);
-
-        // TODO : 로그인한 유저가 리더인지 확인
-        final TeamUser leaderTeamUser = teamQueryRepository.findLeaderUserByTeamId(teamId);
+    public void updateTeamLeader(final Long loginId, final Long teamId, final TeamLeaderRequest request) {
+        final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        final User user = userRepository.findById(loginId).orElseThrow(UserNotFoundException::new);
+        final TeamUser teamUser = teamUserRepository.findByTeamAndUser(team, user);
         final TeamUser updateTeamUser = teamQueryRepository.findTeamUserByIds(teamId, request.getUserId());
 
-        leaderTeamUser.changeRole(MEMBER);
+        teamUser.verifyTeamLeader();
+
+        teamUser.changeRole(MEMBER);
         updateTeamUser.changeRole(LEADER);
     }
 
     public Boolean checkTeamLeader(final Long teamId, final Long loginId) {
+        teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final TeamUser teamUser = teamQueryRepository.findLeaderUserByTeamId(teamId);
 
         return teamUser.sameUser(loginId);
@@ -90,10 +98,6 @@ public class TeamMainService {
 
     private List<TeamMemberResponse> convertUsersToTeamMemberResponse(final List<User> users) {
         return users.stream().map(TeamMemberResponse::of).toList();
-    }
-
-    private void validateTeamId(Long teamId) {
-        if(!teamRepository.existsById(teamId)) throw new TeamNotFoundException();
     }
 
 }

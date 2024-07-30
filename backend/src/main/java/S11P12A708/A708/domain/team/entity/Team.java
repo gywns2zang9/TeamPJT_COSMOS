@@ -70,4 +70,9 @@ public class Team {
         );
     }
 
+    public void update(Team updateTeam) {
+        this.id = updateTeam.getId();
+        this.name = updateTeam.getName();
+        this.description = updateTeam.getDescription();
+    }
 }
