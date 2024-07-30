@@ -20,11 +20,17 @@ public class DataLoader implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         if (userRepository.count() == 0) {
-            User user = new User("test", "test", UserType.NORMAL, "test");
-            user.hashPassword(bCryptPasswordEncoder);
-            userRepository.save(user);
+            createTestUser("test");
+            createTestUser("test1");
+            createTestUser("test2");
         }
+    }
+
+    private void createTestUser(String testName) {
+        User user = new User(testName, testName, UserType.NORMAL, testName);
+        user.hashPassword(bCryptPasswordEncoder);
+        userRepository.save(user);
     }
 }
