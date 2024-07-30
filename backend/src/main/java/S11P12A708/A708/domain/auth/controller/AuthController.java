@@ -39,6 +39,12 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @DeleteMapping("/users/{userId}")
+    public ResponseEntity<Boolean> deleteUser(@PathVariable Long userId) {
+        final boolean response = authService.deleteUser(userId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/refresh")
     public String getRefreshToken(@AuthUser AuthUserDto authUser) {
         return authService.getRefreshToken(authUser);
