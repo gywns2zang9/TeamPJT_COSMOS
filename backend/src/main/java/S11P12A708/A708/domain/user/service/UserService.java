@@ -2,7 +2,6 @@ package S11P12A708.A708.domain.user.service;
 
 import S11P12A708.A708.domain.auth.exception.InvalidPasswordException;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
-import S11P12A708.A708.domain.auth.request.AuthUserDto;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.repository.UserRepository;
 import S11P12A708.A708.domain.user.request.ChangePwRequest;
@@ -24,7 +23,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserInfo getUserInfoByUserId(AuthUserDto authUser, Long userId) throws RuntimeException {
+    public UserInfo getUserInfoByUserId(Long userId) throws RuntimeException {
         final User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         return new UserInfo(user);
     }
@@ -33,7 +32,7 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public boolean changePassword(AuthUserDto authUser, Long userId, ChangePwRequest req) {
+    public boolean changePassword(Long userId, ChangePwRequest req) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         boolean userCheck = user.checkPassword(req.getOldPassword(), bCryptPasswordEncoder);
 
