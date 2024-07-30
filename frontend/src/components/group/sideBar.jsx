@@ -1,43 +1,46 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState, useRef, useEffect } from "react";
-import { Button, Modal, Tooltip, OverlayTrigger } from "react-bootstrap";
+import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 import GroupSettingsModal from "../../modals/GroupSettingsModal";
 import InviteGroupModal from "../../modals/InviteGroupModal";
 import { FaFolderPlus, FaFileAlt, FaTrashAlt, FaCog, FaPlay, FaUserPlus, FaFolder, FaFile, FaAngleDoubleLeft, FaAngleDoubleRight, FaChevronDown, FaChevronRight } from 'react-icons/fa'; 
-import MainPageTemplates from "./mainPageTemplates.jsx";
-import '../../css/group/sideBar.css'
+import '../../css/group/sideBar.css';
+import useGroupStore from '../../store/group.js';
+import CreateItemModal from '../../modals/CreateGroupModal.jsx';
+import StartVideoModal from '../../modals/StartVideoModal.jsx';
+import ItemDeleteModal from '../../modals/ItemDeleteModal.jsx';
 
 // 초기 폴더와 파일 구조 
 const initialStructure = {
     folders: [
-        { id: 1, name: '새폴더', parentId: null },
-        { id: 2, name: '하위폴더1', parentId: 1 },
-        { id: 3, name: '하위폴더2', parentId: 1 },
-        { id: 4, name: '하위하위폴더', parentId: 2 }
     ],
     files: [
-        { id: 0, name: '메인 페이지', parentId: null, type: 'page', content: {MainPageTemplates} },
-        { id: 1, name: '새 페이지', parentId: 1, type: 'page', content: '' }
     ]
 };
 
 
 function SideBar({ groupId }) {
-    const [isOpen, setIsOpen] = useState(true);
-    const [structure, setStructure] = useState(initialStructure);
-    const [showSettingsModal, setShowSettingsModal] = useState(false);
-    const [showInviteModal, setShowInviteModal] = useState(false);
-    const [editingItemId, setEditingItemId] = useState(null);
-    const [editName, setEditName] = useState('');
-    const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-    const [itemToDelete, setItemToDelete] = useState(null);
-    const [sidebarWidth, setSidebarWidth] = useState(250);
-    const [expandedFolders, setExpandedFolders] = useState({}); 
-    const sidebarRef = useRef(null);
-    const resizerRef = useRef(null);
-    const navigate = useNavigate(); 
-    const [showConfirmVideoStart, setShowConfirmVideoStart] = useState(false);
+    const { loadFolderInfo } = useGroupStore(); // 폴더 정보 불러오기
+    const [isOpen, setIsOpen] = useState(true); // 사이드바 오픈 여부
+    const [structure, setStructure] = useState(initialStructure);   // 디렉토리 구조
+    const [showSettingsModal, setShowSettingsModal] = useState(false);  // 그룹설정
+    const [showInviteModal, setShowInviteModal] = useState(false);  // 그룹초대
+    const [editingItemId, setEditingItemId] = useState(null);   // 폴더/파일 이름변경
+    const [editName, setEditName] = useState('');   // 폴더파일 이름변경
+    const [showConfirmDelete, setShowConfirmDelete] = useState(false);  // 삭제확인
+    const [itemToDelete, setItemToDelete] = useState(null); // 삭제
+    const [sidebarWidth, setSidebarWidth] = useState(250);  // 사이드바 너비
+    const [expandedFolders, setExpandedFolders] = useState({}); // 폴더 확장
+    const sidebarRef = useRef(null);    // 사이드바 크기조절
+    const resizerRef = useRef(null);    // 사이드바 크기조절
+    const navigate = useNavigate();     // 페이지 이동
+    const [showConfirmVideoStart, setShowConfirmVideoStart] = useState(false);  // 화상회의 시작
+    // 아이템 생성 상태
+    const [showCreateItemModal, setShowCreateItemModal] = useState(false); // 아이템 생성 모달
+    const [newItemType, setNewItemType] = useState(''); // 생성할 아이템의 타입
+    const [newItemParentId, setNewItemParentId] = useState(null); // 생성할 아이템의 부모 ID
+    const [newItemName, setNewItemName] = useState(''); // 생성할 아이템의 이름을
 
     // 사이드바 토글 
     const toggleSideBar = () => {
@@ -83,6 +86,18 @@ function SideBar({ groupId }) {
         };
     }, []);
 
+    // 최상위 폴더 로드
+    useEffect(() => {
+        const loadRootFolders = async () => {
+            const { folders, files } = await loadFolderInfo({groupId, pageId:0});
+            setStructure(prev => ({
+                folders,
+                files: [...prev.files, ...files]
+            }));
+        };
+        loadRootFolders();
+    }, [groupId, loadFolderInfo]);
+
     // 설정 모달 
     const handleOpenSettingsModal = () => {
         setShowSettingsModal(true);
@@ -101,48 +116,42 @@ function SideBar({ groupId }) {
         setShowInviteModal(false);
     };
 
-    // 최대 ID 가져오기
-    const getMaxId = (items) => {
-        return items.reduce((max, item) => Math.max(max, item.id), 0);
-    };
-
     // 다음 ID 가져오기
     const getNextId = (type) => {
         const items = type === 'folder' ? structure.folders : structure.files;
-        return getMaxId(items) + 1;
-    };
-
-    // 다음 이름 가져오기
-    const getNextName = (type, parentId) => {
-        const existingNames = Object.values(
-            type === 'folder' 
-            ? structure.folders.filter(f => f.parentId === parentId) 
-            : structure.files.filter(f => f.parentId === parentId)
-        ).filter(item => item.name.startsWith(`새 ${type}`));
-        let index = 1;
-        let newName = `새 ${type}`;
-        while (existingNames.some(item => item.name === newName)) {
-            newName = `새 ${type}(${index})`;
-            index += 1;
-        }
-        return newName;
+        return items.reduce((max, item) => Math.max(max, item.id), 0) + 1;
     };
 
     // 항목 추가
-    const handleAddItem = (type, parentId) => {
-        const newId = getNextId(type);
-        const newName = getNextName(type, parentId);
-        setStructure(prev => {
-            const newItem = { id: newId, type, name: newName, parentId, content: type === 'page' ? '' : {} };
+    const handleAddItemClick = (type, parentId) => {
+        setNewItemType(type); // 타입
+        setNewItemParentId(parentId); // 부모 ID
+        setNewItemName(''); // 이름 입력
+        setShowCreateItemModal(true); // 아이템 생성 모달
+    };
 
-            return {
-                ...prev,
-                [type === 'folder' ? 'folders' : 'files']: [
-                    ...prev[type === 'folder' ? 'folders' : 'files'],
-                    newItem
-                ]
-            };
-        });
+    // 항목 추가 저장
+    const handleCreateItemSave = () => {
+        if (newItemName.trim()) {
+            const newId = getNextId(newItemType);
+            setStructure(prev => {
+                const newItem = { id: newId, type: newItemType, name: newItemName, parentId: newItemParentId, content: newItemType === 'page' ? '' : {} };
+    
+                return {
+                    ...prev,
+                    [newItemType === 'folder' ? 'folders' : 'files']: [
+                        ...prev[newItemType === 'folder' ? 'folders' : 'files'],
+                        newItem
+                    ]
+                };
+            });
+            setShowCreateItemModal(false);
+        }
+    };
+    
+    // 항목 추가 모달 닫기
+    const handleCreateItemClose = () => {
+        setShowCreateItemModal(false);
     };
 
     // 항목 삭제 
@@ -217,6 +226,7 @@ function SideBar({ groupId }) {
         setShowConfirmVideoStart(true);
     };
 
+    // 화상회의 모달 닫기
     const handleCloseVideoStartModal = () => {
         setShowConfirmVideoStart(false);
     };
@@ -257,7 +267,7 @@ function SideBar({ groupId }) {
                                     placement="top"
                                     overlay={<Tooltip id={`tooltip-add-folder`}>Add Folder</Tooltip>}
                                 >
-                                    <Button variant="link" className="add-folder-btn" onClick={() => handleAddItem('folder', folder.id)}>
+                                    <Button variant="link" className="add-folder-btn" onClick={() => handleAddItemClick('folder', folder.id)}>
                                         <FaFolderPlus />
                                     </Button>
                                 </OverlayTrigger>
@@ -265,7 +275,7 @@ function SideBar({ groupId }) {
                                     placement="top"
                                     overlay={<Tooltip id={`tooltip-add-page`}>Add Page</Tooltip>}
                                 >
-                                    <Button variant="link" className="add-page-btn" onClick={() => handleAddItem('page', folder.id)}>
+                                    <Button variant="link" className="add-page-btn" onClick={() => handleAddItemClick('page', folder.id)}>
                                         <FaFileAlt />
                                     </Button>
                                 </OverlayTrigger>
@@ -355,40 +365,16 @@ function SideBar({ groupId }) {
                 }
                 <div ref={resizerRef} className="resizer"></div>
             </div>
+            {/* 폴더파일 생성 모달 */}
+            <CreateItemModal show={showCreateItemModal} handleClose={handleCreateItemClose} handleSave={handleCreateItemSave} value={newItemName} setValue={setNewItemName} />
             {/* 그룹설정모달 */}
             <GroupSettingsModal show={showSettingsModal} handleClose={handleCloseSettingsModal} groupId={groupId}/>
             {/* 그룹초대모달 */}
             <InviteGroupModal show={showInviteModal} handleClose={handleCloseInviteModal} groupId={groupId}/>
             {/* 화상회의 시작 모달 */}
-            <Modal show={showConfirmVideoStart} onHide={handleCloseVideoStartModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>화상회의 시작</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>화상회의를 시작하시겠습니까?</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseVideoStartModal}>
-                        돌아가기
-                    </Button>
-                    <Button variant="primary" onClick={handleStartVideo}>
-                        시작하기
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <StartVideoModal show={showConfirmVideoStart} handleClose={handleCloseVideoStartModal} handleStartVideo={handleStartVideo} />
             {/* 아이템 삭제 모달 */}
-            <Modal show={showConfirmDelete} onHide={handleCancelDelete}>
-                <Modal.Header closeButton>
-                    <Modal.Title>!주의!</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>정말 삭제하시겠습니까?</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCancelDelete}>
-                        취소
-                    </Button>
-                    <Button variant="danger" onClick={confirmDelete}>
-                        삭제
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <ItemDeleteModal show={showConfirmDelete} handleClose={handleCancelDelete} handleDelete={confirmDelete} />
         </>
     );
 }

@@ -9,7 +9,6 @@ const GroupInfoText = styled.div`
 `;
 
 // 그룹 정보 받아와서 적기 API
-
 const MainPageTemplates = ({ pageId, groupId }) => {
     return (
         <>
@@ -21,7 +20,7 @@ const MainPageTemplates = ({ pageId, groupId }) => {
                     <br />
                     <span>그룹 소개 : 2학기 공통프로젝트 팀</span>
                 </GroupInfoText>
-                <Calendar />
+                <Calendar groupId={groupId}/>
             </div>
         </>
     );

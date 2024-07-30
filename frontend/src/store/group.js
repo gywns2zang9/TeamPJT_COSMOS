@@ -207,6 +207,122 @@ const useGroupStore = create((set) => ({
             throw err;
         }
     },
+
+    // 그룹 내 폴더 정보 불러오기 id=0이면 최상위폴더
+    loadFolderIjnfo: async ({ groupId, folderId}) => {
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/folder/${folderId}`;
+            const data = {
+                accessToken,
+            };
+            const response = await get(url, data);
+            console.log(response);
+            return response
+        } catch (err) {
+            console.log('그룹내 폴더정보 불러오기 실패 -> ',err);
+            throw err;
+        }
+    },
+
+    // 폴더 생성하기
+    createFolder: async ({ groupId, parentId, folderName }) => {
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/folder`;
+            const data = {
+                accessToken,
+                parentId,
+                folderName
+            };
+            const response = await post(url, data);
+            console.log(response);
+            return response
+            
+        } catch (err) {
+            console.log('폴더 생성 실패 -> ',err);
+            throw err;
+        }
+    },
+
+    // 폴더 삭제하기
+    deleteFolder: async ({ groupId, folderId }) => {
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/folder/${folderId}`;
+            const data = {
+                accessToken,
+            };
+            const response = await deleteRequest(url, data);
+            console.log(response);
+            return response
+        } catch (err) {
+            console.log('폴더 삭제 실패 -> ',err);
+            throw err;
+        }
+    },
+
+    // 캘린더 일정 목록 불러오기
+    loadCalendarScheduleList: async ({ groupId }) => {
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/calendars`;
+            const response = await get(url);
+            console.log(response);
+            return response
+        } catch (err) {
+            console.log('캘린더 일정 목록 불러오기 실패 -> ',err);
+            throw err;
+        }
+    },
+
+    // 캘린더 일정 생성하기
+    createCalendarSchedule: async ({ groupId, title, memo, time }) => {
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/calendar`;
+            const data = {
+                accessToken,
+                title,
+                memo,
+                time
+            };
+            const response = await post(url, data);
+            console.log(response);
+            return response
+            
+        } catch (err) {
+            console.log('캘린더 일정 생성 실패 -> ',err);
+            throw err
+        }
+    },
+
+    // 캘린더 일정 수정하기
+    updateCalendarSchedule: async ({ groupId, calendarId, title, memo, time }) => {
+        try {
+            const url = `${BASE_URL}/${groupId}/calendar/${calendarId}`;
+            const data = {
+                title,
+                memo,
+                time
+            };
+            const response = await patch(url, data);
+            console.log(response);
+            return response
+            
+        } catch (err) {
+            console.log('캘린더 일정 수정하기 실패 -> ',err);
+            throw err;
+        }
+    },
+
+    // 캘린더 일정 삭제하기
+    deleteCalendarSchedule: async ({ groupId, calendarId }) => {
+        try {
+            const url = `${BASE_URL}/${groupId}/calendar/${calendarId}`;
+            const response = await deleteRequest(url);
+            console.log(response);
+            return response
+        } catch (err) {
+            console.log('캘린더 일정 삭제 실패 -> ',err);
+            throw err;
+        }
+    },
 }));
 
 export default useGroupStore;
