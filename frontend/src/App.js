@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import HomeView from "./views/HomeView";
 import ConferenceView from "./views/ConferenceView.jsx";
 import NavBar from "./components/home/navBar.jsx";
