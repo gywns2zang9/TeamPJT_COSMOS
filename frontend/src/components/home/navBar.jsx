@@ -7,10 +7,20 @@ import Navbar from "react-bootstrap/Navbar";
 import "../../css/home/navbar/style.css";
 import logo from "../../assets/media/logo.jpeg";
 
-// 로그인된 사용자면 로그아웃, 마이페이지가 보이고
-// 비로그인 사용자면 로그인, 회원가입이 보이게 하기
+function NavBar() {
+  // localStorage에서 accessToken과 userInfo를 가져와 로그인 상태 확인 및 userId 추출
+  const accessToken = localStorage.getItem("accessToken");
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const userId = userInfo ? userInfo.userId : null;
 
-function NavBar(props) {
+  const handleLogout = () => {
+    // 로그아웃 시 localStorage에서 토큰과 사용자 정보 제거
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userInfo");
+    window.location.href = "/"; // 홈으로 리다이렉트
+  };
+
   return (
     <Navbar id="navbar">
       <Container id="navbar-container">
@@ -22,20 +32,27 @@ function NavBar(props) {
           </Navbar.Brand>
         </div>
         <div>
-          <Nav className="me-auto" id="nav-link-contatiner">
-            <Nav.Link as={Link} to="/login" id="nav-login">
-              LOGIN
-            </Nav.Link>
-            <Nav.Link href="" id="nav-logout">
-              LOGOUT
-            </Nav.Link>
-            <Nav.Link as={Link} to="/signup" id="nav-signup">
-              SIGNUP
-            </Nav.Link>
-            {/* User Profile 페이지로 이동하는 링크 추가 */}
-            <Nav.Link as={Link} to="/user" id="nav-user-profile">
-              USER PROFILE
-            </Nav.Link>
+          <Nav className="me-auto" id="nav-link-container">
+            {accessToken ? (
+              <>
+                {/* 프로필 링크를 userId를 포함하여 동적으로 생성 */}
+                <Nav.Link as={Link} to={`/users/${userId}`} id="nav-user-profile">
+                  PROFILE
+                </Nav.Link>
+                <Nav.Link href="#" id="nav-logout" onClick={handleLogout}>
+                  LOGOUT
+                </Nav.Link>
+              </>
+            ) : (
+              <>
+                <Nav.Link as={Link} to="/login" id="nav-login">
+                  LOGIN
+                </Nav.Link>
+                <Nav.Link as={Link} to="/signup" id="nav-signup">
+                  SIGNUP
+                </Nav.Link>
+              </>
+            )}
           </Nav>
         </div>
       </Container>

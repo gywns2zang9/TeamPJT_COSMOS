@@ -47,7 +47,7 @@ const useSignUp = () => {
     setAuthToken(authTokenValue);
   };
 
-  // 비밀번호 입력 핸들러---ok
+  // 비밀번호 입력 핸들러
   const handlePasswordChange = (event) => {
     const newPassword = event.target.value;
     setPassword(newPassword);
@@ -62,7 +62,7 @@ const useSignUp = () => {
     }
   };
 
-  // 비밀번호 확인 입력 핸들러---ok
+  // 비밀번호 확인 입력 핸들러
   const handleConfirmPasswordChange = (event) => {
     const newConfirmPassword = event.target.value;
     setConfirmPassword(newConfirmPassword);
@@ -76,7 +76,7 @@ const useSignUp = () => {
     }
   };
 
-  // 닉네임 입력 핸들러---ok
+  // 닉네임 입력 핸들러
   const handleNicknameChange = (event) => {
     const newNickname = event.target.value;
     setNickname(newNickname);
@@ -92,7 +92,7 @@ const useSignUp = () => {
     }
   };
 
-  // 이메일 전송 핸들러---ok
+  // 이메일 전송 핸들러
   const handleSendEmail = async () => {
     console.log(`이메일 전송 중: ${email}`);
     setEmailSending(true);
@@ -114,7 +114,7 @@ const useSignUp = () => {
     }
   };
 
-  // 이메일 재전송 핸들러---ok
+  // 이메일 재전송 핸들러
   const handleResendEmail = () => {
     console.log(`이메일 재전송 중: ${email}`);
     setEmailSent(false); // 이메일 전송 상태를 false로 설정
@@ -179,8 +179,21 @@ const useSignUp = () => {
         nickName: nickname,
       });
       if (response.status === 200) {
+        console.log(response)
         console.log(`${nickname}님, 회원가입 감사합니다.`);
-        navigate("/");
+        // 회원가입 성공 후 로그인 요청
+        const loginResponse = await axios.post("http://localhost:8080/auth/login", {
+          email,
+          password,
+        });
+        if (loginResponse.status === 200) {
+          const { accessToken, refreshToken, userInfo } = loginResponse.data;
+          // 로그인 성공 시 토큰과 사용자 정보 저장
+          localStorage.setItem("accessToken", accessToken);
+          localStorage.setItem("refreshToken", refreshToken);
+          localStorage.setItem("userInfo", JSON.stringify(userInfo));
+          navigate(`/users/${userInfo.userId}`); // 프로필 페이지로 이동
+        }
       }
     } catch (error) {
       console.error("회원가입에 실패했습니다.");

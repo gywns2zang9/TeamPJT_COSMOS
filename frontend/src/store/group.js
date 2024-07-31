@@ -18,7 +18,7 @@ const useGroupStore = create((set) => ({
             console.log(response);
             return response;
         } catch (err) {
-            console.log('그룹 목록 불러오기 실패 -> ',err);
+            console.log('그룹 목록 불러오기 실패 -> ', err);
             throw err;
         }
     },
@@ -37,7 +37,7 @@ const useGroupStore = create((set) => ({
             console.log(response);
             return response
         } catch (err) {
-            console.log('그룹 생성 실패 -> ',err);
+            console.log('그룹 생성 실패 -> ', err);
             throw err;
         }
     },
@@ -53,15 +53,15 @@ const useGroupStore = create((set) => ({
             const response = await post(url, data);
             console.log(response);
             return response
-            
+
         } catch (err) {
-            console.log('그룹 참여 실패 -> ',err);
+            console.log('그룹 참여 실패 -> ', err);
             throw err;
         }
     },
 
     // 그룹 상세 정보 불러오기
-    groupDetailLoad: async ({ groupId}) => {
+    groupDetailLoad: async ({ groupId }) => {
         try {
             const url = `${BASE_URL}/teams/${groupId}`;
             const data = {
@@ -71,13 +71,13 @@ const useGroupStore = create((set) => ({
             console.log(response);
             return response
         } catch (err) {
-            console.log('그룹 상세 정보 불러오기 실패 -> ',err);
+            console.log('그룹 상세 정보 불러오기 실패 -> ', err);
             throw err;
         }
     },
 
     // 그룹 멤버 목록 불러오기
-    groupMemberListLoad: async ({ groupId}) => {
+    groupMemberListLoad: async ({ groupId }) => {
         try {
             const url = `${BASE_URL}/teams/${groupId}/users`;
             const data = {
@@ -87,13 +87,13 @@ const useGroupStore = create((set) => ({
             console.log(response);
             return response
         } catch (err) {
-            console.log('그룹 멤버 목록 불러오기 실패 -> ',err);
+            console.log('그룹 멤버 목록 불러오기 실패 -> ', err);
             throw err;
         }
     },
 
     // 그룹 정보 변경 요청하기
-    updateGroupInfo: async ({ groupId, groupName, description}) => {
+    updateGroupInfo: async ({ groupId, groupName, description }) => {
         try {
             const url = `${BASE_URL}/teams/${groupId}`;
             const data = {
@@ -104,9 +104,9 @@ const useGroupStore = create((set) => ({
             const response = await patch(url, data);
             console.log(response);
             return response
-            
+
         } catch (err) {
-            console.log('그룹 정보 변경 실패 -> ',err);
+            console.log('그룹 정보 변경 실패 -> ', err);
             throw err;
         }
     },
@@ -139,7 +139,7 @@ const useGroupStore = create((set) => ({
             console.log(response);
             return response
         } catch (err) {
-            console.log('그룹장 확인 실패-> ',err);
+            console.log('그룹장 확인 실패-> ', err);
             throw err;
         }
     },
@@ -155,7 +155,7 @@ const useGroupStore = create((set) => ({
             console.log(response);
             return response
         } catch (err) {
-            console.log('그룹 탈퇴 실패 -> ',err);
+            console.log('그룹 탈퇴 실패 -> ', err);
             throw err;
         }
     },
@@ -171,7 +171,7 @@ const useGroupStore = create((set) => ({
             console.log(response);
             return response
         } catch (err) {
-            console.log('그룹 초대 가능한 회원 조회하기 실패 -> ',err);
+            console.log('그룹 초대 가능한 회원 조회하기 실패 -> ', err);
             throw err;
         }
     },
@@ -187,7 +187,7 @@ const useGroupStore = create((set) => ({
             console.log(response);
             return response
         } catch (err) {
-            console.log('그룹 참여코드 확인하기 실패 -> ',err);
+            console.log('그룹 참여코드 확인하기 실패 -> ', err);
             throw err;
         }
     },
@@ -203,13 +203,13 @@ const useGroupStore = create((set) => ({
             console.log(response);
             return response
         } catch (err) {
-            console.log('그룹 참여 이메일 발송하기 실패-> ',err);
+            console.log('그룹 참여 이메일 발송하기 실패-> ', err);
             throw err;
         }
     },
 
     // 그룹 내 폴더 정보 불러오기 id=0이면 최상위폴더
-    loadFolderIjnfo: async ({ groupId, folderId}) => {
+    loadFolderIjnfo: async ({ groupId, folderId }) => {
         try {
             const url = `${BASE_URL}/teams/${groupId}/folder/${folderId}`;
             const data = {
@@ -219,7 +219,7 @@ const useGroupStore = create((set) => ({
             console.log(response);
             return response
         } catch (err) {
-            console.log('그룹내 폴더정보 불러오기 실패 -> ',err);
+            console.log('그룹내 폴더정보 불러오기 실패 -> ', err);
             throw err;
         }
     },
@@ -236,9 +236,9 @@ const useGroupStore = create((set) => ({
             const response = await post(url, data);
             console.log(response);
             return response
-            
+
         } catch (err) {
-            console.log('폴더 생성 실패 -> ',err);
+            console.log('폴더 생성 실패 -> ', err);
             throw err;
         }
     },
@@ -254,7 +254,7 @@ const useGroupStore = create((set) => ({
             console.log(response);
             return response
         } catch (err) {
-            console.log('폴더 삭제 실패 -> ',err);
+            console.log('폴더 삭제 실패 -> ', err);
             throw err;
         }
     },
@@ -267,7 +267,7 @@ const useGroupStore = create((set) => ({
             console.log(response);
             return response
         } catch (err) {
-            console.log('캘린더 일정 목록 불러오기 실패 -> ',err);
+            console.log('캘린더 일정 목록 불러오기 실패 -> ', err);
             throw err;
         }
     },
@@ -285,9 +285,9 @@ const useGroupStore = create((set) => ({
             const response = await post(url, data);
             console.log(response);
             return response
-            
+
         } catch (err) {
-            console.log('캘린더 일정 생성 실패 -> ',err);
+            console.log('캘린더 일정 생성 실패 -> ', err);
             throw err
         }
     },
@@ -304,9 +304,9 @@ const useGroupStore = create((set) => ({
             const response = await patch(url, data);
             console.log(response);
             return response
-            
+
         } catch (err) {
-            console.log('캘린더 일정 수정하기 실패 -> ',err);
+            console.log('캘린더 일정 수정하기 실패 -> ', err);
             throw err;
         }
     },
@@ -319,7 +319,7 @@ const useGroupStore = create((set) => ({
             console.log(response);
             return response
         } catch (err) {
-            console.log('캘린더 일정 삭제 실패 -> ',err);
+            console.log('캘린더 일정 삭제 실패 -> ', err);
             throw err;
         }
     },

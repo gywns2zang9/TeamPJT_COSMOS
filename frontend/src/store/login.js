@@ -6,7 +6,6 @@ const useLogin = () => {
   const [email, setEmail] = useState(""); // 이메일 상태
   const [password, setPassword] = useState(""); // 비밀번호 상태
   const [loginError, setLoginError] = useState(""); // 로그인 오류 메시지 상태
-  const [isLoggingIn, setIsLoggingIn] = useState(false); // 로그인 요청 상태
   const [accessToken, setAccessToken] = useState(""); // 액세스 토큰 상태
   const [refreshToken, setRefreshToken] = useState(""); // 리프레시 토큰 상태
   const [userInfo, setUserInfo] = useState(null); // 사용자 정보 상태
@@ -24,16 +23,13 @@ const useLogin = () => {
 
   // 로그인 핸들러
   const handleLogin = async () => {
-    setIsLoggingIn(true); // 로그인 요청 상태 true로 설정
     setLoginError(""); // 로그인 오류 메시지 초기화
 
     // 이메일과 비밀번호 입력 여부 검사
-    if (!email || !password) {
+    if (!email || !password) { // email 또는 password 중 하나라도 값이 없는 경우
       setLoginError("이메일과 비밀번호를 입력해주세요."); // 입력되지 않았을 때의 메시지
-      setIsLoggingIn(false); // 로그인 요청 상태 false로 설정
       return;
     }
-
     try {
       // 로그인 요청 (백엔드와 통신)
       const response = await axios.post("http://localhost:8080/auth/login", {
@@ -49,8 +45,13 @@ const useLogin = () => {
       setUserInfo(userInfo); // 사용자 정보 상태 업데이트
       setLoginError(""); // 오류 메시지 초기화
 
+      // 토큰을 localStorage에 저장
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+
       // 리다이렉션
-      navigate("/user");
+      navigate(`/users/${userInfo.userId}`);
     } catch (error) {
       // 로그인 실패 시
       console.error(
@@ -61,8 +62,6 @@ const useLogin = () => {
         error.response?.data?.message ||
         "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.";
       setLoginError(errorMessage); // 서버에서 반환된 오류 메시지 설정
-    } finally {
-      setIsLoggingIn(false); // 로그인 요청 상태 false로 설정
     }
   };
 
@@ -95,11 +94,23 @@ const useLogin = () => {
     }
   };
 
+  // 컴포넌트가 마운트될 때 로그인 상태를 확인
+  useEffect(() => {
+    const savedAccessToken = localStorage.getItem("accessToken");
+    const savedRefreshToken = localStorage.getItem("refreshToken");
+    const savedUserInfo = localStorage.getItem("userInfo");
+
+    if (savedAccessToken && savedRefreshToken && savedUserInfo) {
+      setAccessToken(savedAccessToken);
+      setRefreshToken(savedRefreshToken);
+      setUserInfo(JSON.parse(savedUserInfo));
+    }
+  }, []);
+
   return {
     email,
     password,
     loginError,
-    isLoggingIn,
     accessToken,
     refreshToken,
     userInfo,

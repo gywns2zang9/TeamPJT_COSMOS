@@ -9,7 +9,6 @@ const Login = () => {
     email,
     password,
     loginError,
-    isLoggingIn,
     handleEmailChange,
     handlePasswordChange,
     handleLoginClick,
@@ -65,9 +64,8 @@ const Login = () => {
         <button
           id="login-btn"
           onClick={handleLoginClick} // 로그인 버튼 클릭 핸들러
-          disabled={isLoggingIn} // 로그인 중에는 버튼 비활성화
         >
-          {isLoggingIn ? "로그인 중..." : "로그인"}
+          로그인        
         </button>
 
         {/* 구분선 */}

@@ -1,27 +1,24 @@
-// src/components/user/UserInfoChange.jsx
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import "../../css/user/userInfoChange.css";
+import defaultImg from "../../assets/media/defaultimg.png";
+import useUserInfoChange from "../../store/userInfoChange";
 
 const UserInfoChange = () => {
-  const navigate = useNavigate();
-
-  const [username, setUsername] = useState("");
-  const [url, setEmail] = useState("");
-  const [intro, setIntro] = useState("");
-  const [profileImage, setProfileImage] = useState("");
-
-  const toSave = () => {
-    navigate("/user");
-  };
-
-  const toCancel = () => {
-    navigate("/user");
-  };
-
-  const toChangePw = () => {
-    navigate("/password-change");
-  };
+  const {
+    username,
+    setUsername,
+    gitId,
+    setGitId,
+    repo,
+    setRepo,
+    intro,
+    setIntro,
+    profileImage,
+    setProfileImage,
+    toSave,
+    toCancel,
+    toChangePw
+  } = useUserInfoChange();
 
   return (
     <div id="info-change-container">
@@ -29,8 +26,10 @@ const UserInfoChange = () => {
 
       <div id="info-change-box">
         <div id="img-change-group">
-          <img id="info-change-img" src={profileImage} alt="profile-img" />
-          <button id="change-img-btn">프로필 이미지 변경</button>
+          <img id="info-change-img" src={profileImage || defaultImg} alt="profile-img" />
+          <button id="change-img-btn" onClick={() => {/* Implement image change logic */}}>
+            프로필 이미지 변경
+          </button>
         </div>
 
         <div id="info-change-group">
@@ -42,19 +41,31 @@ const UserInfoChange = () => {
               id="nickname-input"
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(event) => setUsername(event.target.value)}
             />
           </div>
 
-          <div id="git-change-group">
-            <label id="git-label" htmlFor="git">
-              나의 Git:
+          <div id="gitId-change-group">
+            <label id="gitId-label" htmlFor="gitId">
+              Git Id:
             </label>
             <input
-              id="git-input"
-              type="url"
-              value={url}
-              onChange={(e) => setEmail(e.target.value)}
+              id="gitId-input"
+              type="text"
+              value={gitId}
+              onChange={(event) => setGitId(event.target.value)}
+            />
+          </div>
+
+          <div id="repo-change-group">
+            <label id="repo-label" htmlFor="repo">
+              Repository:
+            </label>
+            <input
+              id="repo-input"
+              type="text"
+              value={repo}
+              onChange={(event) => setRepo(event.target.value)}
             />
           </div>
 
@@ -66,7 +77,7 @@ const UserInfoChange = () => {
               id="intro-input"
               type="text"
               value={intro}
-              onChange={(e) => setIntro(e.target.value)}
+              onChange={(event) => setIntro(event.target.value)}
             />
           </div>
         </div>
