@@ -196,3 +196,35 @@
   width: 20px; /* 아이콘 크기 조정 */
   height: 20px;
 }
+
+/* 안내 메세지 스타일 */
+#email-fail-msg,
+#email-sending-msg,
+#email-send-success-msg,
+#auth-success-msg,
+#pw-confirm-success-msg #email-send-fail-msg #auth-fail-msg,
+#pw-fail-msg,
+#pw-confirm-fail-msg,
+#nickname-fail-msg,
+#nickname-checking-msg,
+#nickname-check-fail-msg {
+  margin-top: 5px; /* 입력 필드와 링크 사이 여백 */
+  text-decoration: none;
+  font-size: 16px; /* 링크 폰트 사이즈 조정 */
+}
+#email-sending-msg,
+#email-send-success-msg,
+#auth-success-msg,
+#pw-confirm-success-msg,
+#nickname-checking-msg {
+  color: #2f95dc;
+}
+#email-fail-msg,
+#email-send-fail-msg,
+#auth-fail-msg,
+#pw-fail-msg,
+#pw-confirm-fail-msg,
+#nickname-fail-msg,
+#nickname-check-fail-msg {
+  color: #d32f2f;
+}

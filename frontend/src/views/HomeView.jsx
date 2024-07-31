@@ -2,9 +2,21 @@ import React from "react";
 import homeImg from "../assets/media/mainImg.jpeg";
 import "../css/home/style.css";
 import Card from "react-bootstrap/Card";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { isLoggedIn } from "../store/auth"; 
 
 function HomeView(props) {
+  const navigate = useNavigate(); // useNavigate 훅을 사용하여 페이지 이동을 위한 함수 생성
+
+  // 클릭 핸들러 정의
+  const handleStartServiceClick = () => {
+    if (isLoggedIn()) {
+      navigate("/group"); // 로그인된 경우 /group 페이지로 이동
+    } else {
+      navigate("/login"); // 로그인되지 않은 경우 로그인 페이지로 이동
+    }
+  };
+
   return (
     <div id="home-card-container">
       <div id="home-description">
@@ -17,14 +29,14 @@ function HomeView(props) {
           </h3>
         </Card>
       </div>
+
       <div id="home-img-card">
-          <Link to="/group" id="group-page-link">
-        <img src={homeImg} alt="" id="home-img" />
-        <div id="start-service">
-          {/* 비로그인 사용자일 때, 로그인페이지로 이동하게 할 것 */}
-            <span>서비스 시작하기</span>
+        <div id= "group-page-link" onClick={handleStartServiceClick}>
+          <img src={homeImg} alt="" id="home-img" />
+          <div id="start-service">
+          <span>서비스 시작하기</span>
         </div>
-          </Link>
+        </div>
       </div>
     </div>
   );

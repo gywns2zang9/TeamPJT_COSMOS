@@ -1,11 +1,12 @@
-import React from 'react';
-import Calendar from './calendar.jsx';
-import styled from 'styled-components';
+// src/components/group/mainPageTemplates.jsx
+import React from "react";
+import Calendar from "./calendar.jsx";
+import styled from "styled-components";
 
 const GroupInfoText = styled.div`
-    color: white;
-    font-size: 30px;
-    margin: 20px;
+  color: white;
+  font-size: 30px;
+  margin: 20px;
 `;
 
 // 그룹 정보 받아와서 적기 API
