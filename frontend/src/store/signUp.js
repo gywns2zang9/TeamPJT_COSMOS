@@ -109,6 +109,7 @@ const useSignUp = () => {
         setTimeLeft(expiredTime * 60); // 타이머를 분 단위로 초로 변환하여 설정
       }
     } catch (error) {
+      console.error(error.message);
       setEmailSending(false);
       setEmailError("이메일 전송에 실패했습니다."); // 이메일 전송 실패 시 오류 메시지 설정
     }
