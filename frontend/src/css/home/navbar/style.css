@@ -1,27 +1,37 @@
+/* 네비게이션 바 스타일 */
 #navbar {
     background-color: #0D0220;
     border-bottom: 2px white solid;
 }
 
+/* 네비게이션 바 컨테이너 스타일 */
 #navbar-container {
-    background-color: transparent !important;;
+    background-color: transparent !important;
     padding: 10px;
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
     align-items: center;
-    
 }
 
+/* 네비게이션 바 브랜드 이름 스타일 */
 #nav-brand-name {
     color: #2F95DC;
 }
 
+/* 로고 이미지 스타일 */
 #logo-img {
     width: 2rem;
     border-radius: 50%;
     margin-right: 5px;
 }
 
-#nav-link-contatiner * {
-    color: white;
+/* 네비게이션 링크 컨테이너 스타일 */
+#nav-link-container {
+    display: flex;
+    align-items: center;
+}
+
+/* 네비게이션 링크 스타일 */
+#nav-link-container .nav-link {
+    color: white !important; /* 링크 글자색을 흰색으로 설정 */
 }

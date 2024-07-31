@@ -34,13 +34,13 @@ function GroupPageView(props) {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showJoinModal, setShowJoinModal] = useState(false);
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleShowCreateModal = () => setShowCreateModal(true);
-    const handleCloseCreateModal = () => setShowCreateModal(false);
+  const handleShowCreateModal = () => setShowCreateModal(true);
+  const handleCloseCreateModal = () => setShowCreateModal(false);
 
-    const handleShowJoinModal = () => setShowJoinModal(true);
-    const handleCloseJoinModal = () => setShowJoinModal(false);
+  const handleShowJoinModal = () => setShowJoinModal(true);
+  const handleCloseJoinModal = () => setShowJoinModal(false);
 
     const navigateToGroupDetail = (groupId) => {
         navigate(`/group/${groupId}/0/`);
@@ -74,11 +74,14 @@ function GroupPageView(props) {
                 </Card>
             </div>
 
-            {/* 그룹 모달 컴포넌트 렌더링 */}
-            <CreateGroupModal show={showCreateModal} handleClose={handleCloseCreateModal} />
-            <JoinGroupModal show={showJoinModal} handleClose={handleCloseJoinModal} />
-        </>
-    );
+      {/* 그룹 모달 컴포넌트 렌더링 */}
+      <CreateGroupModal
+        show={showCreateModal}
+        handleClose={handleCloseCreateModal}
+      />
+      <JoinGroupModal show={showJoinModal} handleClose={handleCloseJoinModal} />
+    </>
+  );
 }
 
 export default GroupPageView;

@@ -72,7 +72,8 @@
 }
 
 #nickname-change-group,
-#git-change-group,
+#gitId-change-group,
+#repo-change-group,
 #intro-change-group {
   margin: 10px; /* 그룹 사이 간격 */
   display: flex; /* 플렉스 박스 레이아웃 사용 */
@@ -81,7 +82,8 @@
 }
 
 #nickname-label,
-#git-label,
+#gitId-label,
+#repo-label,
 #intro-label {
   width: 120px; /* 고정 너비 */
   font-size: 24px; /* 폰트 크기 */
@@ -90,7 +92,8 @@
 }
 
 #nickname-input,
-#git-input,
+#gitId-input,
+#repo-input,
 #intro-input {
   flex: 1;
   padding: 6px;
