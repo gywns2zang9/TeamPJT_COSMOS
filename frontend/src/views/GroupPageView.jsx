@@ -6,6 +6,7 @@ import CreateGroupModal from '../modals/CreateGroupModal.jsx'
 import JoinGroupModal from '../modals/JoinGroupModal.jsx'
 import useGroupStore from "../store/group.js";
 
+const userId = 1
 function GroupPageView(props) {
     // 그룹 목록
     const groups = useGroupStore((state) => state.groups) || [];
@@ -15,7 +16,7 @@ function GroupPageView(props) {
     useEffect(() => {
         const fetchGroups = async () => {
             try {
-                const response = await loadGroupList();
+                const response = await loadGroupList( {userId} );
                 const transformedData = response.map(team => ({
                     groupId: team.teamId,
                     groupName: team.teamName,

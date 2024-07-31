@@ -11,6 +11,7 @@ import CreateItemModal from '../../modals/CreateGroupModal.jsx';
 import StartVideoModal from '../../modals/StartVideoModal.jsx';
 import ItemDeleteModal from '../../modals/ItemDeleteModal.jsx';
 
+
 // 초기 폴더와 파일 구조 
 const initialStructure = {
     folders: [
@@ -21,7 +22,7 @@ const initialStructure = {
 
 
 function SideBar({ groupId }) {
-    const { loadFolderInfo } = useGroupStore(); // 폴더 정보 불러오기
+    const loadFolderInfo = useGroupStore((state) => state.loadFolderInfo); // 폴더 정보 불러오기
     const [isOpen, setIsOpen] = useState(true); // 사이드바 오픈 여부
     const [structure, setStructure] = useState(initialStructure);   // 디렉토리 구조
     const [showSettingsModal, setShowSettingsModal] = useState(false);  // 그룹설정

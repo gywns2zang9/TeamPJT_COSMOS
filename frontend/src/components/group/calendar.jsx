@@ -4,7 +4,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import dayGridPlugin from '@fullcalendar/daygrid';
 import '../../css/group/calendar.css';
-import { Modal, Button, Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import useGroupStore from '../../store/group';
 import CalendarModal from '../../modals/CalendarModal.jsx';
 

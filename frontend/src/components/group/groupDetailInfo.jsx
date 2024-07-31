@@ -3,7 +3,6 @@ import MainPageTemplates from "./mainPageTemplates";
 import MarkdownEditor from "./markdownEditor";
 
 function GroupDetailInfo({ pageId, groupId }) {
-
     return (
         <>
             <div>
