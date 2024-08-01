@@ -323,8 +323,12 @@ const useGroupStore = create((set) => ({
     // 캘린더 일정 목록 불러오기
     loadCalendarScheduleList: async ({ groupId }) => {
         try {
+            const accessToken = await getAccessToken();
             const url = `${BASE_URL}/teams/${groupId}/calendars`;
-            const response = await get(url);
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await get(url, {}, headers);
             console.log(response);
             return response
         } catch (err) {
@@ -346,8 +350,8 @@ const useGroupStore = create((set) => ({
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
             };
+            console.log(headers);
             const response = await post(url, data, headers);
-            console.log(response);
             return response
 
         } catch (err) {
@@ -359,13 +363,17 @@ const useGroupStore = create((set) => ({
     // 캘린더 일정 수정하기
     updateCalendarSchedule: async ({ groupId, calendarId, title, memo, time }) => {
         try {
+            const accessToken = await getAccessToken();
             const url = `${BASE_URL}/${groupId}/calendar/${calendarId}`;
             const data = {
                 title,
                 memo,
                 time
             };
-            const response = await patch(url, data);
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await patch(url, data, headers);
             console.log(response);
             return response
 
@@ -378,8 +386,12 @@ const useGroupStore = create((set) => ({
     // 캘린더 일정 삭제하기
     deleteCalendarSchedule: async ({ groupId, calendarId }) => {
         try {
-            const url = `${BASE_URL}/${groupId}/calendar/${calendarId}`;
-            const response = await deleteRequest(url);
+            const accessToken = await getAccessToken();
+            const url = `${BASE_URL}/teams/${groupId}/calendar/${calendarId}`;
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await deleteRequest(url, {}, headers);
             console.log(response);
             return response
         } catch (err) {
