@@ -17,7 +17,7 @@ const APPLICATION_SERVER_URL = "https://i11a708.p.ssafy.io/";
 
 function ConferenceView(props) {
   const [isOpen, setIsOpen] = useState(true);
-  const [isVideoEnabled, setIsVideoEnabled] = useState(true);
+  const [isVideoEnabled, setisVideoEnabled] = useState(true);
   const [isMicEnabled, setisMicEnabled] = useState(true);
   const [mySessionId, setMySessionId] = useState("groupName");
   const [myUserName, setMyUserName] = useState(
@@ -29,11 +29,26 @@ function ConferenceView(props) {
   const [subscribers, setSubscribers] = useState([]);
   const [OV, setOV] = useState(null);
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
-  const VideoToggleIcon = isVideoEnabled ? VideocamOffIcon : VideocamIcon;
-  const MicToggleIcon = isMicEnabled ? MicOffIcon : MicIcon;
+  const VideoToggleIcon = isVideoEnabled ? VideocamIcon : VideocamOffIcon;
+  const MicToggleIcon = isMicEnabled ? MicIcon : MicOffIcon;
 
   const toggleVideo = () => {
     setIsOpen(!isOpen);
+  };
+
+  const toggleScreen = () => {
+    if (publisher) {
+      publisher.publishVideo(!isVideoEnabled);
+      setisVideoEnabled(!isVideoEnabled);
+    }
+  };
+
+  const toggleMic = () => {
+    if (publisher) {
+      publisher.publishAudio(!isMicEnabled);
+      setisMicEnabled(!isMicEnabled);
+      console.log(publisher);
+    }
   };
 
   useEffect(() => {
@@ -235,13 +250,13 @@ function ConferenceView(props) {
           </div>
           <div className="paint-lower-space">
             <div className="conference-control">
-              <button className="button">
+              <button className="button" onClick={toggleScreen}>
                 <VideoToggleIcon style={{ cursor: "pointer" }} />
-                <span>{isVideoEnabled ? "비디오 종료" : "비디오 시작"}</span>
+                <span>{isVideoEnabled ? " 비디오 종료" : " 비디오 시작"}</span>
               </button>
-              <button className="button">
+              <button className="button" onClick={toggleMic}>
                 <MicToggleIcon style={{ cursor: "pointer" }} />
-                <span>{isMicEnabled ? "음소거 해제" : "음소거"}</span>
+                <span>{isMicEnabled ? " 음소거" : " 음소거 해제"}</span>
               </button>
               {/* <div className="volume-slider">
                 <VolumeSlider />
