@@ -29,8 +29,9 @@ public enum ErrorCode {
     NICKNAME_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "auth", "Nickname is already exist."),
     INVALID_PASSWORD(UNPROCESSABLE_ENTITY, "auth", "password is incorrect."),
     INVALID_NICKNAME(UNPROCESSABLE_ENTITY, "auth", "nickname is incorrect."),
-    FAIL_SING_UP(UNPROCESSABLE_ENTITY, "auth", "Sign up failed due to validation errors."),
-    KAKAO_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "auth", "Sign up failed due to validation errors."),
+    FAIL_SING_UP(UNPROCESSABLE_ENTITY, "auth", "sign up failed due to validation errors."),
+    KAKAO_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "auth", "kakao email is already exist."),
+    NAVER_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "auth", "naver email is already exist."),
 
     // Team
     TEAM_NOT_FOUND(UNPROCESSABLE_ENTITY, "team", "This Team is not exist"),

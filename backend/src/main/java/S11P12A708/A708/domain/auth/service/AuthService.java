@@ -118,6 +118,8 @@ public class AuthService {
             throw new UserAlreadyExistException();
         } else if (user.getType() == UserType.KAKAO) {
             throw new KakaoAlreadyExistException();
+        } else if (user.getType() == UserType.NAVER) {
+            throw new NaverAlreadyExistException();
         }
     }
 
