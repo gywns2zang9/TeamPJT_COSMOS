@@ -1,12 +1,10 @@
 package S11P12A708.A708.domain.auth.controller;
 
 import S11P12A708.A708.domain.auth.annotation.AuthUser;
-import S11P12A708.A708.domain.auth.request.AuthUserDto;
-import S11P12A708.A708.domain.auth.request.LoginRequest;
-import S11P12A708.A708.domain.auth.request.SignUpRequest;
+import S11P12A708.A708.domain.auth.oauth.request.KakaoLoginParams;
+import S11P12A708.A708.domain.auth.request.*;
 import S11P12A708.A708.domain.auth.response.LoginResponse;
 import S11P12A708.A708.domain.auth.service.AuthService;
-import S11P12A708.A708.domain.auth.request.NickNameRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -36,6 +34,12 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         final LoginResponse response = authService.login(loginRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/kakao-login")
+    public ResponseEntity<LoginResponse> loginKakao(@RequestBody KakaoLoginParams params) {
+        final LoginResponse response = authService.socialLogin(params);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
