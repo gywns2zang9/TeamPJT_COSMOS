@@ -69,6 +69,6 @@ public class KakaoApiClient implements OAuthApiClient {
 
         HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
 
-        return restTemplate.postForObject(url, request, gKakaoInfoResponse.class);
+        return restTemplate.postForObject(url, request, KakaoInfoResponse.class);
     }
 }
