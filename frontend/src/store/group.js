@@ -4,12 +4,14 @@ import { deleteRequest, get, patch, post } from '../api/api.js'
 
 const BASE_URL = useStore.getState().BASE_URL;
 
+// useAuthStore 에서 받아오기
 const accessToken = '1234123'
+
 const useGroupStore = create((set) => ({
     // 그룹 목록 불러오기
-    loadGroupList: async () => {
+    loadGroupList: async ({ userId }) => {
         try {
-            const url = `${BASE_URL}/users/{userId}/teams`;
+            const url = `${BASE_URL}/users/${userId}/teams`;
             const data = {
                 accessToken,
             };
@@ -209,7 +211,7 @@ const useGroupStore = create((set) => ({
     },
 
     // 그룹 내 폴더 정보 불러오기 id=0이면 최상위폴더
-    loadFolderIjnfo: async ({ groupId, folderId }) => {
+    loadFolderInfo: async ({ groupId, folderId}) => {
         try {
             const url = `${BASE_URL}/teams/${groupId}/folder/${folderId}`;
             const data = {
@@ -217,7 +219,8 @@ const useGroupStore = create((set) => ({
             };
             const response = await get(url, data);
             console.log(response);
-            return response
+            const responseData = await response.json();
+            return responseData
         } catch (err) {
             console.log('그룹내 폴더정보 불러오기 실패 -> ', err);
             throw err;
