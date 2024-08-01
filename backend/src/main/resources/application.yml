@@ -51,3 +51,10 @@ jwt:
 
 app:
   expired-time: 5
+
+oauth:
+  kakao:
+    client-id: ${CLIENT_ID}
+    url:
+      auth: https://kauth.kakao.com
+      api: https://kapi.kakao.com
