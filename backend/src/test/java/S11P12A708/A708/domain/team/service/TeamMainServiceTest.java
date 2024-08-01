@@ -35,7 +35,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class TeamMainServiceTest {
@@ -138,7 +137,7 @@ class TeamMainServiceTest {
 
         // then
         assertThat(team.getId()).isEqualTo(TEAM1.getId());
-        assertThat(team.getName()).isEqualTo(request.getGroupName());
+        assertThat(team.getName()).isEqualTo(request.getTeamName());
         assertThat(team.getDescription()).isEqualTo(request.getDescription());
     }
 
