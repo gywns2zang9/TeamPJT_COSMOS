@@ -3,14 +3,14 @@ import homeImg from "../assets/media/mainImg.jpeg";
 import "../css/home/style.css";
 import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
-import { isLoggedIn } from "../store/auth"; 
+import { isLogin } from "../store/auth"; 
 
 function HomeView(props) {
   const navigate = useNavigate(); // useNavigate 훅을 사용하여 페이지 이동을 위한 함수 생성
 
   // 클릭 핸들러 정의
   const handleStartServiceClick = () => {
-    if (isLoggedIn()) {
+    if (isLogin()) {
       navigate("/group"); // 로그인된 경우 /group 페이지로 이동
     } else {
       navigate("/login"); // 로그인되지 않은 경우 로그인 페이지로 이동
