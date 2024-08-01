@@ -1,8 +1,7 @@
-// src/components/accounts/PasswordFind.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../css/accounts/passwordFind.css';
-import { sendEmailPasswordFind, verifyAuthToken, changePassword } from "../../store/auth";
+import useAuthStore from "../../store/auth";
 
 const PasswordFind = () => {
   const [email, setEmail] = useState(''); // 이메일 상태
@@ -23,6 +22,10 @@ const PasswordFind = () => {
 
   const navigate = useNavigate(); // 페이지 이동을 위한 네비게이트 함수
 
+  const sendPasswordFindEmail = useAuthStore((state) => state.sendPasswordFindEmail);
+  const verifyAuthToken = useAuthStore((state) => state.verifyAuthToken);
+  const changePassword = useAuthStore((state) => state.changePassword);
+
   // 이메일 입력 변경 핸들러
   const handleEmailChange = (event) => {
     const emailValue = event.target.value;
@@ -40,15 +43,15 @@ const PasswordFind = () => {
   // 이메일 전송 핸들러
   const handleSendEmail = async () => {
     console.log(`${email}로 전송`);
-    // setEmailSending(true);
+    setEmailSending(true);
     try {
-      const {expiredTime} = await sendEmailPasswordFind({email}); // 이메일 전송 API 호출
-      // setEmailSending(false);
-      // setEmailSent(true);
+      const expiredTime = await sendPasswordFindEmail({ email }); // 이메일 전송 API 호출
+      setEmailSending(false);
+      setEmailSent(true);
       console.log(expiredTime)
     } catch (error) {
-      // setEmailSending(false);
-      // setEmailError('이메일 전송에 실패했습니다.');
+      setEmailSending(false);
+      setEmailError('이메일 전송에 실패했습니다.');
     }
   };
 
@@ -72,9 +75,9 @@ const PasswordFind = () => {
           인증번호 : ${authToken}
         }`);
     try {
-      const response = await verifyAuthToken({email, authToken}); // 인증 토큰 확인 API 호출
+      const response = await verifyAuthToken({ email, authToken }); // 인증 토큰 확인 API 호출
       console.log(response)
-      // setAuthVerified(true);
+      setAuthVerified(true);
     } catch (error) {
       setAuthError("인증번호가 올바르지 않습니다.");
     }
@@ -112,7 +115,7 @@ const PasswordFind = () => {
       return;
     }
     try {
-      await changePassword({email, password}); // 비밀번호 변경 API 호출
+      await changePassword({ email, password }); // 비밀번호 변경 API 호출
       console.log("비밀번호가 변경되었습니다.");
       navigate('/login'); // 로그인 페이지로 이동
     } catch (error) {
@@ -205,7 +208,7 @@ const PasswordFind = () => {
         <button
           id="change-pw-btn"
           onClick={handleChangePassword}
-          // disabled={!authVerified || passwordError || passwordMatchError}
+          disabled={!authVerified || passwordError || passwordMatchError}
         >
           비밀번호 변경
         </button>

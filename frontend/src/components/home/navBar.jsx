@@ -6,11 +6,14 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import "../../css/home/navbar/style.css";
 import logo from "../../assets/media/logo.jpeg";
-import { isLogin, logout, getUserInfo } from "../../store/auth";
+import useAuthStore from "../../store/auth";
 
 function NavBar() {
-  const login = isLogin();
+  const isLogin = useAuthStore((state) => state.isLogin);
+  const getUserInfo = useAuthStore((state) => state.getUserInfo);
+  const logout = useAuthStore((state) => state.logout);
   
+  const login = isLogin();
   const userInfo = getUserInfo();
   const userId = userInfo ? userInfo.userId : null;
 

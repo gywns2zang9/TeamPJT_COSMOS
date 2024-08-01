@@ -1,16 +1,18 @@
-// src/components/Login.jsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../../store/auth";
+import useAuthStore from "../../store/auth";
 import "../../css/accounts/login.css";
 import naverIcon from "../../assets/media/navericon.png";
 import kakaoIcon from "../../assets/media/kakaoicon.png";
+const kakaoURL = '';
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login);
 
   // 이메일 입력 핸들러
   const handleEmailChange = (e) => setEmail(e.target.value);
@@ -29,7 +31,7 @@ const Login = () => {
     
     try {
       // 로그인 요청
-      const { accessToken, refreshToken, userInfo } = await login({email, password});
+      const { accessToken, refreshToken, userInfo } = await login({ email, password });
 
       // 로그인 성공 후 페이지 리다이렉션
       navigate(`/users/${userInfo.userId}`);
@@ -52,6 +54,7 @@ const Login = () => {
   // 카카오 로그인 버튼 클릭 핸들러
   const handleKakaoLoginClick = () => {
     console.log("카카오로 로그인으로 이동");
+    window.location.href = kakaoURL;
   };
 
   // 엔터키로 로그인 처리

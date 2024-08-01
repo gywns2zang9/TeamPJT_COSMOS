@@ -1,11 +1,46 @@
-import React from "react"; 
+import React, { useState, useEffect } from "react"; 
+import { useNavigate } from "react-router-dom";
 import "../../css/user/userInfo.css"; 
 import defaultImg from "../../assets/media/defaultimg.png"; 
-import useUserInfo, { useNavigationHandlers } from "../../store/userInfo"; 
+import useAuthStore from "../../store/auth";
 
 const UserInfo = () => {
-  const [userInfo] = useUserInfo(); 
-  const { toChange, toCode, toLogout, toSignout } = useNavigationHandlers(); 
+  const { getUserInfo, getAccessToken, logout, signOut } = useAuthStore();
+  const [userInfo, setUserInfo] = useState(getUserInfo() || {});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUserInfo = getUserInfo();
+    if (storedUserInfo) {
+      setUserInfo(storedUserInfo);
+    }
+  }, [getUserInfo]);
+
+  const toChange = () => {
+    navigate(`change`);
+  };
+
+  const toCode = () => {
+    navigate("code"); // 경로를 수정하세요 아직 없음
+  };
+
+  const handleLogout = () => {
+    console.log("로그아웃 실행");
+    logout(); // 로그아웃 함수 호출
+  };
+
+  const handleSignOut = async () => {
+    console.log("회원 탈퇴 실행");
+    const accessToken = getAccessToken();
+    const userId = userInfo.userId;
+
+    try {
+      await signOut({ accessToken, userId });
+      handleLogout();
+    } catch (error) {
+      console.error("회원 탈퇴 중 오류 발생:", error);
+    }
+  };
 
   return (
     <div id="info-container">
@@ -43,7 +78,6 @@ const UserInfo = () => {
             </label>
             <span id="info-description">{userInfo.description || "정보가 없습니다."}</span>
           </div>
-
         </div>
       </div>
 
@@ -55,14 +89,13 @@ const UserInfo = () => {
         <div id="info-code-btn" onClick={toCode}>
           내 코드 보기
         </div>
-        <div id="info-logout-btn" onClick={toLogout}>
+        <div id="info-logout-btn" onClick={handleLogout}>
           로그아웃
         </div>
-        <div id="info-signout-btn" onClick={toSignout}>
+        <div id="info-signout-btn" onClick={handleSignOut}>
           회원 탈퇴
         </div>
       </div>
-
     </div>
   );
 };
