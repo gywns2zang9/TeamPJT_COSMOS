@@ -11,6 +11,7 @@ import NavBar from "./components/home/navBar.jsx";
 import Footer from "./components/home/footer.jsx";
 import Login from "./components/accounts/login.jsx";
 import SignUp from "./components/accounts/signUp.jsx";
+import PasswordFind from "./components/accounts/passwordFind.jsx";
 import HomeRoutes from "./routes/homeRoutes.js";
 import GroupRoutes from "./routes/groupRoutes.js";
 import UserRouters from "./routes/userRouters.js"; // UserRouters를 추가합니다.
@@ -27,6 +28,7 @@ function AppContent() {
         <Route path="/conference" element={<ConferenceView />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/password-find" element={<PasswordFind />} />
         <Route path="/" element={<HomeView />} />
         <Route path="*" element={<HomeRoutes />} />
         <Route path="/group/*" element={<GroupRoutes />} />

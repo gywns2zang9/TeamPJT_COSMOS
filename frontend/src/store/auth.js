@@ -21,7 +21,7 @@ export const getUserInfo = () => {
 
 // 로그인 요청 함수
 export const login = async ({ email, password }) => {
-
+    console.log("auth.js에서 로그인 요청 실행")
     try {
         const url = `${BASE_URL}/auth/login`;
         const data = {
@@ -34,17 +34,19 @@ export const login = async ({ email, password }) => {
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
         localStorage.setItem("userInfo", JSON.stringify(userInfo));
-        console.log("로그인 성공")
+        console.log(`로그인 성공! -> ${userInfo.nickName}님, 환영합니다!`)
         return { accessToken, refreshToken, userInfo };
 
     } catch (err) {
-        console.log("로그인 실패->", err);
+        console.log("로그인 실패! ->", err);
         throw err;
     }
 };
 
 // 로그아웃 함수
 export const logout = () => {
+
+    console.log(`로그아웃 성공!`)
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("userInfo");
@@ -59,3 +61,54 @@ export const isLogin = () => {
     return !!accessToken;
 };
 
+// 비번찾기-이메일전송 함수
+export const sendEmailPasswordFind = async ({ email }) => {
+    console.log(`${email}받음`)
+    try {
+        const url = `${BASE_URL}/auth-codes/find-pwd`;
+        const data = {
+            email
+        };
+        const expiredTime = await post(url, data);
+        return expiredTime;
+
+    } catch (err) {
+        console.error("이메일 전송에 실패! ->", err);
+        throw err;
+    }
+};
+
+// 인증 토큰 확인 함수
+export const verifyAuthToken = async ({ email, authToken }) => {
+    console.log(`${email}, ${authToken} 받음`);
+    try {
+        const url = `${BASE_URL}/auth-codes/verify-pwd`;
+        const data = {
+            email,
+            authCode: authToken
+        };
+        const response = await post(url, data);
+        return response;
+    } catch (err) {
+        console.error("인증번호 확인에 실패! ->", err);
+        throw err;
+    }
+};
+
+// 비밀번호 변경 함수
+export const changePassword = async ({ email, password }) => {
+    console.log(`${email}, ${password} 받음`);
+    try {
+        const url = `${BASE_URL}/auth-codes/password`;
+        const data = {
+            email,
+            newPassword: password
+        };
+        const response = await patch(url, data);
+        console.log(response)
+        return response
+    } catch (err) {
+        console.error("비밀번호 변경에 실패! ->", err);
+        throw err;
+    }
+};
