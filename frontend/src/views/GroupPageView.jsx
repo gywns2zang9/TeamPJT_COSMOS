@@ -6,7 +6,7 @@ import CreateGroupModal from '../modals/CreateGroupModal.jsx'
 import JoinGroupModal from '../modals/JoinGroupModal.jsx'
 import useGroupStore from "../store/group.js";
 
-const userId = 1
+const userId = 4
 function GroupPageView(props) {
     // 그룹 목록
     const groups = useGroupStore((state) => state.groups) || [];
@@ -18,9 +18,9 @@ function GroupPageView(props) {
             try {
                 const response = await loadGroupList( {userId} );
                 const transformedData = response.map(team => ({
-                    groupId: team.teamId,
-                    groupName: team.teamName,
-                    groupDescription: team.teamDescription,
+                    id: team.id,
+                    name: team.name,
+                    description: team.description,
                 }));
                 setGroups(transformedData);
             } catch (error) {
@@ -51,10 +51,10 @@ function GroupPageView(props) {
             {/* 그룹 목록 */}
             <div id="group-list">
                 {groups.map(group => (
-                    <Card key={group.groupId} onClick={() => navigateToGroupDetail(group.groupId)}>
+                    <Card key={group.id} onClick={() => navigateToGroupDetail(group.id)}>
                         <Card.Body>
-                            <Card.Title>{group.groupName}</Card.Title>
-                            <Card.Text>{group.groupDescription}</Card.Text>
+                            <Card.Title>{group.name}</Card.Title>
+                            <Card.Text>{group.description}</Card.Text>
                         </Card.Body>
                     </Card>
                 ))}    

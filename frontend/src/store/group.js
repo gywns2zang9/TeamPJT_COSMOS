@@ -5,7 +5,7 @@ import { deleteRequest, get, patch, post } from '../api/api.js'
 const BASE_URL = useStore.getState().BASE_URL;
 
 // useAuthStore 에서 받아오기
-const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNzIyNDcxMDM5LCJleHAiOjE3MjI0NzQ2Mzl9.2R-Cdup5A6jSsQmR48GHaZcHrFPy0nEs8OOJs-Ko8lo"
+const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNzIyNDcxNDgwLCJleHAiOjE3MjI0NzUwODB9.qS3FwDbHVGzWuWB3lLTovBFRrZKXG4rNEV8CrCn2kUE"
 
 const useGroupStore = create((set) => ({
     // 그룹 목록 불러오기
@@ -25,17 +25,23 @@ const useGroupStore = create((set) => ({
         }
     },
 
+    // 그룹 세팅하기
+    groups: [],
+    setGroups: (groups) => set({ groups }),
+
     // 그룹 생성하기
     makeGroup: async ({ userId, groupName, description }) => {
         try {
-            const url = `${BASE_URL}/users/${userId}/teams`;
+            const url = `${BASE_URL}/users/${userId}/team`;
             const data = {
-                accessToken,
-                teamName: groupName,
+                groupName,
                 description
             };
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
 
-            const response = await post(url, data);
+            const response = await post(url, data, headers);
             console.log(response);
             return response
         } catch (err) {
@@ -49,10 +55,12 @@ const useGroupStore = create((set) => ({
         try {
             const url = `${BASE_URL}/users/${userId}/teams/join/`;
             const data = {
-                accessToken,
                 teamCode,
             };
-            const response = await post(url, data);
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await post(url, data, headers);
             console.log(response);
             return response
 
@@ -66,10 +74,10 @@ const useGroupStore = create((set) => ({
     groupDetailLoad: async ({ groupId }) => {
         try {
             const url = `${BASE_URL}/teams/${groupId}`;
-            const data = {
-                accessToken,
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
             };
-            const response = await get(url, data);
+            const response = await get(url, {}, headers);
             console.log(response);
             return response
         } catch (err) {
@@ -82,10 +90,10 @@ const useGroupStore = create((set) => ({
     groupMemberListLoad: async ({ groupId }) => {
         try {
             const url = `${BASE_URL}/teams/${groupId}/users`;
-            const data = {
-                accessToken,
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
             };
-            const response = await get(url, data);
+            const response = await get(url, {}, headers);
             console.log(response);
             return response
         } catch (err) {
@@ -99,11 +107,13 @@ const useGroupStore = create((set) => ({
         try {
             const url = `${BASE_URL}/teams/${groupId}`;
             const data = {
-                accessToken,
                 teamName: groupName,
                 description
             };
-            const response = await patch(url, data);
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await patch(url, data, headers);
             console.log(response);
             return response
 
@@ -118,10 +128,12 @@ const useGroupStore = create((set) => ({
         try {
             const url = `${BASE_URL}/teams/${groupId}/leader`;
             const data = {
-                accessToken,
                 userId
             };
-            const response = await patch(url, data);
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await patch(url, data, headers);
             console.log(response);
             return response
         } catch (err) {
@@ -134,10 +146,10 @@ const useGroupStore = create((set) => ({
     checkGroupLeader: async ({ groupId }) => {
         try {
             const url = `${BASE_URL}/teams/${groupId}/leader-check`;
-            const data = {
-                accessToken,
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
             };
-            const response = await get(url, data);
+            const response = await get(url, {}, headers);
             console.log(response);
             return response
         } catch (err) {
@@ -150,10 +162,10 @@ const useGroupStore = create((set) => ({
     outGroup: async ({ groupId }) => {
         try {
             const url = `${BASE_URL}/teams/${groupId}`;
-            const data = {
-                accessToken,
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
             };
-            const response = await deleteRequest(url, data);
+            const response = await deleteRequest(url, {}, headers);
             console.log(response);
             return response
         } catch (err) {
@@ -182,10 +194,10 @@ const useGroupStore = create((set) => ({
     checkInviteCode: async ({ groupId }) => {
         try {
             const url = `${BASE_URL}/teams/auth/${groupId}/teamCode`;
-            const data = {
-                accessToken,
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
             };
-            const response = await get(url, data);
+            const response = await get(url, {}, headers);
             console.log(response);
             return response
         } catch (err) {
@@ -214,10 +226,10 @@ const useGroupStore = create((set) => ({
     loadFolderInfo: async ({ groupId, folderId}) => {
         try {
             const url = `${BASE_URL}/teams/${groupId}/folder/${folderId}`;
-            const data = {
-                accessToken,
-            };
-            const response = await get(url, data);
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            }
+            const response = await get(url, {}, headers);
             console.log(response);
             const responseData = await response.json();
             return responseData
@@ -232,11 +244,13 @@ const useGroupStore = create((set) => ({
         try {
             const url = `${BASE_URL}/teams/${groupId}/folder`;
             const data = {
-                accessToken,
                 parentId,
                 folderName
             };
-            const response = await post(url, data);
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await post(url, data, headers);
             console.log(response);
             return response
 
@@ -250,10 +264,10 @@ const useGroupStore = create((set) => ({
     deleteFolder: async ({ groupId, folderId }) => {
         try {
             const url = `${BASE_URL}/teams/${groupId}/folder/${folderId}`;
-            const data = {
-                accessToken,
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
             };
-            const response = await deleteRequest(url, data);
+            const response = await deleteRequest(url, {}, headers);
             console.log(response);
             return response
         } catch (err) {
@@ -280,12 +294,14 @@ const useGroupStore = create((set) => ({
         try {
             const url = `${BASE_URL}/teams/${groupId}/calendar`;
             const data = {
-                accessToken,
                 title,
                 memo,
                 time
             };
-            const response = await post(url, data);
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await post(url, data, headers);
             console.log(response);
             return response
 

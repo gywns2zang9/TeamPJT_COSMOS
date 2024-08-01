@@ -18,7 +18,7 @@ function JoinGroupModal({ show, handleClose }) {
 
     const handleJoinGroup = async () => {
         try {
-            const userId = 1;
+            const userId = 4;
             const response = await joinGroup({ userId, teamCode});
 
             if (response.success) {
