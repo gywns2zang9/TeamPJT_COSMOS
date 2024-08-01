@@ -1,60 +1,33 @@
+import { OpenVidu } from "openvidu-browser";
+
 import React, { useEffect, useState } from "react";
-import {
-  LocalVideoTrack,
-  RemoteParticipant,
-  RemoteTrack,
-  RemoteTrackPublication,
-  Room,
-  RoomEvent,
-} from "livekit-client";
 import Code from "../components/cenference/Code";
 import Paint from "../components/cenference/Paint";
-import VideoComponent from "../components/cenference/VideoComponent";
-import AudioComponent from "../components/cenference/AudioComponent";
-import VolumeSlider from "../components/cenference/VolumeSlider";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
+import axios from "axios";
+import UserVideoComponent from "../components/cenference/UserVideoComponent";
 import "../css/conference/conference.css";
 
-// 로컬 개발의 경우, 이 변수들을 비워두세요
-// 프로덕션의 경우, 배포에 따라 올바른 URL로 구성하세요
-let APPLICATION_SERVER_URL = "";
-let LIVEKIT_URL = "wss://my-first-app-9i47gdkl.livekit.cloud";
-configureUrls();
-
-function configureUrls() {
-  // APPLICATION_SERVER_URL이 구성되지 않은 경우, 로컬 개발의 기본값을 사용합니다
-  if (!APPLICATION_SERVER_URL) {
-    if (window.location.hostname === "localhost") {
-      APPLICATION_SERVER_URL = "http://localhost:6080/";
-    } else {
-      APPLICATION_SERVER_URL = "https://" + window.location.hostname + ":6443/";
-    }
-  }
-
-  // LIVEKIT_URL이 구성되지 않은 경우, 로컬 개발의 기본값을 사용합니다
-  if (!LIVEKIT_URL) {
-    if (window.location.hostname === "localhost") {
-      LIVEKIT_URL = "ws://localhost:7880/";
-    } else {
-      LIVEKIT_URL = "wss://" + window.location.hostname + ":7443/";
-    }
-  }
-}
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
 
 function ConferenceView(props) {
   const [isOpen, setIsOpen] = useState(true);
-  const [room, setRoom] = useState(undefined);
-  const [localTrack, setLocalTrack] = useState(undefined);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [isMicEnabled, setisMicEnabled] = useState(true);
-  const [participantName, setParticipantName] = useState(
+  const [mySessionId, setMySessionId] = useState("groupName");
+  const [myUserName, setMyUserName] = useState(
     "Participant" + Math.floor(Math.random() * 100)
   );
-  const [remoteTracks, setRemoteTracks] = useState([]);
-  const [roomName, setRoomName] = useState("GroupName");
+  const [session, setSession] = useState(undefined);
+  const [mainStreamManager, setMainStreamManager] = useState(undefined);
+  const [publisher, setPublisher] = useState(undefined);
+  const [subscribers, setSubscribers] = useState([]);
+  const [OV, setOV] = useState(null);
+  const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
   const VideoToggleIcon = isVideoEnabled ? VideocamOffIcon : VideocamIcon;
   const MicToggleIcon = isMicEnabled ? MicOffIcon : MicIcon;
 
@@ -63,133 +36,165 @@ function ConferenceView(props) {
   };
 
   useEffect(() => {
-    joinRoom();
-
-    // 컴포넌트가 언마운트 될 때 룸을 떠납니다
+    window.addEventListener("beforeunload", onbeforeunload);
+    joinSession();
     return () => {
-      leaveRoom();
+      window.removeEventListener("beforeunload", onbeforeunload);
+      // leaveSession();
     };
   }, []);
 
-  async function joinRoom() {
-    // 새로운 Room 객체를 초기화합니다
-    const room = new Room();
-    setRoom(room);
+  const onbeforeunload = (event) => {
+    leaveSession();
+  };
 
-    // 룸에서 이벤트가 발생할 때 동작을 지정합니다
-    // 새로운 트랙이 수신될 때마다...
-    room.on(RoomEvent.TrackSubscribed, (_track, publication, participant) => {
-      setRemoteTracks((prev) => [
-        ...prev,
-        {
-          trackPublication: publication,
-          participantIdentity: participant.identity,
-        },
-      ]);
+  // const handleChangeSessionId = (e) => {
+  //   setMySessionId(e.target.value);
+  // };
+
+  // const handleChangeUserName = (e) => {
+  //   setMyUserName(e.target.value);
+  // };
+
+  // const handleMainVideoStream = (stream) => {
+  //   if (mainStreamManager !== stream) {
+  //     setMainStreamManager(stream);
+  //   }
+  // };
+
+  const deleteSubscriber = (streamManager) => {
+    setSubscribers((prevSubscribers) =>
+      prevSubscribers.filter((subscriber) => subscriber !== streamManager)
+    );
+  };
+
+  const joinSession = () => {
+    // 1) OpenVidu 객체 생성
+    const newOV = new OpenVidu();
+    setOV(newOV);
+
+    // 2) 세션 초기화
+    const newSession = newOV.initSession();
+    setSession(newSession);
+
+    // 3) 세션에서 이벤트가 발생했을 때의 동작 지정
+    newSession.on("streamCreated", (event) => {
+      var subscriber = newSession.subscribe(event.stream, undefined);
+      setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
     });
 
-    // 트랙이 파괴될 때마다...
-    room.on(RoomEvent.TrackUnsubscribed, (_track, publication) => {
-      setRemoteTracks((prev) =>
-        prev.filter(
-          (track) => track.trackPublication.trackSid !== publication.trackSid
-        )
-      );
+    newSession.on("streamDestroyed", (event) => {
+      deleteSubscriber(event.stream.streamManager);
     });
-    try {
-      // 애플리케이션 서버에서 룸 이름과 참가자 이름으로 토큰을 가져옵니다
-      const token = await getToken(roomName, participantName);
 
-      // LiveKit URL과 토큰으로 룸에 연결합니다
-      await room.connect(LIVEKIT_URL, token);
+    newSession.on("exception", (exception) => {
+      console.warn(exception);
+    });
 
-      // 카메라와 마이크를 게시합니다
-      await room.localParticipant.enableCameraAndMicrophone();
-      const videoTrack = room.localParticipant.videoTrackPublications
-        .values()
-        .next().value.videoTrack;
-      setLocalTrack(videoTrack);
-    } catch (error) {
-      console.log("룸에 연결하는 동안 오류가 발생했습니다:", error.message);
-      await leaveRoom();
+    // 4) 유효한 사용자 토큰으로 세션에 연결
+    getToken().then((token) => {
+      newSession
+        .connect(token, { clientData: myUserName })
+        .then(async () => {
+          // 5) 자신의 카메라 스트림 가져오기
+          let newPublisher = await newOV.initPublisherAsync(undefined, {
+            audioSource: undefined,
+            videoSource: undefined,
+            publishAudio: true,
+            publishVideo: true,
+            resolution: "640x480",
+            frameRate: 30,
+            insertMode: "APPEND",
+            mirror: false,
+          });
+
+          newSession.publish(newPublisher);
+
+          // 현재 사용 중인 비디오 장치를 얻습니다
+          var devices = await newOV.getDevices();
+          var videoDevices = devices.filter(
+            (device) => device.kind === "videoinput"
+          );
+          var currentVideoDeviceId = newPublisher.stream
+            .getMediaStream()
+            .getVideoTracks()[0]
+            .getSettings().deviceId;
+          var currentVideoDevice = videoDevices.find(
+            (device) => device.deviceId === currentVideoDeviceId
+          );
+
+          setCurrentVideoDevice(currentVideoDevice);
+          setMainStreamManager(newPublisher);
+          setPublisher(newPublisher);
+          console.log(subscribers);
+        })
+        .catch((error) => {
+          console.log(
+            "세션에 연결하는 동안 오류가 발생했습니다:",
+            error.code,
+            error.message
+          );
+        });
+    });
+  };
+
+  const leaveSession = () => {
+    if (session) {
+      session.disconnect();
     }
+
+    setOV(null);
+    setSession(undefined);
+    setSubscribers([]);
+    setMySessionId("groupName");
+    setMyUserName("Participant" + Math.floor(Math.random() * 100));
+    setMainStreamManager(undefined);
+    setPublisher(undefined);
+  };
+
+  async function getToken() {
+    const sessionId = await createSession(mySessionId);
+    return await createToken(sessionId);
   }
 
-  async function leaveRoom() {
-    // Room 객체의 'disconnect' 메서드를 호출하여 룸을 떠납니다
-    await room?.disconnect();
-
-    // 상태를 초기화합니다
-    setRoom(undefined);
-    setLocalTrack(undefined);
-    setRemoteTracks([]);
-  }
-
-  async function getToken(roomName, participantName) {
-    const response = await fetch(APPLICATION_SERVER_URL + "token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        roomName: roomName,
-        participantName: participantName,
-      }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(`토큰 가져오기 실패: ${error.errorMessage}`);
-    }
-
-    const data = await response.json();
-    return data.token;
-  }
-
-  const toggleVideoStream = async () => {
-    if (localTrack) {
-      if (isVideoEnabled) {
-        await localTrack.mute(); // 비디오 스트림 비활성화
-      } else {
-        await localTrack.unmute(); // 비디오 스트림 활성화
+  async function createSession(sessionId) {
+    const response = await axios.post(
+      APPLICATION_SERVER_URL + "api/sessions",
+      { customSessionId: sessionId },
+      {
+        headers: { "Content-Type": "application/json" },
       }
-      setIsVideoEnabled(!isVideoEnabled); // 상태 업데이트
-      // console.log(localTrack);
-      // console.log(remoteTracks);
-    }
-  };
+    );
+    return response.data; // The sessionId
+  }
 
-  const toggleMic = async () => {
-    setisMicEnabled(!isMicEnabled);
-  };
+  async function createToken(sessionId) {
+    const response = await axios.post(
+      APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
+      {},
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data; // The token
+  }
 
   return (
     <div className="conference">
-      <div className={`video ${isOpen ? "open" : "closed"}`}>
-        {localTrack && (
-          <VideoComponent
-            track={localTrack}
-            participantIdentity={participantName}
-            local={true}
-          />
-        )}
-        {remoteTracks.map((remoteTrack) =>
-          remoteTrack.trackPublication.kind === "video" ? (
-            <VideoComponent
-              key={remoteTrack.trackPublication.trackSid}
-              track={remoteTrack.trackPublication.videoTrack}
-              participantIdentity={remoteTrack.participantIdentity}
-            />
-          ) : (
-            isMicEnabled && (
-              <AudioComponent
-                key={remoteTrack.trackPublication.trackSid}
-                track={remoteTrack.trackPublication.audioTrack}
-              />
-            )
-          )
-        )}
-      </div>
+      {session !== undefined ? (
+        <div className={`video ${isOpen ? "open" : "closed"}`}>
+          {publisher !== undefined ? (
+            <div>
+              <UserVideoComponent streamManager={publisher} />
+            </div>
+          ) : null}
+          {subscribers.map((sub, i) => (
+            <div key={sub.id}>
+              <UserVideoComponent streamManager={sub} />
+            </div>
+          ))}
+        </div>
+      ) : null}
       <div className="code-paint-space">
         <div className="left-space">
           <div className="code-upper-space">
@@ -229,11 +234,11 @@ function ConferenceView(props) {
           </div>
           <div className="paint-lower-space">
             <div className="conference-control">
-              <button className="button" onClick={toggleVideoStream}>
+              <button className="button">
                 <VideoToggleIcon style={{ cursor: "pointer" }} />
                 <span>{isVideoEnabled ? "비디오 종료" : "비디오 시작"}</span>
               </button>
-              <button className="button" onClick={toggleMic}>
+              <button className="button">
                 <MicToggleIcon style={{ cursor: "pointer" }} />
                 <span>{isMicEnabled ? "음소거 해제" : "음소거"}</span>
               </button>
@@ -243,7 +248,7 @@ function ConferenceView(props) {
             </div>
             <div className="share-quit-buttons">
               <button className="button-share">화면 공유하기</button>
-              <button className="button-quit" onClick={leaveRoom}>
+              <button className="button-quit" onClick={leaveSession}>
                 나가기
               </button>
             </div>
