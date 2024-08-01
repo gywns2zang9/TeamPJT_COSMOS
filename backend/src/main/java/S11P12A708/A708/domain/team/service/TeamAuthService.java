@@ -70,7 +70,7 @@ public class TeamAuthService {
 
     private Team requestToEntity(TeamInfoRequest request) {
         return new Team(
-                request.getGroupName(),
+                request.getTeamName(),
                 request.getDescription()
         );
     }
