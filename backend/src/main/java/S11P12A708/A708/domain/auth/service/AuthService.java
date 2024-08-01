@@ -163,6 +163,8 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest req) {
         User user = userRepository.findByEmail(req.getEmail()).orElseThrow(UserNotFoundException::new);
+        if (user.getType() != UserType.NORMAL) errIfDuplicateEmail(user);
+
         boolean userCheck = user.checkPassword(req.getPassword(), bCryptPasswordEncoder);
 
         if (userCheck) {

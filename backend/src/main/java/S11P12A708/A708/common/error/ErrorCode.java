@@ -17,6 +17,7 @@ public enum ErrorCode {
     USER_INVALID(UNPROCESSABLE_ENTITY, "user", "user request is incorrect."),
     USER_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "user", "email is already exist."),
     INVALID_ACCESS(UNPROCESSABLE_ENTITY, "user", "Token userId does not match URL userId."),
+    ONLY_NORMAL_PW(UNPROCESSABLE_ENTITY, "user", "Only NORMAL login users can change password."),
 
     // Auth-Code
     FAIL_MAIL(UNPROCESSABLE_ENTITY, "auth-code", "failed to send email."),
