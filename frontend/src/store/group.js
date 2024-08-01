@@ -5,18 +5,18 @@ import { deleteRequest, get, patch, post } from '../api/api.js'
 const BASE_URL = useStore.getState().BASE_URL;
 
 // useAuthStore 에서 받아오기
-const accessToken = '1234123'
+const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNzIyNDcxMDM5LCJleHAiOjE3MjI0NzQ2Mzl9.2R-Cdup5A6jSsQmR48GHaZcHrFPy0nEs8OOJs-Ko8lo"
 
 const useGroupStore = create((set) => ({
     // 그룹 목록 불러오기
     loadGroupList: async ({ userId }) => {
         try {
             const url = `${BASE_URL}/users/${userId}/teams`;
-            const data = {
-                accessToken,
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
             };
 
-            const response = await get(url, data);
+            const response = await get(url, {}, headers);
             console.log(response);
             return response;
         } catch (err) {

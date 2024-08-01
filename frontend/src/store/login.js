@@ -32,7 +32,7 @@ const useLogin = () => {
     }
     try {
       // 로그인 요청 (백엔드와 통신)
-      const response = await axios.post("http://i11a708.p.ssafy.io:5000/api/sessions/login", {
+      const response = await axios.post("http://localhost:8080/auth/login", {
         email,
         password,
       });
