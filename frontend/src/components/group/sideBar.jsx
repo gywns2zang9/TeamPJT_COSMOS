@@ -2,14 +2,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState, useRef, useEffect } from "react";
 import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
-import GroupSettingsModal from "../../modals/GroupSettingsModal";
-import InviteGroupModal from "../../modals/InviteGroupModal";
 import { FaFolderPlus, FaFileAlt, FaTrashAlt, FaCog, FaPlay, FaUserPlus, FaFolder, FaFile, FaAngleDoubleLeft, FaAngleDoubleRight, FaChevronDown, FaChevronRight } from 'react-icons/fa'; 
 import '../../css/group/sideBar.css';
-import useGroupStore from '../../store/group.js';
+import GroupSettingsModal from "../../modals/GroupSettingsModal";
+import InviteGroupModal from "../../modals/InviteGroupModal";
 import CreateItemModal from '../../modals/CreateItemModal.jsx';
 import StartVideoModal from '../../modals/StartVideoModal.jsx';
 import ItemDeleteModal from '../../modals/ItemDeleteModal.jsx';
+import useGroupStore from '../../store/group.js';
 
 
 // 초기 폴더와 파일 구조 

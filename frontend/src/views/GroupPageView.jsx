@@ -7,9 +7,9 @@ import JoinGroupModal from '../modals/JoinGroupModal.jsx'
 import useGroupStore from "../store/group.js";
 import { getUserInfo } from "../store/auth.js";
 
-const { userId } = getUserInfo();
 
 function GroupPageView(props) {
+    const {userId} = getUserInfo();
     // 그룹 목록
     const groups = useGroupStore((state) => state.groups) || [];
     const setGroups = useGroupStore((state) => state.setGroups);
