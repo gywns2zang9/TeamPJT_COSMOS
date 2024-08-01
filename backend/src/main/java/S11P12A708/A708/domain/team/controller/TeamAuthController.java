@@ -52,7 +52,6 @@ public class TeamAuthController {
     public ResponseEntity<Void> sendInvitation(
             @RequestBody InviteTeamRequest inviteTeamRequest,
             @PathVariable Long teamId) {
-        log.info("sendInvitation");
         teamAuthService.sendInviteEmail(teamId, inviteTeamRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
