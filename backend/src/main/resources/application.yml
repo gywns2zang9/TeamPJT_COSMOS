@@ -54,7 +54,13 @@ app:
 
 oauth:
   kakao:
-    client-id: ${CLIENT_ID}
+    client-id: ${KAKAO_CLIENT_ID}
     url:
       auth: https://kauth.kakao.com
       api: https://kapi.kakao.com
+  naver:
+    secret: ${NAVER_SECRET}
+    client-id: ${NAVER_CLIENT_ID}
+    url:
+      auth: https://nid.naver.com
+      api: https://openapi.naver.com
