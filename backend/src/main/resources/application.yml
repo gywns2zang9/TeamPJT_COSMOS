@@ -4,8 +4,6 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 465
-    username: ${EMAIL}
-    password: ${EMAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -18,24 +16,10 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL}
-    username: ${DB_USER_NAME}
-    password: ${DB_PASSWORD}
-
-  jpa:
-    show-sql: true
-    open-in-view: false
-    properties:
-      hibernate:
-        format_sql: true
-        default_batch_fetch_size: 1000
-        dialect: org.hibernate.dialect.MySQLDialect
-    hibernate:
-      ddl-auto: update
 
 server:
   servlet:
-    context-path: /
+    context-path: /api
   port: '8080'
 
 logging:
@@ -43,7 +27,6 @@ logging:
     root: info
 
 jwt:
-  secret-key: ${JWT_SECRET_KEY}
   access:
     expiration: 3600000
   refresh:
