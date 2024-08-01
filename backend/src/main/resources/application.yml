@@ -34,3 +34,7 @@ jwt:
 
 app:
   expired-time: 5
+
+openvidu:
+  url: https://i11a708.p.ssafy.io:8443/
+  secret: MY_SECRET
