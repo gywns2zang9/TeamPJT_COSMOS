@@ -5,8 +5,10 @@ import { Card } from "react-bootstrap";
 import CreateGroupModal from '../modals/CreateGroupModal.jsx'
 import JoinGroupModal from '../modals/JoinGroupModal.jsx'
 import useGroupStore from "../store/group.js";
+import { getUserInfo } from "../store/auth.js";
 
-const userId = 4
+const { userId } = getUserInfo();
+
 function GroupPageView(props) {
     // 그룹 목록
     const groups = useGroupStore((state) => state.groups) || [];
@@ -34,13 +36,13 @@ function GroupPageView(props) {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showJoinModal, setShowJoinModal] = useState(false);
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const handleShowCreateModal = () => setShowCreateModal(true);
-  const handleCloseCreateModal = () => setShowCreateModal(false);
+    const handleShowCreateModal = () => setShowCreateModal(true);
+    const handleCloseCreateModal = () => setShowCreateModal(false);
 
-  const handleShowJoinModal = () => setShowJoinModal(true);
-  const handleCloseJoinModal = () => setShowJoinModal(false);
+    const handleShowJoinModal = () => setShowJoinModal(true);
+    const handleCloseJoinModal = () => setShowJoinModal(false);
 
     const navigateToGroupDetail = (groupId) => {
         navigate(`/group/${groupId}/0/`);
@@ -74,14 +76,14 @@ function GroupPageView(props) {
                 </Card>
             </div>
 
-      {/* 그룹 모달 컴포넌트 렌더링 */}
-      <CreateGroupModal
-        show={showCreateModal}
-        handleClose={handleCloseCreateModal}
-      />
-      <JoinGroupModal show={showJoinModal} handleClose={handleCloseJoinModal} />
-    </>
-  );
+        {/* 그룹 모달 컴포넌트 렌더링 */}
+        <CreateGroupModal
+            show={showCreateModal}
+            handleClose={handleCloseCreateModal}
+        />
+        <JoinGroupModal show={showJoinModal} handleClose={handleCloseJoinModal} />
+        </>
+    );
 }
 
 export default GroupPageView;

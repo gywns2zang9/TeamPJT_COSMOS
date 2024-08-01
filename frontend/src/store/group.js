@@ -1,13 +1,15 @@
 import { create } from 'zustand';
 import useStore from './index.js';
 import { deleteRequest, get, patch, post } from '../api/api.js'
+import { getAccessToken } from './auth.js'
 
 const BASE_URL = useStore.getState().BASE_URL;
 
 // useAuthStore 에서 받아오기
-const accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNzIyNDcxNDgwLCJleHAiOjE3MjI0NzUwODB9.qS3FwDbHVGzWuWB3lLTovBFRrZKXG4rNEV8CrCn2kUE"
+const accessToken = getAccessToken()
 
 const useGroupStore = create((set) => ({
+    
     // 그룹 목록 불러오기
     loadGroupList: async ({ userId }) => {
         try {

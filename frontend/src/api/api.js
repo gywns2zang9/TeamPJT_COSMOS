@@ -10,14 +10,10 @@ const api = axios.create({
 // GET 요청
 export const get = async (url, params = {}, headers = {}) => {
     const response = await api.get(url, { params, headers: { ...api.defaults.headers, ...headers } });
-export const get = async (url, params = {}, headers = {}) => {
-    const response = await api.get(url, { params, headers: { ...api.defaults.headers, ...headers } });
     return response.data;
 };
 
 // POST 요청
-export const post = async (url, data = {}, headers = {}) => {
-    const response = await api.post(url, data, { headers: { ...api.defaults.headers, ...headers } });
 export const post = async (url, data = {}, headers = {}) => {
     const response = await api.post(url, data, { headers: { ...api.defaults.headers, ...headers } });
     return response.data;
@@ -26,14 +22,10 @@ export const post = async (url, data = {}, headers = {}) => {
 // PATCH 요청
 export const patch = async (url, data = {}, headers = {}) => {
     const response = await api.patch(url, data, { headers: { ...api.defaults.headers, ...headers } });
-export const patch = async (url, data = {}, headers = {}) => {
-    const response = await api.patch(url, data, { headers: { ...api.defaults.headers, ...headers } });
     return response.data;
 };
 
 // DELETE 요청
-export const deleteRequest = async (url, params = {}, headers = {}) => {
-    const response = await api.delete(url, { params, headers: { ...api.defaults.headers, ...headers } });
 export const deleteRequest = async (url, params = {}, headers = {}) => {
     const response = await api.delete(url, { params, headers: { ...api.defaults.headers, ...headers } });
     return response.data;
