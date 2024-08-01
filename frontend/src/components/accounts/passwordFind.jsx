@@ -1,34 +1,124 @@
 // src/components/accounts/PasswordFind.jsx
-import React from 'react';
-import usePasswordFind from '../../store/passwordFind';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../css/accounts/passwordFind.css';
+import { sendEmailPasswordFind, verifyAuthToken, changePassword } from "../../store/auth";
 
 const PasswordFind = () => {
-  const {
-    email,
-    isEmailValid,
-    handleEmailChange,
-    handleSendEmail,
-    emailSent,
-    handleResendEmail,
-    emailError,
+  const [email, setEmail] = useState(''); // 이메일 상태
+  const [isEmailValid, setIsEmailValid] = useState(true); // 이메일 유효성 상태
+  const [emailError, setEmailError] = useState(''); // 이메일 오류 메시지 상태
+  const [emailSending, setEmailSending] = useState(false); // 이메일 전송 중 상태
+  const [emailSent, setEmailSent] = useState(false); // 이메일 전송 완료 상태
 
-    authToken,
-    handleAuthTokenChange,
-    handleAuthToken,
-    authVerified,
-    authError,
+  const [authToken, setAuthToken] = useState(''); // 인증 토큰 상태
+  const [authVerified, setAuthVerified] = useState(false); // 인증 완료 상태
+  const [authError, setAuthError] = useState(''); // 인증 오류 메시지 상태
 
-    password,
-    handlePasswordChange,
-    passwordError,
+  const [password, setPassword] = useState(''); // 비밀번호 상태
+  const [passwordError, setPasswordError] = useState(''); // 비밀번호 오류 메시지 상태
+  const [confirmPassword, setConfirmPassword] = useState(''); // 비밀번호 확인 상태
+  const [passwordMatchError, setPasswordMatchError] = useState(''); // 비밀번호 불일치 오류 메시지 상태
+  const [passwordMatchSuccess, setPasswordMatchSuccess] = useState(''); // 비밀번호 일치 성공 메시지 상태
 
-    confirmPassword,
-    handleConfirmPasswordChange,
-    passwordMatchError,
-    passwordMatchSuccess,
-    handleChangePassword
-  } = usePasswordFind();
+  const navigate = useNavigate(); // 페이지 이동을 위한 네비게이트 함수
+
+  // 이메일 입력 변경 핸들러
+  const handleEmailChange = (event) => {
+    const emailValue = event.target.value;
+    setEmail(emailValue);
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 유효성 검사 패턴
+    if (!emailPattern.test(emailValue)) {
+      setIsEmailValid(false);
+      setEmailError("이메일 형식에 맞춰 입력해주세요.");
+    } else {
+      setIsEmailValid(true);
+      setEmailError("");
+    }
+  };
+
+  // 이메일 전송 핸들러
+  const handleSendEmail = async () => {
+    console.log(`${email}로 전송`);
+    // setEmailSending(true);
+    try {
+      const {expiredTime} = await sendEmailPasswordFind({email}); // 이메일 전송 API 호출
+      // setEmailSending(false);
+      // setEmailSent(true);
+      console.log(expiredTime)
+    } catch (error) {
+      // setEmailSending(false);
+      // setEmailError('이메일 전송에 실패했습니다.');
+    }
+  };
+
+  // 이메일 재전송 핸들러
+  const handleResendEmail = () => {
+    console.log(`이메일 재전송 중: ${email}`);
+    setEmailSent(false);
+    handleSendEmail(); // 이메일 전송 함수 호출
+  };
+
+  // 인증 토큰 입력 변경 핸들러
+  const handleAuthTokenChange = (event) => {
+    const authTokenValue = event.target.value;
+    setAuthToken(authTokenValue);
+  };
+
+  // 인증 토큰 확인 핸들러
+  const handleAuthToken = async () => {
+    console.log(`인증 토큰 확인 중... {
+          이메일 : ${email},
+          인증번호 : ${authToken}
+        }`);
+    try {
+      const response = await verifyAuthToken({email, authToken}); // 인증 토큰 확인 API 호출
+      console.log(response)
+      // setAuthVerified(true);
+    } catch (error) {
+      setAuthError("인증번호가 올바르지 않습니다.");
+    }
+  };
+
+  // 비밀번호 입력 변경 핸들러
+  const handlePasswordChange = (event) => {
+    const newPassword = event.target.value;
+    setPassword(newPassword);
+    const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,13}$/; // 비밀번호 유효성 검사 패턴
+    if (!passwordPattern.test(newPassword)) {
+      setPasswordError("비밀번호는 문자, 숫자, 특수문자를 조합해주세요. (8~13자)");
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  // 비밀번호 확인 입력 변경 핸들러
+  const handleConfirmPasswordChange = (event) => {
+    const newConfirmPassword = event.target.value;
+    setConfirmPassword(newConfirmPassword);
+    if (password !== newConfirmPassword) {
+      setPasswordMatchError("비밀번호가 일치하지 않습니다.");
+      setPasswordMatchSuccess("");
+    } else {
+      setPasswordMatchError("");
+      setPasswordMatchSuccess("비밀번호가 일치합니다.");
+    }
+  };
+
+  // 비밀번호 변경 핸들러
+  const handleChangePassword = async () => {
+    if (password !== confirmPassword) {
+      setPasswordMatchError('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+    try {
+      await changePassword({email, password}); // 비밀번호 변경 API 호출
+      console.log("비밀번호가 변경되었습니다.");
+      navigate('/login'); // 로그인 페이지로 이동
+    } catch (error) {
+      console.error('비밀번호 변경에 실패했습니다.');
+    }
+  };
 
   return (
     <div id="pw-find-container">
@@ -115,7 +205,7 @@ const PasswordFind = () => {
         <button
           id="change-pw-btn"
           onClick={handleChangePassword}
-          disabled={!authVerified || passwordError || passwordMatchError}
+          // disabled={!authVerified || passwordError || passwordMatchError}
         >
           비밀번호 변경
         </button>
