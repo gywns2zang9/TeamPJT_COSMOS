@@ -1,5 +1,6 @@
 package S11P12A708.A708.domain.team.controller;
 
+import S11P12A708.A708.domain.team.request.InviteTeamRequest;
 import S11P12A708.A708.domain.team.request.TeamInfoRequest;
 import S11P12A708.A708.domain.team.request.TeamJoinRequest;
 import S11P12A708.A708.domain.team.response.TeamCodeResponse;
@@ -47,6 +48,13 @@ public class TeamAuthController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/teams/auth/{teamId}/teamCode")
+    public ResponseEntity<Void> sendInvitation(
+            @RequestBody InviteTeamRequest inviteTeamRequest,
+            @PathVariable Long teamId) {
+        teamAuthService.sendInviteEmail(teamId, inviteTeamRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @GetMapping("/teams/auth/{teamId}/teamCode")
     public ResponseEntity<TeamCodeResponse> getTeamCode(
