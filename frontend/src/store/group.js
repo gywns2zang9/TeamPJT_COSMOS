@@ -226,13 +226,13 @@ const useGroupStore = create((set) => ({
 
     // 그룹 내 폴더 정보 불러오기 id=0이면 최상위폴더
     loadFolderInfo: async ({ groupId, folderId}) => {
+        console.log(folderId);
         try {
             const url = `${BASE_URL}/teams/${groupId}/folder/${folderId}`;
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
             }
             const response = await get(url, {}, headers);
-            console.log(response);
             const responseData = await response.json();
             return responseData
         } catch (err) {
@@ -278,6 +278,37 @@ const useGroupStore = create((set) => ({
         }
     },
 
+    // 파일 생성하기
+    createFile: async ({ groupId, folderId, fileName, file }) => {
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/pages`;
+            const data = {
+                folderId,
+                fileName,
+                file,
+            };            
+            const response = await post(url, data);
+            console.log(response);
+            return response
+        } catch (err) {
+            console.log('파일 생성 실패 -> ', err);
+            throw err;
+        }
+    },
+
+    // 파일 삭제하기
+    deleteFile: async ({ groupId, fileId }) => {
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/files/${fileId}`;
+            const response = await deleteRequest(url, {});
+            console.log(response);
+            return response
+        } catch (err) {
+            console.log('파일 삭제 실패 -> ', err);
+            throw err;
+        }
+    },
+    
     // 캘린더 일정 목록 불러오기
     loadCalendarScheduleList: async ({ groupId }) => {
         try {

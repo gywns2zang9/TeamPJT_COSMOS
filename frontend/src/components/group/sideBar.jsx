@@ -7,7 +7,7 @@ import InviteGroupModal from "../../modals/InviteGroupModal";
 import { FaFolderPlus, FaFileAlt, FaTrashAlt, FaCog, FaPlay, FaUserPlus, FaFolder, FaFile, FaAngleDoubleLeft, FaAngleDoubleRight, FaChevronDown, FaChevronRight } from 'react-icons/fa'; 
 import '../../css/group/sideBar.css';
 import useGroupStore from '../../store/group.js';
-import CreateItemModal from '../../modals/CreateGroupModal.jsx';
+import CreateItemModal from '../../modals/CreateItemModal.jsx';
 import StartVideoModal from '../../modals/StartVideoModal.jsx';
 import ItemDeleteModal from '../../modals/ItemDeleteModal.jsx';
 
@@ -90,7 +90,7 @@ function SideBar({ groupId }) {
     // 최상위 폴더 로드
     useEffect(() => {
         const loadRootFolders = async () => {
-            const { folders, files } = await loadFolderInfo({groupId, pageId:0});
+            const { folders, files } = await loadFolderInfo({groupId, folderId:0});
             setStructure(prev => ({
                 folders,
                 files: [...prev.files, ...files]
