@@ -11,8 +11,9 @@ import axios from "axios";
 import UserVideoComponent from "../components/cenference/UserVideoComponent";
 import "../css/conference/conference.css";
 
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
+// const APPLICATION_SERVER_URL =
+//   process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
+const APPLICATION_SERVER_URL = "https://i11a708.p.ssafy.io/";
 
 function ConferenceView(props) {
   const [isOpen, setIsOpen] = useState(true);
