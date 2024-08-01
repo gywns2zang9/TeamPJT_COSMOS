@@ -2,6 +2,7 @@ package S11P12A708.A708.domain.auth.controller;
 
 import S11P12A708.A708.domain.auth.annotation.AuthUser;
 import S11P12A708.A708.domain.auth.oauth.request.KakaoLoginParams;
+import S11P12A708.A708.domain.auth.oauth.request.NaverLoginParams;
 import S11P12A708.A708.domain.auth.request.*;
 import S11P12A708.A708.domain.auth.response.LoginResponse;
 import S11P12A708.A708.domain.auth.service.AuthService;
@@ -39,6 +40,12 @@ public class AuthController {
 
     @PostMapping("/kakao-login")
     public ResponseEntity<LoginResponse> loginKakao(@RequestBody KakaoLoginParams params) {
+        final LoginResponse response = authService.socialLogin(params);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/naver-login")
+    public ResponseEntity<LoginResponse> loginNaver(@RequestBody NaverLoginParams params) {
         final LoginResponse response = authService.socialLogin(params);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

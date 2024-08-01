@@ -35,6 +35,7 @@ public class SecurityConfig {
             "/auth/login",
             "/auth/check-nickname",
             "/auth/kakao-login",
+            "/auth/naver-login",
             "/auth-codes/**"
     };
 
