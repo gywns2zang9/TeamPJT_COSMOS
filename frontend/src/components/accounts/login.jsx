@@ -1,22 +1,66 @@
-import { Link } from "react-router-dom";
-import useLogin from "../../store/login.js";
+// src/components/Login.jsx
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../../store/auth";
 import "../../css/accounts/login.css";
 import naverIcon from "../../assets/media/navericon.png";
 import kakaoIcon from "../../assets/media/kakaoicon.png";
 
 const Login = () => {
-  const {
-    email,
-    password,
-    loginError,
-    handleEmailChange,
-    handlePasswordChange,
-    handleLoginClick,
-    handlePasswordFindClick,
-    handleNaverLoginClick,
-    handleKakaoLoginClick,
-    handleKeyDown,
-  } = useLogin(); // 훅에서 상태와 핸들러 가져오기
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const navigate = useNavigate();
+
+  // 이메일 입력 핸들러
+  const handleEmailChange = (e) => setEmail(e.target.value);
+
+  // 비밀번호 입력 핸들러
+  const handlePasswordChange = (e) => setPassword(e.target.value);
+
+  // 로그인 버튼 클릭 핸들러
+  const handleLoginClick = async () => {
+    setLoginError(""); // 오류 메시지 초기화
+    // 이메일과 비밀번호 입력 여부 검사
+    if (!email || !password) {
+      setLoginError("이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
+    
+    try {
+      // 로그인 요청
+      const { accessToken, refreshToken, userInfo } = await login({email, password});
+
+      // 로그인 성공 후 페이지 리다이렉션
+      navigate(`/users/${userInfo.userId}`);
+    } catch (error) {
+      // 로그인 실패 시 에러 메시지 표시
+      setLoginError("로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.");
+    }
+  };
+
+  // 비밀번호 찾기 페이지로 이동
+  const handlePasswordFindClick = () => {
+    console.log("비밀번호 찾기로 이동");
+  };
+
+  // 네이버 로그인 버튼 클릭 핸들러
+  const handleNaverLoginClick = () => {
+    console.log("네이버로 로그인으로 이동");
+  };
+
+  // 카카오 로그인 버튼 클릭 핸들러
+  const handleKakaoLoginClick = () => {
+    console.log("카카오로 로그인으로 이동");
+  };
+
+  // 엔터키로 로그인 처리
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault(); // 기본 엔터키 동작 방지
+      handleLoginClick(); // 로그인 핸들러 호출
+    }
+  };
 
   return (
     <div id="login-container">
