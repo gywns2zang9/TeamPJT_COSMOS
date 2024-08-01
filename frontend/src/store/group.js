@@ -82,6 +82,7 @@ const useGroupStore = create((set) => ({
             };
             const response = await get(url, {}, headers);
             console.log(response);
+            console.log(response);
             return response
         } catch (err) {
             console.log('그룹 상세 정보 불러오기 실패 -> ', err);

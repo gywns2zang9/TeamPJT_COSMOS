@@ -1,7 +1,8 @@
 // src/components/group/mainPageTemplates.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Calendar from "./calendar.jsx";
 import styled from "styled-components";
+import useGroupStore from "../../store/group.js";
 
 const GroupInfoText = styled.div`
     color: white;
@@ -11,17 +12,49 @@ const GroupInfoText = styled.div`
 
 // 그룹 정보 받아와서 적기 API
 const MainPageTemplates = ({ pageId, groupId }) => {
+    const { groupDetailLoad } = useGroupStore();
+    const [groupInfo, setGroupInfo] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    useEffect(() => {
+        const fetchGroupDetails = async () => {
+            try {
+                setLoading(true);
+                const response = await groupDetailLoad({ groupId });
+                setGroupInfo(response);
+                console.log(groupInfo);
+                setLoading(false);
+            } catch (error) {
+                setError(error);
+                setLoading(false);
+            }
+        };
+        
+        fetchGroupDetails();
+    }, [groupId, groupDetailLoad]);
+
+    if (loading) {
+        return <GroupInfoText>Loading........</GroupInfoText>
+    }
+
+    if (error) {
+        return <GroupInfoText>Error........<br/>{error.message}</GroupInfoText>
+    }
+
     return (
         <>
             <div>
-                <GroupInfoText>
-                    <span>그룹 : A708</span>
-                    <br />
-                    <span>그룹원 : 곽지혁, 김도한, 김효준, 지경근, 정예은, 정호성</span>
-                    <br />
-                    <span>그룹 소개 : 2학기 공통프로젝트 팀</span>
-                </GroupInfoText>
-                <Calendar groupId={groupId}/>
+            {groupInfo && (
+                    <GroupInfoText>
+                        <span>그룹 : {groupInfo.name}</span>
+                        <br />
+                        <span>그룹원 : {groupInfo.members.map(member => member.nickName).join(", ")}</span>
+                        <br />
+                        <span>그룹 소개 : {groupInfo.description}</span>
+                    </GroupInfoText>
+                )}
+                <Calendar groupId={groupId} />
             </div>
         </>
     );
