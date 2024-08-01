@@ -36,7 +36,8 @@ public class SecurityConfig {
             "/auth/check-nickname",
             "/auth/kakao-login",
             "/auth/naver-login",
-            "/auth-codes/**"
+            "/auth-codes/**",
+            "/sessions/", "/sessions/**",
     };
 
     @Bean

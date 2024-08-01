@@ -64,3 +64,7 @@ oauth:
     url:
       auth: https://nid.naver.com
       api: https://openapi.naver.com
+
+openvidu:
+  url: https://i11a708.p.ssafy.io:8443/
+  secret: MY_SECRET
