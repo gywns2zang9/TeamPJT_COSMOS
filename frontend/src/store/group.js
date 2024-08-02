@@ -80,8 +80,6 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await get(url, {}, headers);
-            console.log(response);
-            console.log(response);
             return response
         } catch (err) {
             console.log('그룹 상세 정보 불러오기 실패 -> ', err);
@@ -233,7 +231,6 @@ const useGroupStore = create((set) => ({
 
     // 그룹 내 폴더 정보 불러오기 id=0이면 최상위폴더
     loadFolderInfo: async ({ groupId, folderId}) => {
-        console.log(folderId);
         try {
             const accessToken = await getAccessToken();
             const url = `${BASE_URL}/teams/${groupId}/folder/${folderId}`;
@@ -328,7 +325,6 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await get(url, {}, headers);
-            console.log(response);
             return response
         } catch (err) {
             console.log('캘린더 일정 목록 불러오기 실패 -> ', err);

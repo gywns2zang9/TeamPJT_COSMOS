@@ -45,7 +45,7 @@ function GroupPageView(props) {
     const handleCloseJoinModal = () => setShowJoinModal(false);
 
     const navigateToGroupDetail = (groupId) => {
-        navigate(`/group/${groupId}/0/`);
+        navigate(`/group/${groupId}/main/`);
     };
 
     return (

@@ -11,7 +11,7 @@ const GroupInfoText = styled.div`
 `;
 
 // 그룹 정보 받아와서 적기 API
-const MainPageTemplates = ({ pageId, groupId }) => {
+const MainPageTemplates = ({ groupId }) => {
     const { groupDetailLoad } = useGroupStore();
     const [groupInfo, setGroupInfo] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -23,7 +23,6 @@ const MainPageTemplates = ({ pageId, groupId }) => {
                 setLoading(true);
                 const response = await groupDetailLoad({ groupId });
                 setGroupInfo(response);
-                console.log(groupInfo);
                 setLoading(false);
             } catch (error) {
                 setError(error);
