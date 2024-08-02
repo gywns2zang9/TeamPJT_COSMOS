@@ -6,6 +6,7 @@ import S11P12A708.A708.domain.folder.exception.FolderNameDuplicateException;
 import S11P12A708.A708.domain.folder.exception.FolderNotBelongToTeamException;
 import S11P12A708.A708.domain.folder.exception.FolderNotFoundException;
 import S11P12A708.A708.domain.folder.repository.FolderRepository;
+import S11P12A708.A708.domain.folder.repository.query.FolderQueryRepository;
 import S11P12A708.A708.domain.folder.request.FolderCreateRequest;
 import S11P12A708.A708.domain.folder.response.FolderInfoResponse;
 import S11P12A708.A708.domain.team.entity.Team;
@@ -21,12 +22,26 @@ import org.springframework.stereotype.Service;
 public class FolderService {
 
     private final FolderRepository folderRepository;
+    private final FolderQueryRepository folderQueryRepository;
     private final FileRepository fileRepository;
     private final TeamRepository teamRepository;
 
     public FolderInfoResponse getFolderInfo(Long teamId, Long folderId) {
+        if(folderId == 0) return getRootFolderInfo(teamId);
+        else return getNormalFolderInfo(teamId, folderId);
+    }
+
+    public FolderInfoResponse getNormalFolderInfo(Long teamId, Long folderId) {
         final Folder folder = folderRepository.findById(folderId).orElseThrow(FolderNotFoundException::new);
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        validateTeamFolder(folder, team);
+
+        return FolderInfoResponse.of(folder);
+    }
+
+    public FolderInfoResponse getRootFolderInfo(Long teamId) {
+        final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        final Folder folder = folderQueryRepository.findRootFolderByTeam(teamId).orElseThrow(FolderNotFoundException::new);
         validateTeamFolder(folder, team);
 
         return FolderInfoResponse.of(folder);
@@ -57,6 +72,7 @@ public class FolderService {
         }
 
         fileRepository.deleteAll(folder.getFiles());
+        // TODO : 파일 삭제시 코드도 같이 삭제!
         folderRepository.delete(folder);
     }
 
@@ -73,6 +89,5 @@ public class FolderService {
     private static void validateTeamFolder(Folder folder, Team team) {
         if(!folder.getTeam().equals(team)) throw new FolderNotBelongToTeamException();
     }
-
 
 }
