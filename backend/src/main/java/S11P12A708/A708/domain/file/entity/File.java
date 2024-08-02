@@ -32,9 +32,6 @@ public class File {
     @Enumerated(EnumType.STRING)
     private FileType type;
 
-    @Column(nullable = false)
-    private String slug;
-
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -46,6 +43,7 @@ public class File {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "folder_id")
     private Folder folder;
@@ -53,4 +51,29 @@ public class File {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "code_id")
     private Code code;
+
+    public File(String name, String content, FileType type, LocalDateTime createdAt, LocalDateTime modifiedAt, User user, Folder folder, Code code) {
+        this.name = name;
+        this.content = content;
+        this.type = type;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.user = user;
+        this.folder = folder;
+        this.code = code;
+    }
+
+    public File(String name, String content, FileType type, Folder folder) {
+        this.name = name;
+        this.content = content;
+        this.type = type;
+        this.folder = folder;
+        this.createdAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
+    }
+
+    public static File createNormalFile(String name, Folder folder) {
+        return new File(name, "", FileType.NORMAL, folder);
+    }
+
 }
