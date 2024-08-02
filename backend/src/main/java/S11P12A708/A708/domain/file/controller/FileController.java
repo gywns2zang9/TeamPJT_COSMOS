@@ -1,7 +1,7 @@
 package S11P12A708.A708.domain.file.controller;
 
-import S11P12A708.A708.domain.file.request.CodeFileCreateRequest;
 import S11P12A708.A708.domain.file.request.FileCreateRequest;
+import S11P12A708.A708.domain.file.request.FileUpdateRequest;
 import S11P12A708.A708.domain.file.service.FileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,16 @@ public class FileController {
         fileService.createNormalFile(teamId, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    
+
+    @PatchMapping("/teams/{teamId}/file/{fileId}")
+    public ResponseEntity<Void> updateFolder(
+            @PathVariable("teamId") Long teamId,
+            @PathVariable("fileId") Long fileId,
+            @Valid @RequestBody FileUpdateRequest request) {
+        fileService.updateNormalFile(teamId, fileId, request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 // 코드 페이지 추가
 //    @PostMapping("/teams/{teamId}/file/code")
 //    public ResponseEntity<Void> createCodeFolder(

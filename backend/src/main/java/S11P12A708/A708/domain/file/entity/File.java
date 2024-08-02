@@ -43,9 +43,8 @@ public class File {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "folder_id")
+    @JoinColumn(name = "folder_id", nullable = false)
     private Folder folder;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -74,6 +73,11 @@ public class File {
 
     public static File createNormalFile(String name, Folder folder) {
         return new File(name, "", FileType.NORMAL, folder);
+    }
+
+    public void update(File updateFile) {
+        this.name = updateFile.getName();
+        this.content = updateFile.getContent();
     }
 
 }
