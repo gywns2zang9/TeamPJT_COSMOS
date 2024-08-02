@@ -122,7 +122,7 @@ public class AuthCodeService {
             context.setVariable("code", code);
             context.setVariable("expiredAt", expiredTime);
 
-            String text = templateEngine.process("mail", context);
+            String text = templateEngine.process("mail/AuthMail", context);
             helper.setText(text, true);
 
             mailSender.send(message);

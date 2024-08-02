@@ -8,6 +8,7 @@ import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.entity.TeamUser;
 import S11P12A708.A708.domain.team.entity.TeamUserRole;
 import S11P12A708.A708.domain.user.entity.User;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -63,4 +64,19 @@ public class TeamQueryRepositoryImpl implements TeamQueryRepository {
                 .fetchOne();
     }
 
+    @Override
+    public List<User> findUsersByNickNameAndNonGroupId(Long teamId, String nickName) {
+        return queryFactory
+                .selectFrom(user)
+                .join(teamUser)
+                .on(teamUser.user.id.eq(user.id))
+                .where(user.id.notIn(
+                        JPAExpressions
+                                .select(teamUser.user.id)
+                                .from(teamUser)
+                                .where(teamUser.team.id.eq(teamId))
+                ), user.nickname.contains(nickName))
+                .fetch()
+                .stream().toList();
+    }
 }

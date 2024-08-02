@@ -66,4 +66,21 @@ public class Folder {
         subFolder.setParentFolder(null);
     }
 
+    public Folder(String name, User user, Team team, Folder parentFolder, Problem problem) {
+        this.name = name;
+        this.user = user;
+        this.team = team;
+        this.parentFolder = parentFolder;
+        this.problem = problem;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public Folder(String name, Team team, Folder parentFolder) {
+        this(name, null, team, parentFolder, null);
+    }
+
+    public static Folder createRootFolder(Team team) {
+        return new Folder("root", team, null);
+    }
+
 }
