@@ -40,7 +40,12 @@ public enum ErrorCode {
     TEAM_ALREADY_JOIN(UNPROCESSABLE_ENTITY, "team", "this user already joined"),
 
     // Calendar
-    CALENDAR_NOT_FOUND(UNPROCESSABLE_ENTITY, "Calendar", "This Calendar is not exist");
+    CALENDAR_NOT_FOUND(UNPROCESSABLE_ENTITY, "Calendar", "This Calendar is not exist"),
+
+    //Folder
+    FOLDER_NOT_FOUND(UNPROCESSABLE_ENTITY, "folder", "This Folder is not exist"),
+    FOLDER_NAME_DUPLICATE(UNPROCESSABLE_ENTITY, "folder", "This Folder name already exist"),
+    FOLDER_NOT_BELONG_TO_TEAM(UNPROCESSABLE_ENTITY, "folder", "Folder does not belong to the specified team");
 
 
     private final HttpStatus code;
