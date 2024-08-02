@@ -104,6 +104,12 @@ public class CodeService {
 
         // 실행한 파일 삭제
         file.delete();
+        if (language.equals("java")) {
+            File classFile = new File(file.getParent(), file.getName().replace(".java", ".class"));
+            if (classFile.exists()) {
+                classFile.delete();
+            }
+        }
         return result;
     }
 
