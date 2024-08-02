@@ -36,7 +36,7 @@ const useUserInfoChange = () => { // 사용자 정보 변경을 위한 커스텀
         console.log(updatedUserInfo)
         try {
             const response = await axios.patch( // 서버에 PATCH 요청을 보냅니다.
-                `http://localhost:8080/users/${userId}`, // 요청할 API URL
+                `http://localhost:8080/api/users/${userId}`, // 요청할 API URL
                 updatedUserInfo,
                 {
                     headers: { // 요청 헤더 설정

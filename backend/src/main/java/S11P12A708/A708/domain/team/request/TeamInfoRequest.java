@@ -9,7 +9,7 @@ import lombok.Getter;
 public class TeamInfoRequest {
 
     @NotBlank
-    private String groupName;
+    private String teamName;
 
     @NotBlank
     private String description;
