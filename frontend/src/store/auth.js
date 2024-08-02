@@ -27,7 +27,6 @@ const useAuthStore = create((set) => ({
 
     // 로그인 요청
     login: async ({ email, password }) => {
-        console.log("auth.js에서 로그인 요청 실행");
         try {
             const url = `${BASE_URL}/auth/login`;
             const data = { email, password };
@@ -38,9 +37,12 @@ const useAuthStore = create((set) => ({
             localStorage.setItem("refreshToken", refreshToken);
             localStorage.setItem("userInfo", JSON.stringify(userInfo));
 
+            // 상태 업데이트
             set({ accessToken, refreshToken, userInfo });
+
             console.log(`로그인 성공! -> ${userInfo.nickName}님, 환영합니다!`);
             return { accessToken, refreshToken, userInfo };
+
         } catch (err) {
             console.log("로그인 실패! ->", err);
             throw err;
@@ -48,8 +50,7 @@ const useAuthStore = create((set) => ({
     },
 
     // 카카오 로그인 요청
-    kakaoLogin: async (authorizationCode) => {
-        console.log("auth.js에서 카카오 로그인 요청 실행");
+    kakao: async ({ authorizationCode }) => {
         try {
             const url = `${BASE_URL}/auth/kakao-login`;
             const data = { authorizationCode };
@@ -60,14 +61,38 @@ const useAuthStore = create((set) => ({
             localStorage.setItem("refreshToken", refreshToken);
             localStorage.setItem("userInfo", JSON.stringify(userInfo));
 
+            // 상태 업데이트
             set({ accessToken, refreshToken, userInfo });
             console.log(`카카오 로그인 성공! -> ${userInfo.nickName}님, 환영합니다!`);
             return { accessToken, refreshToken, userInfo };
+
         } catch (err) {
             console.log("카카오 로그인 실패! ->", err);
             throw err;
         }
     },
+
+    naverLogin: async ({ authorizationCode, state }) => {
+        console.log("네이버 로그인 요청 실행");
+        try {
+            const url = `${BASE_URL}/auth/naver-login`
+            const data = { authorizationCode, state };
+            const responseData = await post(url, data);
+
+            const { accessToken, refreshToken, userInfo } = responseData;
+
+            localStorage.setItem("accessToken", accessToken);
+            localStorage.setItem("refreshToken", refreshToken);
+            localStorage.setItem("userInfo", JSON.stringify(userInfo));
+
+            console.log(`네이버 로그인 성공! -> ${userInfo.nickName}님, 환영합니다!`);
+
+        } catch (err) {
+            console.log("네아버 로그인 실패! ->", err);
+            throw err;
+        }
+    },
+
     // 로그아웃 함수
     logout: () => {
         console.log(`로그아웃 성공!`);

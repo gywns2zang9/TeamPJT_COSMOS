@@ -4,8 +4,10 @@ import useAuthStore from "../../store/auth";
 import "../../css/accounts/login.css";
 import naverIcon from "../../assets/media/navericon.png";
 import kakaoIcon from "../../assets/media/kakaoicon.png";
-const kakaoURL = '';
+const KAKAO_CLIENT_ID = process.env.REACT_APP_KAKAO_CLIENT_ID;
+const KAKAO_REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
 
+const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -21,7 +23,7 @@ const Login = () => {
   const handlePasswordChange = (e) => setPassword(e.target.value);
 
   // 로그인 버튼 클릭 핸들러
-  const handleLoginClick = async () => {
+  const handleLogin = async () => {
     setLoginError(""); // 오류 메시지 초기화
     // 이메일과 비밀번호 입력 여부 검사
     if (!email || !password) {
@@ -33,8 +35,8 @@ const Login = () => {
       // 로그인 요청
       const { accessToken, refreshToken, userInfo } = await login({ email, password });
 
-      // 로그인 성공 후 페이지 리다이렉션
-      navigate(`/users/${userInfo.userId}`);
+      // 로그인 성공 후 그룹페이지로
+      navigate(`/`);
     } catch (error) {
       // 로그인 실패 시 에러 메시지 표시
       setLoginError("로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.");
@@ -47,12 +49,12 @@ const Login = () => {
   };
 
   // 네이버 로그인 버튼 클릭 핸들러
-  const handleNaverLoginClick = () => {
-    console.log("네이버로 로그인으로 이동");
+  const handleNaverLogin = () => {
+    // window.location.href = naverURL;
   };
 
   // 카카오 로그인 버튼 클릭 핸들러
-  const handleKakaoLoginClick = () => {
+  const handleKakaoLogin = () => {
     console.log("카카오로 로그인으로 이동");
     window.location.href = kakaoURL;
   };
@@ -61,7 +63,7 @@ const Login = () => {
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault(); // 기본 엔터키 동작 방지
-      handleLoginClick(); // 로그인 핸들러 호출
+      handleLogin(); // 로그인 핸들러 호출
     }
   };
 
@@ -110,7 +112,7 @@ const Login = () => {
 
         <button
           id="login-btn"
-          onClick={handleLoginClick} // 로그인 버튼 클릭 핸들러
+          onClick={handleLogin} // 로그인 버튼 클릭 핸들러
         >
           로그인        
         </button>
@@ -122,12 +124,12 @@ const Login = () => {
         <div id="social-login-box">
           <div id="social-login-title">소셜 로그인</div>
           <div id="social-login-btns">
-            <button id="social-login-btn-naver" onClick={handleNaverLoginClick}>
+            <button id="social-login-btn-naver" onClick={handleNaverLogin}>
               <img id="social-icon-naver" src={naverIcon} alt="네이버 아이콘" />
               <span>네이버로 로그인</span>
             </button>
 
-            <button id="social-login-btn-kakao" onClick={handleKakaoLoginClick}>
+            <button id="social-login-btn-kakao" onClick={handleKakaoLogin}>
               <img id="social-icon-kakao" src={kakaoIcon} alt="카카오 아이콘" />
               <span>카카오로 로그인</span>
             </button>
