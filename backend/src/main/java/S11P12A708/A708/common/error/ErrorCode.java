@@ -41,7 +41,12 @@ public enum ErrorCode {
 
     // Calendar
     CALENDAR_NOT_FOUND(UNPROCESSABLE_ENTITY, "calendar", "This Calendar is not exist"),
-    CALENDAR_TIME_FORMAT(UNPROCESSABLE_ENTITY, "calendar", "Calendar time format is invaild");
+    CALENDAR_TIME_FORMAT(UNPROCESSABLE_ENTITY, "calendar", "Calendar time format is invaild"),
+
+    //Folder
+    FOLDER_NOT_FOUND(UNPROCESSABLE_ENTITY, "folder", "This Folder is not exist"),
+    FOLDER_NAME_DUPLICATE(UNPROCESSABLE_ENTITY, "folder", "This Folder name already exist"),
+    FOLDER_NOT_BELONG_TO_TEAM(UNPROCESSABLE_ENTITY, "folder", "Folder does not belong to the specified team");
 
 
     private final HttpStatus code;

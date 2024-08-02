@@ -1,5 +1,7 @@
 package S11P12A708.A708.domain.team.service;
 
+import S11P12A708.A708.domain.folder.entity.Folder;
+import S11P12A708.A708.domain.folder.repository.FolderRepository;
 import S11P12A708.A708.domain.authcode.exception.FailMailException;
 import S11P12A708.A708.domain.team.exception.TeamAlreadyJoinException;
 import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
@@ -48,6 +50,7 @@ public class TeamAuthService {
     private final TeamRepository teamRepository;
     private final TeamUserRepository teamUserRepository;
     private final UserRepository userRepository;
+    private final FolderRepository folderRepository;
     private final TeamQueryRepository teamQueryRepository;
     private final TeamCodeGenerator generator;
     private final JavaMailSender mailSender;
@@ -62,6 +65,8 @@ public class TeamAuthService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Team team = teamRepository.save(requestToEntity(request));
         teamUserRepository.save(new TeamUser(user, team, LEADER));
+        folderRepository.save(Folder.createRootFolder(team));
+
         return TeamIdResponse.of(team);
     }
 
