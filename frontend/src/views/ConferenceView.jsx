@@ -31,9 +31,9 @@ function ConferenceView(props) {
   const [OV, setOV] = useState(null);
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
-  const [showChat, setShowChat] = useState(false); // 채팅창 모달 상태
-  const [chatMessages, setChatMessages] = useState([]); // 채팅 메시지 상태
-  const [newMessage, setNewMessage] = useState(""); // 새로운 메시지 입력 상태
+  const [showChat, setShowChat] = useState(false);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
 
   const VideoToggleIcon = isVideoEnabled ? VideocamIcon : VideocamOffIcon;
   const MicToggleIcon = isMicEnabled ? MicIcon : MicOffIcon;
@@ -70,6 +70,12 @@ function ConferenceView(props) {
 
   const handleNewMessageChange = (e) => {
     setNewMessage(e.target.value);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
   };
 
   useEffect(() => {
@@ -393,6 +399,7 @@ function ConferenceView(props) {
                 type="text"
                 value={newMessage}
                 onChange={handleNewMessageChange}
+                onKeyDown={handleKeyPress}
                 placeholder="메시지를 입력하세요..."
               />
               <button onClick={handleSendMessage}>전송</button>
@@ -408,9 +415,6 @@ function ConferenceView(props) {
                 <MicToggleIcon style={{ cursor: "pointer" }} />
                 <span>{isMicEnabled ? " 음소거" : " 음소거 해제"}</span>
               </button>
-              {/* <div className="volume-slider">
-                <VolumeSlider />
-              </div> */}
             </div>
             <div className="share-quit-buttons">
               <button className="button-share" onClick={toggleScreenShare}>
