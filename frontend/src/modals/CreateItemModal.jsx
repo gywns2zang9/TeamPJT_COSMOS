@@ -8,12 +8,12 @@ function CreateItemModal({ show, handleClose, handleSave, nameValue, setNameValu
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>새 파일 생성</Modal.Title>
+                <Modal.Title>{typeValue === 'folder' ? '새 폴더 생성' : '새 파일 생성'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
                     <Form.Group controlId="formItemName">
-                        <Form.Label>파일 이름</Form.Label>
+                        <Form.Label>{typeValue === 'folder' ? '폴더 이름' : '파일 이름'}</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="이름을 입력하세요"
@@ -21,25 +21,27 @@ function CreateItemModal({ show, handleClose, handleSave, nameValue, setNameValu
                             onChange={handleNameChange}
                         />
                     </Form.Group>
-                    <Form.Group controlId="formItemType" className="mt-3">
-                        <Form.Label>유형</Form.Label>
-                        <Form.Check
-                            type="radio"
-                            label="Markdown Editor"
-                            name="itemType"
-                            value="markdownEditor"
-                            checked={typeValue === "markdownEditor"}
-                            onChange={handleTypeChange}
-                        />
-                        <Form.Check
-                            type="radio"
-                            label="Study Templates"
-                            name="itemType"
-                            value="studyTemplates"
-                            checked={typeValue === "studyTemplates"}
-                            onChange={handleTypeChange}
-                        />
-                    </Form.Group>
+                    {typeValue !== 'folder' && (
+                        <Form.Group controlId="formItemType" className="mt-3">
+                            <Form.Label>유형</Form.Label>
+                            <Form.Check
+                                type="radio"
+                                label="Markdown Editor"
+                                name="itemType"
+                                value="markdownEditor"
+                                checked={typeValue === "markdownEditor"}
+                                onChange={handleTypeChange}
+                            />
+                            <Form.Check
+                                type="radio"
+                                label="Study Templates"
+                                name="itemType"
+                                value="studyTemplates"
+                                checked={typeValue === "studyTemplates"}
+                                onChange={handleTypeChange}
+                            />
+                        </Form.Group>
+                    )}
                 </Form>
             </Modal.Body>
             <Modal.Footer>

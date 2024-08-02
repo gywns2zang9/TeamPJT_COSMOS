@@ -354,30 +354,25 @@ function SideBar({ groupId }) {
     return (
         <div className="sidebar" ref={sidebarRef} style={{ width: sidebarWidth }}>
             <div className="sidebar-header">
-                <Button variant="link" size="sm" onClick={toggleSideBar}>
+                <Button variant="link" size="m" onClick={toggleSideBar}>
                     {isOpen ? <FaAngleDoubleLeft /> : <FaAngleDoubleRight />}
                 </Button>
-                <h5 className="ms-2">Group Name</h5>
+            </div>
+            <div style={{ textAlign:'center'}}>
+                <OverlayTrigger
+                    placement="top"
+                    overlay={<Tooltip>화상회의</Tooltip>}
+                >
+                    <Button variant="link" size="sm" onClick={() => setShowConfirmVideoStart(true)}>
+                        <FaPlay />
+                    </Button>
+                    
+                </OverlayTrigger>
             </div>
             {isOpen && (
                 <div className="sidebar-content">
+                    
                     <div className="actions">
-                        <OverlayTrigger
-                            placement="top"
-                            overlay={<Tooltip>설정</Tooltip>}
-                        >
-                            <Button variant="link" size="sm" onClick={handleOpenSettingsModal}>
-                                <FaCog />
-                            </Button>
-                        </OverlayTrigger>
-                        <OverlayTrigger
-                            placement="top"
-                            overlay={<Tooltip>초대</Tooltip>}
-                        >
-                            <Button variant="link" size="sm" onClick={handleOpenInviteModal}>
-                                <FaUserPlus />
-                            </Button>
-                        </OverlayTrigger>
                         <OverlayTrigger
                             placement="top"
                             overlay={<Tooltip>폴더 추가</Tooltip>}
@@ -394,20 +389,33 @@ function SideBar({ groupId }) {
                                 <FaFileAlt />
                             </Button>
                         </OverlayTrigger>
-                        <OverlayTrigger
-                            placement="top"
-                            overlay={<Tooltip>화상회의</Tooltip>}
-                        >
-                            <Button variant="link" size="sm" onClick={() => setShowConfirmVideoStart(true)}>
-                                <FaPlay />
-                            </Button>
-                        </OverlayTrigger>
+                        
                     </div>
                     <div className="folders">
                         {structure.folders.filter(folder => folder.parentId === null).map(renderFolder)}
                     </div>
                 </div>
             )}
+
+                <div className="sidebar-footer">
+                    <OverlayTrigger
+                        placement="top"
+                        overlay={<Tooltip>설정</Tooltip>}
+                    >
+                        <Button variant="link" size="sm" onClick={handleOpenSettingsModal}>
+                            <FaCog />
+                        </Button>
+                    </OverlayTrigger>
+                    <OverlayTrigger
+                        placement="top"
+                        overlay={<Tooltip>초대</Tooltip>}
+                    >
+                        <Button variant="link" size="sm" onClick={handleOpenInviteModal}>
+                            <FaUserPlus />
+                        </Button>
+                    </OverlayTrigger>
+                </div>
+
             <div className="sidebar-resizer" ref={resizerRef}></div>
 
             <GroupSettingsModal show={showSettingsModal} handleClose={handleCloseSettingsModal} />
