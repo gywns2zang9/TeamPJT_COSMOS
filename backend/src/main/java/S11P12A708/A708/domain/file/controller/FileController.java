@@ -1,5 +1,7 @@
 package S11P12A708.A708.domain.file.controller;
 
+import S11P12A708.A708.domain.auth.annotation.AuthUser;
+import S11P12A708.A708.domain.auth.request.AuthUserDto;
 import S11P12A708.A708.domain.file.request.FileCreateRequest;
 import S11P12A708.A708.domain.file.request.FileUpdateRequest;
 import S11P12A708.A708.domain.file.service.FileService;
@@ -18,7 +20,7 @@ public class FileController {
     private final FileService fileService;
 
     @PostMapping("/teams/{teamId}/file")
-    public ResponseEntity<Void> createFolder(
+    public ResponseEntity<Void> createNormalFile(
             @PathVariable("teamId") Long teamId,
             @Valid @RequestBody FileCreateRequest request) {
         fileService.createNormalFile(teamId, request);
@@ -26,7 +28,7 @@ public class FileController {
     }
 
     @PatchMapping("/teams/{teamId}/file/{fileId}")
-    public ResponseEntity<Void> updateFolder(
+    public ResponseEntity<Void> updateNormalFile(
             @PathVariable("teamId") Long teamId,
             @PathVariable("fileId") Long fileId,
             @Valid @RequestBody FileUpdateRequest request) {
@@ -34,13 +36,13 @@ public class FileController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-// 코드 페이지 추가
-//    @PostMapping("/teams/{teamId}/file/code")
-//    public ResponseEntity<Void> createCodeFolder(
-//            @PathVariable("teamId") Long teamId,
-//            @Valid @RequestBody CodeFileCreateRequest request) {
-//        fileService.createCodeFile(teamId, request);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    @PostMapping("/teams/{teamId}/file/code")
+    public ResponseEntity<Void> createCodeFile(
+            @AuthUser AuthUserDto authUser,
+            @PathVariable("teamId") Long teamId,
+            @Valid @RequestBody FileCreateRequest request) {
+        fileService.createCodeFile(teamId, authUser, request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

@@ -50,7 +50,8 @@ public enum ErrorCode {
 
     // file
     FILE_NOT_FOUND(UNPROCESSABLE_ENTITY, "file", "This file is not exist"),
-    FILE_NAME_DUPLICATE(UNPROCESSABLE_ENTITY, "file", "This file name already exist");
+    FILE_NAME_DUPLICATE(UNPROCESSABLE_ENTITY, "file", "This file name already exist"),
+    FOLDER_NOT_PROBLEM_INFO(UNPROCESSABLE_ENTITY, "file", "this folder cannot have code file");
 
 
     private final HttpStatus code;

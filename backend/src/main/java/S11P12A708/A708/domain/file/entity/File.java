@@ -71,8 +71,21 @@ public class File {
         this.modifiedAt = LocalDateTime.now();
     }
 
+    public File(String name, String content, FileType type, User user, Folder folder, Code code) {
+        this.name = name;
+        this.content = content;
+        this.type = type;
+        this.folder = folder;
+        this.user = user;
+        this.code = code;
+    }
+
     public static File createNormalFile(String name, Folder folder) {
         return new File(name, "", FileType.NORMAL, folder);
+    }
+
+    public static File createCodeFile(String name, User user, Folder folder, Code code) {
+        return new File(name, "", FileType.CODE, user, folder, code);
     }
 
     public void update(File updateFile) {
