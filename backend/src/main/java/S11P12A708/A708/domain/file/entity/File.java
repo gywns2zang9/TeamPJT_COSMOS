@@ -88,6 +88,14 @@ public class File {
         return new File(name, "", FileType.CODE, user, folder, code);
     }
 
+    public static File createOverViewFile(Folder folder) {
+        return new File("전체 개요", "", FileType.OVERVIEW, folder);
+    }
+
+    public static File createMainFile(Folder folder) {
+        return new File("메인 페이지", "", FileType.MAIN, folder);
+    }
+
     public void update(File updateFile) {
         this.name = updateFile.getName();
         this.content = updateFile.getContent();

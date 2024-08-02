@@ -1,5 +1,7 @@
 package S11P12A708.A708.domain.team.service;
 
+import S11P12A708.A708.domain.file.entity.File;
+import S11P12A708.A708.domain.file.repository.FileRepository;
 import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.folder.repository.FolderRepository;
 import S11P12A708.A708.domain.authcode.exception.FailMailException;
@@ -44,6 +46,7 @@ import static S11P12A708.A708.domain.team.entity.TeamUserRole.MEMBER;
 @RequiredArgsConstructor
 @Transactional
 public class TeamAuthService {
+    private final FileRepository fileRepository;
     @Value("${spring.mail.username}")
     private String from;
 
@@ -65,9 +68,17 @@ public class TeamAuthService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Team team = teamRepository.save(requestToEntity(request));
         teamUserRepository.save(new TeamUser(user, team, LEADER));
-        folderRepository.save(Folder.createRootFolder(team));
+
+        createRootFolder(team);
 
         return TeamIdResponse.of(team);
+    }
+
+    private void createRootFolder(Team team) {
+        final Folder rootFolder = Folder.createRootFolder(team);
+        folderRepository.save(rootFolder);
+        fileRepository.save(File.createOverViewFile(rootFolder));
+        fileRepository.save(File.createMainFile(rootFolder));
     }
 
     public TeamCodeResponse getTeamCode(Long teamId) {
