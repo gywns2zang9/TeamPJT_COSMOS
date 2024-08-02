@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: A708
+  mail:
+    username: ${EMAIL}
+    password: ${EMAIL_PASSWORD}
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER_NAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 1000
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    root: info
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}

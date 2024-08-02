@@ -34,7 +34,8 @@ public class SecurityConfig {
             "/auth/signup",
             "/auth/login",
             "/auth/check-nickname",
-            "/auth-codes/**"
+            "/auth-codes/**",
+            "/sessions/", "/sessions/**",
     };
 
     @Bean

@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: A708
+  mail:
+    username: cosmosa708@gmail.com
+    password: smja mhgo oofr iykx
+
+  datasource:
+    url: jdbc:mysql://i11a708.p.ssafy.io:3306/A708_prod?serverTimezone=UTC&characterEncoding=UTF-8
+    username: produser
+    password: prodpass
+
+  jpa:
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 1000
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    root: warn
+
+jwt:
+  secret-key: lGmYbu6wGqW37992AMeifFGoUzlYEQyUSIoc1FCLG6g=
