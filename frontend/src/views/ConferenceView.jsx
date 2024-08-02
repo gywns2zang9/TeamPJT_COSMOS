@@ -20,7 +20,7 @@ function ConferenceView(props) {
   const [isVideoEnabled, setisVideoEnabled] = useState(true);
   const [isMicEnabled, setisMicEnabled] = useState(true);
   const [mySessionId, setMySessionId] = useState("groupName");
-  const [showPaint, setShowPaint] = useState(false);
+  const [showPaint, setShowPaint] = useState(true);
   const [myUserName, setMyUserName] = useState(
     "Participant" + Math.floor(Math.random() * 100)
   );
@@ -31,6 +31,9 @@ function ConferenceView(props) {
   const [OV, setOV] = useState(null);
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
+  const [showChat, setShowChat] = useState(false); // 채팅창 모달 상태
+  const [chatMessages, setChatMessages] = useState([]); // 채팅 메시지 상태
+  const [newMessage, setNewMessage] = useState(""); // 새로운 메시지 입력 상태
 
   const VideoToggleIcon = isVideoEnabled ? VideocamIcon : VideocamOffIcon;
   const MicToggleIcon = isMicEnabled ? MicIcon : MicOffIcon;
@@ -42,6 +45,44 @@ function ConferenceView(props) {
   const handleTogglePaint = () => {
     setShowPaint((prevShowPaint) => !prevShowPaint);
   };
+
+  const handleToggleChat = () => {
+    setShowChat((prevShowChat) => !prevShowChat);
+  };
+
+  const handleSendMessage = () => {
+    if (session && newMessage.trim()) {
+      session
+        .signal({
+          data: newMessage,
+          to: [],
+          type: "my-chat",
+        })
+        .then(() => {
+          console.log("Message successfully sent");
+          setNewMessage("");
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
+  const handleNewMessageChange = (e) => {
+    setNewMessage(e.target.value);
+  };
+
+  useEffect(() => {
+    if (session) {
+      session.on("signal:my-chat", (event) => {
+        const senderData = JSON.parse(event.from.data);
+        setChatMessages((prevMessages) => [
+          ...prevMessages,
+          { from: senderData.clientData, text: event.data },
+        ]);
+      });
+    }
+  }, [session]);
 
   const toggleScreenShare = async () => {
     if (!isScreenSharing) {
@@ -315,7 +356,9 @@ function ConferenceView(props) {
               </button>
             </div>
             <div>
-              <button className="button">채팅</button>
+              <button className="button" onClick={handleToggleChat}>
+                채팅
+              </button>
             </div>
           </div>
           <div className="paint-space">
@@ -326,6 +369,34 @@ function ConferenceView(props) {
                 <UserVideoComponent streamManager={mainStreamManager} />
               )
             )}
+          </div>
+          <div className={`chat-modal ${showChat ? "open" : ""}`}>
+            <div className="chat-header">
+              <h3>채팅</h3>
+              <button
+                className="button button-close"
+                onClick={handleToggleChat}
+              >
+                닫기
+              </button>
+            </div>
+            <div className="chat-body">
+              {chatMessages.map((msg, index) => (
+                <div key={index}>
+                  <strong>{msg.from}: </strong>
+                  {msg.text}
+                </div>
+              ))}
+            </div>
+            <div className="chat-footer">
+              <input
+                type="text"
+                value={newMessage}
+                onChange={handleNewMessageChange}
+                placeholder="메시지를 입력하세요..."
+              />
+              <button onClick={handleSendMessage}>전송</button>
+            </div>
           </div>
           <div className="paint-lower-space">
             <div className="conference-control">
