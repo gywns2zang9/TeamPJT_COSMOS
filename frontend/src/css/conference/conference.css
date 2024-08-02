@@ -19,6 +19,21 @@
   overflow: hidden;
 }
 
+video {
+  width: 100%;
+  /* display: hidden; */
+}
+
+.video-container {
+  position: relative;
+  aspect-ratio: 16/9;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 10px 20px;
+  height: 100px;
+  cursor: pointer;
+}
+
 .video.open {
   max-height: 100%; /* 비디오 컨테이너가 열릴 때 최대 높이 */
 }
@@ -76,12 +91,19 @@
 }
 
 .paint-space {
+  display: flex;
   flex: 1;
+  position: relative;
   background-color: #fff;
-  border: 1px solid #ddd;
+  align-items: center;
   border-radius: 5px;
-  padding: 15px;
   color: black;
+  align-items: center;
+  justify-content: center;
+}
+
+.paint-space video {
+  overflow: hidden;
 }
 
 .paint-lower-space {
