@@ -55,6 +55,7 @@ public class FileService {
     }
 
     public void createCodeFile(Long teamId, AuthUserDto authUser, FileCreateRequest request) {
+        // TODO : 현재 문제를 담는 폴더가 만들어 지지 않아 테스트가 불가함. 추후에 테스트까지 진행할 예정
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final Folder folder = folderRepository.findById(request.getFolderId()).orElseThrow(FolderNotFoundException::new);
         final User user = userRepository.findById(authUser.getId()).orElseThrow(UserNotFoundException::new);
