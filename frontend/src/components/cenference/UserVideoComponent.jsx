@@ -9,7 +9,7 @@ const UserVideoComponent = ({ streamManager }) => {
   };
 
   return (
-    <div className="video-container">
+    <div>
       {streamManager !== undefined ? (
         <div>
           <OpenViduVideoComponent streamManager={streamManager} />
