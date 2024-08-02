@@ -9,13 +9,16 @@ import S11P12A708.A708.domain.team.repository.TeamRepository;
 import S11P12A708.A708.domain.team.repository.TeamUserRepository;
 import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
 import S11P12A708.A708.domain.team.request.InviteTeamRequest;
+import S11P12A708.A708.domain.team.request.NickNameLookUpRequest;
 import S11P12A708.A708.domain.team.request.TeamInfoRequest;
 import S11P12A708.A708.domain.team.request.TeamJoinRequest;
+import S11P12A708.A708.domain.team.response.NickNameLookUpResponse;
 import S11P12A708.A708.domain.team.response.TeamCodeResponse;
 import S11P12A708.A708.domain.team.response.TeamIdResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
 import S11P12A708.A708.domain.team.service.TeamCodeGenerator.TeamCodeGenerator;
 import S11P12A708.A708.domain.user.entity.User;
+import S11P12A708.A708.domain.user.exception.UserInvalidException;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.user.repository.UserRepository;
 import jakarta.mail.internet.MimeMessage;
@@ -87,6 +90,15 @@ public class TeamAuthService {
                 request.getGroupName(),
                 request.getDescription()
         );
+    }
+
+    public List<NickNameLookUpResponse> getMembersOfNickName(Long teamId, NickNameLookUpRequest req) {
+        teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+
+        if (!req.getNickName().isEmpty()) {
+            final List<User> users = teamQueryRepository.findUsersByNickNameAndNonGroupId(teamId, req.getNickName());
+            return users.stream().map(NickNameLookUpResponse::of).toList();
+        } else return List.of();
     }
 
     public void sendInviteEmail(Long teamId, InviteTeamRequest req) {

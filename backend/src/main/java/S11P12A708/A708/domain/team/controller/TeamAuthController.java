@@ -1,8 +1,10 @@
 package S11P12A708.A708.domain.team.controller;
 
 import S11P12A708.A708.domain.team.request.InviteTeamRequest;
+import S11P12A708.A708.domain.team.request.NickNameLookUpRequest;
 import S11P12A708.A708.domain.team.request.TeamInfoRequest;
 import S11P12A708.A708.domain.team.request.TeamJoinRequest;
+import S11P12A708.A708.domain.team.response.NickNameLookUpResponse;
 import S11P12A708.A708.domain.team.response.TeamCodeResponse;
 import S11P12A708.A708.domain.team.response.TeamIdResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,6 +49,15 @@ public class TeamAuthController {
 
         teamAuthService.joinTeam(userId, request);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/teams/auth/{teamId}/members")
+    public ResponseEntity<List<NickNameLookUpResponse>> getUserListOfNickName(
+            @PathVariable Long teamId,
+            @RequestBody NickNameLookUpRequest nickNameLookUpRequest) {
+        final List<NickNameLookUpResponse> response
+                = teamAuthService.getMembersOfNickName(teamId, nickNameLookUpRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/teams/auth/{teamId}/teamCode")
