@@ -4,8 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDate;
-
 @Getter
 @AllArgsConstructor
 public class CalendarRequest {
@@ -16,6 +14,6 @@ public class CalendarRequest {
     private String memo;
 
     @NotBlank
-    private LocalDate time;
+    private String time;
 
 }

@@ -40,7 +40,8 @@ public enum ErrorCode {
     TEAM_ALREADY_JOIN(UNPROCESSABLE_ENTITY, "team", "this user already joined"),
 
     // Calendar
-    CALENDAR_NOT_FOUND(UNPROCESSABLE_ENTITY, "Calendar", "This Calendar is not exist"),
+    CALENDAR_NOT_FOUND(UNPROCESSABLE_ENTITY, "calendar", "This Calendar is not exist"),
+    CALENDAR_TIME_FORMAT(UNPROCESSABLE_ENTITY, "calendar", "Calendar time format is invaild"),
 
     //Folder
     FOLDER_NOT_FOUND(UNPROCESSABLE_ENTITY, "folder", "This Folder is not exist"),
