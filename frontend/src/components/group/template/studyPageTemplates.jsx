@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaFileAlt } from 'react-icons/fa';
 import { MdRefresh } from 'react-icons/md';
-import useGroupStore from '../../store/group';
+import useGroupStore from '../../../store/group';
 
 
 

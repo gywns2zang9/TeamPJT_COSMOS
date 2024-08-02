@@ -3,10 +3,10 @@ import FullCalendar from '@fullcalendar/react';
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import dayGridPlugin from '@fullcalendar/daygrid';
-import '../../css/group/calendar.css';
+import '../../../css/group/calendar.css';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import useGroupStore from '../../store/group';
-import CalendarModal from '../../modals/CalendarModal.jsx';
+import useGroupStore from '../../../store/group';
+import CalendarModal from '../../../modals/CalendarModal.jsx';
 
 function Calendar({ groupId }) {
   const { loadCalendarScheduleList, createCalendarSchedule, updateCalendarSchedule, deleteCalendarSchedule } = useGroupStore();

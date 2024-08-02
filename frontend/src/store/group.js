@@ -6,7 +6,6 @@ import { getAccessToken } from './auth.js'
 const BASE_URL = useStore.getState().BASE_URL;
 
 const useGroupStore = create((set) => ({
-    
     // 그룹 목록 불러오기
     loadGroupList: async ({ userId }) => {
         try {

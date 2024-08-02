@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "./calendar.jsx";
 import styled from "styled-components";
-import useGroupStore from "../../store/group.js";
+import useGroupStore from "../../../store/group.js";
 
 const GroupInfoText = styled.div`
     color: white;
