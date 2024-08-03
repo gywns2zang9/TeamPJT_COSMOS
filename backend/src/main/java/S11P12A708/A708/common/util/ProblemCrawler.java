@@ -69,7 +69,7 @@ public class ProblemCrawler {
             case 0:
                 return "unrated";
             case 1:
-                return "BRONZE V";
+                return "Bronze V";
             case 2:
                 return "Bronze IV";
             case 3:
