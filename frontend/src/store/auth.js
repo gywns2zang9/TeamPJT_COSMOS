@@ -93,11 +93,9 @@ const useAuthStore = create((set) => ({
 
     // 로그아웃 함수
     logout: () => {
-        console.log(`로그아웃 성공!`);
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("userInfo");
-
         set({ accessToken: null, refreshToken: null, userInfo: null });
 
         // 홈 페이지로 리다이렉트

@@ -17,10 +17,6 @@ function NavBar() {
   const userInfo = getUserInfo();
   const userId = userInfo ? userInfo.userId : null;
 
-  const handleLogout = () => {
-    logout();
-  };
-
   return (
     <Navbar id="navbar">
       <Container id="navbar-container">
@@ -38,7 +34,7 @@ function NavBar() {
                 <Nav.Link as={Link} to={`/users/${userId}`} id="nav-user-profile">
                   PROFILE
                 </Nav.Link>
-                <Nav.Link href="#" id="nav-logout" onClick={handleLogout}>
+                <Nav.Link href="#" id="nav-logout" onClick={logout}>
                   LOGOUT
                 </Nav.Link>
               </>
