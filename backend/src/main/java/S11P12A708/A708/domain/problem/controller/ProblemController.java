@@ -1,5 +1,6 @@
 package S11P12A708.A708.domain.problem.controller;
 
+import S11P12A708.A708.domain.problem.request.CrawlCodeRequest;
 import S11P12A708.A708.domain.problem.request.CreateProblemRequest;
 import S11P12A708.A708.domain.problem.service.ProblemService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,13 @@ public class ProblemController {
     @DeleteMapping("/teams/{teamId}/problems/{problemId}")
     public ResponseEntity<Void> deleteProblem(@PathVariable Long teamId, @PathVariable Long problemId) {
         problemService.deleteProblem(teamId, problemId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/teams/{teamId}/problems/code")
+    public ResponseEntity<Void> crawlAndSaveCode(@PathVariable Long teamId,
+                                                 @RequestBody CrawlCodeRequest crawlCodeRequest) {
+        problemService.crawlCode(teamId, crawlCodeRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

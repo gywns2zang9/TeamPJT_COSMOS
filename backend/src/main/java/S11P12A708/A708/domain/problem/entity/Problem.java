@@ -1,6 +1,5 @@
 package S11P12A708.A708.domain.problem.entity;
 
-
 import S11P12A708.A708.common.util.BojProblem;
 import S11P12A708.A708.domain.study.entity.Study;
 import jakarta.persistence.*;
@@ -24,7 +23,7 @@ public class Problem {
     @Enumerated(EnumType.STRING)
     private SiteInfoType site;
 
-    private String number;
+    private Integer number;
 
     @Column(nullable = false)
     private String name;
@@ -45,7 +44,7 @@ public class Problem {
     public static Problem of(BojProblem problem) {
         return new Problem(
                 problem.getSiteInfo(),
-                String.valueOf(problem.getNumber()),
+                problem.getNumber(),
                 problem.getName(),
                 problem.getLevel(),
                 problem.getSiteUrl(),
@@ -54,7 +53,7 @@ public class Problem {
         );
     }
 
-    public Problem(SiteInfoType site, String number, String name, String level, String url, LocalDateTime createdAt) {
+    public Problem(SiteInfoType site, Integer number, String name, String level, String url, LocalDateTime createdAt) {
         this.site = site;
         this.number = number;
         this.name = name;

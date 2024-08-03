@@ -48,6 +48,8 @@ public enum ErrorCode {
     // Problem
     PROBLEM_NOT_FOUND(UNPROCESSABLE_ENTITY, "problem", "problem is not found."),
     PROBLEM_NOT_EXIST(UNPROCESSABLE_ENTITY, "problem", "problem is not exist."),
+    CODE_NOT_EXIST(UNPROCESSABLE_ENTITY, "problem", "code is not exist."),
+    USER_INFO_NECESSARY(UNPROCESSABLE_ENTITY, "problem", "user's git, repo information is necessary for crawling."),
 
     //Folder
     FOLDER_NOT_FOUND(UNPROCESSABLE_ENTITY, "folder", "This Folder is not exist"),
