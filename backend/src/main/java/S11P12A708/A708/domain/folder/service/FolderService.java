@@ -1,6 +1,5 @@
 package S11P12A708.A708.domain.folder.service;
 
-import S11P12A708.A708.domain.file.repository.FileRepository;
 import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.folder.exception.FolderNameDuplicateException;
 import S11P12A708.A708.domain.folder.exception.FolderNotBelongToTeamException;
@@ -23,7 +22,6 @@ public class FolderService {
 
     private final FolderRepository folderRepository;
     private final FolderQueryRepository folderQueryRepository;
-    private final FileRepository fileRepository;
     private final TeamRepository teamRepository;
 
     public FolderInfoResponse getFolderInfo(Long teamId, Long folderId) {

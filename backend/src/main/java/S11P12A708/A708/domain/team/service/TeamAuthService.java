@@ -76,9 +76,10 @@ public class TeamAuthService {
 
     private void createRootFolder(Team team) {
         final Folder rootFolder = Folder.createRootFolder(team);
+        rootFolder.addFile(File.createOverViewFile(rootFolder));
+        rootFolder.addFile(File.createMainFile(rootFolder));
+
         folderRepository.save(rootFolder);
-        fileRepository.save(File.createOverViewFile(rootFolder));
-        fileRepository.save(File.createMainFile(rootFolder));
     }
 
     public TeamCodeResponse getTeamCode(Long teamId) {

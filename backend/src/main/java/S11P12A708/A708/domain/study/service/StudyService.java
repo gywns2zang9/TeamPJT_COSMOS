@@ -28,7 +28,6 @@ public class StudyService {
     private final TeamRepository teamRepository;
     private final FolderQueryRepository folderQueryRepository;
     private final FolderRepository folderRepository;
-    private final FileRepository fileRepository;
     private final StudyRepository studyRepository;
 
     public void createStudy(Long teamId, StudyCreateRequest request) {
@@ -44,9 +43,9 @@ public class StudyService {
         // 년 월에 해당하는 폴더 생성 및 찾기
         final Folder rootFolder = folderQueryRepository.findRootFolderByTeam(teamId).orElseThrow(FolderNotFoundException::new);
         final String yearMonthFolderName = formatYearMonth(request.getYear(), request.getMonth());
-        if(time == 1) { // 기존에 년월 폴더 없었다면 생성
+        if(!hasYearMonthFolder(rootFolder, yearMonthFolderName)) { // 기존에 년월 폴더 없었다면 생성
             Folder yearMonthFolder = new Folder(yearMonthFolderName, team, rootFolder);
-            folderRepository.save(yearMonthFolder);
+            rootFolder.addSubFolder(yearMonthFolder);
         }
 
         final Folder yearMonthFolder = rootFolder.getSubFolders().stream()
@@ -56,11 +55,16 @@ public class StudyService {
 
         // 회차 이름으로 폴더 생성
         final Folder timeFolder = new Folder(time + "회차", team, yearMonthFolder);
-        folderRepository.save(timeFolder);
+        yearMonthFolder.addSubFolder(timeFolder);
 
         // 1회차 스터디 개요 파일 추가.
         final File timeOverViewFile = File.createTimeOverViewFile(timeFolder);
-        fileRepository.save(timeOverViewFile);
+        timeFolder.addFile(timeOverViewFile);
+    }
+
+    private boolean hasYearMonthFolder(Folder rootFolder, String yearMonthFolderName) {
+        return rootFolder.getSubFolders().stream()
+                .anyMatch(subFolder -> yearMonthFolderName.equals(subFolder.getName()));
     }
 
     public void deleteStudy(Long teamId, Long studyId) {
@@ -74,7 +78,7 @@ public class StudyService {
         final Folder yearMonthFolder = rootFolder.getSubFolders().stream()
                 .filter(subFolder -> yearMonthFolderName.equals(subFolder.getName()))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(); // TODO
 
         final String timeFolderName = study.getTimes() + "회차";
         final Folder timeFolder = yearMonthFolder.getSubFolders().stream()
