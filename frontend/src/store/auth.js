@@ -108,33 +108,6 @@ const useAuthStore = create((set) => ({
         return !!accessToken;
     },
 
-    // 회원가입-이메일 전송 요청
-    sendSignUpEmail: async ({ email }) => {
-        console.log(`${email} 받음`);
-        try {
-            const url = `${BASE_URL}/auth-codes/send-code`;
-            const data = { email };
-            const expiredTime = await post(url, data);
-            return expiredTime; //5
-        } catch (err) {
-            console.log("회원가입-이메일 전송에 실패!", err);
-            throw err
-        }
-    },
-
-    // 회원가입-인증 확인 요청
-    verifySignUpCode: async ({ email, authCode }) => {
-        try {
-            const url = `${BASE_URL}/auth-codes/verify-code`
-            const data = { email, authCode }
-            const response = await post(url, data);
-            return response; //true
-        } catch (err) {
-            console.log("회원가입-인증 확인 실패!", err);
-            throw err;
-        }
-    },
-
     // 비번찾기-코드 전송 요청
     sendPasswordFindEmail: async ({ email }) => {
         try {
@@ -179,16 +152,45 @@ const useAuthStore = create((set) => ({
         }
     },
 
+
+    // 회원가입-코드 전송 요청
+    sendSignUpEmail: async ({ email }) => {
+        try {
+            const url = `${BASE_URL}/auth-codes/send-code`;
+            const data = { email };
+            const responseData = await post(url, data);
+            const expiredTime = responseData.expiredTime
+            console.log(`회원가입-코드 전송 요청 성공! -> ${email}로 코드를 발송했습니다.`)
+            return expiredTime;
+        } catch (error) {
+            console.log("회원가입-코드 전송 요청 실패!", error);
+            throw error
+        }
+    },
+
+    // 회원가입-코드 확인 요청
+    verifySignUpCode: async ({ email, authCode }) => {
+        try {
+            const url = `${BASE_URL}/auth-codes/verify-code`
+            const data = { email, authCode }
+            const response = await post(url, data);
+            return response;
+        } catch (error) {
+            console.log("회원가입-코드 확인 요청 실패!", error);
+            throw error;
+        }
+    },
+
     // 닉네임 검사 요청
     checkNickName: async ({ nickName }) => {
         try {
             const url = `${BASE_URL}/auth/check-nickname`
             const data = { nickName }
             const response = await post(url, data);
-            return response //true
-        } catch (err) {
-            console.log("닉네임 검사 실패! ->", err);
-            throw err;
+            return response
+        } catch (error) {
+            console.log("닉네임 검사 요청 실패! ->", error);
+            throw error;
         }
     },
 
@@ -197,13 +199,13 @@ const useAuthStore = create((set) => ({
         try {
             const url = `${BASE_URL}/auth/signup`
             const data = { email, password, nickName }
-            console.log(`회원가입 성공! ${nickName}님 감사합니다.`)
             const response = await post(url, data);
+            console.log(`회원가입 성공! ${nickName}님 감사합니다.`)
             return response
 
-        } catch (err) {
-            console.log("회원가입 실패! ->", err);
-            throw err;
+        } catch (error) {
+            console.log("회원가입 요청 ->", error);
+            throw error;
         }
     },
 
@@ -215,11 +217,12 @@ const useAuthStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`
             }
             const response = await deleteRequest(url, {}, headers);
+            console.log(`회원탈퇴 성공! 안녕히가세요.`)
             return response
 
-        } catch (err) {
-            console.log("회원탈퇴 실패! ->", err);
-            throw err;
+        } catch (error) {
+            console.log("회원탈퇴 요청 실패! ->", error);
+            throw error;
         }
     }
 

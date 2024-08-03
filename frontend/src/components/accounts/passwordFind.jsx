@@ -21,18 +21,18 @@ const PasswordFind = () => {
   const [confirmPassword, setConfirmPassword] = useState(''); // 비밀번호 확인 상태
   const [matchPassword, setMatchPassword] = useState();
 
-
-  const navigate = useNavigate();
-
   const sendPasswordFindEmail = useAuthStore((state) => state.sendPasswordFindEmail);
   const verifyAuthCode = useAuthStore((state) => state.verifyAuthCode);
   const changePassword = useAuthStore((state) => state.changePassword);
+  const login = useAuthStore((state) => state.login);
+  const getUserInfo = useAuthStore((state) => state.getUserInfo);
+
+  const navigate = useNavigate();
 
   // 이메일 입력 핸들러
   const handleEmailInput = (event) => {
-
     setEmail(event.target.value);
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 패턴 검사
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(event.target.value)) {
       setIsEmailValid(false);
       setEmailError("이메일 형식에 맞춰 입력해주세요.");
@@ -84,7 +84,7 @@ const PasswordFind = () => {
 
   // 이메일 재전송 핸들러
   const handleResendEmail = () => {
-    handleSendCode(); // 이메일 전송 함수 호출
+    handleSendCode();
   };
 
   // 인증 코드 입력 핸들러
@@ -109,8 +109,7 @@ const PasswordFind = () => {
   const handlePasswordInput = (event) => {
     setMatchPassword(false)
     setNewPassword(event.target.value);
-
-    const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,13}$/; // 비밀번호 유효성 검사 패턴
+    const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,13}$/;
     if (!passwordPattern.test(event.target.value)) {
       setPasswordErrorMessage("비밀번호는 문자, 숫자, 특수문자를 조합해주세요. (8~13자)");
     } else {
@@ -138,10 +137,11 @@ const PasswordFind = () => {
     try {
       await changePassword({ email, newPassword }); 
       console.log("비밀번호가 변경되었습니다.");
-      navigate('/login'); 
-
+      await login({ email, newPassword });
+      const userInfo = getUserInfo();
+      navigate(`/users/${userInfo.userId}`);
     } catch (error) {
-      console.error('비밀번호 변경에 실패했습니다.');
+      console.log('비밀번호 변경에 실패했습니다.');
     }
   };
 
@@ -169,7 +169,7 @@ const PasswordFind = () => {
               전송
             </button>
           </div>
-          {emailSending && <div id="email-sending-message">인증번호 전송중...</div>}
+          {emailSending && <div id="email-sending-message">인증번호를 전송 중입니다. 잠시만 기다려주세요.</div>}
           {emailSent && (
             <div id="email-send-success-message">
               인증번호를 발송했습니다. {timeMessage && <span>{timeMessage}</span>}
@@ -182,11 +182,11 @@ const PasswordFind = () => {
           {emailError && <div id="email-fail-message">{emailError}</div>}
         </div>
 
-        <div id="auth-token-group">
-          <label id="auth-token-label" htmlFor="auth-token">인증번호 입력</label>
-          <div id="auth-token-input-with-button">
+        <div id="auth-code-group">
+          <label id="auth-code-label" htmlFor="auth-code">인증번호 입력</label>
+          <div id="auth-code-input-with-button">
             <input
-              id="auth-token-input"
+              id="auth-code-input"
               type="text"
               placeholder="인증번호를 입력하세요"
               value={authCode}
@@ -219,7 +219,6 @@ const PasswordFind = () => {
 
         <div id="confirm-password-group">
           <label id="confirm-password-label" htmlFor="confirm-password">비밀번호 확인</label>
-
           <input
             id="confirm-password-input"
             type="password"
@@ -227,8 +226,7 @@ const PasswordFind = () => {
             value={confirmPassword}
             onChange={handleConfirmPasswordInput}
           />
-
-          {confirmPassword && !matchPassword && <div id="password-confirm-fail-message">비밀번호가 일치하지 않습니다.</div>}
+          { confirmPassword && !matchPassword && <div id="password-confirm-fail-message">비밀번호가 일치하지 않습니다.</div>}
           { matchPassword && <div id="password-confirm-success-message">비밀번호가 일치합니다.</div>}
         </div>
 
