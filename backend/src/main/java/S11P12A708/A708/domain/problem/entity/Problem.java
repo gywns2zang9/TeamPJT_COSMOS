@@ -1,6 +1,7 @@
 package S11P12A708.A708.domain.problem.entity;
 
 
+import S11P12A708.A708.common.util.BojProblem;
 import S11P12A708.A708.domain.study.entity.Study;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -40,4 +41,25 @@ public class Problem {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    // TODO: study가 현재 미구현 상태. 추후 생성자 주입 필요
+    public static Problem of(BojProblem problem) {
+        return new Problem(
+                problem.getSiteInfo(),
+                String.valueOf(problem.getNumber()),
+                problem.getName(),
+                problem.getLevel(),
+                problem.getSiteUrl(),
+//                study
+                LocalDateTime.now()
+        );
+    }
+
+    public Problem(SiteInfoType site, String number, String name, String level, String url, LocalDateTime createdAt) {
+        this.site = site;
+        this.number = number;
+        this.name = name;
+        this.level = level;
+        this.url = url;
+        this.createdAt = createdAt;
+    }
 }

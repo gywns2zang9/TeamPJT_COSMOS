@@ -35,4 +35,10 @@ public class ProblemUser {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    public ProblemUser(Problem problem, User user, File file) {
+        this.problem = problem;
+        this.user = user;
+        this.file = file;
+        this.createdAt = LocalDateTime.now();
+    }
 }
