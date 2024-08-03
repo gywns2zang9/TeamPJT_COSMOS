@@ -41,4 +41,18 @@ public class Study {
     @JoinColumn(name = "team_id")
     private Team team;
 
+
+    public Study(Integer year, Integer month, Integer times, ArrayList<Problem> problems, Team team) {
+        this.year = year;
+        this.month = month;
+        this.times = times;
+        this.createdAt = LocalDateTime.now();
+        this.problems = problems;
+        this.team = team;
+    }
+
+    public static Study createStudy(Integer year, Integer month, Integer times, Team team) {
+        return new Study( year, month, times, null, team);
+    }
+
 }

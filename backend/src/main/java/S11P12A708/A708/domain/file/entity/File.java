@@ -96,6 +96,10 @@ public class File {
         return new File("메인 페이지", "", FileType.MAIN, folder);
     }
 
+    public static File createTimeOverViewFile(Folder folder) {
+        return new File("스터디 개요", "", FileType.TIME_OVERVIEW, folder);
+    }
+
     public void update(File updateFile) {
         this.name = updateFile.getName();
         this.content = updateFile.getContent();
