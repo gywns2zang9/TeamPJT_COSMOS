@@ -1,20 +1,29 @@
-import React, { useState, useEffect } from "react"; 
+import { useState, useEffect } from "react"; 
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../../store/auth";
 import "../../css/user/userInfo.css"; 
 import defaultImg from "../../assets/media/defaultimg.png"; 
-import useAuthStore from "../../store/auth";
 
 const UserInfo = () => {
-  const { getUserInfo, getAccessToken, logout, signOut } = useAuthStore();
-  const [userInfo, setUserInfo] = useState(getUserInfo() || {});
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const storedUserInfo = getUserInfo();
-    if (storedUserInfo) {
-      setUserInfo(storedUserInfo);
-    }
-  }, [getUserInfo]);
+  const getUserInfo = useAuthStore((state) => state.getUserInfo);
+  const accessToken = useAuthStore((state) => state.getAccessToken);
+
+  // getUserInfo 함수 호출하여 사용자 정보를 가져옴
+  const userInfo = getUserInfo();
+
+  const [userId, setUserId] = useState(userInfo.userId);
+  const [email, setEmail] = useState(userInfo.email);
+  const [nickName, setNickName] = useState(userInfo.nickName);
+  const [type, setType] = useState(userInfo.type);
+  const [img, setImg] = useState(userInfo.img);
+  const [gitId, setGitId] = useState(userInfo.gitId);
+  const [repo, setRepo] = useState(userInfo.repo);
+  const [description, setDescription] = useState(userInfo.description);
+
+  const signOut = useAuthStore((state) => state.signOut);
+  const logout = useAuthStore((state) => state.logout);
 
   const toChange = () => {
     navigate(`change`);
@@ -25,15 +34,11 @@ const UserInfo = () => {
   };
 
   const handleLogout = () => {
-    console.log("로그아웃 실행");
-    logout(); // 로그아웃 함수 호출
+    logout();
   };
 
   const handleSignOut = async () => {
     console.log("회원 탈퇴 실행");
-    const accessToken = getAccessToken();
-    const userId = userInfo.userId;
-
     try {
       await signOut({ accessToken, userId });
       handleLogout();
@@ -47,7 +52,7 @@ const UserInfo = () => {
       <div id="info-title">내 정보</div> 
       <div id="info-box">
         <div id="info-img-group">
-          <img id="info-img" src={userInfo.img || defaultImg} alt="profile-img" />
+          <img id="info-img" src={img || defaultImg} alt="profile-img" />
         </div>
 
         <div id="info-group">
@@ -55,28 +60,28 @@ const UserInfo = () => {
             <label id="info-nickname-label" htmlFor="nickname">
               닉네임:
             </label>
-            <span id="info-nickname">{userInfo.nickName || "정보가 없습니다."}</span>
+            <span id="info-nickname">{nickName || "정보가 없습니다."}   (<span>{type}</span>)</span>
           </div>
 
           <div id="info-gitId-group">
             <label id="info-gitId-label" htmlFor="gitId">
               Git Id:
             </label>
-            <span id="info-gitId">{userInfo.gitId || "정보가 없습니다."}</span>
+            <span id="info-gitId">{gitId || "정보가 없습니다."}</span>
           </div>
 
           <div id="info-repo-group"> 
             <label id="info-repo-label" htmlFor="repo">
               Repository:
             </label>
-            <span id="info-repo">{userInfo.repo || "정보가 없습니다."}</span> 
+            <span id="info-repo">{repo || "정보가 없습니다."}</span> 
           </div>
 
           <div id="info-description-group">
             <label id="info-description-label" htmlFor="description">
               내 소개:
             </label>
-            <span id="info-description">{userInfo.description || "정보가 없습니다."}</span>
+            <span id="info-description">{description || "정보가 없습니다."}</span>
           </div>
         </div>
       </div>

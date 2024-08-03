@@ -36,8 +36,8 @@ const Login = () => {
     try {
       // 로그인 요청 보냄
       const { accessToken, refreshToken, userInfo } = await login({ email, password });
-      // 로그인 성공 후 그룹페이지로 (수정필요)
-      navigate(`/`);
+      const userId = userInfo.userId
+      navigate(`/group`);
 
     } catch (error) {
       // 로그인 실패 시 에러 메시지 표시
