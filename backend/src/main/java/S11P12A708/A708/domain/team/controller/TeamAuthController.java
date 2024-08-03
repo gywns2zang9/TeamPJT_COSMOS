@@ -1,7 +1,10 @@
 package S11P12A708.A708.domain.team.controller;
 
+import S11P12A708.A708.domain.team.request.InviteTeamRequest;
+import S11P12A708.A708.domain.team.request.NickNameLookUpRequest;
 import S11P12A708.A708.domain.team.request.TeamInfoRequest;
 import S11P12A708.A708.domain.team.request.TeamJoinRequest;
+import S11P12A708.A708.domain.team.response.NickNameLookUpResponse;
 import S11P12A708.A708.domain.team.response.TeamCodeResponse;
 import S11P12A708.A708.domain.team.response.TeamIdResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
@@ -11,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +26,7 @@ public class TeamAuthController {
 
     private final TeamAuthService teamAuthService;
 
-    @GetMapping("/users/{userId}/groups")
+    @GetMapping("/users/{userId}/teams")
     public ResponseEntity<List<TeamResponse>> getTeamList(
             @PathVariable Long userId) {
 
@@ -30,7 +34,7 @@ public class TeamAuthController {
         return new ResponseEntity<>(teamResponses, HttpStatus.OK);
     }
 
-    @PostMapping("/users/{userId}/group")
+    @PostMapping("/users/{userId}/team")
     public ResponseEntity<TeamIdResponse> createTeam(
             @PathVariable Long userId,
             @Valid @RequestBody TeamInfoRequest request) {
@@ -47,6 +51,22 @@ public class TeamAuthController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/teams/auth/{teamId}/members")
+    public ResponseEntity<List<NickNameLookUpResponse>> getUserListOfNickName(
+            @PathVariable Long teamId,
+            @RequestBody NickNameLookUpRequest nickNameLookUpRequest) {
+        final List<NickNameLookUpResponse> response
+                = teamAuthService.getMembersOfNickName(teamId, nickNameLookUpRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/teams/auth/{teamId}/teamCode")
+    public ResponseEntity<Void> sendInvitation(
+            @RequestBody InviteTeamRequest inviteTeamRequest,
+            @PathVariable Long teamId) {
+        teamAuthService.sendInviteEmail(teamId, inviteTeamRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @GetMapping("/teams/auth/{teamId}/teamCode")
     public ResponseEntity<TeamCodeResponse> getTeamCode(

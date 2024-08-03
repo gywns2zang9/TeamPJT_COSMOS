@@ -6,6 +6,18 @@ import '../css/group/groupDetail.css';
 
 const GroupDetailView = () => {
     const { pageId, groupId } = useParams();
+    if (pageId === undefined) {
+        return (
+            <div id="group-detail-info">
+            <div id="sidebar">
+            <SideBar groupId={groupId}/>
+            </div>
+            <div id='group-detail-info-page'>
+            <GroupDetailInfo groupId={groupId} type='main' pageId={pageId}/>
+            </div>
+        </div>
+        )
+    }
     return (
         <div id="group-detail-info">
             <div id="sidebar">

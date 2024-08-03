@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaFileAlt } from 'react-icons/fa';
 import { MdRefresh } from 'react-icons/md';
+import useGroupStore from '../../../store/group';
 
-const StudyPageTemplates = ({ pageId }) => {
+
+
+const StudyPageTemplates = ({ groupId, pageId }) => {
+    // const [ members, setMembers ] = useState([]);
+    // const getGroupMembers = useGroupStore((state) => state.groupDetailLoad)
+
+
     return (
         <>
             <div style={{color:'white'}}>

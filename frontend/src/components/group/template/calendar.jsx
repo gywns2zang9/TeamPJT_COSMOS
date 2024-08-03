@@ -3,10 +3,10 @@ import FullCalendar from '@fullcalendar/react';
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import dayGridPlugin from '@fullcalendar/daygrid';
-import '../../css/group/calendar.css';
+import '../../../css/group/calendar.css';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import useGroupStore from '../../store/group';
-import CalendarModal from '../../modals/CalendarModal.jsx';
+import useGroupStore from '../../../store/group';
+import CalendarModal from '../../../modals/CalendarModal.jsx';
 
 function Calendar({ groupId }) {
   const { loadCalendarScheduleList, createCalendarSchedule, updateCalendarSchedule, deleteCalendarSchedule } = useGroupStore();
@@ -16,15 +16,15 @@ function Calendar({ groupId }) {
   const [currentEvent, setCurrentEvent] = useState({ title: '', start: '', description: '' });
   const [isEditing, setIsEditing] = useState(false);
   const [currentEventId, setCurrentEventId] = useState(null);
-
+  
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const response = await loadCalendarScheduleList({ groupId })
         const formattedEvents = response.map(event => ({
-          id: event.scheduleId,
+          id: event.calendarId,
           title: event.title,
-          start: new Date(event.startTime).toISOString().slice(0, -1),
+          start: new Date(event.time).toISOString().slice(0, -1),
           description: event.memo
         }))
         setEvents(formattedEvents);
@@ -52,16 +52,30 @@ function Calendar({ groupId }) {
     setIsEditing(true);
     setShowModal(true);
   };
+  
+  const formatDateToMySQL = (isoDate) => {
+    const date = new Date(isoDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
 
   const handleSaveEvent = async () => {
     try {
+      const eventDate = new Date(currentEvent.start);
+      const formattedDate = formatDateToMySQL(eventDate);
       if (isEditing) {
+        console.log(currentEvent);
         await updateCalendarSchedule({
           groupId,
           calendarId: currentEventId,
           title: currentEvent.title,
           memo: currentEvent.description,
-          time: new Date(currentEvent.start).toISOString()
+          time: formattedDate
         });
         setEvents(events.map(event => 
           event.id === currentEventId ? { ...currentEvent, id: currentEventId } : event
@@ -87,6 +101,7 @@ function Calendar({ groupId }) {
       await deleteCalendarSchedule({ groupId, calendarId: currentEventId });
       setEvents(events.filter(event => event.id !== currentEventId));
       setShowDeleteModal(false);
+      setShowModal(false);
     } catch (err) {
       console.error('일정 삭제 실패', err);
     }

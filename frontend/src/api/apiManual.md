@@ -10,11 +10,18 @@ const UserComponent = ({ userId }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const data = {
+    data1:"data1",
+    data2:"data2",
+  }
+  const token = "tokentokentokentokentokentokentoken"
+  const headers = {
+    Authorization: `Bearer ${token}`
+  }
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userData = await get(`/users/${userId}`);
+        const userData = await get(`/users/${userId}`, data, headers);
         setUser(userData);
       } catch (err) {
         setError(err);
