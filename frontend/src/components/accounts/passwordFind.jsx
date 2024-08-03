@@ -4,34 +4,36 @@ import '../../css/accounts/passwordFind.css';
 import useAuthStore from "../../store/auth";
 
 const PasswordFind = () => {
-  const [email, setEmail] = useState(''); // 이메일 상태
-  const [isEmailValid, setIsEmailValid] = useState(true); // 이메일 유효성 상태
-  const [emailError, setEmailError] = useState(''); // 이메일 오류 메시지 상태
-  const [emailSending, setEmailSending] = useState(false); // 이메일 전송 중 상태
-  const [emailSent, setEmailSent] = useState(false); // 이메일 전송 완료 상태
+  const [email, setEmail] = useState('');
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [emailError, setEmailError] = useState(''); 
+  const [emailSending, setEmailSending] = useState(false); 
+  const [emailSent, setEmailSent] = useState(false); 
 
-  const [authToken, setAuthToken] = useState(''); // 인증 토큰 상태
-  const [authVerified, setAuthVerified] = useState(false); // 인증 완료 상태
-  const [authError, setAuthError] = useState(''); // 인증 오류 메시지 상태
+  const [timeMessage, setTimeMessage] = useState("");
 
-  const [password, setPassword] = useState(''); // 비밀번호 상태
-  const [passwordError, setPasswordError] = useState(''); // 비밀번호 오류 메시지 상태
+  const [authCode, setAuthCode] = useState(''); 
+  const [authErrorMessage, setAuthErrorMessage] = useState(''); 
+  const [authVerified, setAuthVerified] = useState(false); 
+
+  const [newPassword, setNewPassword] = useState('');
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState(''); // 비밀번호 오류 메시지 상태
   const [confirmPassword, setConfirmPassword] = useState(''); // 비밀번호 확인 상태
-  const [passwordMatchError, setPasswordMatchError] = useState(''); // 비밀번호 불일치 오류 메시지 상태
-  const [passwordMatchSuccess, setPasswordMatchSuccess] = useState(''); // 비밀번호 일치 성공 메시지 상태
+  const [matchPassword, setMatchPassword] = useState();
 
-  const navigate = useNavigate(); // 페이지 이동을 위한 네비게이트 함수
+
+  const navigate = useNavigate();
 
   const sendPasswordFindEmail = useAuthStore((state) => state.sendPasswordFindEmail);
-  const verifyAuthToken = useAuthStore((state) => state.verifyAuthToken);
+  const verifyAuthCode = useAuthStore((state) => state.verifyAuthCode);
   const changePassword = useAuthStore((state) => state.changePassword);
 
-  // 이메일 입력 변경 핸들러
-  const handleEmailChange = (event) => {
-    const emailValue = event.target.value;
-    setEmail(emailValue);
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 유효성 검사 패턴
-    if (!emailPattern.test(emailValue)) {
+  // 이메일 입력 핸들러
+  const handleEmailInput = (event) => {
+
+    setEmail(event.target.value);
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 패턴 검사
+    if (!emailPattern.test(event.target.value)) {
       setIsEmailValid(false);
       setEmailError("이메일 형식에 맞춰 입력해주세요.");
     } else {
@@ -40,175 +42,200 @@ const PasswordFind = () => {
     }
   };
 
-  // 이메일 전송 핸들러
-  const handleSendEmail = async () => {
-    console.log(`${email}로 전송`);
+  // 코드 전송 버튼 핸들러
+  const handleSendCode = async () => {
     setEmailSending(true);
+    setEmailSent(false);
+    setEmailError("");
+
     try {
-      const expiredTime = await sendPasswordFindEmail({ email }); // 이메일 전송 API 호출
-      setEmailSending(false);
+      const expiredTime = await sendPasswordFindEmail({ email });
+      const Timer = (minutes) => {
+        let totalTime = minutes * 60;
+        const intervalId = setInterval(() => {
+          if (totalTime >= 0) {
+            const min = Math.floor(totalTime / 60);
+            const sec = totalTime % 60;
+            setTimeMessage(`${min}:${sec < 10 ? '0' : ''}${sec}`);
+            totalTime--;
+          } else {
+            clearInterval(intervalId);
+            console.log("타이머 종료");
+            setTimeMessage("인증시간 만료");
+          }
+        }, 1000);
+      };
+
+      setEmailSending(false); 
       setEmailSent(true);
-      console.log(expiredTime)
+      console.log(`타이머 시작: ${expiredTime}분`);
+      Timer(expiredTime);
+
     } catch (error) {
       setEmailSending(false);
-      setEmailError('이메일 전송에 실패했습니다.');
+      let errorMessage;
+      if (error.response.data.error.user) {
+        errorMessage = error.response.data.error.user
+      }
+      setEmailError(errorMessage || "이메일 전송에 실패했습니다.");
+      
     }
   };
 
   // 이메일 재전송 핸들러
   const handleResendEmail = () => {
-    console.log(`이메일 재전송 중: ${email}`);
-    setEmailSent(false);
-    handleSendEmail(); // 이메일 전송 함수 호출
+    handleSendCode(); // 이메일 전송 함수 호출
   };
 
-  // 인증 토큰 입력 변경 핸들러
-  const handleAuthTokenChange = (event) => {
-    const authTokenValue = event.target.value;
-    setAuthToken(authTokenValue);
+  // 인증 코드 입력 핸들러
+  const handleAuthCodeInput = (event) => {
+    setAuthErrorMessage("");
+    setAuthCode(event.target.value);
   };
 
-  // 인증 토큰 확인 핸들러
-  const handleAuthToken = async () => {
-    console.log(`인증 토큰 확인 중... {
-          이메일 : ${email},
-          인증번호 : ${authToken}
-        }`);
+  // 인증 코드 확인 버튼 핸들러
+  const handleAuthCode = async () => {
     try {
-      const response = await verifyAuthToken({ email, authToken }); // 인증 토큰 확인 API 호출
-      console.log(response)
-      setAuthVerified(true);
+      const response = await verifyAuthCode({ email, authCode });
+      setAuthVerified(response);
+      setAuthErrorMessage("");
     } catch (error) {
-      setAuthError("인증번호가 올바르지 않습니다.");
+      console.log(error.response.data.error);
+      setAuthErrorMessage("인증번호가 올바르지 않습니다.");
     }
   };
 
-  // 비밀번호 입력 변경 핸들러
-  const handlePasswordChange = (event) => {
-    const newPassword = event.target.value;
-    setPassword(newPassword);
+  // 비밀번호 입력 핸들러
+  const handlePasswordInput = (event) => {
+    setMatchPassword(false)
+    setNewPassword(event.target.value);
+
     const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,13}$/; // 비밀번호 유효성 검사 패턴
-    if (!passwordPattern.test(newPassword)) {
-      setPasswordError("비밀번호는 문자, 숫자, 특수문자를 조합해주세요. (8~13자)");
+    if (!passwordPattern.test(event.target.value)) {
+      setPasswordErrorMessage("비밀번호는 문자, 숫자, 특수문자를 조합해주세요. (8~13자)");
     } else {
-      setPasswordError("");
+      setPasswordErrorMessage("");
     }
   };
 
-  // 비밀번호 확인 입력 변경 핸들러
-  const handleConfirmPasswordChange = (event) => {
-    const newConfirmPassword = event.target.value;
-    setConfirmPassword(newConfirmPassword);
-    if (password !== newConfirmPassword) {
-      setPasswordMatchError("비밀번호가 일치하지 않습니다.");
-      setPasswordMatchSuccess("");
+  // 비밀번호 확인 입력 핸들러
+  const handleConfirmPasswordInput = (event) => {
+    setConfirmPassword(event.target.value);
+    if (newPassword !== event.target.value) {
+      setMatchPassword(false)
     } else {
-      setPasswordMatchError("");
-      setPasswordMatchSuccess("비밀번호가 일치합니다.");
+      setMatchPassword(true)
     }
   };
 
-  // 비밀번호 변경 핸들러
-  const handleChangePassword = async () => {
-    if (password !== confirmPassword) {
-      setPasswordMatchError('비밀번호가 일치하지 않습니다.');
+  // 비밀번호 변경 버튼 핸들러
+  const handleChangePasswordButton = async () => {
+    if (newPassword !== confirmPassword) {
+      setMatchPassword(false)
       return;
     }
+
     try {
-      await changePassword({ email, password }); // 비밀번호 변경 API 호출
+      await changePassword({ email, newPassword }); 
       console.log("비밀번호가 변경되었습니다.");
-      navigate('/login'); // 로그인 페이지로 이동
+      navigate('/login'); 
+
     } catch (error) {
       console.error('비밀번호 변경에 실패했습니다.');
     }
   };
 
   return (
-    <div id="pw-find-container">
-      <div id="pw-find-box">
-        <div id="pw-find-title">비밀번호 찾기</div>
+    <div id="password-find-container">
+      <div id="password-find-box">
+        <div id="password-find-title">비밀번호 찾기</div>
 
         <div id="email-auth-group">
           <label id="email-auth-label" htmlFor="email-auth">이메일</label>
-          <div id="email-auth-input-with-btn">
+          <div id="email-auth-input-with-button">
             <input
               id="email-auth-input"
               type="email"
               placeholder="이메일을 입력하세요"
               value={email}
-              onChange={handleEmailChange}
+              onChange={handleEmailInput}
+              disabled={authVerified}
             />
             <button
-              id="send-btn"
-              onClick={handleSendEmail}
+              id="send-button"
+              onClick={handleSendCode}
               disabled={authVerified || !isEmailValid}
             >
               전송
             </button>
           </div>
+          {emailSending && <div id="email-sending-message">인증번호 전송중...</div>}
           {emailSent && (
-            <div id="email-send-success-msg">
-              인증번호를 발송했습니다.
+            <div id="email-send-success-message">
+              인증번호를 발송했습니다. {timeMessage && <span>{timeMessage}</span>}
               <div>
                 인증번호가 오지 않았나요?
-                <b id="email-send-fail-msg" onClick={handleResendEmail}> 재전송</b>
+                <b id="email-send-fail-message" onClick={handleResendEmail}> 재전송</b>
               </div>
             </div>
           )}
-          {emailError && <div id="email-fail-msg">{emailError}</div>}
+          {emailError && <div id="email-fail-message">{emailError}</div>}
         </div>
 
         <div id="auth-token-group">
           <label id="auth-token-label" htmlFor="auth-token">인증번호 입력</label>
-          <div id="auth-token-input-with-btn">
+          <div id="auth-token-input-with-button">
             <input
               id="auth-token-input"
               type="text"
               placeholder="인증번호를 입력하세요"
-              value={authToken}
-              onChange={handleAuthTokenChange}
+              value={authCode}
+              onChange={handleAuthCodeInput}
+              disabled={authVerified || !emailSent}
             />
             <button
-              id="auth-btn"
-              onClick={handleAuthToken}
-              disabled={authVerified}
+              id="auth-button"
+              onClick={handleAuthCode}
+              disabled={authVerified || !emailSent}
             >
               확인
             </button>
           </div>
-          {authVerified && <div id="auth-success-msg">인증되었습니다.</div>}
-          {authError && <div id="auth-fail-msg">{authError}</div>}
+          {authVerified && <div id="auth-success-message">인증되었습니다.</div>}
+          {authErrorMessage && <div id="auth-fail-message">{authErrorMessage}</div>}
         </div>
 
-        <div id="new-pw-group">
-          <label id="new-pw-label" htmlFor="new-pw">새 비밀번호</label>
+        <div id="new-password-group">
+          <label id="new-password-label" htmlFor="new-password">새 비밀번호</label>
           <input
-            id="new-pw-input"
+            id="new-password-input"
             type="password"
             placeholder="새 비밀번호를 입력하세요"
-            value={password}
-            onChange={handlePasswordChange}
+            value={newPassword}
+            onChange={handlePasswordInput}
           />
-          {passwordError && <div id="pw-fail-msg">{passwordError}</div>}
+          {passwordErrorMessage && <div id="password-fail-message">{passwordErrorMessage}</div>}
         </div>
 
-        <div id="confirm-pw-group">
-          <label id="confirm-pw-label" htmlFor="confirm-pw">비밀번호 확인</label>
+        <div id="confirm-password-group">
+          <label id="confirm-password-label" htmlFor="confirm-password">비밀번호 확인</label>
+
           <input
-            id="confirm-pw-input"
+            id="confirm-password-input"
             type="password"
             placeholder="비밀번호를 확인하세요"
             value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
+            onChange={handleConfirmPasswordInput}
           />
-          {passwordMatchError && <div id="pw-confirm-fail-msg">{passwordMatchError}</div>}
-          {passwordMatchSuccess && <div id="pw-confirm-success-msg">{passwordMatchSuccess}</div>}
+
+          {confirmPassword && !matchPassword && <div id="password-confirm-fail-message">비밀번호가 일치하지 않습니다.</div>}
+          { matchPassword && <div id="password-confirm-success-message">비밀번호가 일치합니다.</div>}
         </div>
 
         <button
-          id="change-pw-btn"
-          onClick={handleChangePassword}
-          disabled={!authVerified || passwordError || passwordMatchError}
+          id="change-password-button"
+          onClick={handleChangePasswordButton}
+          disabled={!authVerified || !matchPassword}
         >
           비밀번호 변경
         </button>

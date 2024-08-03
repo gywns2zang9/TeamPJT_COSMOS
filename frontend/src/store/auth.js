@@ -135,46 +135,47 @@ const useAuthStore = create((set) => ({
         }
     },
 
-    // 비번찾기-이메일 전송 요청
+    // 비번찾기-코드 전송 요청
     sendPasswordFindEmail: async ({ email }) => {
-        console.log(`${email} 받음`);
         try {
             const url = `${BASE_URL}/auth-codes/find-pwd`;
             const data = { email };
-            const expiredTime = await post(url, data);
-            return expiredTime; //5
-        } catch (err) {
-            console.log("비번찾기-이메일 전송 실패! ->", err);
-            throw err;
+            const responseData = await post(url, data);
+            const expiredTime = responseData.expiredTime
+            console.log(`비번찾기-코드 전송 요청 성공! -> ${email}로 코드를 발송했습니다.`)
+            return expiredTime;
+
+        } catch (error) {
+            console.log("비번찾기-코드 전송 요청 실패! ->", error);
+            throw error;
         }
     },
 
-    // 비번찾기-인증 확인 요청
-    verifyAuthToken: async ({ email, authToken }) => {
-        console.log(`${email}, ${authToken} 받음`);
+    // 비번찾기-코드 확인 요청
+    verifyAuthCode: async ({ email, authCode }) => {
         try {
             const url = `${BASE_URL}/auth-codes/verify-pwd`;
-            const data = { email, authCode: authToken };
+            const data = { email, authCode };
             const response = await post(url, data);
-            return response; //true
-        } catch (err) {
-            console.error("비번찾기-인증 확인 실패! ->", err);
-            throw err;
+            return response;
+
+        } catch (error) {
+            console.log("비번찾기-코드 확인 요청 실패! ->", error);
+            throw error;
         }
     },
 
-    // 비밀번호 재설정 요청
-    changePassword: async ({ email, password }) => {
-        console.log(`${email}, ${password} 받음`);
+    // 비밀번호 변경 요청
+    changePassword: async ({ email, newPassword }) => {
         try {
             const url = `${BASE_URL}/auth-codes/password`;
-            const data = { email, newPassword: password };
+            const data = { email, newPassword };
             const response = await patch(url, data);
-            console.log(response);
             return response;
-        } catch (err) {
-            console.error("비밀번호 변경 실패! ->", err);
-            throw err;
+
+        } catch (error) {
+            console.error("비밀번호 변경 요청 실패! ->", error);
+            throw error;
         }
     },
 

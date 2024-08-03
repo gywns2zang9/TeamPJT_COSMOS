@@ -6,29 +6,28 @@ import naverIcon from "../../assets/media/navericon.png";
 import kakaoIcon from "../../assets/media/kakaoicon.png";
 
 const Login = () => {
-  const [email, setEmailInput] = useState("");
-  const [password, setPasswordInput] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
 
   // 이메일 입력 핸들러
   const handleEmailInput = (event) => {
-    setLoginErrorMessage(""); // 오류 메시지 초기화
-    setEmailInput(event.target.value);
+    setLoginErrorMessage(""); 
+    setEmail(event.target.value);
   };
   
   // 비밀번호 입력 핸들러
   const handlePasswordInput = (event) => {
-    setPasswordInput(event.target.value);
-    setLoginErrorMessage(""); // 오류 메시지 초기화
+    setPassword(event.target.value);
+    setLoginErrorMessage("");
   };
 
   // 로그인 버튼 핸들러
   const handleLoginButton = async () => {
-    setLoginErrorMessage(""); // 오류 메시지 초기화함
+    setLoginErrorMessage(""); 
 
-    // 이메일과 비밀번호 입력 여부를 검사하고
     if (!email || !password) {
       setLoginErrorMessage("이메일과 비밀번호를 입력해주세요.");
       return;
