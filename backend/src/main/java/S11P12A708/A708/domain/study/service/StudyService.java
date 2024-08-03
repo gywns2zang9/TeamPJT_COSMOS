@@ -63,8 +63,30 @@ public class StudyService {
         fileRepository.save(timeOverViewFile);
     }
 
-    public void deleteStudy(Long teamId, Long meetingId) {
+    public void deleteStudy(Long teamId, Long studyId) {
+        final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
 
+        // 스터디 폴더 및 내부 삭제
+        final Study study = studyRepository.findById(studyId).orElseThrow(); // TODO
+        final Folder rootFolder = folderQueryRepository.findRootFolderByTeam(teamId).orElseThrow(FolderNotFoundException::new);
+
+        final String yearMonthFolderName = formatYearMonth(study.getYear(), study.getMonth());
+        final Folder yearMonthFolder = rootFolder.getSubFolders().stream()
+                .filter(subFolder -> yearMonthFolderName.equals(subFolder.getName()))
+                .findFirst()
+                .orElseThrow();
+
+        final String timeFolderName = study.getTimes() + "회차";
+        final Folder timeFolder = yearMonthFolder.getSubFolders().stream()
+                .filter(subFolder -> timeFolderName.equals(subFolder.getName()))
+                .findFirst()
+                .orElseThrow();
+
+        yearMonthFolder.removeSubFolder(timeFolder);
+        folderRepository.delete(timeFolder);
+
+        // 스터디 객체 삭제
+        studyRepository.deleteById(studyId);
     }
 
     private String formatYearMonth(Integer year, Integer month) {

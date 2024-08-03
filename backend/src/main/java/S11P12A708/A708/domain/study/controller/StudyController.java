@@ -16,7 +16,7 @@ public class StudyController {
 
     private final StudyService studyService;
 
-    @PostMapping("/teams/{teamId}/meetings")
+    @PostMapping("/teams/{teamId}/study")
     public ResponseEntity<Void> createStudy(
             @PathVariable("teamId") Long teamId,
             @Valid @RequestBody StudyCreateRequest request) {
@@ -24,11 +24,11 @@ public class StudyController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/teams/{teamId}/meetings/{meetingId}")
+    @DeleteMapping("/teams/{teamId}/study/{studyId}")
     public ResponseEntity<Void> deleteFolder(
             @PathVariable("teamId") Long teamId,
-            @PathVariable("meetingId") Long meetingId) {
-        studyService.deleteStudy(teamId, meetingId);
+            @PathVariable("studyId") Long studyId) {
+        studyService.deleteStudy(teamId, studyId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

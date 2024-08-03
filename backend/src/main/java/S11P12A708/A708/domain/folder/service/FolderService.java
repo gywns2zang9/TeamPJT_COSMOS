@@ -63,16 +63,6 @@ public class FolderService {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         validateTeamFolder(folder, team);
 
-        deleteSubFoldersAndFiles(folder);
-    }
-
-    private void deleteSubFoldersAndFiles(Folder folder) {
-        for (Folder subFolder : folder.getSubFolders()) {
-            deleteSubFoldersAndFiles(subFolder);
-        }
-
-        fileRepository.deleteAll(folder.getFiles());
-        // TODO : 파일 삭제시 코드도 같이 삭제!
         folderRepository.delete(folder);
     }
 

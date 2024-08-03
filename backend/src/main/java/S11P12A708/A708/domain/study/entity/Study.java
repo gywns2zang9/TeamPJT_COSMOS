@@ -11,6 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -35,7 +36,7 @@ public class Study {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "study")
-    private ArrayList<Problem> problems = new ArrayList<>();
+    private List<Problem> problems = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
