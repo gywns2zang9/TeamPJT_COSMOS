@@ -3,11 +3,10 @@ import { Modal, Button } from 'react-bootstrap';
 import '../css/group/style.css';
 import useGroupStore from '../store/group';
 import { useNavigate } from 'react-router-dom';
-import { getUserInfo } from '../store/auth.js'
-
+import useAuthStore from '../store/auth.js'
 
 function CreateGroupModal({ show, handleClose }) {
-    const {userId} = getUserInfo()
+    const {userId} = useAuthStore.getState().getUserInfo()
     const navigate = useNavigate();
 
     // 그룹이름과 그룹설명 변수 세팅
