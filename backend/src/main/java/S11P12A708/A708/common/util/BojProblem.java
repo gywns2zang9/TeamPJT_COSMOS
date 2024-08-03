@@ -68,7 +68,8 @@ public class BojProblem {
                 "siteInfo='" + siteInfo + '\'' +
                 ", number=" + number +
                 ", name='" + name + '\'' +
-                ", level=" + level +
+                ", level=" + level + '\''+
+                ", url=" + siteUrl +
                 '}';
     }
 }
