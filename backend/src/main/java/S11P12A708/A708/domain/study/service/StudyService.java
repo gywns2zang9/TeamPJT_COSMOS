@@ -1,12 +1,13 @@
 package S11P12A708.A708.domain.study.service;
 
 import S11P12A708.A708.domain.file.entity.File;
-import S11P12A708.A708.domain.file.repository.FileRepository;
 import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.folder.exception.FolderNotFoundException;
 import S11P12A708.A708.domain.folder.repository.FolderRepository;
 import S11P12A708.A708.domain.folder.repository.query.FolderQueryRepository;
 import S11P12A708.A708.domain.study.entity.Study;
+import S11P12A708.A708.domain.study.exception.StudyNotBelongToTeamException;
+import S11P12A708.A708.domain.study.exception.StudyNotFoundException;
 import S11P12A708.A708.domain.study.repository.StudyRepository;
 import S11P12A708.A708.domain.study.repository.query.StudyQueryRepository;
 import S11P12A708.A708.domain.study.request.StudyCreateRequest;
@@ -51,7 +52,7 @@ public class StudyService {
         final Folder yearMonthFolder = rootFolder.getSubFolders().stream()
                 .filter(subFolder -> yearMonthFolderName.equals(subFolder.getName()))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(FolderNotFoundException::new);
 
         // 회차 이름으로 폴더 생성
         final Folder timeFolder = new Folder(time + "회차", team, yearMonthFolder);
@@ -69,22 +70,23 @@ public class StudyService {
 
     public void deleteStudy(Long teamId, Long studyId) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        final Study study = studyRepository.findById(studyId).orElseThrow(StudyNotFoundException::new);
+        validateTeamStudy(study, team);
 
         // 스터디 폴더 및 내부 삭제
-        final Study study = studyRepository.findById(studyId).orElseThrow(); // TODO
         final Folder rootFolder = folderQueryRepository.findRootFolderByTeam(teamId).orElseThrow(FolderNotFoundException::new);
 
         final String yearMonthFolderName = formatYearMonth(study.getYear(), study.getMonth());
         final Folder yearMonthFolder = rootFolder.getSubFolders().stream()
                 .filter(subFolder -> yearMonthFolderName.equals(subFolder.getName()))
                 .findFirst()
-                .orElseThrow(); // TODO
+                .orElseThrow(FolderNotFoundException::new);
 
         final String timeFolderName = study.getTimes() + "회차";
         final Folder timeFolder = yearMonthFolder.getSubFolders().stream()
                 .filter(subFolder -> timeFolderName.equals(subFolder.getName()))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(FolderNotFoundException::new);
 
         yearMonthFolder.removeSubFolder(timeFolder);
         folderRepository.delete(timeFolder);
@@ -98,4 +100,9 @@ public class StudyService {
         String formattedMonth = String.format("%d", month);
         return shortYear + "년 " + formattedMonth + "월";
     }
+
+    private void validateTeamStudy(Study study, Team team) {
+        if(!study.getTeam().equals(team)) throw new StudyNotBelongToTeamException();
+    }
+
 }

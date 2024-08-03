@@ -22,7 +22,6 @@ import S11P12A708.A708.domain.team.response.TeamIdResponse;
 import S11P12A708.A708.domain.team.response.TeamResponse;
 import S11P12A708.A708.domain.team.service.TeamCodeGenerator.TeamCodeGenerator;
 import S11P12A708.A708.domain.user.entity.User;
-import S11P12A708.A708.domain.user.exception.UserInvalidException;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.user.repository.UserRepository;
 import jakarta.mail.internet.MimeMessage;
@@ -46,7 +45,7 @@ import static S11P12A708.A708.domain.team.entity.TeamUserRole.MEMBER;
 @RequiredArgsConstructor
 @Transactional
 public class TeamAuthService {
-    private final FileRepository fileRepository;
+
     @Value("${spring.mail.username}")
     private String from;
 
