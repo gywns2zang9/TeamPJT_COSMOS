@@ -4,6 +4,7 @@ import S11P12A708.A708.common.util.BojProblem;
 import S11P12A708.A708.domain.problem.entity.Problem;
 import S11P12A708.A708.domain.problem.entity.ProblemUser;
 import S11P12A708.A708.domain.problem.exception.ProblemNotExistException;
+import S11P12A708.A708.domain.problem.exception.ProblemNotFoundException;
 import S11P12A708.A708.domain.problem.repository.ProblemRepository;
 import S11P12A708.A708.domain.problem.repository.ProblemUserRepository;
 import S11P12A708.A708.domain.problem.request.CreateProblemRequest;
@@ -14,6 +15,7 @@ import S11P12A708.A708.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -46,6 +48,19 @@ public class ProblemService {
             final ProblemUser problemUser = new ProblemUser(savedProblem, user, null);
             problemUserRepository.save(problemUser);
         }
+    }
+
+    @Transactional
+    public void deleteProblem(Long teamId, Long problemId) {
+        teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        final Problem problem =  problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
+
+        final List<User> teamUsers = teamQueryRepository.findUsersByTeamId(teamId);
+        for (User user : teamUsers) {
+            // TODO: user가 포함된 파일(folder, user 이용) 및 폴더(user, problem 이용) 삭제 필요
+        }
+        problemUserRepository.deleteByProblem(problem);
+        problemRepository.delete(problem);
     }
 
 }

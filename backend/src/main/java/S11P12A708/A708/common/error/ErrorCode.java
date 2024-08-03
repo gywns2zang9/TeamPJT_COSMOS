@@ -46,6 +46,7 @@ public enum ErrorCode {
     CALENDAR_TIME_FORMAT(UNPROCESSABLE_ENTITY, "calendar", "Calendar time format is invaild"),
 
     // Problem
+    PROBLEM_NOT_FOUND(UNPROCESSABLE_ENTITY, "problem", "problem is not found."),
     PROBLEM_NOT_EXIST(UNPROCESSABLE_ENTITY, "problem", "problem is not exist."),
 
     //Folder

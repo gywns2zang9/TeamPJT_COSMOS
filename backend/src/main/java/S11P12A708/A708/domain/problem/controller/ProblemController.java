@@ -22,6 +22,12 @@ public class ProblemController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @DeleteMapping("/teams/{teamId}/problems/{problemId}")
+    public ResponseEntity<Void> deleteProblem(@PathVariable Long teamId, @PathVariable Long problemId) {
+        problemService.deleteProblem(teamId, problemId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
 
 
