@@ -72,20 +72,21 @@ const useAuthStore = create((set) => ({
         }
     },
 
-    naverLogin: async ({ authorizationCode, state }) => {
+    naver: async ({ authorizationCode, state }) => {
         console.log("네이버 로그인 요청 실행");
         try {
             const url = `${BASE_URL}/auth/naver-login`
             const data = { authorizationCode, state };
             const responseData = await post(url, data);
-
             const { accessToken, refreshToken, userInfo } = responseData;
 
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
             localStorage.setItem("userInfo", JSON.stringify(userInfo));
 
+            set({ accessToken, refreshToken, userInfo });
             console.log(`네이버 로그인 성공! -> ${userInfo.nickName}님, 환영합니다!`);
+            return { accessToken, refreshToken, userInfo };
 
         } catch (err) {
             console.log("네아버 로그인 실패! ->", err);

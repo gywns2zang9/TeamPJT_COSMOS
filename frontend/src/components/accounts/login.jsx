@@ -4,10 +4,6 @@ import useAuthStore from "../../store/auth";
 import "../../css/accounts/login.css";
 import naverIcon from "../../assets/media/navericon.png";
 import kakaoIcon from "../../assets/media/kakaoicon.png";
-const KAKAO_CLIENT_ID = process.env.REACT_APP_KAKAO_CLIENT_ID;
-const KAKAO_REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
-
-const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -50,11 +46,25 @@ const Login = () => {
 
   // 네이버 로그인 버튼 클릭 핸들러
   const handleNaverLogin = () => {
-    // window.location.href = naverURL;
+    // 간단한 랜덤 문자열 생성 함수
+    const generateRandomString = () => {
+      return Math.random().toString(36).slice(2, 10);
+    };
+
+    const NAVER_CLIENT_ID = process.env.REACT_APP_NAVER_CLIENT_ID;
+    const NAVER_REDIRECT_URI = process.env.REACT_APP_NAVER_REDIRECT_URI;
+    const NAVER_STATE = generateRandomString()
+    
+    const naverURL= `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${NAVER_STATE}&redirect_uri=${NAVER_REDIRECT_URI}`
+    console.log("네이버로 로그인으로 이동");
+    window.location.href = naverURL;
   };
 
   // 카카오 로그인 버튼 클릭 핸들러
   const handleKakaoLogin = () => {
+    const KAKAO_CLIENT_ID = process.env.REACT_APP_KAKAO_CLIENT_ID;
+    const KAKAO_REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
+    const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
     console.log("카카오로 로그인으로 이동");
     window.location.href = kakaoURL;
   };
