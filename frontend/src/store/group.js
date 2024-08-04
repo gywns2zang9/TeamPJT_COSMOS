@@ -30,10 +30,11 @@ const useGroupStore = create((set) => ({
     // 그룹 생성하기
     makeGroup: async ({ userId, groupName, description }) => {
         try {
+            console.log(userId, groupName, description);
             const accessToken = useAuthStore.getState().getAccessToken();
             const url = `${BASE_URL}/users/${userId}/team`;
             const data = {
-                groupName,
+                teamName:groupName,
                 description
             };
             const headers = {
@@ -248,6 +249,7 @@ const useGroupStore = create((set) => ({
 
     // 폴더 생성하기
     createFolder: async ({ groupId, parentId, folderName }) => {
+        console.log(groupId, parentId, folderName);
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
             const url = `${BASE_URL}/teams/${groupId}/folder`;
