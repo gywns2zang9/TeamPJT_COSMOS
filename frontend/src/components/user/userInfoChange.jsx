@@ -2,6 +2,7 @@ import React from "react";
 import "../../css/user/userInfoChange.css";
 import defaultImg from "../../assets/media/defaultimg.png";
 import useUserInfoChange from "../../store/userInfoChange";
+import useAuthStore from "../../store/auth";
 
 const UserInfoChange = () => {
   const {
@@ -20,6 +21,23 @@ const UserInfoChange = () => {
     toChangePw
   } = useUserInfoChange();
 
+  const getUserInfo = useAuthStore((state) => state.getUserInfo);
+  const getAccessToken = useAuthStore((state) => state.getAccessToken);
+  const signOut = useAuthStore((state) => state.signOut);
+  const logout = useAuthStore((state) => state.logout);
+
+
+  const handleSignOut = async () => {
+    const userId = getUserInfo().userId
+    const accessToken = getAccessToken()
+    console.log("회원 탈퇴 실행");
+    try {
+      await signOut({ accessToken, userId });
+      logout();
+    } catch (error) {
+      console.error("회원 탈퇴 중 오류 발생:", error);
+    }
+  };
   return (
     <div id="info-change-container">
       <div id="info-change-title">내 정보 수정</div>
@@ -89,6 +107,9 @@ const UserInfoChange = () => {
         </div>
         <div id="info-change-change-pw-btn" onClick={toChangePw}>
           비밀번호 변경
+        </div>
+        <div id="info-change-signout-btn" onClick={handleSignOut}>
+          회원 탈퇴
         </div>
         <div id="info-change-back-btn" onClick={toCancel}>
           뒤로가기

@@ -9,7 +9,6 @@ const UserInfo = () => {
 
   const getUserInfo = useAuthStore((state) => state.getUserInfo);
   const getAccessToken = useAuthStore((state) => state.getAccessToken);
-  const signOut = useAuthStore((state) => state.signOut);
   const logout = useAuthStore((state) => state.logout);
 
   const [userInfo, setUserInfo] = useState(getUserInfo());
@@ -43,21 +42,15 @@ const UserInfo = () => {
   const toCode = () => {
     navigate("code"); // 경로를 수정하세요 아직 없음
   };
+  
+  const handleGroup = () => {
+    navigate("../../group")
+  }
 
   const handleLogout = () => {
     logout();
   };
 
-  const handleSignOut = async () => {
-    const accessToken = getAccessToken()
-    console.log("회원 탈퇴 실행");
-    try {
-      await signOut({ accessToken, userId });
-      // handleLogout();
-    } catch (error) {
-      console.error("회원 탈퇴 중 오류 발생:", error);
-    }
-  };
 
   return (
     <div id="info-container">
@@ -106,11 +99,11 @@ const UserInfo = () => {
         <div id="info-code-btn" onClick={toCode}>
           내 코드 보기
         </div>
+        <div id="info-group-btn" onClick={handleGroup}>
+          내 그룹 보기
+        </div>
         <div id="info-logout-btn" onClick={handleLogout}>
           로그아웃
-        </div>
-        <div id="info-signout-btn" onClick={handleSignOut}>
-          회원 탈퇴
         </div>
       </div>
     </div>
