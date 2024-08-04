@@ -32,9 +32,6 @@ public class File {
     @Enumerated(EnumType.STRING)
     private FileType type;
 
-    @Column(nullable = false)
-    private String slug;
-
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -47,10 +44,65 @@ public class File {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "folder_id")
+    @JoinColumn(name = "folder_id", nullable = false)
     private Folder folder;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "code_id")
     private Code code;
+
+    public File(String name, String content, FileType type, LocalDateTime createdAt, LocalDateTime modifiedAt, User user, Folder folder, Code code) {
+        this.name = name;
+        this.content = content;
+        this.type = type;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.user = user;
+        this.folder = folder;
+        this.code = code;
+    }
+
+    public File(String name, String content, FileType type, Folder folder) {
+        this.name = name;
+        this.content = content;
+        this.type = type;
+        this.folder = folder;
+        this.createdAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
+    }
+
+    public File(String name, String content, FileType type, User user, Folder folder, Code code) {
+        this.name = name;
+        this.content = content;
+        this.type = type;
+        this.folder = folder;
+        this.user = user;
+        this.code = code;
+    }
+
+    public static File createNormalFile(String name, Folder folder) {
+        return new File(name, "", FileType.NORMAL, folder);
+    }
+
+    public static File createCodeFile(String name, User user, Folder folder, Code code) {
+        return new File(name, "", FileType.CODE, user, folder, code);
+    }
+
+    public static File createOverViewFile(Folder folder) {
+        return new File("전체 개요", "", FileType.OVERVIEW, folder);
+    }
+
+    public static File createMainFile(Folder folder) {
+        return new File("메인 페이지", "", FileType.MAIN, folder);
+    }
+
+    public static File createTimeOverViewFile(Folder folder) {
+        return new File("스터디 개요", "", FileType.TIME_OVERVIEW, folder);
+    }
+
+    public void update(File updateFile) {
+        this.name = updateFile.getName();
+        this.content = updateFile.getContent();
+    }
+
 }
