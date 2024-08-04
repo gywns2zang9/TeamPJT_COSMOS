@@ -159,7 +159,7 @@ public class CodeCrawler {
                 return res.toString();
             }
         } catch (IOException e) {
-            return null;
+            return getCppContent(url);
         }
 
         return null;
