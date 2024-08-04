@@ -5,6 +5,7 @@ import ConferenceView from "./views/ConferenceView.jsx";
 import NavBar from "./components/home/navBar.jsx";
 import Footer from "./components/home/footer.jsx";
 import Login from "./components/accounts/login.jsx";
+import PasswordChange from "./components/accounts/passwordChange.jsx";
 import KakaoRedirect from "./components/accounts/kakaoRedirect.jsx";
 import NaverRedirect from "./components/accounts/naverRedirect.jsx";
 import SignUp from "./components/accounts/signUp.jsx";
@@ -27,6 +28,7 @@ function AppContent() {
         <Route path="/auth/kakao/callback" element={<KakaoRedirect />} />
         <Route path="/auth/naver/callback" element={<NaverRedirect />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/password-change" element={<PasswordChange />} />
         <Route path="/password-find" element={<PasswordFind />} />
         <Route path="/" element={<HomeView />} />
         <Route path="*" element={<HomeRoutes />} />

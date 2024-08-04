@@ -138,7 +138,7 @@ const useAuthStore = create((set) => ({
         }
     },
 
-    // 비밀번호 변경 요청
+    // 비번찾기-비밀번호 변경 요청
     changePassword: async ({ email, newPassword }) => {
         try {
             const url = `${BASE_URL}/auth-codes/password`;
@@ -151,7 +151,21 @@ const useAuthStore = create((set) => ({
             throw error;
         }
     },
-
+    // 비밀번호 변경 요청
+    passwordChange: async ({ accessToken, userId, oldPassword, newPassword }) => {
+        try {
+            const url = `${BASE_URL}/users/${userId}/password`
+            const data = { oldPassword, newPassword }
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await patch(url, data, headers)
+            return response
+        }
+        catch (error) {
+            console.log(error)
+        }
+    },
 
     // 회원가입-코드 전송 요청
     sendSignUpEmail: async ({ email }) => {
@@ -214,8 +228,8 @@ const useAuthStore = create((set) => ({
         try {
             const url = `${BASE_URL}/auth/users/${userId}`
             const headers = {
-                Authorization: `Bearer ${accessToken}`
-            }
+                Authorization: `Bearer ${accessToken}`,
+            };
             const response = await deleteRequest(url, {}, headers);
             console.log(`회원탈퇴 성공! 안녕히가세요.`)
             return response
