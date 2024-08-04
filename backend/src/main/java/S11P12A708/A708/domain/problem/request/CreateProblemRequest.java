@@ -1,6 +1,5 @@
 package S11P12A708.A708.domain.problem.request;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,4 +14,7 @@ public class CreateProblemRequest {
 
     @NotNull
     Integer problemNumber;
+
+    @NotNull
+    Long studyId;
 }

@@ -11,6 +11,9 @@ import S11P12A708.A708.domain.problem.repository.ProblemRepository;
 import S11P12A708.A708.domain.problem.repository.ProblemUserRepository;
 import S11P12A708.A708.domain.problem.request.CrawlCodeRequest;
 import S11P12A708.A708.domain.problem.request.CreateProblemRequest;
+import S11P12A708.A708.domain.study.entity.Study;
+import S11P12A708.A708.domain.study.exception.StudyNotFoundException;
+import S11P12A708.A708.domain.study.repository.StudyRepository;
 import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
 import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
@@ -37,14 +40,16 @@ public class ProblemService {
     private final TeamQueryRepository teamQueryRepository;
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
+    private final StudyRepository studyRepository;
 
     public void createProblem(Long teamId, CreateProblemRequest req) {
         teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
 
         final BojProblem crawledProblem = Optional.ofNullable(getBojProblem(req.getProblemNumber()))
                 .orElseThrow(ProblemNotExistException::new);
+        final Study study = studyRepository.findById(req.getStudyId()).orElseThrow(StudyNotFoundException::new);
 
-        final Problem problem = Problem.of(crawledProblem);
+        final Problem problem = Problem.of(crawledProblem, study);
         final Problem savedProblem = problemRepository.save(problem);
 
         final List<User> teamUsers = teamQueryRepository.findUsersByTeamId(teamId);

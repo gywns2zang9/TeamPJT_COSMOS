@@ -40,25 +40,25 @@ public class Problem {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    // TODO: study가 현재 미구현 상태. 추후 생성자 주입 필요
-    public static Problem of(BojProblem problem) {
+    public static Problem of(BojProblem problem, Study study) {
         return new Problem(
-                problem.getSiteInfo(),
-                problem.getNumber(),
-                problem.getName(),
-                problem.getLevel(),
-                problem.getSiteUrl(),
-//                study
-                LocalDateTime.now()
+            problem.getSiteInfo(),
+            problem.getNumber(),
+            problem.getName(),
+            problem.getLevel(),
+            problem.getSiteUrl(),
+            study,
+            LocalDateTime.now()
         );
     }
 
-    public Problem(SiteInfoType site, Integer number, String name, String level, String url, LocalDateTime createdAt) {
+    public Problem(SiteInfoType site, Integer number, String name, String level, String url, Study study, LocalDateTime createdAt) {
         this.site = site;
         this.number = number;
         this.name = name;
         this.level = level;
         this.url = url;
+        this.study = study;
         this.createdAt = createdAt;
     }
 }
