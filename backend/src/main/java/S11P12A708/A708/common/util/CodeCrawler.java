@@ -11,9 +11,7 @@ import java.io.IOException;
 
 @Component
 public class CodeCrawler {
-    public static void main(String[] args) {
-        System.out.println(CodeCrawler.bojCrawl("commitcomplete","Algorithm",2438));
-    }
+
     public static String bojCrawl(String nickname,String repo,int pbNum)  {
 
         // Jsoup으로 HTML 파싱
