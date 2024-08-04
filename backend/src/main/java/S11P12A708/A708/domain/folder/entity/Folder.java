@@ -66,6 +66,14 @@ public class Folder {
         subFolder.setParentFolder(null);
     }
 
+    public void addFile(File file) {
+        files.add(file);
+    }
+
+    public void removeFile(File file) {
+        files.remove(file);
+    }
+
     public Folder(String name, User user, Team team, Folder parentFolder, Problem problem) {
         this.name = name;
         this.user = user;

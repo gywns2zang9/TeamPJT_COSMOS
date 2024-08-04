@@ -48,8 +48,16 @@ public enum ErrorCode {
     //Folder
     FOLDER_NOT_FOUND(UNPROCESSABLE_ENTITY, "folder", "This Folder is not exist"),
     FOLDER_NAME_DUPLICATE(UNPROCESSABLE_ENTITY, "folder", "This Folder name already exist"),
-    FOLDER_NOT_BELONG_TO_TEAM(UNPROCESSABLE_ENTITY, "folder", "Folder does not belong to the specified team");
+    FOLDER_NOT_BELONG_TO_TEAM(UNPROCESSABLE_ENTITY, "folder", "Folder does not belong to the specified team"),
 
+    // file
+    FILE_NOT_FOUND(UNPROCESSABLE_ENTITY, "file", "This file is not exist"),
+    FILE_NAME_DUPLICATE(UNPROCESSABLE_ENTITY, "file", "This file name already exist"),
+    FOLDER_NOT_PROBLEM_INFO(UNPROCESSABLE_ENTITY, "file", "this folder cannot have code file"),
+
+    // Study
+    STUDY_NOT_FOUND(UNPROCESSABLE_ENTITY, "study", "This study is not exist"),
+    STUDY_NOT_BELONG_TO_TEAM(UNPROCESSABLE_ENTITY, "study", "study does not belong to the specified team");
 
     private final HttpStatus code;
     private final String body;
