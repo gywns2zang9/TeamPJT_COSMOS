@@ -11,10 +11,6 @@ import java.io.IOException;
 
 @Component
 public class ReadmeCrawler {
-
-    public static void main(String[] args) {
-        System.out.println(ReadmeCrawler.readmeCrawl("commitcomplete","Algorithm",14890));
-    }
     public static String readmeCrawl(String nickname,String repo,int pbNum){
         String url = "https://raw.githubusercontent.com/name/repo/main/%EB%B0%B1%EC%A4%80/tier/number/README.md";
         BojProblem temp = ProblemCrawler.getBojProblem(pbNum);
