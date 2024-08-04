@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import HomeView from "./views/HomeView";
 import ConferenceView from "./views/ConferenceView.jsx";
 import NavBar from "./components/home/navBar.jsx";
@@ -27,7 +32,8 @@ function AppContent() {
         <Route path="/" element={<HomeView />} />
         <Route path="*" element={<HomeRoutes />} />
         <Route path="/group/*" element={<GroupRoutes />} />
-        <Route path="/users/*" element={<UserRouters />} /> {/* UserRouters를 추가합니다. */}
+        <Route path="/users/*" element={<UserRouters />} />{" "}
+        {/* UserRouters를 추가합니다. */}
       </Routes>
       {!isConferenceRoute && <Footer />}
     </div>
