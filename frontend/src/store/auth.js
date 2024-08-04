@@ -238,6 +238,21 @@ const useAuthStore = create((set) => ({
             console.log("회원탈퇴 요청 실패! ->", error);
             throw error;
         }
+    },
+
+    // 내 코드 보기 (미완성)
+    myCode: async ({ accessToken, userId }) => {
+        try {
+            const url = `${BASE_URL}/users/${userId}/codes`
+            const data = {}
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const responseData = await get(url, data, headers);
+            return responseData
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 
