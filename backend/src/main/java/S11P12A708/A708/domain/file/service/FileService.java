@@ -82,8 +82,7 @@ public class FileService {
         final User user = userRepository.findById(authUser.getId()).orElseThrow(UserNotFoundException::new);
         final File file = fileRepository.findById(fileId).orElseThrow(FileNotFoundException::new);
 
-
-        if(file.getType() == FileType.TIME_OVERVIEW) {
+        if(file.getType() == FileType.OVERVIEW) {
             final List<Study> studies = studyRepository.findByTeam(team);
             final List<Problem> problems = new java.util.ArrayList<>();
             for(Study study : studies) {
@@ -93,13 +92,17 @@ public class FileService {
             return FileResponse.fromOverViewFile(file, problems);
         }
 
-        if(file.getType() == FileType.OVERVIEW) {
+        if(file.getType() == FileType.TIME_OVERVIEW) {
             final Folder folder = file.getFolder();
             final List<Problem> problems = folder.getSubFolders().stream()
                     .map(Folder::getProblem)
                     .toList();
 
             return FileResponse.fromOverViewFile(file, problems);
+        }
+
+        if(file.getType() == FileType.CODE) {
+            return FileResponse.fromCodeFile(file, file.getCode());
         }
 
         return FileResponse.fromFile(file);

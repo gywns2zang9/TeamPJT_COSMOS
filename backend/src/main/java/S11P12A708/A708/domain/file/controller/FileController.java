@@ -50,7 +50,7 @@ public class FileController {
     public ResponseEntity<FileResponse> getFileInfo(
             @AuthUser AuthUserDto authUser,
             @PathVariable("teamId") Long teamId,
-            @PathVariable("teamId") Long fileId) {
+            @PathVariable("fileId") Long fileId) {
         final FileResponse response = fileService.getFileInfo(teamId, authUser, fileId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
