@@ -15,6 +15,7 @@
     "@fullcalendar/timegrid": "^6.1.15",
     "@livekit/components-react": "^2.4.0",
     "@livekit/components-styles": "^1.0.12",
+    "@monaco-editor/react": "^4.6.0",
     "@mui/icons-material": "^5.16.4",
     "@mui/material": "^5.16.4",
     "@testing-library/jest-dom": "^5.17.0",
@@ -45,6 +46,9 @@
     "styled-components": "^6.1.12",
     "uuid": "^10.0.0",
     "web-vitals": "^2.1.4",
+    "y-monaco": "^0.1.6",
+    "y-websocket": "^2.0.4",
+    "yjs": "^13.6.18",
     "zustand": "^4.5.4"
   },
   "scripts": {
