@@ -34,7 +34,7 @@ const useGroupStore = create((set) => ({
             const accessToken = useAuthStore.getState().getAccessToken();
             const url = `${BASE_URL}/users/${userId}/team`;
             const data = {
-                teamName:groupName,
+                teamName: groupName,
                 description
             };
             const headers = {
@@ -219,7 +219,7 @@ const useGroupStore = create((set) => ({
             Authorization: `Bearer ${accessToken}`,
         };
         try {
-            const url = `${BASE_URL}/teams/auth/${groupId}/teamCode/`;
+            const url = `${BASE_URL}/teams/auth/${groupId}/teamCode`;
             const data = {
                 email,
             };
@@ -286,7 +286,7 @@ const useGroupStore = create((set) => ({
     },
 
     // 파일 생성하기
-    createFile: async ({ groupId, folderId, fileName, type}) => {
+    createFile: async ({ groupId, folderId, fileName, type }) => {
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
             const headers = {
@@ -296,7 +296,7 @@ const useGroupStore = create((set) => ({
             if (type === 'NORMAL') {
                 url = `${BASE_URL}/teams/${groupId}/file`;
             } else {
-            url = `${BASE_URL}/teams/${groupId}/file/code`;
+                url = `${BASE_URL}/teams/${groupId}/file/code`;
             }
             const data = {
                 folderId,
