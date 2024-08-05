@@ -450,8 +450,8 @@ function SideBar({ groupId }) {
 
             <div className="sidebar-resizer" ref={resizerRef}></div>
 
-            <GroupSettingsModal show={showSettingsModal} handleClose={handleCloseSettingsModal} />
-            <InviteGroupModal show={showInviteModal} handleClose={handleCloseInviteModal} />
+            <GroupSettingsModal show={showSettingsModal} handleClose={handleCloseSettingsModal} groupId={groupId}/>
+            <InviteGroupModal show={showInviteModal} handleClose={handleCloseInviteModal} groupId={groupId}/>
             <CreateItemModal
                 show={showCreateItemModal}
                 handleClose={handleCreateItemClose}
