@@ -120,7 +120,6 @@ const useGroupStore = create((set) => ({
             const response = await patch(url, data, headers);
             console.log(response);
             return response
-
         } catch (err) {
             console.log('그룹 정보 변경 실패 -> ', err);
             throw err;
