@@ -1,9 +1,13 @@
 package S11P12A708.A708.domain.problem.service;
 
 import S11P12A708.A708.common.util.BojProblem;
+import S11P12A708.A708.common.util.CodeCrawler;
+import S11P12A708.A708.domain.code.entity.Code;
+import S11P12A708.A708.domain.code.repository.CodeRepository;
+import S11P12A708.A708.domain.file.entity.File;
+import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.problem.entity.Problem;
 import S11P12A708.A708.domain.problem.entity.ProblemUser;
-import S11P12A708.A708.domain.problem.exception.CodeNotExistException;
 import S11P12A708.A708.domain.problem.exception.ProblemNotExistException;
 import S11P12A708.A708.domain.problem.exception.ProblemNotFoundException;
 import S11P12A708.A708.domain.problem.exception.UserInfoNessaryException;
@@ -14,6 +18,8 @@ import S11P12A708.A708.domain.problem.request.CreateProblemRequest;
 import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.study.exception.StudyNotFoundException;
 import S11P12A708.A708.domain.study.repository.StudyRepository;
+import S11P12A708.A708.domain.study.service.StudyService;
+import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
 import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
@@ -28,11 +34,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static S11P12A708.A708.common.util.CodeCrawler.bojCrawl;
 import static S11P12A708.A708.common.util.ProblemCrawler.getBojProblem;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ProblemService {
     private final ProblemRepository problemRepository;
@@ -42,8 +48,13 @@ public class ProblemService {
     private final UserRepository userRepository;
     private final StudyRepository studyRepository;
 
+    private final StudyService studyService;
+
+    private final CodeCrawler codeCrawler;
+    private final CodeRepository codeRepository;
+
     public void createProblem(Long teamId, CreateProblemRequest req) {
-        teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
 
         final BojProblem crawledProblem = Optional.ofNullable(getBojProblem(req.getProblemNumber()))
                 .orElseThrow(ProblemNotExistException::new);
@@ -52,10 +63,23 @@ public class ProblemService {
         final Problem problem = Problem.of(crawledProblem, study);
         final Problem savedProblem = problemRepository.save(problem);
 
+        // 스터디 폴더 내에 문제 이름으로 폴더 생성
+        final Folder studyFolder = studyService.findStudyFolder(req.getStudyId());
+        final Folder codeFolder = Folder.createCodeFolder(team, studyFolder, problem);
+        studyFolder.addSubFolder(codeFolder);
+
         final List<User> teamUsers = teamQueryRepository.findUsersByTeamId(teamId);
         for (User user : teamUsers) {
-            // TODO: 문제 생성 후 관련한 폴더(사용자 별 폴더) 생성 필요
-            // TODO: 문제에 대한 각 사용자의 코드 페이지(사용자 폴더에 생성되는 코드 페이지)를 생성 후 file 자리에 대입
+            // 문제 폴더에 이름별로 폴더 생성
+            final Folder individualCodeFolder = Folder.createIndividualCodeFolder(team, user, studyFolder, problem);
+            codeFolder.addSubFolder(individualCodeFolder);
+
+            // 이름별로 생성된 폴더에 파일 추가
+            final Code code = codeCrawler.createByCrawler(user, req.getProblemNumber());
+            codeRepository.save(code);
+
+            individualCodeFolder.addFile(File.createCodeFile(user.getNickname() + "님의 풀이", user, individualCodeFolder, code));
+
             final ProblemUser problemUser = new ProblemUser(savedProblem, user, null);
             problemUserRepository.save(problemUser);
         }
@@ -81,8 +105,8 @@ public class ProblemService {
 
         checkUserInfoForCrawling(user);
 
-        String code = Optional.ofNullable(bojCrawl(user.getGitId(), user.getRepo(), problem.getNumber()))
-                .orElseThrow(CodeNotExistException::new);
+//        String code = Optional.ofNullable(bojCrawl(user.getGitId(), user.getRepo(), problem.getNumber()))
+//                .orElseThrow(CodeNotExistException::new);
 
         // TODO: 갖고 온 코드를 코드 페이지에 저장 필요
         // TODO: 코드 뿐만 아니라, 해당 README.md 도 같이 저장되었으면 어떨지 논의 필요

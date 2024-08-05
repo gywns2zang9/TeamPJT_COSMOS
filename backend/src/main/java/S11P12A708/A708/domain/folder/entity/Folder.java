@@ -91,4 +91,12 @@ public class Folder {
         return new Folder("root", team, null);
     }
 
+    public static Folder createCodeFolder(Team team, Folder parentFolder, Problem problem) {
+        return new Folder(problem.getName(), null, team, parentFolder, problem);
+    }
+
+    public static Folder createIndividualCodeFolder(Team team, User user,Folder parentFolder, Problem problem) {
+        return new Folder(user.getNickname(), user, team, parentFolder, problem);
+    }
+
 }

@@ -18,6 +18,8 @@ public class Code {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Column(nullable = false)
