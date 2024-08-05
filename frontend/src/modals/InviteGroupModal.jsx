@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import '../css/group/inviteGroupModal.css'
 import useGroupStore from "../store/group";
@@ -7,9 +7,10 @@ import useGroupStore from "../store/group";
 
 function InviteGroupModal({ show, handleClose, groupId }) {
     const [inviteMethod, setInviteMethod] = useState('email');
-    const [groupCode, setGroupCode] = useState('ABCD-1234'); // 예시 그룹 코드
+    const [groupCode, setGroupCode] = useState(''); 
     const [nickname, setNickname] = useState('');
     const [email, setEmail] = useState('');
+    const checkInviteCode = useGroupStore((state) => state.checkInviteCode);
 
     const invitePossibleUsers = useGroupStore((state) => state.invitePossibleUsers);
     const sendInviteEmail = useGroupStore((state) => state.sendInviteEmail);
@@ -17,6 +18,19 @@ function InviteGroupModal({ show, handleClose, groupId }) {
     const handleInviteMethodChange = (event) => {
         setInviteMethod(event.target.value);
     };
+
+    useEffect(() => {
+        console.log(groupId);
+        const getDetails = async () => {
+            try {
+                const inviteCode = await checkInviteCode({ groupId })
+                setGroupCode(inviteCode.teamCode);
+            } catch (err) {
+                console.error('실패 -> ', err);
+            }
+        }
+        getDetails();
+    }, [groupId]);
 
     const handleInvite = async () => {
         try {

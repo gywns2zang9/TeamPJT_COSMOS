@@ -151,12 +151,11 @@ const useGroupStore = create((set) => ({
     checkGroupLeader: async ({ groupId }) => {
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
-            const url = `${BASE_URL}/teams/${groupId}/leader-check`;
+            const url = `${BASE_URL}/teams/${groupId}/leader`;
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await get(url, {}, headers);
-            console.log(response);
             return response
         } catch (err) {
             console.log('그룹장 확인 실패-> ', err);
