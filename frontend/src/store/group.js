@@ -30,10 +30,11 @@ const useGroupStore = create((set) => ({
     // 그룹 생성하기
     makeGroup: async ({ userId, groupName, description }) => {
         try {
+            console.log(userId, groupName, description);
             const accessToken = useAuthStore.getState().getAccessToken();
             const url = `${BASE_URL}/users/${userId}/team`;
             const data = {
-                groupName,
+                teamName:groupName,
                 description
             };
             const headers = {
@@ -238,8 +239,7 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             }
             const response = await get(url, {}, headers);
-            const responseData = await response.json();
-            return responseData
+            return response
         } catch (err) {
             console.log('그룹내 폴더정보 불러오기 실패 -> ', err);
             throw err;
@@ -250,7 +250,7 @@ const useGroupStore = create((set) => ({
     createFolder: async ({ groupId, parentId, folderName }) => {
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
-            const url = `${BASE_URL}/teams/${groupId}/folder`;
+            const url = `${BASE_URL}/teams/${groupId}/folders`;
             const data = {
                 parentId,
                 folderName
@@ -259,9 +259,7 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await post(url, data, headers);
-            console.log(response);
             return response
-
         } catch (err) {
             console.log('폴더 생성 실패 -> ', err);
             throw err;
@@ -286,15 +284,23 @@ const useGroupStore = create((set) => ({
     },
 
     // 파일 생성하기
-    createFile: async ({ groupId, folderId, fileName, file }) => {
+    createFile: async ({ groupId, folderId, fileName, type}) => {
         try {
-            const url = `${BASE_URL}/teams/${groupId}/pages`;
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            let url = ''
+            if (type === 'NORMAL') {
+                url = `${BASE_URL}/teams/${groupId}/file`;
+            } else {
+            url = `${BASE_URL}/teams/${groupId}/file/code`;
+            }
             const data = {
                 folderId,
                 fileName,
-                file,
             };
-            const response = await post(url, data);
+            const response = await post(url, data, headers);
             console.log(response);
             return response
         } catch (err) {

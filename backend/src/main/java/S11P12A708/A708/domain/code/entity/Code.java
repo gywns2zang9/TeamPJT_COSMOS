@@ -28,4 +28,14 @@ public class Code {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    public Code(String content, Language language) {
+        this.content = content;
+        this.language = language;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public static Code createBasic() {
+        return new Code("", Language.JAVA);
+    }
+
 }

@@ -2,6 +2,8 @@ package S11P12A708.A708.domain.user.service;
 
 import S11P12A708.A708.domain.auth.exception.InvalidPasswordException;
 import S11P12A708.A708.domain.auth.service.AuthService;
+import S11P12A708.A708.domain.user.entity.UserType;
+import S11P12A708.A708.domain.user.exception.OnlyNormalPwException;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.repository.UserRepository;
@@ -46,8 +48,9 @@ public class UserService {
 
     public boolean changePassword(Long userId, ChangePwRequest req) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        boolean userCheck = user.checkPassword(req.getOldPassword(), bCryptPasswordEncoder);
+        if (user.getType() != UserType.NORMAL) throw new OnlyNormalPwException();
 
+        boolean userCheck = user.checkPassword(req.getOldPassword(), bCryptPasswordEncoder);
         if (userCheck) {
             user.setPassword(req.getNewPassword());
             user.hashPassword(bCryptPasswordEncoder);
