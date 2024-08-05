@@ -240,6 +240,28 @@ const useAuthStore = create((set) => ({
         }
     },
 
+    //정보 수정 요청
+    updateUserInfo: async ({ accessToken, userId, newUserInfo }) => {
+        try {
+            const url = `${BASE_URL}/users/${userId}`;
+            const data = newUserInfo;
+            console.log(data)
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json"
+            };
+            const response = await patch(url, data, headers);
+            if (response.status === 200) {
+                const updatedUser = response.data
+                console.log(updatedUser)
+                localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+                return updatedUser
+            }
+        } catch (error) {
+            console.log("정보 수정 요청 실패! ->", error);
+        }
+    },
+
     // 내 코드 보기 (미완성)
     myCode: async ({ accessToken, userId }) => {
         try {
@@ -253,8 +275,8 @@ const useAuthStore = create((set) => ({
         } catch (error) {
             console.log(error)
         }
-    }
-
+    },
+    //
 
 }));
 export default useAuthStore;

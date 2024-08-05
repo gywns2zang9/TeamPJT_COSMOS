@@ -12,6 +12,10 @@ const UserCode = () => {
     기타: "etc",
   };
 
+  const getUserInfo = useAuthStore((state) => state.getUserInfo);
+  const getAccessToken = useAuthStore((state) => state.getAccessToken);
+  
+
   // 버튼 클릭 핸들러
   const handleCategorySelect = (category) => {
     console.log(`Selected category: ${category}`);

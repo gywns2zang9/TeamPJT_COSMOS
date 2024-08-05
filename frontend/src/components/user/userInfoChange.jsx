@@ -1,50 +1,106 @@
-import React from "react";
-import "../../css/user/userInfoChange.css";
-import defaultImg from "../../assets/media/defaultimg.png";
-import useUserInfoChange from "../../store/userInfoChange";
+import { useState, useEffect } from "react"; 
+import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/auth";
+import "../../css/user/userInfoChange.css"; 
+import defaultImg from "../../assets/media/defaultimg.png"; 
 
 const UserInfoChange = () => {
-  const {
-    username,
-    setUsername,
-    gitId,
-    setGitId,
-    repo,
-    setRepo,
-    intro,
-    setIntro,
-    profileImage,
-    setProfileImage,
-    toSave,
-    toCancel,
-    toChangePw
-  } = useUserInfoChange();
+  const navigate = useNavigate();
+  
 
   const getUserInfo = useAuthStore((state) => state.getUserInfo);
   const getAccessToken = useAuthStore((state) => state.getAccessToken);
+  const updateUserInfo = useAuthStore((state) => state.updateUserInfo);
   const signOut = useAuthStore((state) => state.signOut);
   const logout = useAuthStore((state) => state.logout);
+  
+  const [errorMessage, setErrorMessage] = useState("");
 
+  const [userInfo, setUserInfo] = useState(getUserInfo());
+  const [accessToken, setAccessToken] = useState(getAccessToken());
+  const [userId, setUserId] = useState(userInfo.userId);
+  const [email, setEmail] = useState(userInfo.email);
+  const [nickName, setNickName] = useState(userInfo.nickName);
+  const [type, setType] = useState(userInfo.type);
+  const [img, setImg] = useState(userInfo.img);
+  const [gitId, setGitId] = useState(userInfo.gitId);
+  const [repo, setRepo] = useState(userInfo.repo);
+  const [description, setDescription] = useState(userInfo.description);
 
-  const handleSignOut = async () => {
-    const userId = getUserInfo().userId
+  useEffect(() => {
+    const userInfo = getUserInfo();
+    setUserInfo(userInfo);
+    setUserId(userInfo.userId);
+    setEmail(userInfo.email);
+    setNickName(userInfo.nickName);
+    setType(userInfo.type);
+    setImg(userInfo.img);
+    setGitId(userInfo.gitId);
+    setRepo(userInfo.repo);
+    setDescription(userInfo.description);
     const accessToken = getAccessToken()
-    console.log("회원 탈퇴 실행");
-    try {
-      await signOut({ accessToken, userId });
-      logout();
-    } catch (error) {
-      console.error("회원 탈퇴 중 오류 발생:", error);
-    }
-  };
+    setAccessToken(accessToken)
+    }, [getUserInfo, getAccessToken]);
+
+    const handleNickNameInput = (event) => {
+      setNickName(event.target.value);
+    };
+  
+    const handleGitIdInput = (event) => {
+      setGitId(event.target.value);
+    };
+  
+    const handleRepoInput = (event) => {
+      setRepo(event.target.value);
+    };
+  
+    const handleDescriptionInput = (event) => {
+      setDescription(event.target.value);
+    };
+
+    const handleUpdate = async () => {
+      const newUserInfo = {
+        nickName,
+        gitId,
+        repo,
+        description,
+      };
+      try {
+        const updatedUser = await updateUserInfo({ accessToken, userId, newUserInfo });
+        navigate(`/users/${userId}`);
+      } catch (error) {
+        console.error('정보 수정에 실패했습니다.', error);
+      }
+    };
+
+    const handleChangePw = () => {
+      navigate('/password-change');
+    };
+  
+    const handleSignOut = async () => {
+      const userId = getUserInfo().userId
+      const accessToken = getAccessToken()
+      console.log("회원 탈퇴 실행");
+      try {
+        await signOut({ accessToken, userId });
+        logout();
+      } catch (error) {
+        console.error("회원 탈퇴 중 오류 발생:", error);
+      }
+    };
+    
+    const handleCancel = () => {
+      navigate(`/users/${userId}`); 
+    };
+
+
   return (
     <div id="info-change-container">
       <div id="info-change-title">내 정보 수정</div>
 
       <div id="info-change-box">
         <div id="img-change-group">
-          <img id="info-change-img" src={profileImage || defaultImg} alt="profile-img" />
+          <img id="info-change-img" src={img || defaultImg} alt="profile-img" />
           <button id="change-img-btn" onClick={() => {/* Implement image change logic */}}>
             프로필 이미지 변경
           </button>
@@ -58,8 +114,8 @@ const UserInfoChange = () => {
             <input
               id="nickname-input"
               type="text"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
+              value={nickName}
+              onChange={handleNickNameInput}
             />
           </div>
 
@@ -71,7 +127,7 @@ const UserInfoChange = () => {
               id="gitId-input"
               type="text"
               value={gitId}
-              onChange={(event) => setGitId(event.target.value)}
+              onChange={handleGitIdInput}
             />
           </div>
 
@@ -83,7 +139,7 @@ const UserInfoChange = () => {
               id="repo-input"
               type="text"
               value={repo}
-              onChange={(event) => setRepo(event.target.value)}
+              onChange={handleRepoInput}
             />
           </div>
 
@@ -94,24 +150,25 @@ const UserInfoChange = () => {
             <input
               id="intro-input"
               type="text"
-              value={intro}
-              onChange={(event) => setIntro(event.target.value)}
+              value={description}
+              onChange={handleDescriptionInput}
             />
           </div>
         </div>
       </div>
+          {errorMessage && <div id="infochange-fail-message">{errorMessage}</div>}
 
       <div id="info-change-btn-group">
-        <div id="info-change-save-btn" onClick={toSave}>
+        <div id="info-change-save-btn" onClick={handleUpdate}>
           변경사항 저장
         </div>
-        <div id="info-change-change-pw-btn" onClick={toChangePw}>
+        <div id="info-change-change-pw-btn" onClick={handleChangePw}>
           비밀번호 변경
         </div>
         <div id="info-change-signout-btn" onClick={handleSignOut}>
           회원 탈퇴
         </div>
-        <div id="info-change-back-btn" onClick={toCancel}>
+        <div id="info-change-back-btn" onClick={handleCancel}>
           뒤로가기
         </div>
       </div>
