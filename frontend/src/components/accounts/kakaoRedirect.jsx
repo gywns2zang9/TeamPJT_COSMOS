@@ -12,9 +12,9 @@ const KakaoRedirect = () => {
             try {
                 const { accessToken, refreshToken, userInfo } = await kakao({ authorizationCode });
                 navigate(`/users/${userInfo.userId}`);
-            } catch (err) {
-                console.log("fetchKakaoUser 오류:", err);
-                navigate('/')
+            } catch (error) {
+                console.log("fetchKakaoUser 오류:", error.response.data.error.user);
+                navigate('/login')
             }
         };
 
