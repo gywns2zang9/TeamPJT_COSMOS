@@ -91,7 +91,7 @@ public class Folder {
         return new Folder("root", team, null);
     }
 
-    public static Folder createCodeFolder(Team team, Folder parentFolder, Problem problem) {
+    public static Folder createProblemFolder(Team team, Folder parentFolder, Problem problem) {
         return new Folder(problem.getName(), null, team, parentFolder, problem);
     }
 

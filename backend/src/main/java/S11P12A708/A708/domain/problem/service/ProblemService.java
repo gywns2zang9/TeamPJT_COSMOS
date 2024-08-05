@@ -6,6 +6,9 @@ import S11P12A708.A708.domain.code.entity.Code;
 import S11P12A708.A708.domain.code.repository.CodeRepository;
 import S11P12A708.A708.domain.file.entity.File;
 import S11P12A708.A708.domain.folder.entity.Folder;
+import S11P12A708.A708.domain.folder.exception.FolderNotFoundException;
+import S11P12A708.A708.domain.folder.repository.FolderRepository;
+import S11P12A708.A708.domain.folder.service.FolderService;
 import S11P12A708.A708.domain.problem.entity.Problem;
 import S11P12A708.A708.domain.problem.entity.ProblemUser;
 import S11P12A708.A708.domain.problem.exception.ProblemNotExistException;
@@ -15,6 +18,7 @@ import S11P12A708.A708.domain.problem.repository.ProblemRepository;
 import S11P12A708.A708.domain.problem.repository.ProblemUserRepository;
 import S11P12A708.A708.domain.problem.request.CrawlCodeRequest;
 import S11P12A708.A708.domain.problem.request.CreateProblemRequest;
+import S11P12A708.A708.domain.problem.request.DeleteProblemRequest;
 import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.study.exception.StudyNotFoundException;
 import S11P12A708.A708.domain.study.repository.StudyRepository;
@@ -52,6 +56,8 @@ public class ProblemService {
 
     private final CodeCrawler codeCrawler;
     private final CodeRepository codeRepository;
+    private final FolderService folderService;
+    private final FolderRepository folderRepository;
 
     public void createProblem(Long teamId, CreateProblemRequest req) {
         Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
@@ -65,36 +71,43 @@ public class ProblemService {
 
         // 스터디 폴더 내에 문제 이름으로 폴더 생성
         final Folder studyFolder = studyService.findStudyFolder(req.getStudyId());
-        final Folder codeFolder = Folder.createCodeFolder(team, studyFolder, problem);
-        studyFolder.addSubFolder(codeFolder);
+        final Folder problemFolder = Folder.createProblemFolder(team, studyFolder, problem);
+        studyFolder.addSubFolder(problemFolder);
 
         final List<User> teamUsers = teamQueryRepository.findUsersByTeamId(teamId);
         for (User user : teamUsers) {
             // 문제 폴더에 이름별로 폴더 생성
             final Folder individualCodeFolder = Folder.createIndividualCodeFolder(team, user, studyFolder, problem);
-            codeFolder.addSubFolder(individualCodeFolder);
+            problemFolder.addSubFolder(individualCodeFolder);
 
             // 이름별로 생성된 폴더에 파일 추가
             final Code code = codeCrawler.createByCrawler(user, req.getProblemNumber());
             codeRepository.save(code);
 
-            individualCodeFolder.addFile(File.createCodeFile(user.getNickname() + "님의 풀이", user, individualCodeFolder, code));
+            final File UserCodeFile  = File.createCodeFile(user.getNickname() + "님의 풀이", user, individualCodeFolder, code);
+            individualCodeFolder.addFile(UserCodeFile);
 
-            final ProblemUser problemUser = new ProblemUser(savedProblem, user, null);
+            final ProblemUser problemUser = new ProblemUser(savedProblem, user, UserCodeFile);
             problemUserRepository.save(problemUser);
         }
     }
 
     @Transactional
-    public void deleteProblem(Long teamId, Long problemId) {
+    public void deleteProblem(Long teamId, Long problemId, DeleteProblemRequest request) {
         teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final Problem problem =  problemRepository.findById(problemId).orElseThrow(ProblemNotFoundException::new);
 
-        final List<User> teamUsers = teamQueryRepository.findUsersByTeamId(teamId);
-        for (User user : teamUsers) {
-            // TODO: user가 포함된 파일(folder, user 이용) 및 폴더(user, problem 이용) 삭제 필요
-        }
         problemUserRepository.deleteByProblem(problem);
+
+        Folder studyFolder = studyService.findStudyFolder(request.getStudyId());
+        Folder problemFolder = studyFolder.getSubFolders().stream()
+                .filter(subFolder -> problem.getName().equals(subFolder.getName()))
+                .findFirst()
+                .orElseThrow(FolderNotFoundException::new);
+
+        folderRepository.delete(problemFolder);
+        studyFolder.removeSubFolder(problemFolder);
+
         problemRepository.delete(problem);
     }
 
