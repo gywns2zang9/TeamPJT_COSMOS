@@ -4,7 +4,6 @@ import { Modal, Button, Form } from "react-bootstrap";
 function CreateItemModal({ show, handleClose, handleSave, nameValue, setNameValue, typeValue, setTypeValue }) {
     const handleNameChange = (e) => setNameValue(e.target.value);
     const handleTypeChange = (e) => setTypeValue(e.target.value);
-
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -26,18 +25,34 @@ function CreateItemModal({ show, handleClose, handleSave, nameValue, setNameValu
                             <Form.Label>유형</Form.Label>
                             <Form.Check
                                 type="radio"
-                                label="Markdown Editor"
+                                label="일반페이지"
                                 name="itemType"
-                                value="markdownEditor"
-                                checked={typeValue === "markdownEditor"}
+                                value="NORMAL"
+                                checked={typeValue === "NORMAL"}
                                 onChange={handleTypeChange}
                             />
                             <Form.Check
                                 type="radio"
-                                label="Study Templates"
+                                label="코드페이지"
                                 name="itemType"
-                                value="studyTemplates"
-                                checked={typeValue === "studyTemplates"}
+                                value="CODE"
+                                checked={typeValue === "CODE"}
+                                onChange={handleTypeChange}
+                            />
+                            <Form.Check
+                                type="radio"
+                                label="전체개요페이지"
+                                name="itemType"
+                                value="OVERVIEW"
+                                checked={typeValue === "OVERVIEW"}
+                                onChange={handleTypeChange}
+                            />
+                            <Form.Check
+                                type="radio"
+                                label="개요페이지"
+                                name="itemType"
+                                value="OVERVIEW"
+                                checked={typeValue === "OVERVIEW"}
                                 onChange={handleTypeChange}
                             />
                         </Form.Group>

@@ -26,7 +26,6 @@ public class UserInfo {
     @NotBlank
     Enum<UserType> type;
 
-    @NotBlank
     String img;
 
     String gitId;
