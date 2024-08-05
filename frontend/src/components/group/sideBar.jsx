@@ -367,10 +367,11 @@ function SideBar({ groupId }) {
     const handleFileClick = (file) => {
         const { id, type } = file;
         const pageMap = {
-            mainPageTemplates: "/group/mainPageTemplates",
-            codePageTemplates: "/group/codePageTemplates",
-            markdownEditor: "/group/markdownEditor",
-            studyTemplates: "/group/studyTemplates",
+            'MAIN': `/group/${groupId}/main/`,
+            'OVERVIEW': `/group/${groupId}/overview/`,
+            'NORMAL': `/group/${groupId}/${id}/`,
+            'CODE': `/group/${groupId}/${id}/`,
+            'TIME_OVERVIEW': `/group/${groupId}/${id}/`,
         };
         navigate(pageMap[type], { state: { fileId: id, fileName: file.name } });
     };
