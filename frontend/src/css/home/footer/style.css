@@ -1,0 +1,17 @@
+.footer {
+    background-color: transparent;
+    color: #ffffff; 
+    padding: 1rem 0; 
+}
+
+.footer-logo {
+    height: 40px;
+    width: auto; 
+    margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+    .footer-logo {
+        height: 30px; 
+    }
+}

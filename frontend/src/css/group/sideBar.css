@@ -1,0 +1,160 @@
+/* 사이드바 기본 스타일 */
+.sidebar {
+    transition: width 0.3s;
+    overflow: hidden;
+    background: linear-gradient(to right, #175491, #0D0220);
+    color: #939cec;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    max-height: 100vh;
+    position: relative;
+}
+
+
+/* 사이드바가 닫힐 때의 스타일 */
+.sidebar.closed {
+    width: 50px;
+}
+
+/* 사이드바 헤더 - 화상회의 시작하기 */
+.sidebar-head {
+    background: linear-gradient(to right, #6c36c4, #0D0220);
+    padding: 3px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    cursor: pointer;
+    position: relative;
+}
+
+.sidebar-head:hover {
+    cursor: none;
+}
+
+.sidebar-head::after {
+    content: "";
+    display: none;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 2px solid transparent;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.sidebar-head::before {
+    content: "\f04b"; /* Unicode for the play icon */
+    font-family: "Font Awesome 5 Free"; /* Ensure you are using the correct Font Awesome version */
+    font-weight: 900;
+    color: red;
+    position: absolute;
+    display: none;
+    font-size: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.sidebar-head:hover::after {
+    display: block;
+    animation: rotate-segment 2s linear infinite;
+    background: radial-gradient(circle, transparent 60%, black 60%), transparent;
+    mask: conic-gradient(from 0deg at 50% 50%, black 60deg, transparent 60deg 360deg);
+    -webkit-mask: conic-gradient(from 0deg at 50% 50%, black 60deg, transparent 60deg 360deg);
+}
+
+.sidebar-head:hover::before {
+    display: block;
+}
+
+@keyframes rotate-segment {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* 사이드바 접기 */
+.sidebar-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background: linear-gradient(to right, #1a0441, #0f345a);
+    cursor: pointer;
+    height: 30px;
+}
+
+/* 사이드바 내용 */
+.sidebar-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: transparent;
+}
+
+/* 사이드바 푸터 */
+.sidebar-footer {
+    padding: 10px;
+    text-align: center;
+    background-color: transparent;
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    border-top: 3px solid black;
+}
+.sidebar-footer.closed {
+    display: flex;
+    justify-content: space-around;
+}
+/* 열기/닫기 버튼 */
+.toggle-btn {
+    font-size: 1.5rem;
+    color: rgb(216, 164, 164);
+    background: none;
+    border: none;
+}
+
+/* 사이드바의 아이콘 */
+.icon {
+    margin-right: 5px;
+}
+
+/* 버튼 스타일 */
+.add-folder-btn,
+.add-page-btn,
+.delete-btn {
+    font-size: 16px;
+    margin: 0 2px;
+    padding: 0;
+    line-height: 1;
+}
+
+/* 사이드바 조절 핸들 스타일 */
+.resizer {
+    width: 2px;
+    height: 100%;
+    background-color: #0b2e6e;
+    cursor: ew-resize;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.no-style-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.no-style-list li {
+    margin-bottom: 5px;
+}
