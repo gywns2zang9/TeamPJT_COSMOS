@@ -5,7 +5,7 @@ import useGroupStore from '../../../store/group';
 
 
 
-const StudyPageTemplates = ({ groupId, pageId }) => {
+const OverviewPageTemplagtes = ({ groupId, pageId }) => {
     // const [ members, setMembers ] = useState([]);
     // const getGroupMembers = useGroupStore((state) => state.groupDetailLoad)
 
@@ -68,4 +68,4 @@ const StudyPageTemplates = ({ groupId, pageId }) => {
     );
 };
 
-export default StudyPageTemplates;
+export default OverviewPageTemplagtes;

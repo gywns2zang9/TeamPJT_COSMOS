@@ -12,8 +12,8 @@ import ItemDeleteModal from '../../modals/ItemDeleteModal.jsx';
 import useGroupStore from '../../store/group.js';
 import MainPageTemplates from './template/mainPageTemplates.jsx';
 import CodePageTemplates from './template/codePageTemplates.jsx';
-import MarkDownEditor from './template/markdownEditor.jsx';
-import StudyPageTemplates from './template/studyPageTemplates.jsx';
+import MarkDownEditor from './template/NormalTemplates.jsx';
+import OverviewPageTemplates from './template/OverviewPageTemplates.jsx';
 
 // 초기 폴더와 파일 구조 
 const initialStructure = {
