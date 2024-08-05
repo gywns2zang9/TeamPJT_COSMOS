@@ -4,6 +4,7 @@ import S11P12A708.A708.domain.auth.annotation.AuthUser;
 import S11P12A708.A708.domain.auth.request.AuthUserDto;
 import S11P12A708.A708.domain.file.request.FileCreateRequest;
 import S11P12A708.A708.domain.file.request.FileUpdateRequest;
+import S11P12A708.A708.domain.file.response.FileResponse;
 import S11P12A708.A708.domain.file.service.FileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,15 @@ public class FileController {
             @Valid @RequestBody FileCreateRequest request) {
         fileService.createCodeFile(teamId, authUser, request);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/teams/{teamId}/file/{fileId}")
+    public ResponseEntity<FileResponse> getFileInfo(
+            @AuthUser AuthUserDto authUser,
+            @PathVariable("teamId") Long teamId,
+            @PathVariable("teamId") Long fileId) {
+        final FileResponse response = fileService.getFileInfo(teamId, authUser, fileId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

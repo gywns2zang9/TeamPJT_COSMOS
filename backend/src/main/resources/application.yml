@@ -19,7 +19,7 @@ spring:
 
 server:
   servlet:
-    context-path: /api
+    context-path: /
   port: '8080'
 
 logging:
