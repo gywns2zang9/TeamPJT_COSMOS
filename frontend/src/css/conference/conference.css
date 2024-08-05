@@ -54,9 +54,9 @@ video {
   display: flex;
   flex-direction: column;
   background-color: #0e253d;
-  color: white; /* 텍스트 색상 */
-  padding: 10px; /* 내부 여백 */
-  border-radius: 8px; /* 모서리 둥글게 */
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
 }
 
 .code-upper-space {
@@ -70,7 +70,7 @@ video {
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 5px;
-  padding: 15px;
+  padding: 15px 5px;
   color: black;
 }
 

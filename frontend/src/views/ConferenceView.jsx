@@ -14,7 +14,8 @@ import "../css/conference/conference.css";
 
 import useAuthStore from "../store/auth";
 
-const APPLICATION_SERVER_URL = "https://i11a708.p.ssafy.io/";
+// const APPLICATION_SERVER_URL = "https://i11a708.p.ssafy.io/";
+const APPLICATION_SERVER_URL = "http://localhost:8080/";
 
 function ConferenceView(props) {
   // 닉네임 불러오는 코드 추가
@@ -281,7 +282,7 @@ function ConferenceView(props) {
     setSession(undefined);
     setSubscribers([]);
     setMySessionId(groupId);
-    setMyUserName("Participant" + Math.floor(Math.random() * 100));
+    setMyUserName(myUserName);
     setMainStreamManager(undefined);
     setPublisher(undefined);
   };
@@ -337,29 +338,7 @@ function ConferenceView(props) {
         </div>
       ) : null}
       <div className="code-paint-space">
-        <div className="left-space">
-          <div className="code-upper-space">
-            <div>
-              <button className="button">백준</button>
-              <button className="button">프로그래머스</button>
-              <button className="button">SWEA</button>
-            </div>
-            <div>
-              <button className="button" onClick={toggleVideo}>
-                {isOpen ? "⇑" : "⇓"}
-              </button>
-            </div>
-          </div>
-          <div className="code-space">
-            <Code />
-          </div>
-          <div className="code-lower-space">
-            <button className="button">코드 공유하기</button>
-            <button className="button">코드 저장하기</button>
-            <button className="button">내 코드 보기</button>
-            <button className="button">공유 코드 보기</button>
-          </div>
-        </div>
+        <Code toggleVideo={toggleVideo} isOpen={isOpen} />
         <div className="right-space">
           <div className="paint-upper-space">
             <div>
