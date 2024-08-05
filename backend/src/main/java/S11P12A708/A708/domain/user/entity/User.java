@@ -27,7 +27,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
@@ -43,7 +42,6 @@ public class User {
 
     private String description;
 
-    @Column(nullable = false)
     private String img;
 
     @CreatedDate
@@ -61,7 +59,12 @@ public class User {
         this.password = password;
         this.type = type;
         this.nickname = nickname;
-        this.img = "s3 주소";
+    }
+
+    public User(String email, UserType type, String nickname) {
+        this.email = email;
+        this.type = type;
+        this.nickname = nickname;
     }
 
     public void hashPassword(PasswordEncoder passwordEncoder) {

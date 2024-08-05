@@ -7,17 +7,18 @@ public class BojProblem {
     private int number;
     private String name;
     private String level;
-
+    private String siteUrl;
     // 기본 생성자
     public BojProblem() {
     }
 
     // 매개변수가 있는 생성자
-    public BojProblem(SiteInfoType siteInfo, int number, String name, String level) {
+    public BojProblem(SiteInfoType siteInfo, int number, String name, String level,String siteUrl) {
         this.siteInfo = siteInfo;
         this.number = number;
         this.name = name;
         this.level = level;
+        this.siteUrl = siteUrl;
     }
 
     // Getter 및 Setter 메서드
@@ -53,6 +54,13 @@ public class BojProblem {
         this.level = level;
     }
 
+    public String getSiteUrl() {
+        return siteUrl;
+    }
+
+    public void setSiteUrl(String siteUrl) {
+        this.siteUrl = siteUrl;
+    }
     // toString 메서드
     @Override
     public String toString() {
@@ -60,7 +68,8 @@ public class BojProblem {
                 "siteInfo='" + siteInfo + '\'' +
                 ", number=" + number +
                 ", name='" + name + '\'' +
-                ", level=" + level +
+                ", level=" + level + '\''+
+                ", url=" + siteUrl +
                 '}';
     }
 }

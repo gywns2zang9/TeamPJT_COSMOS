@@ -9,6 +9,8 @@ import S11P12A708.A708.domain.authcode.exception.FailMailException;
 import S11P12A708.A708.domain.authcode.exception.InvalidAuthCodeException;
 import S11P12A708.A708.domain.authcode.request.FindPwRequest;
 import S11P12A708.A708.domain.authcode.request.VerifyAuthCodeRequest;
+import S11P12A708.A708.domain.user.entity.UserType;
+import S11P12A708.A708.domain.user.exception.OnlyNormalPwException;
 import S11P12A708.A708.domain.user.exception.UserAlreadyExistException;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import jakarta.mail.internet.MimeMessage;
@@ -94,8 +96,9 @@ public class AuthCodeService {
 
         if (type == AuthType.SIGN_UP && foundEmailUser.isPresent()) {
             throw new UserAlreadyExistException();
-        } else if (type == AuthType.FIND_PW && foundEmailUser.isEmpty()) {
-            throw new UserNotFoundException();
+        } else if (type == AuthType.FIND_PW) {
+            if (foundEmailUser.isEmpty()) throw new UserNotFoundException();
+            else if (foundEmailUser.get().getType() != UserType.NORMAL) throw new OnlyNormalPwException();
         }
     }
 
@@ -119,7 +122,7 @@ public class AuthCodeService {
             context.setVariable("code", code);
             context.setVariable("expiredAt", expiredTime);
 
-            String text = templateEngine.process("mail", context);
+            String text = templateEngine.process("mail/AuthMail", context);
             helper.setText(text, true);
 
             mailSender.send(message);
@@ -163,6 +166,7 @@ public class AuthCodeService {
     @Transactional
     public boolean changePassword(FindPwRequest req) {
         User user = userRepository.findByEmail(req.getEmail()).orElseThrow(UserNotFoundException::new);
+        if (user.getType() != UserType.NORMAL) throw new OnlyNormalPwException();
 
         if (errIfNotVerifyEmail(req.getEmail()) && authService.pwCheck(req.getNewPassword())) {
             user.setPassword(req.getNewPassword());

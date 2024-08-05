@@ -2,6 +2,7 @@ package S11P12A708.A708.domain.calendar.service;
 
 import S11P12A708.A708.domain.calendar.entity.Calendar;
 import S11P12A708.A708.domain.calendar.exception.CalendarNotFoundException;
+import S11P12A708.A708.domain.calendar.exception.CalendarTimeFormatException;
 import S11P12A708.A708.domain.calendar.repository.CalendarRepository;
 import S11P12A708.A708.domain.calendar.request.CalendarRequest;
 import S11P12A708.A708.domain.calendar.response.CalendarResponse;
@@ -12,6 +13,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -21,6 +24,8 @@ public class CalendarService {
 
     private final CalendarRepository calendarRepository;
     private final TeamRepository teamRepository;
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public void createCalendar(final Long teamId, final CalendarRequest request) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
@@ -32,7 +37,7 @@ public class CalendarService {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final List<Calendar> calendars = calendarRepository.findByTeam(team);
 
-        return calendars.stream().map(CalendarResponse::of).toList();
+        return calendars.stream().map(calendar -> CalendarResponse.of(calendar, formatter)).toList();
     }
 
     public void updateCalendar(final Long teamId, final Long calendarId, CalendarRequest request) {
@@ -54,9 +59,17 @@ public class CalendarService {
         return new Calendar(
                 request.getTitle(),
                 request.getMemo(),
-                request.getTime(),
+                convertToLocalDateTime(request.getTime()),
                 team
         );
+    }
+
+    private LocalDateTime convertToLocalDateTime(String time) {
+        try {
+            return LocalDateTime.parse(time, formatter);
+        } catch (Exception e) {
+            throw new CalendarTimeFormatException();
+        }
     }
 
 }

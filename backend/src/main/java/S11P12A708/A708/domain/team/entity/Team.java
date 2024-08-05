@@ -65,7 +65,7 @@ public class Team {
     public static Team of(Long teamId, TeamInfoRequest request) {
         return new Team(
                 teamId,
-                request.getGroupName(),
+                request.getTeamName(),
                 request.getDescription()
         );
     }
