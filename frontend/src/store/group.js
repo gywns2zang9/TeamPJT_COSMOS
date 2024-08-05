@@ -120,7 +120,6 @@ const useGroupStore = create((set) => ({
             const response = await patch(url, data, headers);
             console.log(response);
             return response
-
         } catch (err) {
             console.log('그룹 정보 변경 실패 -> ', err);
             throw err;
@@ -215,12 +214,16 @@ const useGroupStore = create((set) => ({
 
     // 그룹 참여 이메일 발송하기
     sendInviteEmail: async ({ groupId, email }) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+        };
         try {
             const url = `${BASE_URL}/teams/auth/${groupId}/teamCode/`;
             const data = {
                 email,
             };
-            const response = await post(url, data);
+            const response = await post(url, data, headers);
             console.log(response);
             return response
         } catch (err) {

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../css/group/groupSettingsModal.css';
 import useGroupStore from '../store/group';
-
+import { useNavigate } from 'react-router-dom';
 function GroupSettingsModal({ show, handleClose, groupId }) {
-
+    const navigate = useNavigate();
     const [isLeader, setIsLeader] = useState(false);
     
     const [groupName, setGroupName] = useState('');
@@ -57,7 +57,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
     const handleSaveChanges = async () => {
         try {
             if (isLeader) {
-                await updateGroupInfo({ groupId, groupName, groupDescription });
+                await updateGroupInfo({ groupId, groupName, description:groupDescription });
                 if (newLeader) {
                     await updateGroupLeader({ groupId, userId: newLeader });
                 }
