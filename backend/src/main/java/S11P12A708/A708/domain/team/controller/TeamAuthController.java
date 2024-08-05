@@ -22,7 +22,7 @@ public class TeamAuthController {
 
     private final TeamAuthService teamAuthService;
 
-    @GetMapping("/users/{userId}/teams")
+    @GetMapping("/users/{userId}/groups")
     public ResponseEntity<List<TeamResponse>> getTeamList(
             @PathVariable Long userId) {
 
@@ -30,7 +30,7 @@ public class TeamAuthController {
         return new ResponseEntity<>(teamResponses, HttpStatus.OK);
     }
 
-    @PostMapping("/users/{userId}/team")
+    @PostMapping("/users/{userId}/group")
     public ResponseEntity<TeamIdResponse> createTeam(
             @PathVariable Long userId,
             @Valid @RequestBody TeamInfoRequest request) {
