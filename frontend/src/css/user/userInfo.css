@@ -96,8 +96,8 @@
 
 #info-change-btn,
 #info-code-btn,
-#info-logout-btn,
-#info-signout-btn {
+#info-group-btn,
+#info-logout-btn {
   background-color: #3a088f; /* 배경색 */
   background: linear-gradient(
     90deg,
@@ -118,7 +118,7 @@
 
 #info-change-btn:hover,
 #info-code-btn:hover,
-#info-logout-btn:hover,
-#info-signout-btn:hover {
+#info-group-btn:hover,
+#info-logout-btn:hover {
   border: 1px solid #fff;
 }

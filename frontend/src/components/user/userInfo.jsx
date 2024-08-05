@@ -8,11 +8,10 @@ const UserInfo = () => {
   const navigate = useNavigate();
 
   const getUserInfo = useAuthStore((state) => state.getUserInfo);
-  const accessToken = useAuthStore((state) => state.getAccessToken);
+  const getAccessToken = useAuthStore((state) => state.getAccessToken);
+  const logout = useAuthStore((state) => state.logout);
 
-  // getUserInfo 함수 호출하여 사용자 정보를 가져옴
-  const userInfo = getUserInfo();
-
+  const [userInfo, setUserInfo] = useState(getUserInfo());
   const [userId, setUserId] = useState(userInfo.userId);
   const [email, setEmail] = useState(userInfo.email);
   const [nickName, setNickName] = useState(userInfo.nickName);
@@ -22,8 +21,19 @@ const UserInfo = () => {
   const [repo, setRepo] = useState(userInfo.repo);
   const [description, setDescription] = useState(userInfo.description);
 
-  const signOut = useAuthStore((state) => state.signOut);
-  const logout = useAuthStore((state) => state.logout);
+  useEffect(() => {
+    console.log("useEffect 실행")
+    const userInfo = getUserInfo();
+    setUserInfo(userInfo);
+    setUserId(userInfo.userId);
+    setEmail(userInfo.email);
+    setNickName(userInfo.nickName);
+    setType(userInfo.type);
+    setImg(userInfo.img);
+    setGitId(userInfo.gitId);
+    setRepo(userInfo.repo);
+    setDescription(userInfo.description);
+  }, [getUserInfo]);
 
   const toChange = () => {
     navigate(`change`);
@@ -32,20 +42,15 @@ const UserInfo = () => {
   const toCode = () => {
     navigate("code"); // 경로를 수정하세요 아직 없음
   };
+  
+  const handleGroup = () => {
+    navigate("../../group")
+  }
 
   const handleLogout = () => {
     logout();
   };
 
-  const handleSignOut = async () => {
-    console.log("회원 탈퇴 실행");
-    try {
-      await signOut({ accessToken, userId });
-      handleLogout();
-    } catch (error) {
-      console.error("회원 탈퇴 중 오류 발생:", error);
-    }
-  };
 
   return (
     <div id="info-container">
@@ -94,11 +99,11 @@ const UserInfo = () => {
         <div id="info-code-btn" onClick={toCode}>
           내 코드 보기
         </div>
+        <div id="info-group-btn" onClick={handleGroup}>
+          내 그룹 보기
+        </div>
         <div id="info-logout-btn" onClick={handleLogout}>
           로그아웃
-        </div>
-        <div id="info-signout-btn" onClick={handleSignOut}>
-          회원 탈퇴
         </div>
       </div>
     </div>
