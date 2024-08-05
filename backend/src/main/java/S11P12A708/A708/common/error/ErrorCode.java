@@ -16,8 +16,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(UNPROCESSABLE_ENTITY, "user", "user not found."),
     USER_INVALID(UNPROCESSABLE_ENTITY, "user", "user request is incorrect."),
     USER_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "user", "email is already exist."),
-    INVALID_ACCESS(UNPROCESSABLE_ENTITY, "user", "Token userId does not match URL userId."),
-    ONLY_NORMAL_PW(UNPROCESSABLE_ENTITY, "user", "Only NORMAL login users can change password."),
+    INVALID_ACCESS(UNPROCESSABLE_ENTITY, "user", "token userId does not match URL userId."),
+    ONLY_NORMAL_PW(UNPROCESSABLE_ENTITY, "user", "only NORMAL login users can change password."),
 
     // Auth-Code
     FAIL_MAIL(UNPROCESSABLE_ENTITY, "auth-code", "failed to send email."),
@@ -44,6 +44,12 @@ public enum ErrorCode {
     // Calendar
     CALENDAR_NOT_FOUND(UNPROCESSABLE_ENTITY, "calendar", "This Calendar is not exist"),
     CALENDAR_TIME_FORMAT(UNPROCESSABLE_ENTITY, "calendar", "Calendar time format is invaild"),
+
+    // Problem
+    PROBLEM_NOT_FOUND(UNPROCESSABLE_ENTITY, "problem", "problem is not found."),
+    PROBLEM_NOT_EXIST(UNPROCESSABLE_ENTITY, "problem", "problem is not exist."),
+    CODE_NOT_EXIST(UNPROCESSABLE_ENTITY, "problem", "code is not exist."),
+    USER_INFO_NECESSARY(UNPROCESSABLE_ENTITY, "problem", "user's git, repo information is necessary for crawling."),
 
     //Folder
     FOLDER_NOT_FOUND(UNPROCESSABLE_ENTITY, "folder", "This Folder is not exist"),
