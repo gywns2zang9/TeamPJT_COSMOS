@@ -40,4 +40,8 @@ public class Code {
         return new Code("", Language.JAVA);
     }
 
+    public void update(Code newCode) {
+        this.content = newCode.getContent();
+        this.language = newCode.getLanguage();
+    }
 }

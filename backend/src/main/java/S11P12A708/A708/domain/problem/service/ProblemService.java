@@ -115,13 +115,14 @@ public class ProblemService {
         teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final User user = userRepository.findById(req.getUserId()).orElseThrow(UserNotFoundException::new);
         final Problem problem = problemRepository.findById(req.getProblemId()).orElseThrow(ProblemNotFoundException::new);
-
         checkUserInfoForCrawling(user);
 
-//        String code = Optional.ofNullable(bojCrawl(user.getGitId(), user.getRepo(), problem.getNumber()))
-//                .orElseThrow(CodeNotExistException::new);
+        final ProblemUser problemUser = problemUserRepository.findByProblemAndUser(problem, user);
+        final Code code = problemUser.getFile().getCode();
+        final Code newCode = codeCrawler.createByCrawler(user, problem.getNumber());
 
-        // TODO: 갖고 온 코드를 코드 페이지에 저장 필요
+        code.update(newCode);
+
         // TODO: 코드 뿐만 아니라, 해당 README.md 도 같이 저장되었으면 어떨지 논의 필요
     }
 
