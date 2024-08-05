@@ -1,6 +1,7 @@
 import { OpenVidu } from "openvidu-browser";
 
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Code from "../components/cenference/Code";
 import Paint from "../components/cenference/Paint";
 import VideocamIcon from "@mui/icons-material/Videocam";
@@ -16,10 +17,11 @@ import "../css/conference/conference.css";
 const APPLICATION_SERVER_URL = "https://i11a708.p.ssafy.io/";
 
 function ConferenceView(props) {
+  const { groupId } = useParams();
   const [isOpen, setIsOpen] = useState(true);
   const [isVideoEnabled, setisVideoEnabled] = useState(true);
   const [isMicEnabled, setisMicEnabled] = useState(true);
-  const [mySessionId, setMySessionId] = useState("groupName");
+  const [mySessionId, setMySessionId] = useState(groupId);
   const [showPaint, setShowPaint] = useState(true);
   const [myUserName, setMyUserName] = useState(
     "Participant" + Math.floor(Math.random() * 100)
@@ -274,7 +276,7 @@ function ConferenceView(props) {
     setOV(null);
     setSession(undefined);
     setSubscribers([]);
-    setMySessionId("groupName");
+    setMySessionId(groupId);
     setMyUserName("Participant" + Math.floor(Math.random() * 100));
     setMainStreamManager(undefined);
     setPublisher(undefined);

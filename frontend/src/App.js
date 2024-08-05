@@ -6,7 +6,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import HomeView from "./views/HomeView";
-import ConferenceView from "./views/ConferenceView.jsx";
+import ConferenceRoutes from "./routes/conferenceRoutes.js";
 import NavBar from "./components/home/navBar.jsx";
 import Footer from "./components/home/footer.jsx";
 import Login from "./components/accounts/login.jsx";
@@ -21,13 +21,13 @@ import "./App.css";
 
 function AppContent() {
   const location = useLocation();
-  const isConferenceRoute = location.pathname === "/conference";
+  const isConferenceRoute = location.pathname.startsWith("/conference");
 
   return (
     <div id="App">
       {!isConferenceRoute && <NavBar />}
       <Routes>
-        <Route path="/conference" element={<ConferenceView />} />
+        <Route path="/conference/*" element={<ConferenceRoutes />} />
         <Route path="/login" element={<Login />} />
         <Route path="/auth/kakao/callback" element={<KakaoRedirect />} />
         <Route path="/auth/naver/callback" element={<NaverRedirect />} />
