@@ -1,6 +1,7 @@
 import { OpenVidu } from "openvidu-browser";
 
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Code from "../components/cenference/Code";
 import Paint from "../components/cenference/Paint";
 import VideocamIcon from "@mui/icons-material/Videocam";
@@ -13,20 +14,20 @@ import "../css/conference/conference.css";
 
 import useAuthStore from "../store/auth";
 
-// const APPLICATION_SERVER_URL =
-//   process.env.NODE_ENV === "production" ? "" : "https://demos.openvidu.io/";
-const APPLICATION_SERVER_URL = "https://i11a708.p.ssafy.io/";
+// const APPLICATION_SERVER_URL = "https://i11a708.p.ssafy.io/";
+const APPLICATION_SERVER_URL = "http://localhost:8080/";
 
 function ConferenceView(props) {
   // 닉네임 불러오는 코드 추가
   const getUserInfo = useAuthStore((state) => state.getUserInfo);
-  const userInfo = getUserInfo()
+  const userInfo = getUserInfo();
   const [myUserName, setMyUserName] = useState(userInfo.nickName);
 
+  const { groupId } = useParams();
   const [isOpen, setIsOpen] = useState(true);
   const [isVideoEnabled, setisVideoEnabled] = useState(true);
   const [isMicEnabled, setisMicEnabled] = useState(true);
-  const [mySessionId, setMySessionId] = useState("groupName");
+  const [mySessionId, setMySessionId] = useState(groupId);
   const [showPaint, setShowPaint] = useState(true);
   const [session, setSession] = useState(undefined);
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
@@ -38,10 +39,10 @@ function ConferenceView(props) {
   const [showChat, setShowChat] = useState(false); // 채팅창 모달 상태
   const [chatMessages, setChatMessages] = useState([]); // 채팅 메시지 상태
   const [newMessage, setNewMessage] = useState(""); // 새로운 메시지 입력 상태
-  
+
   const VideoToggleIcon = isVideoEnabled ? VideocamIcon : VideocamOffIcon;
   const MicToggleIcon = isMicEnabled ? MicIcon : MicOffIcon;
-  
+
   const toggleVideo = () => {
     setIsOpen(!isOpen);
   };
@@ -74,6 +75,12 @@ function ConferenceView(props) {
 
   const handleNewMessageChange = (e) => {
     setNewMessage(e.target.value);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
   };
 
   useEffect(() => {
@@ -176,6 +183,8 @@ function ConferenceView(props) {
     return () => {
       window.removeEventListener("beforeunload", onbeforeunload);
       // leaveSession();
+      window.removeEventListener("beforeunload", onbeforeunload);
+      // leaveSession();
     };
   }, []);
 
@@ -272,8 +281,8 @@ function ConferenceView(props) {
     setOV(null);
     setSession(undefined);
     setSubscribers([]);
-    setMySessionId("groupName");
-    setMyUserName("Participant" + Math.floor(Math.random() * 100));
+    setMySessionId(groupId);
+    setMyUserName(myUserName);
     setMainStreamManager(undefined);
     setPublisher(undefined);
   };
@@ -329,29 +338,7 @@ function ConferenceView(props) {
         </div>
       ) : null}
       <div className="code-paint-space">
-        <div className="left-space">
-          <div className="code-upper-space">
-            <div>
-              <button className="button">백준</button>
-              <button className="button">프로그래머스</button>
-              <button className="button">SWEA</button>
-            </div>
-            <div>
-              <button className="button" onClick={toggleVideo}>
-                {isOpen ? "⇑" : "⇓"}
-              </button>
-            </div>
-          </div>
-          <div className="code-space">
-            <Code />
-          </div>
-          <div className="code-lower-space">
-            <button className="button">코드 공유하기</button>
-            <button className="button">코드 저장하기</button>
-            <button className="button">내 코드 보기</button>
-            <button className="button">공유 코드 보기</button>
-          </div>
-        </div>
+        <Code toggleVideo={toggleVideo} isOpen={isOpen} />
         <div className="right-space">
           <div className="paint-upper-space">
             <div>
@@ -397,6 +384,7 @@ function ConferenceView(props) {
                 type="text"
                 value={newMessage}
                 onChange={handleNewMessageChange}
+                onKeyDown={handleKeyPress}
                 placeholder="메시지를 입력하세요..."
               />
               <button onClick={handleSendMessage}>전송</button>
@@ -412,9 +400,6 @@ function ConferenceView(props) {
                 <MicToggleIcon style={{ cursor: "pointer" }} />
                 <span>{isMicEnabled ? " 음소거" : " 음소거 해제"}</span>
               </button>
-              {/* <div className="volume-slider">
-                <VolumeSlider />
-              </div> */}
             </div>
             <div className="share-quit-buttons">
               <button className="button-share" onClick={toggleScreenShare}>
