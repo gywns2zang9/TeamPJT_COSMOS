@@ -5,11 +5,11 @@ import { Card } from "react-bootstrap";
 import CreateGroupModal from '../modals/CreateGroupModal.jsx'
 import JoinGroupModal from '../modals/JoinGroupModal.jsx'
 import useGroupStore from "../store/group.js";
-import { getUserInfo } from "../store/auth.js";
+import useAuthStore from "../store/auth.js";
 
 
 function GroupPageView(props) {
-    const {userId} = getUserInfo();
+    const {userId} = useAuthStore.getState().getUserInfo();
     // 그룹 목록
     const groups = useGroupStore((state) => state.groups) || [];
     const setGroups = useGroupStore((state) => state.setGroups);
