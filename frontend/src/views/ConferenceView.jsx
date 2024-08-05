@@ -180,6 +180,8 @@ function ConferenceView(props) {
     return () => {
       window.removeEventListener("beforeunload", onbeforeunload);
       // leaveSession();
+      window.removeEventListener("beforeunload", onbeforeunload);
+      // leaveSession();
     };
   }, []);
 
