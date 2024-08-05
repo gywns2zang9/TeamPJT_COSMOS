@@ -13,10 +13,7 @@ import java.net.URL;
 @Component
 public class ProblemCrawler {
     private static final String BOJ_API_URL = "https://solved.ac/api/v3/problem/show";
-
-//    public static void main(String[] args) {
-//        System.out.println(ProblemCrawler.getBojProblem(12422));
-//    }
+    private static final String BOJ_Problem_URL = "https://www.acmicpc.net/problem/";
 
     public static BojProblem getBojProblem(int number){
         try {
@@ -25,13 +22,10 @@ public class ProblemCrawler {
 
             // JSON 데이터 처리
             JSONObject jsonObject = new JSONObject(jsonResponse);
-//            System.out.println("Problem ID: " + jsonObject.getInt("problemId"));
-//            System.out.println("Title: " + jsonObject.getString("titleKo"));
-//            System.out.println("Difficulty: " + jsonObject.getInt("level"));
             String title = jsonObject.getString("titleKo");
             String level = getRating(jsonObject.getInt("level"));
-
-            return new BojProblem(SiteInfoType.BAEKJOON,number,title,level);
+            String url = new StringBuilder().append(BOJ_Problem_URL).append(number).toString();
+            return new BojProblem(SiteInfoType.BAEKJOON,number,title,level,url);
             // 필요한 다른 필드를 추가로 출력할 수 있습니다.
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,7 +63,7 @@ public class ProblemCrawler {
             case 0:
                 return "unrated";
             case 1:
-                return "BRONZE V";
+                return "Bronze V";
             case 2:
                 return "Bronze IV";
             case 3:
