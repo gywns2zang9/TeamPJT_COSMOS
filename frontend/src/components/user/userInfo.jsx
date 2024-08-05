@@ -33,7 +33,7 @@ const UserInfo = () => {
     setGitId(userInfo.gitId);
     setRepo(userInfo.repo);
     setDescription(userInfo.description);
-  }, [getUserInfo]);
+  }, [getUserInfo, getAccessToken]);
 
   const toChange = () => {
     navigate(`change`);
