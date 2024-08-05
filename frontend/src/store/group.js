@@ -97,7 +97,7 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await get(url, {}, headers);
-            console.log(response);
+            console.log(1)
             return response
         } catch (err) {
             console.log('그룹 멤버 목록 불러오기 실패 -> ', err);
@@ -345,15 +345,16 @@ const useGroupStore = create((set) => ({
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
             const url = `${BASE_URL}/teams/${groupId}/calendar`;
+            const formattedTime = time.replace('T', ' ').slice(0, 16);
             const data = {
                 title,
                 memo,
-                time
+                time: formattedTime
             };
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
             };
-            console.log(headers);
+            console.log(data);
             const response = await post(url, data, headers);
             return response
 

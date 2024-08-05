@@ -94,7 +94,6 @@ function SideBar({ groupId }) {
     // 최상위 폴더 로드
     useEffect(() => {
         const loadRootFolders = async () => {
-                console.log(1);
             try {
                 const { folderId, folders, files } = await loadFolderInfo({groupId, folderId:0});
                 const rootFolder = {
