@@ -49,11 +49,16 @@ const PasswordChange = () => {
     const accessToken = getAccessToken()
     const userId = getUserInfo().userId
     try {
-      await passwordChange({ accessToken, userId, oldPassword, newPassword });
+      const res = await passwordChange({ accessToken, userId, oldPassword, newPassword });
       console.log("비밀번호가 변경되었습니다.");
+      if (!res || res === null) {
+        ErrorEvent()
+      }
       navigate(`../users/${userId}`);
     } catch (error) {
       console.log('비밀번호 변경에 실패했습니다.');
+      console.log(error)
+      window.alert(`${error.response.data.error.auth}`)
     }
   };
 
