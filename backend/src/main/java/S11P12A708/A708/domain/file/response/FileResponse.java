@@ -18,24 +18,34 @@ public class FileResponse {
     private String fileName;
     private String content;
 
-    private Code code;
-    private List<Problem> problems;
+    private FileCodeResponse code;
+    private List<FileProblemResponse> problems;
 
-    public FileResponse(File file, Code code, List<Problem> problems) {
+    public FileResponse(File file, FileCodeResponse fileCodeResponse, List<FileProblemResponse> fileProblemResponses) {
         this.fileId = file.getId();
         this.fileType = file.getType();
         this.fileName = file.getName();
         this.content = file.getContent();
-        this.code = code;
-        this.problems = problems;
+        this.code = fileCodeResponse;
+        this.problems = fileProblemResponses;
     }
 
     public static FileResponse fromFile(File file) {
-        if(file.getType() == FileType.CODE) return new FileResponse(file, file.getCode(), null);
-        return new FileResponse(file, null, null);}
+        return new FileResponse(file, null, null);
+    }
 
     public static FileResponse fromOverViewFile(File file, List<Problem> problems) {
-        return new FileResponse(file, null, problems);
+        return new FileResponse(
+                file,
+                null,
+                problems.stream().map(FileProblemResponse::of).toList());
+    }
+
+    public static FileResponse fromCodeFile(File file, Code code) {
+        return new FileResponse(
+                file,
+                FileCodeResponse.of(code),
+                null);
     }
 
 }

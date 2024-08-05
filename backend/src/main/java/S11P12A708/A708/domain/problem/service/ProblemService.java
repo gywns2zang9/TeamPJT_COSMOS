@@ -70,7 +70,7 @@ public class ProblemService {
         final Problem savedProblem = problemRepository.save(problem);
 
         // 스터디 폴더 내에 문제 이름으로 폴더 생성
-        final Folder studyFolder = studyService.findStudyFolder(req.getStudyId());
+        final Folder studyFolder = studyService.findStudyFolder(teamId, req.getStudyId());
         final Folder problemFolder = Folder.createProblemFolder(team, studyFolder, problem);
         studyFolder.addSubFolder(problemFolder);
 
@@ -99,7 +99,7 @@ public class ProblemService {
 
         problemUserRepository.deleteByProblem(problem);
 
-        Folder studyFolder = studyService.findStudyFolder(request.getStudyId());
+        Folder studyFolder = studyService.findStudyFolder(teamId, request.getStudyId());
         Folder problemFolder = studyFolder.getSubFolders().stream()
                 .filter(subFolder -> problem.getName().equals(subFolder.getName()))
                 .findFirst()

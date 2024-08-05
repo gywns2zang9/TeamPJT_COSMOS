@@ -93,13 +93,17 @@ public class FileService {
             return FileResponse.fromOverViewFile(file, problems);
         }
 
-        if(file.getType() == FileType.OVERVIEW) {
+        if(file.getType() == FileType.TIME_OVERVIEW) {
             final Folder folder = file.getFolder();
             final List<Problem> problems = folder.getSubFolders().stream()
                     .map(Folder::getProblem)
                     .toList();
 
             return FileResponse.fromOverViewFile(file, problems);
+        }
+
+        if(file.getType() == FileType.CODE) {
+            return FileResponse.fromCodeFile(file, file.getCode());
         }
 
         return FileResponse.fromFile(file);
