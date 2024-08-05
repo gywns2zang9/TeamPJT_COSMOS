@@ -10,26 +10,25 @@ const GroupInfoText = styled.div`
     margin: 20px;
 `;
 
-// 그룹 정보 받아와서 적기 API
 const MainPageTemplates = ({ groupId }) => {
     const { groupDetailLoad } = useGroupStore();
     const [groupInfo, setGroupInfo] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     
+    const fetchGroupDetails = async () => {
+        try {
+            setLoading(true);
+            const response = await groupDetailLoad({ groupId });
+            setGroupInfo(response);
+            setLoading(false);
+        } catch (error) {
+            setError(error);
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchGroupDetails = async () => {
-            try {
-                setLoading(true);
-                const response = await groupDetailLoad({ groupId });
-                setGroupInfo(response);
-                setLoading(false);
-            } catch (error) {
-                setError(error);
-                setLoading(false);
-            }
-        };
-        
         fetchGroupDetails();
     }, [groupId, groupDetailLoad]);
 

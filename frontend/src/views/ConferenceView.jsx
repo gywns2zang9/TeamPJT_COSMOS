@@ -12,18 +12,22 @@ import axios from "axios";
 import UserVideoComponent from "../components/cenference/UserVideoComponent";
 import "../css/conference/conference.css";
 
+import useAuthStore from "../store/auth";
+
 const APPLICATION_SERVER_URL = "https://i11a708.p.ssafy.io/";
 
 function ConferenceView(props) {
+  // 닉네임 불러오는 코드 추가
+  const getUserInfo = useAuthStore((state) => state.getUserInfo);
+  const userInfo = getUserInfo();
+  const [myUserName, setMyUserName] = useState(userInfo.nickName);
+
   const { groupId } = useParams();
   const [isOpen, setIsOpen] = useState(true);
   const [isVideoEnabled, setisVideoEnabled] = useState(true);
   const [isMicEnabled, setisMicEnabled] = useState(true);
   const [mySessionId, setMySessionId] = useState(groupId);
   const [showPaint, setShowPaint] = useState(true);
-  const [myUserName, setMyUserName] = useState(
-    "Participant" + Math.floor(Math.random() * 100)
-  );
   const [session, setSession] = useState(undefined);
   const [mainStreamManager, setMainStreamManager] = useState(undefined);
   const [publisher, setPublisher] = useState(undefined);
@@ -31,9 +35,9 @@ function ConferenceView(props) {
   const [OV, setOV] = useState(null);
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
-  const [showChat, setShowChat] = useState(false);
-  const [chatMessages, setChatMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
+  const [showChat, setShowChat] = useState(false); // 채팅창 모달 상태
+  const [chatMessages, setChatMessages] = useState([]); // 채팅 메시지 상태
+  const [newMessage, setNewMessage] = useState(""); // 새로운 메시지 입력 상태
 
   const VideoToggleIcon = isVideoEnabled ? VideocamIcon : VideocamOffIcon;
   const MicToggleIcon = isMicEnabled ? MicIcon : MicOffIcon;
