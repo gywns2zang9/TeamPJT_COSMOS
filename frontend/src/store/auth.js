@@ -27,8 +27,6 @@ const useAuthStore = create((set) => ({
 
     // 일반 로그인 요청
     login: async ({ email, password }) => {
-        console.log(email, password);
-
         try {
             const url = `${BASE_URL}/auth/login`;
             const data = { email, password };
@@ -98,6 +96,7 @@ const useAuthStore = create((set) => ({
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("userInfo");
+        // localStorage.clear();
         set({ accessToken: null, refreshToken: null, userInfo: null });
 
         // 홈 페이지로 리다이렉트
@@ -252,13 +251,10 @@ const useAuthStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
                 "Content-Type": "application/json"
             };
-            const response = await patch(url, data, headers);
-            if (response.status === 200) {
-                const updatedUser = response.data
-                console.log(updatedUser)
-                localStorage.setItem("userInfo", JSON.stringify(updatedUser));
-                return updatedUser
-            }
+            const responseData = await patch(url, data, headers);
+            localStorage.setItem("userInfo", JSON.stringify(responseData));
+
+            return responseData
         } catch (error) {
             console.log("정보 수정 요청 실패! ->", error);
         }

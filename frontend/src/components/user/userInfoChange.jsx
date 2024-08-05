@@ -66,7 +66,7 @@ const UserInfoChange = () => {
         description,
       };
       try {
-        const updatedUser = await updateUserInfo({ accessToken, userId, newUserInfo });
+        await updateUserInfo({ accessToken, userId, newUserInfo });
         navigate(`/users/${userId}`);
       } catch (error) {
         console.error('정보 수정에 실패했습니다.', error);
