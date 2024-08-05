@@ -138,7 +138,7 @@ const useAuthStore = create((set) => ({
         }
     },
 
-    // 비밀번호 변경 요청
+    // 비번찾기-비밀번호 변경 요청
     changePassword: async ({ email, newPassword }) => {
         try {
             const url = `${BASE_URL}/auth-codes/password`;
@@ -151,7 +151,21 @@ const useAuthStore = create((set) => ({
             throw error;
         }
     },
-
+    // 비밀번호 변경 요청
+    passwordChange: async ({ accessToken, userId, oldPassword, newPassword }) => {
+        try {
+            const url = `${BASE_URL}/users/${userId}/password`
+            const data = { oldPassword, newPassword }
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await patch(url, data, headers)
+            return response
+        }
+        catch (error) {
+            console.log(error)
+        }
+    },
 
     // 회원가입-코드 전송 요청
     sendSignUpEmail: async ({ email }) => {
@@ -214,8 +228,8 @@ const useAuthStore = create((set) => ({
         try {
             const url = `${BASE_URL}/auth/users/${userId}`
             const headers = {
-                Authorization: `Bearer ${accessToken}`
-            }
+                Authorization: `Bearer ${accessToken}`,
+            };
             const response = await deleteRequest(url, {}, headers);
             console.log(`회원탈퇴 성공! 안녕히가세요.`)
             return response
@@ -224,8 +238,45 @@ const useAuthStore = create((set) => ({
             console.log("회원탈퇴 요청 실패! ->", error);
             throw error;
         }
-    }
+    },
 
+    //정보 수정 요청
+    updateUserInfo: async ({ accessToken, userId, newUserInfo }) => {
+        try {
+            const url = `${BASE_URL}/users/${userId}`;
+            const data = newUserInfo;
+            console.log(data)
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json"
+            };
+            const response = await patch(url, data, headers);
+            if (response.status === 200) {
+                const updatedUser = response.data
+                console.log(updatedUser)
+                localStorage.setItem("userInfo", JSON.stringify(updatedUser));
+                return updatedUser
+            }
+        } catch (error) {
+            console.log("정보 수정 요청 실패! ->", error);
+        }
+    },
+
+    // 내 코드 보기 (미완성)
+    myCode: async ({ accessToken, userId }) => {
+        try {
+            const url = `${BASE_URL}/users/${userId}/codes`
+            const data = {}
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const responseData = await get(url, data, headers);
+            return responseData
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    //
 
 }));
 export default useAuthStore;
