@@ -30,9 +30,9 @@ function CreateGroupModal({ show, handleClose }) {
             console.log('그룹 생성 완료', response);
             handleClose(); // 모달 닫기
             const groupId = response.teamId;
-            await makeMainFolder({ groupId, parentId:null, folderName:"=base" });
-            await makeMainPage({ groupId, folderId:0, fileName:"mainPage", file:fileText });
-            navigate(`/group/${groupId}/0/`)
+            // await makeMainFolder({ groupId, parentId:0, folderName:"base" });
+            // await makeMainPage({ groupId, folderId:0, fileName:"mainPage", file:fileText });
+            navigate(`/group/${groupId}/main/`)
         } catch (err) {
             console.log('그룹 생성 실패', err);
         }

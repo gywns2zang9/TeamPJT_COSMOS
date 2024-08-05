@@ -43,6 +43,9 @@ function SideBar({ groupId }) {
     const [newItemType, setNewItemType] = useState(''); // 생성할 아이템의 타입
     const [newItemParentId, setNewItemParentId] = useState(null); // 생성할 아이템의 부모 ID
     const [newItemName, setNewItemName] = useState(''); // 생성할 아이템의 이름을
+    const [rootId, setRootId] = useState(null); // 루트폴더 아이디 저장
+    const createFile = useGroupStore((state) => state.createFile);
+    const createFolder = useGroupStore((state) => state.createFolder);
 
     // 사이드바 토글 
     const toggleSideBar = () => {
@@ -91,11 +94,26 @@ function SideBar({ groupId }) {
     // 최상위 폴더 로드
     useEffect(() => {
         const loadRootFolders = async () => {
-            const { folders, files } = await loadFolderInfo({groupId, folderId:0});
+            const { folderId, folders, files } = await loadFolderInfo({groupId, folderId:0});
+            const rootFolder = {
+                'type':'folder',
+                'id':folderId,
+                'name':'Root',
+                'parentId':null,
+            }
+            setRootId(folderId);
+            setExpandedFolders(prev => ({
+                ...prev,
+                [folderId]: true,
+            }))
             setStructure(prev => ({
                 folders,
-                files: [...prev.files, ...files]
+                files
             }));
+            setStructure(prev => ({
+                ...prev,
+                folders: [rootFolder]
+            }))
         };
         loadRootFolders();
     }, [groupId, loadFolderInfo]);
@@ -152,7 +170,13 @@ function SideBar({ groupId }) {
         if (newItemName.trim()) {
             const newId = getNextId(newItemType);
             setStructure(prev => {
-                const newItem = { id: newId, type: newItemType, name: newItemName, parentId: newItemParentId, content: '' };
+                const parentId = newItemParentId || rootId;
+                const newItem = { id: newId, type: newItemType, name: newItemName, parentId: parentId, content: '' };
+                if (newItemType === 'folder') {
+                    createFolder({ groupId, parentId:parentId, folderName:newItemName });
+                } else if (newItemType === 'file') {
+                    createFile({ groupId, folderId:parentId, fileName:newItemName, type: newItemType});
+                }
 
                 return {
                     ...prev,
@@ -161,6 +185,7 @@ function SideBar({ groupId }) {
                         newItem
                     ]
                 };
+                
             });
             setShowCreateItemModal(false);
         }
@@ -229,6 +254,12 @@ function SideBar({ groupId }) {
 
     // 폴더 렌더링
     const renderFolder = (folder) => {
+        if (folder.id === rootId) {
+            return <div className='sidebar-content'>
+                {renderFolder(structure.folders.filter(f => f.parentId === folder.id))}
+                {renderFiles(structure.files.filter(f => f.parentId === folder.id))}
+            </div>
+        }
         const isExpanded = expandedFolders[folder.id] || false;
         const childFolders = structure.folders.filter(f => f.parentId === folder.id);
         const childFiles = structure.files.filter(f => f.parentId === folder.id);
@@ -343,10 +374,11 @@ function SideBar({ groupId }) {
     const handleFileClick = (file) => {
         const { id, type } = file;
         const pageMap = {
-            mainPageTemplates: "/group/mainPageTemplates",
-            codePageTemplates: "/group/codePageTemplates",
-            markdownEditor: "/group/markdownEditor",
-            studyTemplates: "/group/studyTemplates",
+            'MAIN': `/group/${groupId}/main/`,
+            'OVERVIEW': `/group/${groupId}/overview/`,
+            'NORMAL': `/group/${groupId}/${id}/`,
+            'CODE': `/group/${groupId}/code/${id}/`,
+            'TIME_OVERVIEW': `/group/${groupId}/time-overview/${id}/`,
         };
         navigate(pageMap[type], { state: { fileId: id, fileName: file.name } });
     };
@@ -428,6 +460,7 @@ function SideBar({ groupId }) {
                 setNameValue={setNewItemName}
                 typeValue={newItemType}
                 setTypeValue={setNewItemType}
+                groupId={groupId}
             />
             <StartVideoModal
                 show={showConfirmVideoStart}
