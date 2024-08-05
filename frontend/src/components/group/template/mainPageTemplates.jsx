@@ -32,12 +32,6 @@ const MainPageTemplates = ({ groupId }) => {
         fetchGroupDetails();
     }, [groupId, groupDetailLoad]);
 
-    useEffect(() => {
-        if (groupInfo) {
-            fetchGroupDetails();
-        }
-    })
-
     if (loading) {
         return <GroupInfoText>Loading........</GroupInfoText>
     }

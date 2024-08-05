@@ -94,26 +94,31 @@ function SideBar({ groupId }) {
     // 최상위 폴더 로드
     useEffect(() => {
         const loadRootFolders = async () => {
-            const { folderId, folders, files } = await loadFolderInfo({groupId, folderId:0});
-            const rootFolder = {
-                'type':'folder',
-                'id':folderId,
-                'name':'Root',
-                'parentId':null,
+                console.log(1);
+            try {
+                const { folderId, folders, files } = await loadFolderInfo({groupId, folderId:0});
+                const rootFolder = {
+                    'type':'folder',
+                    'id':folderId,
+                    'name':'Root',
+                    'parentId':null,
+                }
+                setRootId(folderId);
+                setExpandedFolders(prev => ({
+                    ...prev,
+                    [folderId]: true,
+                }));
+                setStructure(prev => ({
+                    folders,
+                    files
+                }));
+                setStructure(prev => ({
+                    ...prev,
+                    folders: [rootFolder]
+                }));
+            } catch (err) {
+                console.error('폴더 로딩 실패 -> ', err);
             }
-            setRootId(folderId);
-            setExpandedFolders(prev => ({
-                ...prev,
-                [folderId]: true,
-            }))
-            setStructure(prev => ({
-                folders,
-                files
-            }));
-            setStructure(prev => ({
-                ...prev,
-                folders: [rootFolder]
-            }))
         };
         loadRootFolders();
     }, [groupId, loadFolderInfo]);
