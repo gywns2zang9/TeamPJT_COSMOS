@@ -43,6 +43,7 @@ function SideBar({ groupId }) {
     const [newItemType, setNewItemType] = useState(''); // 생성할 아이템의 타입
     const [newItemParentId, setNewItemParentId] = useState(null); // 생성할 아이템의 부모 ID
     const [newItemName, setNewItemName] = useState(''); // 생성할 아이템의 이름을
+    const [rootId, setRootId] = useState(null); // 루트폴더 아이디 저장
 
     // 사이드바 토글 
     const toggleSideBar = () => {
@@ -91,13 +92,29 @@ function SideBar({ groupId }) {
     // 최상위 폴더 로드
     useEffect(() => {
         const loadRootFolders = async () => {
-            const { folders, files } = await loadFolderInfo({groupId, folderId:0});
+            const { folderId, folders, files } = await loadFolderInfo({groupId, folderId:0});
+            const rootFolder = {
+                'type':'folder',
+                'id':folderId,
+                'name':'Root',
+                'parentId':null,
+            }
+            setRootId(folderId);
+            setExpandedFolders(prev => ({
+                ...prev,
+                [folderId]: true,
+            }))
             setStructure(prev => ({
                 folders,
-                files: [...prev.files, ...files]
+                files
             }));
+            setStructure(prev => ({
+                ...prev,
+                folders: [rootFolder]
+            }))
         };
         loadRootFolders();
+        console.log(structure);
     }, [groupId, loadFolderInfo]);
 
     // 설정 모달 
@@ -229,6 +246,13 @@ function SideBar({ groupId }) {
 
     // 폴더 렌더링
     const renderFolder = (folder) => {
+        console.log(structure);
+        console.log(folder, rootId);
+        if (folder.id === rootId) {
+            return <div className='sidebar-content'>
+                {renderFiles(structure.files.filter(f => f.parentId === folder.id))}
+            </div>
+        }
         const isExpanded = expandedFolders[folder.id] || false;
         const childFolders = structure.folders.filter(f => f.parentId === folder.id);
         const childFiles = structure.files.filter(f => f.parentId === folder.id);

@@ -239,8 +239,8 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             }
             const response = await get(url, {}, headers);
-            const responseData = await response.json();
-            return responseData
+            console.log(response);
+            return response
         } catch (err) {
             console.log('그룹내 폴더정보 불러오기 실패 -> ', err);
             throw err;
