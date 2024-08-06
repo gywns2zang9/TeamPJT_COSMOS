@@ -54,7 +54,6 @@ const useGroupStore = create((set) => ({
     joinGroup: async ({ userId, teamCode }) => {
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
-
             const url = `${BASE_URL}/users/${userId}/teams/teamCode`;
             const data = {
                 teamCode,
