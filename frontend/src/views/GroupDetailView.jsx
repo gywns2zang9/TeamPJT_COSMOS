@@ -14,7 +14,9 @@ const GroupDetailView = () => {
     let type;
 
     useEffect(() => {
-        setLoadedType(getFile({ groupId, fileId }));
+        if (fileId !== 'main') {
+            setLoadedType(getFile({ groupId, fileId }));
+        }
     }, [getFile]);
 
     switch (loadedType) {

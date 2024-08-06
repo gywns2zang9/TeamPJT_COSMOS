@@ -95,7 +95,6 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await get(url, {}, headers);
-            console.log(1)
             return response
         } catch (err) {
             console.log('그룹 멤버 목록 불러오기 실패 -> ', err);
@@ -197,7 +196,6 @@ const useGroupStore = create((set) => ({
 
     // 그룹 참여코드 확인하기
     checkInviteCode: async ({ groupId }) => {
-        console.log(groupId);
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
             const url = `${BASE_URL}/teams/auth/${groupId}/teamCode`;
@@ -205,7 +203,6 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await get(url, {}, headers);
-            console.log(response);
             return response
         } catch (err) {
             console.log('그룹 참여코드 확인하기 실패 -> ', err);
@@ -374,6 +371,26 @@ const useGroupStore = create((set) => ({
         try {
             const url = `${BASE_URL}/teams/${groupId}/file/${fileId}`
             const response = await get(url, {}, headers);
+            return response
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+
+    // 일반 페이지 수정하기
+    updateNormalFile: async ({ groupId, fileId, name, content }) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+        };
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/files/${fileId}`;
+            const data = {
+                name,
+                content
+            };
+            const response = await get(url, data, headers);
             console.log(response);
             return response
         } catch (err) {
@@ -382,6 +399,28 @@ const useGroupStore = create((set) => ({
         }
     },
 
+    // 코드 페이지 수정하기
+    updateCodeFile: async ({ groupId, fileId, name, code, content, language }) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+        };
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/files/codes/${fileId}`;
+            const data = {
+                name,
+                code,
+                content,
+                language
+            };
+            const response = await get(url, data, headers);
+            console.log(response);
+            return response
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
     // 캘린더 일정 목록 불러오기
     loadCalendarScheduleList: async ({ groupId }) => {
         try {

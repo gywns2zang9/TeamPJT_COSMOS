@@ -74,6 +74,12 @@
     display: block;
 }
 
+.folder-name, .file-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @keyframes rotate-segment {
     0% {
         transform: translate(-50%, -50%) rotate(0deg);

@@ -2,9 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import SimpleMDE from 'simplemde';
 import 'simplemde/dist/simplemde.min.css';
 import axios from 'axios';
-
-// 페이지 떠날 때, 페이지를 저장하는 API
-// 페이지 렌더링 할 때, 페이지를 받는 API
+import useGroupStore from '../../../store/group.js';
 
 const NormalTemplates = ({ pageId, groupId }) => {
     const editorRef = useRef(null);
@@ -20,14 +18,14 @@ const NormalTemplates = ({ pageId, groupId }) => {
         });
         setEditor(simpleMDE);
 
-        // 페이지 로딩 시 내용 가져오기
+        // TODO - 페이지 로딩 시 내용 가져오기
         axios.get(`/api/pages/${pageId}`)
             .then(response => {
                 simpleMDE.value(response.data.content || '');
             })
             .catch(error => console.error(error));
 
-        // 내용 변경 시 자동 저장
+        // TODO - 내용 변경 시 자동 저장
         simpleMDE.codemirror.on('change', () => {
             const newContent = simpleMDE.value();
             axios.post(`/api/pages/${pageId}`, { content: newContent })
@@ -35,7 +33,7 @@ const NormalTemplates = ({ pageId, groupId }) => {
                 .catch(error => console.error('Save error', error));
         });
 
-        // 단축기 설정
+        // 단축키 설정
         const editorInstance = simpleMDE.codemirror;
         editorInstance.setOption('extraKeys', {
             'Ctrl-B': () => {
