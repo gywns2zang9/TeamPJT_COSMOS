@@ -51,8 +51,8 @@ function CreateItemModal({ show, handleClose, handleSave, nameValue, setNameValu
                                 type="radio"
                                 label="개요페이지"
                                 name="itemType"
-                                value="OVERVIEW"
-                                checked={typeValue === "OVERVIEW"}
+                                value="TIMEOVERVIEW"
+                                checked={typeValue === "TIMEOVERVIEW"}
                                 onChange={handleTypeChange}
                             />
                         </Form.Group>
