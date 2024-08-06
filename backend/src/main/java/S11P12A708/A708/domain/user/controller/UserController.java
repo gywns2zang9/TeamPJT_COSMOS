@@ -2,6 +2,7 @@ package S11P12A708.A708.domain.user.controller;
 
 import S11P12A708.A708.domain.user.request.ChangePwRequest;
 import S11P12A708.A708.domain.user.request.ChangeUserRequest;
+import S11P12A708.A708.domain.user.response.UserCode;
 import S11P12A708.A708.domain.user.response.UserInfo;
 import S11P12A708.A708.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -22,6 +25,12 @@ public class UserController {
     public ResponseEntity<UserInfo> getUserInfo(@PathVariable Long userId) {
         final UserInfo userInfo = userService.getUserInfoByUserId(userId);
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/codes")
+    public ResponseEntity<List<UserCode>> getUserCode(@PathVariable Long userId) {
+        final List<UserCode> userCode = userService.getUserCodeByUserID(userId);
+        return new ResponseEntity<>(userCode, HttpStatus.OK);
     }
 
     @PatchMapping("/{userId}")
