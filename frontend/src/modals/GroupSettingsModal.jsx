@@ -72,6 +72,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
     const handleLeaveGroup = async () => {
         try {
             await outGroup({ groupId });
+            navigate('/group')
             handleClose();
             navigate("../")
         } catch (err) {

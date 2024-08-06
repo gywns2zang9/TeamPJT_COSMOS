@@ -16,7 +16,7 @@ function Calendar({ groupId }) {
   const [currentEvent, setCurrentEvent] = useState({ title: '', start: '', description: '' });
   const [isEditing, setIsEditing] = useState(false);
   const [currentEventId, setCurrentEventId] = useState(null);
-  
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -52,7 +52,7 @@ function Calendar({ groupId }) {
     setIsEditing(true);
     setShowModal(true);
   };
-  
+
   const formatDateToMySQL = (isoDate) => {
     const date = new Date(isoDate);
     const year = date.getFullYear();
@@ -69,7 +69,6 @@ function Calendar({ groupId }) {
       const eventDate = new Date(currentEvent.start);
       const formattedDate = formatDateToMySQL(eventDate);
       if (isEditing) {
-        console.log(currentEvent);
         await updateCalendarSchedule({
           groupId,
           calendarId: currentEventId,
@@ -77,7 +76,7 @@ function Calendar({ groupId }) {
           memo: currentEvent.description,
           time: formattedDate
         });
-        setEvents(events.map(event => 
+        setEvents(events.map(event =>
           event.id === currentEventId ? { ...currentEvent, id: currentEventId } : event
         ));
       } else {
@@ -85,7 +84,7 @@ function Calendar({ groupId }) {
           groupId,
           title: currentEvent.title,
           memo: currentEvent.description,
-          time: new Date(currentEvent.start).toISOString()
+          time: new Date(currentEvent.start)
         });
         setEvents([...events, { ...currentEvent, id: response.calendarId }]);
       }
@@ -127,7 +126,7 @@ function Calendar({ groupId }) {
         <div
           className="fc-daygrid-day-number"
           onClick={(e) => {
-            e.stopPropagation(); 
+            e.stopPropagation();
             handleDateClick(dayCellContent.date);
           }}
         >
@@ -143,7 +142,7 @@ function Calendar({ groupId }) {
         plugins={plugins}
         initialView="dayGridMonth"
         events={events}
-        headerToolbar={{ 
+        headerToolbar={{
           left: "title",
           right: "dayGridMonth,timeGridWeek,timeGridDay today,addEventButton"
         }}
@@ -169,13 +168,13 @@ function Calendar({ groupId }) {
           day: "일별",
           list: "리스트"
         }}
-        dateClick={(e) => e.jsEvent.stopPropagation()} 
+        dateClick={(e) => e.jsEvent.stopPropagation()}
         eventClick={handleEventClick}
         eventContent={renderEventContent}
         expandRows={true}
-        dayMaxEventRows={false} 
+        dayMaxEventRows={false}
         dayMaxEvents={false}
-        dayCellContent={renderDayCellContent} 
+        dayCellContent={renderDayCellContent}
       />
 
       <CalendarModal

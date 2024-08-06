@@ -54,6 +54,17 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<TeamUser> teamUsers = new ArrayList<>();
 
+    public User(String email, String password, UserType type, String nickname, String gitId, String repo) {
+        this.email = email;
+        this.password = password;
+        this.type = type;
+        this.nickname = nickname;
+        this.gitId = gitId;
+        this.repo = repo;
+        this.createdAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
+    }
+
     public User(String email, String password, UserType type, String nickname) {
         this.email = email;
         this.password = password;
