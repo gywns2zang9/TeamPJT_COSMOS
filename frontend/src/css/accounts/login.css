@@ -1,0 +1,177 @@
+/* src/css/accounts/login.css */
+#login-container {
+  display: flex;
+  justify-content: center; /* 수평 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  min-height: 100vh; /* 최소 높이를 뷰포트 높이로 설정 */
+  background: linear-gradient(
+    180deg,
+    #0d0220 0%,
+    #0d0220de 100%
+  ); /* 배경 그라데이션 */
+}
+
+#login-box {
+  background-color: #0d0220; /* 배경색 설정 */
+  border: 1px solid #f5f5f5; /* 테두리 설정 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  margin: 50px;
+  padding: 24px; /* 내부 여백 설정 */
+  width: 100%; /* 너비를 100%로 설정 */
+  max-width: 500px; /* 최대 너비를 500px로 설정 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 설정 */
+  box-sizing: border-box; /* 패딩과 테두리를 포함한 너비 계산 */
+  display: flex;
+  flex-direction: column; /* 세로 방향으로 배치 */
+  align-items: center; /* 수평 중앙 정렬 */
+}
+
+#login-title {
+  font-size: 24px; /* 글꼴 크기 설정 */
+  font-weight: 500; /* 글꼴 두께 설정 */
+  color: #fff; /* 글꼴 색상 설정 */
+  margin-bottom: 24px; /* 하단 여백 설정 */
+  text-align: center; /* 중앙 정렬 */
+}
+
+#login-email-group,
+#login-pw-group,
+#login-btn {
+  width: 100%; /* 너비를 100%로 설정 */
+  max-width: 400px; /* 최대 너비를 400px로 설정 */
+  margin: 10px; /* 상하좌우 여백 10px */
+}
+
+#login-email-group,
+#login-pw-group {
+  display: flex;
+  flex-direction: column; /* 세로 방향으로 배치 */
+  align-items: flex-start; /* 왼쪽 정렬 */
+}
+
+#login-btn {
+  padding: 12px; /* 내부 여백 설정 */
+  background-color: #d9d9d9; /* 배경색 설정 */
+  border: none; /* 테두리 제거 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  font-size: 16px; /* 글꼴 크기 설정 */
+  font-family: "Inter", sans-serif; /* 글꼴 패밀리 설정 */
+  cursor: pointer; /* 커서를 포인터로 변경 */
+}
+
+#login-email-label,
+#login-pw-label {
+  display: block; /* 블록 요소로 설정 */
+  margin-bottom: 8px; /* 하단 여백 설정 */
+  color: #fff; /* 글꼴 색상 설정 */
+  font-size: 16px; /* 글꼴 크기 설정 */
+  font-family: "Inter", sans-serif; /* 글꼴 패밀리 설정 */
+  text-align: left; /* 왼쪽 정렬 */
+}
+
+#login-email-input,
+#login-pw-input {
+  width: 100%;
+  padding: 12px; /* 내부 여백 설정 */
+  border: 1px solid #f3f3f3; /* 테두리 설정 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  background-color: #1e1e1e; /* 배경색 설정 */
+  color: #fff; /* 글꼴 색상 설정 */
+  font-size: 16px; /* 글꼴 크기 설정 */
+  font-family: "Inter", sans-serif; /* 글꼴 패밀리 설정 */
+  box-sizing: border-box; /* 패딩과 테두리를 포함한 너비 계산 */
+}
+
+/* 비밀번호 찾기 링크 스타일 */
+#pw-find-link {
+  color: #2f95dc;
+  margin-top: 5px; /* 입력 필드와 링크 사이 여백 */
+  text-decoration: none;
+  font-size: 16px; /* 링크 폰트 사이즈 조정 */
+}
+
+#login-btn:hover {
+  background-color: #c0c0c0; /* hover 시 배경색 변경 */
+}
+
+/* 구분선 스타일 */
+#login-separator-line {
+  width: 100%;
+  height: 1px;
+  background-color: #fff; /* 구분선 색상 */
+  margin: 20px 0; /* 구분선 위아래 여백 */
+}
+
+/* 소셜 로그인 섹션 스타일 */
+#social-login-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 중앙 정렬 */
+}
+
+/* 소셜 로그인 제목 스타일 */
+#social-login-title {
+  color: #fff;
+  font-size: 16px;
+  margin-bottom: 10px; /* 제목과 버튼 사이 여백 */
+}
+
+/* 소셜 버튼 컨테이너 스타일 */
+#social-login-btns {
+  display: flex;
+  gap: 20px; /* 버튼 사이 여백 */
+}
+
+/* 소셜 버튼 스타일 */
+#social-login-btn-naver,
+#social-login-btn-kakao {
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 12px; /* 버튼 내 여백 */
+  cursor: pointer;
+  font-size: 14px; /* 버튼 텍스트 크기 */
+  color: #000;
+}
+
+/* 소셜 버튼 hover 상태 스타일 */
+#social-login-btn-naver:hover,
+#social-login-btn-kakao:hover {
+  background-color: #fff;
+}
+
+/* 네이버 버튼 색상 */
+#social-login-btn-naver {
+  background-color: #03ec66; /* 네이버 색상 */
+}
+
+/* 카카오 버튼 색상 */
+#social-login-btn-kakao {
+  background-color: #fae100; /* 카카오 색상 */
+}
+
+/* 소셜 버튼 아이콘 스타일 */
+#social-icon-naver,
+#social-icon-kakao {
+  margin-right: 8px; /* 아이콘과 텍스트 사이 여백 */
+  width: 20px; /* 아이콘 크기 조정 */
+  height: 20px;
+}
+
+/* 안내 메세지 스타일 */
+#login-error-msg {
+  margin-top: 5px; /* 입력 필드와 링크 사이 여백 */
+  margin-bottom: 0;
+  text-decoration: none;
+  font-size: 16px; /* 링크 폰트 사이즈 조정 */
+}
+
+/* 성공 */
+/* {
+  color: #2f95dc;
+} */
+
+#login-error-msg {
+  color: #d32f2f;
+}

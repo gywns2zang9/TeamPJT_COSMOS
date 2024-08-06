@@ -26,7 +26,7 @@ public class TeamAuthController {
 
     private final TeamAuthService teamAuthService;
 
-    @GetMapping("/users/{userId}/groups")
+    @GetMapping("/users/{userId}/teams")
     public ResponseEntity<List<TeamResponse>> getTeamList(
             @PathVariable Long userId) {
 
@@ -34,7 +34,7 @@ public class TeamAuthController {
         return new ResponseEntity<>(teamResponses, HttpStatus.OK);
     }
 
-    @PostMapping("/users/{userId}/group")
+    @PostMapping("/users/{userId}/team")
     public ResponseEntity<TeamIdResponse> createTeam(
             @PathVariable Long userId,
             @Valid @RequestBody TeamInfoRequest request) {
