@@ -7,8 +7,8 @@ import Error404 from "../components/error/Error404";
 const GroupRoutes = () => (
   <Routes>
     <Route path="/" element={<GroupPageView />} />
-    <Route path="/:groupId/main" element={<GroupDetailView />} />
-    <Route path="/:groupId/overview" element={<GroupDetailView />} />
+    <Route path="/:groupId/main/:fileId" element={<GroupDetailView />} />
+    <Route path="/:groupId/overview/:fileId" element={<GroupDetailView />} />
     <Route path="/:groupId/:fileId" element={<GroupDetailView />} />
     <Route path="/:groupId/code/:fileId" element={<GroupDetailView />} />
     <Route path="/:groupId/time-overview/:fileId" element={<GroupDetailView />} />

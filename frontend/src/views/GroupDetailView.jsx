@@ -6,7 +6,7 @@ import '../css/group/groupDetail.css';
 import useGroupStore from "../store/group.js";
 
 const GroupDetailView = () => {
-    const { pageId, groupId } = useParams();
+    const { fileId, groupId } = useParams();
 
     const location = window.location.pathname;
     const [loadedType, setLoadedType] = useState('main');
@@ -14,8 +14,7 @@ const GroupDetailView = () => {
     let type;
 
     useEffect(() => {
-        console.log(groupId, pageId);
-        setLoadedType(getFile({ groupId, fileId:pageId }));
+        setLoadedType(getFile({ groupId, fileId }));
     }, [getFile]);
 
     switch (loadedType) {
@@ -35,7 +34,7 @@ const GroupDetailView = () => {
             type = 'normal';
             break;
         default:
-            type = 'normal';
+            type = 'main';
     }
 
     if (location) {
@@ -59,7 +58,7 @@ const GroupDetailView = () => {
                 <SideBar groupId={groupId} />
             </div>
             <div id='group-detail-info-page'>
-                <GroupDetailInfo pageId={pageId} type={type} groupId={groupId} />
+                <GroupDetailInfo pageId={fileId} type={type} groupId={groupId} />
             </div>
         </div>
     );

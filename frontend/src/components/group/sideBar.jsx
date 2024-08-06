@@ -426,8 +426,8 @@ function SideBar({ groupId }) {
   const handleFileClick = (file) => {
     const { id, type } = file;
     const pageMap = {
-      MAIN: `/group/${groupId}/main/`,
-      OVERVIEW: `/group/${groupId}/overview/`,
+      MAIN: `/group/${groupId}/main/${id}/`,
+      OVERVIEW: `/group/${groupId}/overview/${id}/`,
       NORMAL: `/group/${groupId}/${id}/`,
       CODE: `/group/${groupId}/code/${id}/`,
       TIME_OVERVIEW: `/group/${groupId}/time-overview/${id}/`,

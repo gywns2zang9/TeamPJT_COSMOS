@@ -246,6 +246,26 @@ const useGroupStore = create((set) => ({
         }
     },
 
+    // 스터디 생성하기
+    createStudy: async ({ groupId, year, month }) => {
+        try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const url = `${BASE_URL}/teams/${groupId}/study`;
+            const data = {
+                year,
+                month
+            };
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await post(url, data, headers);
+            return response
+        } catch (err) {
+            console.log('스터디 생성 실패 -> ', err);
+            throw err;
+        }
+    },
+
     // 폴더 생성하기
     createFolder: async ({ groupId, parentId, folderName }) => {
         try {
@@ -325,9 +345,13 @@ const useGroupStore = create((set) => ({
 
     // 파일 불러오기
     getFile: async ({ groupId, fileId, folderId }) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+        };
         try {
             const url = `${BASE_URL}/teams/${groupId}/file/${fileId}`
-            const response = await get(url, {});
+            const response = await get(url, {}, headers);
             console.log(response);
             return response
         } catch (err) {
