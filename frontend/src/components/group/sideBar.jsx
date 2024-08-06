@@ -2,20 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useRef, useEffect } from "react";
 import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import {
-  FaFolderPlus,
-  FaFileAlt,
-  FaTrashAlt,
-  FaCog,
-  FaPlay,
-  FaUserPlus,
-  FaFolder,
-  FaFile,
-  FaAngleDoubleLeft,
-  FaAngleDoubleRight,
-  FaChevronDown,
-  FaChevronRight,
-} from "react-icons/fa";
+import { FaFolderPlus, FaFileAlt, FaTrashAlt, FaCog, FaPlay, FaUserPlus, FaFolder, FaFile, FaAngleDoubleLeft, FaAngleDoubleRight, FaChevronDown, FaChevronRight } from "react-icons/fa";
 import "../../css/group/sideBar.css";
 import GroupSettingsModal from "../../modals/GroupSettingsModal";
 import InviteGroupModal from "../../modals/InviteGroupModal";
@@ -23,10 +10,6 @@ import CreateItemModal from '../../modals/CreateItemModal.jsx';
 import StartVideoModal from '../../modals/StartVideoModal.jsx';
 import ItemDeleteModal from '../../modals/ItemDeleteModal.jsx';
 import useGroupStore from '../../store/group.js';
-import MainPageTemplates from './template/mainPageTemplates.jsx';
-import CodePageTemplates from './template/codePageTemplates.jsx';
-import MarkDownEditor from './template/NormalTemplates.jsx';
-import OverviewPageTemplates from './template/OverviewPageTemplates.jsx';
 
 // 초기 폴더와 파일 구조
 const initialStructure = {
@@ -36,28 +19,32 @@ const initialStructure = {
 
 function SideBar({ groupId }) {
   const loadFolderInfo = useGroupStore((state) => state.loadFolderInfo); // 폴더 정보 불러오기
-  const [isOpen, setIsOpen] = useState(true); // 사이드바 오픈 여부
   const [structure, setStructure] = useState(initialStructure); // 디렉토리 구조
-  const [showSettingsModal, setShowSettingsModal] = useState(false); // 그룹설정
-  const [showInviteModal, setShowInviteModal] = useState(false); // 그룹초대
   const [editingItemId, setEditingItemId] = useState(null); // 폴더/파일 이름변경
   const [editName, setEditName] = useState(""); // 폴더파일 이름변경
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false); // 삭제확인
-  const [itemToDelete, setItemToDelete] = useState(null); // 삭제
-  const [sidebarWidth, setSidebarWidth] = useState(250); // 사이드바 너비
   const [expandedFolders, setExpandedFolders] = useState({}); // 폴더 확장
+  // 설정
+  const [showInviteModal, setShowInviteModal] = useState(false); // 그룹초대
+  const [showSettingsModal, setShowSettingsModal] = useState(false); // 그룹설정
+  // 사이드바 크기
+  const [isOpen, setIsOpen] = useState(true); // 사이드바 오픈 여부
+  const [sidebarWidth, setSidebarWidth] = useState(250); // 사이드바 너비
   const sidebarRef = useRef(null); // 사이드바 크기조절
   const resizerRef = useRef(null); // 사이드바 크기조절
-  const navigate = useNavigate(); // 페이지 이동
-  const [showConfirmVideoStart, setShowConfirmVideoStart] = useState(false); // 화상회의 시작
-  // 아이템 생성 상태
+  // 페이지 이동
+  const navigate = useNavigate(); 
+  // 화상회의 시작
+  const [showConfirmVideoStart, setShowConfirmVideoStart] = useState(false); 
+  // 아이템 생성 및 삭제
   const [showCreateItemModal, setShowCreateItemModal] = useState(false); // 아이템 생성 모달
   const [newItemType, setNewItemType] = useState(""); // 생성할 아이템의 타입
   const [newItemParentId, setNewItemParentId] = useState(null); // 생성할 아이템의 부모 ID
-  const [newItemName, setNewItemName] = useState(""); // 생성할 아이템의 이름을
+  const [newItemName, setNewItemName] = useState(""); // 생성할 아이템의 이름
   const [rootId, setRootId] = useState(null); // 루트폴더 아이디 저장
   const createFile = useGroupStore((state) => state.createFile);
   const createFolder = useGroupStore((state) => state.createFolder);
+  const [itemToDelete, setItemToDelete] = useState(null); // 삭제
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false); // 삭제확인
 
   // 사이드바 토글
   const toggleSideBar = () => {
@@ -488,7 +475,8 @@ function SideBar({ groupId }) {
           </div>
         </div>
       )}
-
+      
+      {/* 사이드바 푸터 */}
       <div className="sidebar-footer">
         <OverlayTrigger placement="top" overlay={<Tooltip>설정</Tooltip>}>
           <Button variant="link" size="sm" onClick={handleOpenSettingsModal}>
@@ -504,6 +492,7 @@ function SideBar({ groupId }) {
 
       <div className="sidebar-resizer" ref={resizerRef}></div>
 
+      {/* 모달세팅 */}
       <GroupSettingsModal
         show={showSettingsModal}
         handleClose={handleCloseSettingsModal}
