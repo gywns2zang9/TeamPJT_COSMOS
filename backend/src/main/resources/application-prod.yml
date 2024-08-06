@@ -6,7 +6,7 @@ spring:
     password: smja mhgo oofr iykx
 
   datasource:
-    url: jdbc:mysql://i11a708.p.ssafy.io:3306/A708_prod?serverTimezone=UTC&characterEncoding=UTF-8
+    url:
     username: produser
     password: prodpass
 
@@ -27,3 +27,20 @@ logging:
 
 jwt:
   secret-key: lGmYbu6wGqW37992AMeifFGoUzlYEQyUSIoc1FCLG6g=
+
+oauth:
+  kakao:
+    client-id: 5dc1b39c3ec1e01e34200896d28b756f
+    url:
+      auth: https://kauth.kakao.com
+      api: https://kapi.kakao.com
+  naver:
+    secret: PHuFkNpuoZ
+    client-id: 6yuLNhBVLUEs87FgWVLO
+    url:
+      auth: https://nid.naver.com
+      api: https://openapi.naver.com
+
+openvidu:
+  url: https://i11a708.p.ssafy.io:8443/
+  secret: MY_SECRET
