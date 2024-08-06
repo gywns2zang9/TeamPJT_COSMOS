@@ -60,7 +60,7 @@ function SideBar({ groupId }) {
     setIsOpen(sidebarWidth > 100);
   }, [sidebarWidth]);
 
-  // 마우스 이벤트 핸들러 설정
+  // 마우스 이벤트 핸들러 설정 - TODO
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (resizerRef.current && e.buttons === 1) {
@@ -93,35 +93,31 @@ function SideBar({ groupId }) {
     };
   }, []);
 
-    // 최상위 폴더 로드
+    // 최상위 폴더 로드 - 
     useEffect(() => {
-        const loadRootFolders = async () => {
-            try {
-                const { folderId, folders, files } = await loadFolderInfo({groupId, folderId:0});
-                const rootFolder = {
-                    'type':'folder',
-                    'id':folderId,
-                    'name':'Root',
-                    'parentId':null,
-                }
-                setRootId(folderId);
-                setExpandedFolders(prev => ({
-                    ...prev,
-                    [folderId]: true,
-                }));
-                setStructure(prev => ({
-                    folders,
-                    files
-                }));
-                setStructure(prev => ({
-                    ...prev,
-                    folders: [rootFolder]
-                }));
-            } catch (err) {
-                console.error('폴더 로딩 실패 -> ', err);
-            }
-        };
-        loadRootFolders();
+      const loadRootFolder = async () => {
+          try {
+              const { folderId, folders, files } = await loadFolderInfo({ groupId, folderId: 0 });
+              const rootFolder = {
+                  type: 'folder',
+                  id: folderId,
+                  name: 'Root',
+                  parentId: null,
+              };
+              setRootId(folderId);
+              setExpandedFolders({ [folderId]: true });
+              setStructure({
+                  folders: [rootFolder, ...folders],
+                  files: files,
+              });
+          } catch (err) {
+              console.error('루트폴더 로드 실패 -> ', err);
+          }
+      };
+
+      if (structure.files.length === 0) {
+          loadRootFolder();
+      }
     }, [groupId, loadFolderInfo]);
 
   // 설정 모달
@@ -264,30 +260,64 @@ function SideBar({ groupId }) {
     setEditName("");
   };
 
-  // 폴더 확장
+  // 서브폴더 로드
+  const loadSubFolders = async (parentId) => {
+    try {
+        const { folders, files } = await loadFolderInfo({ groupId, folderId: parentId });
+        setStructure((prev) => ({
+            folders: [...prev.folders, ...folders],
+            files: [...prev.files, ...files],
+        }));
+    } catch (err) {
+        console.error('Failed to load subfolders:', err);
+    }
+  };
+
+  // 폴더 확장 - TODO
   const toggleFolderExpansion = (folderId) => {
-    setExpandedFolders((prev) => ({
-      ...prev,
-      [folderId]: !prev[folderId],
-    }));
+      const isExpanded = expandedFolders[folderId];
+      if (isExpanded) {
+          setExpandedFolders((prev) => {
+              const { [folderId]: _, ...rest } = prev;
+              return rest;
+          });
+      } else {
+          setExpandedFolders((prev) => ({
+              ...prev,
+              [folderId]: true,
+          }));
+          const hasSubFolders = structure.folders.some((folder) => folder.parentId === folderId);
+          if (!hasSubFolders) {
+              loadSubFolders(folderId);
+          }
+      }
+  };
+
+  // 파일 클릭시 페이지 전환
+  const handleFileClick = (file) => {
+    const { id, type } = file;
+    const pageMap = {
+      MAIN: `/group/${groupId}/main/${id}/`,
+      OVERVIEW: `/group/${groupId}/overview/${id}/`,
+      NORMAL: `/group/${groupId}/${id}/`,
+      CODE: `/group/${groupId}/code/${id}/`,
+      TIME_OVERVIEW: `/group/${groupId}/time-overview/${id}/`,
+    };
+    navigate(pageMap[type], { state: { fileId: id, fileName: file.name } });
   };
 
   // 폴더 렌더링
   const renderFolder = (folder) => {
     if (folder.id === rootId) {
       return (
-        <div className="sidebar-content">
-          {renderFolder(
-            structure.folders.filter((f) => f.parentId === folder.id)
-          )}
+        <div key={folder.id} className="sidebar-content">
+          {structure.folders.filter((f) => f.parentId === folder.id).map(renderFolder)}
           {renderFiles(structure.files.filter((f) => f.parentId === folder.id))}
         </div>
       );
     }
     const isExpanded = expandedFolders[folder.id] || false;
-    const childFolders = structure.folders.filter(
-      (f) => f.parentId === folder.id
-    );
+    const childFolders = structure.folders.filter((f) => f.parentId === folder.id);
     const childFiles = structure.files.filter((f) => f.parentId === folder.id);
 
     return (
@@ -409,18 +439,7 @@ function SideBar({ groupId }) {
     );
   };
 
-  // 파일 클릭시 페이지 전환
-  const handleFileClick = (file) => {
-    const { id, type } = file;
-    const pageMap = {
-      MAIN: `/group/${groupId}/main/${id}/`,
-      OVERVIEW: `/group/${groupId}/overview/${id}/`,
-      NORMAL: `/group/${groupId}/${id}/`,
-      CODE: `/group/${groupId}/code/${id}/`,
-      TIME_OVERVIEW: `/group/${groupId}/time-overview/${id}/`,
-    };
-    navigate(pageMap[type], { state: { fileId: id, fileName: file.name } });
-  };
+  
 
   return (
     <div className="sidebar" ref={sidebarRef} style={{ width: sidebarWidth }}>
@@ -469,9 +488,7 @@ function SideBar({ groupId }) {
             </OverlayTrigger>
           </div>
           <div className="folders">
-            {structure.folders
-              .filter((folder) => folder.parentId === null)
-              .map(renderFolder)}
+          {structure.folders.filter((folder) => folder.parentId === null).map(renderFolder)}
           </div>
         </div>
       )}
