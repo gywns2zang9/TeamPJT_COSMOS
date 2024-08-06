@@ -2,14 +2,14 @@ import { OpenVidu } from "openvidu-browser";
 
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Code from "../components/cenference/Code";
-import Paint from "../components/cenference/Paint";
+import Code from "../components/conference/Code";
+import Paint from "../components/conference/Paint";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
 import axios from "axios";
-import UserVideoComponent from "../components/cenference/UserVideoComponent";
+import UserVideoComponent from "../components/conference/UserVideoComponent";
 import LeaveSessionModal from "../modals/LeaveSessionModal";
 import "../css/conference/conference.css";
 
