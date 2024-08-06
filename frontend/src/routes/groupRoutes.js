@@ -7,9 +7,12 @@ import Error404 from "../components/error/Error404";
 const GroupRoutes = () => (
   <Routes>
     <Route path="/" element={<GroupPageView />} />
-    <Route path="/:groupId/:pageId" element={<GroupDetailView />} />
-    <Route path="*" element={<Error404 />} />{" "}
-    {/* 모든 경로에 대해 404 페이지 처리 */}
+    <Route path="/:groupId/main" element={<GroupDetailView />} type={'main'}/>
+    <Route path="/:groupId/overview" element={<GroupDetailView />} type={'overview'}/>
+    <Route path="/:groupId/:fileId" element={<GroupDetailView />} type={'normal'}/> 
+    <Route path="/:groupId/code/:fileId" element={<GroupDetailView />} type={'code'}/> 
+    <Route path="/:groupId/time-overview/:fileId" element={<GroupDetailView />} type={'time-overview'}/> 
+    <Route path="*" element={<Error404 />} />
   </Routes>
 );
 

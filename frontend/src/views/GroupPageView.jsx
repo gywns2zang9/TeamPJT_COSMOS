@@ -5,9 +5,11 @@ import { Card } from "react-bootstrap";
 import CreateGroupModal from '../modals/CreateGroupModal.jsx'
 import JoinGroupModal from '../modals/JoinGroupModal.jsx'
 import useGroupStore from "../store/group.js";
+import useAuthStore from "../store/auth.js";
 
-const userId = 1
+
 function GroupPageView(props) {
+    const {userId} = useAuthStore.getState().getUserInfo();
     // 그룹 목록
     const groups = useGroupStore((state) => state.groups) || [];
     const setGroups = useGroupStore((state) => state.setGroups);
@@ -18,9 +20,9 @@ function GroupPageView(props) {
             try {
                 const response = await loadGroupList( {userId} );
                 const transformedData = response.map(team => ({
-                    groupId: team.teamId,
-                    groupName: team.teamName,
-                    groupDescription: team.teamDescription,
+                    id: team.id,
+                    name: team.name,
+                    description: team.description,
                 }));
                 setGroups(transformedData);
             } catch (error) {
@@ -34,16 +36,16 @@ function GroupPageView(props) {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showJoinModal, setShowJoinModal] = useState(false);
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const handleShowCreateModal = () => setShowCreateModal(true);
-  const handleCloseCreateModal = () => setShowCreateModal(false);
+    const handleShowCreateModal = () => setShowCreateModal(true);
+    const handleCloseCreateModal = () => setShowCreateModal(false);
 
-  const handleShowJoinModal = () => setShowJoinModal(true);
-  const handleCloseJoinModal = () => setShowJoinModal(false);
+    const handleShowJoinModal = () => setShowJoinModal(true);
+    const handleCloseJoinModal = () => setShowJoinModal(false);
 
     const navigateToGroupDetail = (groupId) => {
-        navigate(`/group/${groupId}/0/`);
+        navigate(`/group/${groupId}/main/`);
     };
 
     return (
@@ -51,10 +53,10 @@ function GroupPageView(props) {
             {/* 그룹 목록 */}
             <div id="group-list">
                 {groups.map(group => (
-                    <Card key={group.groupId} onClick={() => navigateToGroupDetail(group.groupId)}>
+                    <Card key={group.id} onClick={() => navigateToGroupDetail(group.id)}>
                         <Card.Body>
-                            <Card.Title>{group.groupName}</Card.Title>
-                            <Card.Text>{group.groupDescription}</Card.Text>
+                            <Card.Title>{group.name}</Card.Title>
+                            <Card.Text>{group.description}</Card.Text>
                         </Card.Body>
                     </Card>
                 ))}    
@@ -74,14 +76,14 @@ function GroupPageView(props) {
                 </Card>
             </div>
 
-      {/* 그룹 모달 컴포넌트 렌더링 */}
-      <CreateGroupModal
-        show={showCreateModal}
-        handleClose={handleCloseCreateModal}
-      />
-      <JoinGroupModal show={showJoinModal} handleClose={handleCloseJoinModal} />
-    </>
-  );
+        {/* 그룹 모달 컴포넌트 렌더링 */}
+        <CreateGroupModal
+            show={showCreateModal}
+            handleClose={handleCloseCreateModal}
+        />
+        <JoinGroupModal show={showJoinModal} handleClose={handleCloseJoinModal} />
+        </>
+    );
 }
 
 export default GroupPageView;

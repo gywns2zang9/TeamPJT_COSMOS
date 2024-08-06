@@ -3,29 +3,36 @@ import { Modal, Button } from 'react-bootstrap';
 import '../css/group/style.css';
 import useGroupStore from '../store/group';
 import { useNavigate } from 'react-router-dom';
+import useAuthStore from '../store/auth.js'
 
 function CreateGroupModal({ show, handleClose }) {
+    const {userId} = useAuthStore.getState().getUserInfo()
     const navigate = useNavigate();
 
     // 그룹이름과 그룹설명 변수 세팅
     const [groupName, setGroupName] = useState('');
     const [description, setDescription] = useState('');
     
-    // 로그인된 사용자 정보에서 userId 받아오기
-    const userId = 1;
-
     // 그룹생성함수 import
     const makeGroup = useGroupStore((state) => state.makeGroup);
 
-    // 요청하기, 성공시 그룹 내부 페이지 이동하기 
+    // base폴더 만들기
+    const makeMainFolder = useGroupStore((state) => state.createFolder)
+
+    // 메인페이지 만들기
+    const makeMainPage = useGroupStore((state) => state.createFile)
+    const fileText = ''
+
+    // 요청하기, 성공시 1. base폴더 만들고 2. 메인페이지 만들고 3. 그룹 내부 페이지 이동하기 
     const handleGreateGroup = async () => {
         try {
-            console.log(userId, groupName, description);
             const response = await makeGroup({ userId, groupName, description });
             console.log('그룹 생성 완료', response);
             handleClose(); // 모달 닫기
             const groupId = response.teamId;
-            navigate(`/group/${groupId}/0/`)
+            // await makeMainFolder({ groupId, parentId:0, folderName:"base" });
+            // await makeMainPage({ groupId, folderId:0, fileName:"mainPage", file:fileText });
+            navigate(`/group/${groupId}/main/`)
         } catch (err) {
             console.log('그룹 생성 실패', err);
         }

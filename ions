@@ -1,0 +1,1327 @@
+[33mcommit 1114b7848b80f32f2145afe6ae46439778ff7ea0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mFE-snsLogin-S11P12A708[m[33m, [m[1;31morigin/FE-snsLogin-S11P12A708[m[33m)[m
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Fri Aug 2 16:04:20 2024 +0900
+
+    fix: group error
+
+[33mcommit 36992099ef543fb7fb01cf0b99b59e4efa49101c[m
+Merge: 04568a5 748ee2f
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Fri Aug 2 15:18:10 2024 +0900
+
+    Merge remote-tracking branch 'origin/front-develop' into FE-snsLogin-S11P12A708
+
+[33mcommit 748ee2f3c6c30e3a462124daefdccac5059982fa[m[33m ([m[1;31morigin/front-develop[m[33m)[m
+Merge: 6b95f18 5ec4a1d
+Author: 정호성 <ghtjd1551@naver.com>
+Date:   Fri Aug 2 13:50:16 2024 +0900
+
+    Merge branch 'FE-groupAPI-S11P12A708-74' into 'front-develop'
+    
+    fix: groupPage API
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!41
+
+[33mcommit 04568a5d6fbb8c78cfa0a059663d66cb81f65875[m
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Fri Aug 2 13:47:34 2024 +0900
+
+    fix: kakao-login
+
+[33mcommit 5ec4a1de89d7feae6854a6fd4c56c6d7e51e2bf0[m[33m ([m[1;31morigin/FE-groupAPI-S11P12A708-74[m[33m)[m
+Merge: 6bd7f88 ba839b1
+Author: JHS <ghtjd1551@naver.com>
+Date:   Fri Aug 2 13:15:12 2024 +0900
+
+    Merge branch 'back-develop' into FE-groupAPI-S11P12A708-74
+
+[33mcommit ba839b14a779f7c07d8b77546383c38f4aa1ebb6[m[33m ([m[1;31morigin/back-develop[m[33m)[m
+Merge: 40b8f81 425a74b
+Author: 곽지혁 <kwlgur0416@gmail.com>
+Date:   Fri Aug 2 13:04:33 2024 +0900
+
+    Merge branch 'BE-Folder-S11P23A708-74' into 'back-develop'
+    
+    feat : folder create, read, delete api
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!40
+
+[33mcommit 425a74be39e129f5b761903c60b91220a476b973[m
+Merge: 0a720cc 40b8f81
+Author: 곽지혁 <kwlgur0416@gmail.com>
+Date:   Fri Aug 2 11:30:16 2024 +0900
+
+    Merge branch 'back-develop' into 'BE-Folder-S11P23A708-74'
+    
+    # Conflicts:
+    #   backend/src/main/java/S11P12A708/A708/common/error/ErrorCode.java
+    #   backend/src/main/java/S11P12A708/A708/domain/team/service/TeamAuthService.java
+
+[33mcommit 6bd7f8843daaa3d5b041c32383ed816c16cccf60[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Fri Aug 2 11:27:04 2024 +0900
+
+    design:sidebarUI
+
+[33mcommit 0a720ccb3321aa672582b5136f4bc344713d8fcc[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Fri Aug 2 11:18:25 2024 +0900
+
+    feat : folder create, read, delete api
+
+[33mcommit a601d4c3478f9d0400098b378b5234905d710142[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Fri Aug 2 11:13:58 2024 +0900
+
+    comment:delete quote
+
+[33mcommit 9907d6e66978ae89c8965f685d6d5214f3f7dcca[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Fri Aug 2 11:09:04 2024 +0900
+
+    fix:createItem
+
+[33mcommit 0bbf8a6663d4928f6e9bc621dfc23c248b6ea008[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Fri Aug 2 11:02:09 2024 +0900
+
+    feat: can select file type
+
+[33mcommit 40b8f81a3e92ae28aefc0ba9447c8ae144333784[m[33m ([m[1;31morigin/BE-chatGptS11P12A708-225-chatgpt-ai[m[33m)[m
+Merge: e5ca046 07c0077
+Author: 김도한 <oneblue14@gmail.com>
+Date:   Fri Aug 2 10:21:53 2024 +0900
+
+    Merge branch 'BE-crawlend-S11P12A708-172-api' into 'back-develop'
+    
+    add code Crawler
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!39
+
+[33mcommit 4c1da3c27e2ed51baff754ef43ef8086980ec95b[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Fri Aug 2 10:20:10 2024 +0900
+
+    style:delete console.log
+
+[33mcommit 07c007719031f254d1d6809b25875b25ba990a09[m
+Author: oneblue14 <oneblue14@gmail.com>
+Date:   Fri Aug 2 10:12:30 2024 +0900
+
+    add code Crawler
+
+[33mcommit 1d1bc52cbced66eb3f1d2f0d8d58f0360f965b78[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Fri Aug 2 10:07:56 2024 +0900
+
+    Rename:component/group/template
+
+[33mcommit e5ca046a69ea698779f619b734c02727544bd69b[m[33m ([m[1;31morigin/BE-excute-code-S11P12A708-92[m[33m, [m[1;31morigin/BE-CodeCrawler-S11P12A708-172-api[m[33m)[m
+Merge: aa2ad43 925367b
+Author: 정예은 <skqhs7276@gmail.com>
+Date:   Fri Aug 2 09:35:57 2024 +0900
+
+    Merge branch 'BE-invite-nickname-S11P12A708-106' into 'back-develop'
+    
+    Get user list using nickname
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!38
+
+[33mcommit 0c491e5366c0aa2ce38c7e5a0c887eb41b663afd[m
+Merge: 2587b46 8e74fc9
+Author: JHS <ghtjd1551@naver.com>
+Date:   Fri Aug 2 09:13:34 2024 +0900
+
+    Merge branch 'master' into FE-groupAPI-S11P12A708-74
+
+[33mcommit 925367b47f870bf66c02363fbc18081bb042b9d8[m
+Merge: a553e49 aa2ad43
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Fri Aug 2 09:10:58 2024 +0900
+
+    chore: merge back develop
+
+[33mcommit a553e497fc318cd9bb2b119ee78cc68f6d084ba9[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Fri Aug 2 09:09:53 2024 +0900
+
+    feat: get user list using nickname without same group members
+
+[33mcommit 3924b4e51d38c635d9cfda8e6a4088565a8e4c71[m
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Fri Aug 2 08:19:53 2024 +0900
+
+    "feat: kakaologin"
+
+[33mcommit aa2ad43dfb2de0d67b7dcb6ca2db4b8ff5317bdb[m[33m ([m[1;31morigin/BE-codeCrawl-S11P12A708-172-api[m[33m)[m
+Merge: 0582ec1 5b18ee4
+Author: 곽지혁 <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 23:18:58 2024 +0900
+
+    Merge branch 'BE-calendar-S11P12A708' into 'back-develop'
+    
+    refactor : set format of calendar time
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!37
+
+[33mcommit 5b18ee43690507b0027527a48275d5344b9d70ad[m
+Author: kwlgur0416@gmail.com <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 22:52:02 2024 +0900
+
+    refactor : set format of calendar time
+
+[33mcommit 0582ec1fadb6ba719c197b0d1c554def5550d9c0[m
+Merge: 9b57ad6 21cf654
+Author: 정예은 <skqhs7276@gmail.com>
+Date:   Thu Aug 1 21:50:05 2024 +0900
+
+    Merge branch 'BE-invite-email-S11P12A708-128' into 'back-develop'
+    
+    invite to team through email
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!36
+
+[33mcommit 21cf65484ec247754e3bd2a448f42072c21752a6[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Aug 1 21:49:23 2024 +0900
+
+    test: remove test log
+
+[33mcommit 79003de2c90055d02763980e0adc4eb2707e4e68[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Aug 1 19:37:24 2024 +0900
+
+    feat: invite users to send emails
+
+[33mcommit f5af77adf72c032b75201fe269d1d9fa4ff0af4a[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Aug 1 19:36:42 2024 +0900
+
+    rename: modify auth mail structure
+
+[33mcommit 98e760440dc623acf53a853a35978c93bb4d5792[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Aug 1 19:29:52 2024 +0900
+
+    faet: create invite email html
+
+[33mcommit 2587b465b1c0ae0d6fc16d872679ed3f9e32ed87[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Thu Aug 1 17:55:06 2024 +0900
+
+    fix: calendarAPI
+
+[33mcommit d83184faf53244eca4287124a70cb452878ee586[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Thu Aug 1 16:51:23 2024 +0900
+
+    feat: groupMainPage groupDetailInfo
+
+[33mcommit e1ddbba0f2a1b7633260de62f632c7d456add3ab[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Thu Aug 1 16:49:56 2024 +0900
+
+    feat: group main page_group detail info
+
+[33mcommit 8e74fc9fc87085b3623782e93a5902a42032e739[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Merge: 79772eb ec939f6
+Author: 곽지혁 <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 16:41:54 2024 +0900
+
+    Merge branch 'BE-Team-S11P12A708' into 'master'
+    
+    refactor : change group to team
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!34
+
+[33mcommit ec939f66dc452add62d7ba80c91d997175e1d8c1[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 16:38:41 2024 +0900
+
+    refactor : change group to team
+
+[33mcommit 79772ebbbb2e2914d6a3a09bf7e37870501cfd4a[m
+Merge: ed83ef3 5d8bc86
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 16:24:36 2024 +0900
+
+    fix : add openvidu-browser lib
+
+[33mcommit 5d8bc8606b0227c1614b2e9758e10a846bd55d04[m
+Merge: a655993 6b95f18
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 14:57:48 2024 +0900
+
+    Merge branch 'front-develop' of https://lab.ssafy.com/s11-webmobile1-sub2/S11P12A708 into front-develop
+
+[33mcommit 6b95f184c3f1c545d5e19b2c114008acd76284de[m
+Author: kyungkeun <wlrudrms19@naver.com>
+Date:   Thu Aug 1 14:55:49 2024 +0900
+
+    fix : openvidu-browser install error
+
+[33mcommit ed83ef30c3ba8a35b0da0dc8578af8413bda3666[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 14:31:11 2024 +0900
+
+    refactor : edit conference server api url
+
+[33mcommit 3ad6ff059a3f4d7503733b7f54e22d1d6e749e17[m
+Merge: 65a7896 1f6e1e7
+Author: JHS <ghtjd1551@naver.com>
+Date:   Thu Aug 1 14:29:12 2024 +0900
+
+    Merge branch 'front-develop' into FE-groupAPI-S11P12A708-74
+
+[33mcommit 62049516c8ee26892c58e963c68fa39dff5fb703[m
+Merge: 01c1e57 a655993
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 14:26:37 2024 +0900
+
+    Merge branch 'front-develop'
+
+[33mcommit 01c1e57dc7f3a70d1f4c02d7ab59b0bc9a5dcf6d[m
+Merge: 5823494 9b57ad6
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 14:26:18 2024 +0900
+
+    Merge branch 'back-develop'
+
+[33mcommit a6559933493f436a51bfc5349dd2cb882d7026f1[m
+Merge: 5823494 1f6e1e7
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 14:25:44 2024 +0900
+
+    Merge branch 'front-develop' of https://lab.ssafy.com/s11-webmobile1-sub2/S11P12A708 into front-develop
+
+[33mcommit 9b57ad6cb424780b949611f73c19e11f20fefc01[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 14:24:26 2024 +0900
+
+    feat : open url of openvidu
+
+[33mcommit 5717509add82f6ea9e3e3c9061cf7f5d2a58339b[m
+Merge: fc9bb19 d508642
+Author: 곽지혁 <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 14:21:32 2024 +0900
+
+    Merge branch 'BE-openvidu-S11O12A708' into 'back-develop'
+    
+    Basic Code of Openvidu
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!28
+
+[33mcommit 1f6e1e76a6a8a961857a8fea4d5c99278dacf049[m
+Merge: 6835d0d 2eafe3d
+Author: 곽지혁 <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 14:06:08 2024 +0900
+
+    Merge branch 'FE-conference-S11P12A708-224' into 'front-develop'
+    
+    Feat: openvidu2 conference added
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!33
+
+[33mcommit 2eafe3d7957f39fe6c091bfff669a31c710dddf1[m
+Author: kyungkeun <wlrudrms19@naver.com>
+Date:   Thu Aug 1 14:05:23 2024 +0900
+
+    Feat: OpenVidu2 conference added
+
+[33mcommit e15f22353ea711a3494bb310ef7f618dc70494fa[m
+Author: kyungkeun <wlrudrms19@naver.com>
+Date:   Thu Aug 1 13:51:56 2024 +0900
+
+    Feat: openvidu2 conference added
+
+[33mcommit fc9bb1996afed6d6b0c25f250d6351c4d509eb79[m
+Merge: 012bbbe 8310de0
+Author: 김도한 <oneblue14@gmail.com>
+Date:   Thu Aug 1 13:27:40 2024 +0900
+
+    Merge branch 'BE-pbCrawl-S11P12A708-170-api' into 'back-develop'
+    
+    add problem crawler
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!32
+
+[33mcommit 8310de0b787dbcb81ff7bfba2dc75076a66b650d[m
+Author: oneblue14 <oneblue14@gmail.com>
+Date:   Thu Aug 1 13:13:59 2024 +0900
+
+    feat: add problem crawler
+
+[33mcommit 5823494d122d6ac91b2a62f897d8b5c6406d3dc4[m
+Merge: d9f4688 6835d0d
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 12:54:53 2024 +0900
+
+    Merge branch 'front-develop'
+
+[33mcommit 65a7896e7c1f563e4830acf8f26d3cf856cfb0e2[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Thu Aug 1 12:53:08 2024 +0900
+
+    fix:err_modal
+
+[33mcommit d9f4688a408933524f452b97777243754828480b[m
+Merge: 0390b30 e294368
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 12:36:28 2024 +0900
+
+    Merge branch 'master' of https://lab.ssafy.com/s11-webmobile1-sub2/S11P12A708
+
+[33mcommit 0390b300003e589986d0a6c5c5b5c12d47994416[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 12:36:03 2024 +0900
+
+    refactor: front jenkins execute setting
+
+[33mcommit e294368e21dd6300457c774d70ee59c4c2c6b277[m
+Author: oneblue14 <oneblue14@gmail.com>
+Date:   Thu Aug 1 11:36:51 2024 +0900
+
+    Revert "feat: add boj problem crawling"
+    
+    This reverts commit 9f4e267185653e316da507dffef87186f18d81a5.
+
+[33mcommit 9f4e267185653e316da507dffef87186f18d81a5[m
+Author: oneblue14 <oneblue14@gmail.com>
+Date:   Thu Aug 1 11:27:44 2024 +0900
+
+    feat: add boj problem crawling
+
+[33mcommit 009a63bcaa7ea97739de8eaf7bcbd3f43208db2c[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Thu Aug 1 11:06:23 2024 +0900
+
+    fix:api
+
+[33mcommit 991dbbae3f3d4f00e0f21ff9041550b39ae6904b[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Thu Aug 1 10:35:33 2024 +0900
+
+    feat:delete_login.js
+
+[33mcommit 4d4c5ad9b9ea334f48d71b2b9807ff08ff494e70[m
+Merge: 328b3f4 6835d0d
+Author: JHS <ghtjd1551@naver.com>
+Date:   Thu Aug 1 10:32:52 2024 +0900
+
+    Merge branch 'front-develop' into FE-groupAPI-S11P12A708-74
+
+[33mcommit 6835d0d0c6c84a087e3c09ed40d0c4e58e9fe187[m
+Merge: 8c89fed e446a92
+Author: 김효준 <gywns2zang9@gmail.com>
+Date:   Thu Aug 1 10:27:58 2024 +0900
+
+    Merge branch 'FE-userinfoAPI-S11P12A708' into 'front-develop'
+    
+    Fe userinfo api
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!30
+
+[33mcommit e446a9285a1445c7896899fa9ac675d73f64a0fa[m
+Merge: 5772ce6 8c89fed
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Thu Aug 1 10:22:01 2024 +0900
+
+    Merge remote-tracking branch 'fvv/front-develop' into FE-userinfoAPI-S11P12A708
+
+[33mcommit 328b3f4aa8248f63be1d643ea3a0b27f7d4f4b82[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Thu Aug 1 10:16:50 2024 +0900
+
+    fix:headers);
+
+[33mcommit 5772ce6e8535a0ffb3985ee38f85039d390822f5[m
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Thu Aug 1 10:03:45 2024 +0900
+
+    stlye: auth.js 수정
+
+[33mcommit b61139586e4a813ab16ea704d5f1bd9bbe1e5649[m
+Merge: 8c89fed 1632ca3
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Aug 1 09:50:06 2024 +0900
+
+    Merge branch 'BE-Infra-S11P12A708-123'
+
+[33mcommit c7d2fbd490c0581c1ba96551d7a5c48c87314904[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Thu Aug 1 09:17:41 2024 +0900
+
+    fix:api_err_solve
+
+[33mcommit 8c89fed11193ce038d33bdc7d4b20a7db6136a6c[m
+Merge: a077f2f 115e2bb
+Author: 정호성 <ghtjd1551@naver.com>
+Date:   Thu Aug 1 08:25:23 2024 +0900
+
+    Merge branch 'FE-groupAPI-S11P12A708-74' into 'front-develop'
+    
+    fix some error and add backend
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!29
+
+[33mcommit 115e2bbb30530e18da7a8480dc752f103198371c[m
+Merge: 860ca92 012bbbe
+Author: JHS <ghtjd1551@naver.com>
+Date:   Thu Aug 1 08:22:46 2024 +0900
+
+    fix:solve_error&merge
+
+[33mcommit 1632ca3b13963fbf60a660994b67bd2ad98b1bff[m[33m ([m[1;31morigin/BE-Infra-S11P12A708-123[m[33m)[m
+Author: kwlgur0416@gmail.com <kwlgur0416@gmail.com>
+Date:   Wed Jul 31 23:36:32 2024 +0900
+
+    feat : add infra settings for ci/cd
+
+[33mcommit d72bafeccc3df6efdd5218e1f8e4dcdf71a1b4ae[m
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Wed Jul 31 17:40:48 2024 +0900
+
+    style: 코드 스타일 수정
+
+[33mcommit d508642a7043b6d1280e4c33c8242f413e377def[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Wed Jul 31 17:02:06 2024 +0900
+
+    feat : basic code of openvidu
+
+[33mcommit b1410d21d7c8472c83da64424f73ed5199cb28a7[m
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Wed Jul 31 16:47:18 2024 +0900
+
+    style: 코드 스타일 수정
+
+[33mcommit 860ca92b03fbeb9ee34c3e3e1075c66a829c6e4b[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Wed Jul 31 16:31:25 2024 +0900
+
+    design:logo
+
+[33mcommit f9097b657f189b7964bf1a4e6335f36cf777d77b[m
+Merge: 49bcdcf 92692d3
+Author: JHS <ghtjd1551@naver.com>
+Date:   Wed Jul 31 16:30:30 2024 +0900
+
+    design:web-logo
+    merge commited by hj
+
+[33mcommit 49bcdcfc87eff27418879ca716222ddd463afc41[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Wed Jul 31 16:04:32 2024 +0900
+
+    fix:group-api-update
+
+[33mcommit 92692d3f0941cbef998c846bd605028d5d04bb5a[m
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Wed Jul 31 15:49:00 2024 +0900
+
+    feat: userAPI 연결
+
+[33mcommit 012bbbe34cacc6ff940bd1dd4f9db3bfd72dda42[m
+Merge: 2420aba ab3fb34
+Author: 정예은 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 15:49:21 2024 +0900
+
+    Merge branch 'BE-user-info-patch-S11P12A708-53' into 'back-develop'
+    
+    change and delete user info
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!26
+
+[33mcommit bfef3c037dbe093138b4d962423e8c2cbd985b59[m
+Merge: d1bb64a a077f2f
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Tue Jul 30 15:48:48 2024 +0900
+
+    tmp: merged
+
+[33mcommit ab3fb34064db799464aaaba006831ac9f4283f0f[m
+Merge: d09dac1 2420aba
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 15:35:46 2024 +0900
+
+    Merge branch 'back-develop' into BE-user-info-patch-S11P12A708-53
+
+[33mcommit d09dac199a919efa2e2ad4aaae69dae2b5687bd9[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 15:35:10 2024 +0900
+
+    feat: delete user function
+
+[33mcommit d1bb64aea9abaeebe1a34a60e837295513c5e5c6[m
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Tue Jul 30 15:32:04 2024 +0900
+
+    Feat: 회원가입&로그인 API연결
+
+[33mcommit 2420abafc766766327cb01f6cf89f64e962d4e6f[m
+Merge: 0396bc1 5e11135
+Author: 곽지혁 <kwlgur0416@gmail.com>
+Date:   Tue Jul 30 15:24:06 2024 +0900
+
+    Merge branch 'BE-Team-S11P12A708-56' into 'back-develop'
+    
+    Check login user's team info permission and add teamCode join api
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!23
+
+[33mcommit 5e1113583c8367d0f403cdd564e99ea78a7c0b38[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Tue Jul 30 15:20:59 2024 +0900
+
+    refactor : modify error code and add seed data
+
+[33mcommit cedb93533245b2dadc1f244f972c5f891ff63a41[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 15:20:47 2024 +0900
+
+    feat: modfiy user infomation api
+
+[33mcommit e9797a3bba29802e8da88e9479024695d3f16445[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Tue Jul 30 15:14:38 2024 +0900
+
+    refactor : add test user
+
+[33mcommit 91b645874a6adde9421e225ed52ffc209b2a7760[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Tue Jul 30 15:14:26 2024 +0900
+
+    feat : Team join api
+
+[33mcommit eec57bb4c4f48e77adde0dac8ee6890d5b8534ad[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Tue Jul 30 14:44:23 2024 +0900
+
+    refactor : Team create api return TeamIdResponse
+
+[33mcommit 0396bc1018f214b2158153381d3c62e4d32c5b9b[m
+Merge: d91d0c7 b7bbb3c
+Author: 정예은 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 14:44:07 2024 +0900
+
+    Merge branch 'fix-email' into 'back-develop'
+    
+    rest api: authcode change get to post
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!25
+
+[33mcommit b7bbb3cd1ad1f6134fd877f8c06bc652dac5f8bf[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 14:38:01 2024 +0900
+
+    fix: verify mail authcode change get to post
+
+[33mcommit a077f2f0ae2db811c4a128c9d172fec9c1085d61[m
+Merge: b49cb10 fb09fb6
+Author: 정호성 <ghtjd1551@naver.com>
+Date:   Tue Jul 30 14:16:11 2024 +0900
+
+    Merge branch 'FE-groupAPI-S11P12A708-74' into 'front-develop'
+    
+    Feat:adjustingAPI
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!24
+
+[33mcommit a70f8480b7b4dc7eb949d2b8af252e45a1210012[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Tue Jul 30 13:59:35 2024 +0900
+
+    refactor : remove TODO List
+
+[33mcommit d91d0c7ea9c4140183cd4c4eb8fd77e73f61aea3[m
+Merge: f3380a7 711489e
+Author: 정예은 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 13:55:49 2024 +0900
+
+    Merge branch 'BE-signup-nickname-S11P12A708-12' into 'back-develop'
+    
+    nickname check at sign up
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!22
+
+[33mcommit fb09fb6cc0897c44944a3438a87ba14bef88602e[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Tue Jul 30 13:52:15 2024 +0900
+
+    feat:calendar
+    일정받기,추가,수정,삭제 api 연결
+
+[33mcommit 711489edea305f546ffeeff3296d5b4e5ab1d40d[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 13:47:34 2024 +0900
+
+    feat: seperate nickname check from signup
+
+[33mcommit d427f01bc06f1de0b710d8b8505151912eef4830[m
+Merge: 8957ab5 f3380a7
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Tue Jul 30 13:43:03 2024 +0900
+
+    Merge branch 'back-develop' of https://lab.ssafy.com/s11-webmobile1-sub2/S11P12A708 into BE-Team-S11P12A708-56
+    
+    # Conflicts:
+    #       backend/src/main/java/S11P12A708/A708/common/error/ErrorCode.java
+    #       backend/src/main/java/S11P12A708/A708/domain/team/service/TeamAuthService.java
+
+[33mcommit 8957ab5f17659da04733ecca8aa80e2b79e79ad9[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Tue Jul 30 13:39:39 2024 +0900
+
+    feat : check permission of team info
+
+[33mcommit f3380a7c60be554b36ce5c61608bf3898d9ec6df[m
+Merge: a2f64fd eaf7046
+Author: 정예은 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 13:15:48 2024 +0900
+
+    Merge branch 'BE-find-pw-S11P12A708-58-normal' into 'back-develop'
+    
+    non login user can change password
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!21
+
+[33mcommit eaf7046fbf24ac6974962c29cb9dbe6827e718f8[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 11:05:53 2024 +0900
+
+    feat: when email verfiy, change password
+
+[33mcommit 6744c3cf63c3776b7ac6cdd284b754566d4da935[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 10:48:09 2024 +0900
+
+    chore: invalid input data
+
+[33mcommit 754af26aaca59dbf99215efcecede2175b878369[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 10:47:06 2024 +0900
+
+    feat: verify email authcode when find pw
+
+[33mcommit e680cf2c4a0b2bf098226b96b6e10f70bab264e7[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 10:32:30 2024 +0900
+
+    feat: find password controller with non-login user
+
+[33mcommit 3a1336bf5741c2ff9fc0a583994192a9296e505e[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 10:30:52 2024 +0900
+
+    fix: authcode update when email re-send
+
+[33mcommit a2f64fd76e1b9d97fe87b6067f910dd2e99161d2[m
+Merge: 518e1c5 e7199d8
+Author: 정예은 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 09:42:16 2024 +0900
+
+    Merge branch 'BE-change-pw-S11P12A708-55-normal' into 'back-develop'
+    
+    로그인 유저의 비밀번호 변경
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!20
+
+[33mcommit e7199d887bcb12f686752ea52b7fdc612eb7ba11[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Tue Jul 30 09:40:23 2024 +0900
+
+    refactor: delete unnecessary AuthUser parameter
+
+[33mcommit 3174781f2bf768eaa7e04f86c4e70843dfde9164[m
+Author: kwlgur0416@gmail.com <kwlgur0416@gmail.com>
+Date:   Tue Jul 30 09:28:41 2024 +0900
+
+    test : test for TeamMain
+
+[33mcommit 4af189cc4e35e008079ab0e62db64f80911e9dd5[m
+Author: kwlgur0416@gmail.com <kwlgur0416@gmail.com>
+Date:   Tue Jul 30 09:28:17 2024 +0900
+
+    feat : check loginUser's permission about Team Info
+
+[33mcommit 6a69ddb7b015824e266620cf01a6e5a900a15c2a[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Tue Jul 30 09:08:32 2024 +0900
+
+    Feat:adjustingAPI
+    그룹생성API
+    그룹목록API
+    그룹참여API
+    그룹상세API
+    그룹설정API
+    그룹탈퇴API
+    추가
+
+[33mcommit 3434d4e5ebfe9727901cc25c9a610c6391346560[m
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Tue Jul 30 08:21:18 2024 +0900
+
+    tmp: 충돌해결
+
+[33mcommit f0b24241b7818815b7648eaabae1b375fcbf8864[m
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Tue Jul 30 08:03:08 2024 +0900
+
+    tmp: 효준
+
+[33mcommit 5501be7519f2f09a3e9ef3ce15d766624fdc35f7[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Mon Jul 29 21:34:32 2024 +0900
+
+    feat: login user change password
+
+[33mcommit b49cb10c1831ccb8cca7dff8d101b60a2892cf99[m
+Merge: 4c14521 c348394
+Author: 정호성 <ghtjd1551@naver.com>
+Date:   Mon Jul 29 19:33:41 2024 +0900
+
+    Merge branch 'FE-for-merge-0725-03' into 'front-develop'
+    
+    Feat: video, mic toggle added
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!18
+
+[33mcommit 518e1c5f172dc2be1f1a954e6184665f2986f068[m
+Merge: c57a59d a998249
+Author: 정예은 <skqhs7276@gmail.com>
+Date:   Mon Jul 29 15:56:02 2024 +0900
+
+    Merge branch 'BE-celendar-S11P12A708-78' into 'back-develop'
+    
+    feat : add calendar api
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!16
+
+[33mcommit c57a59d464688eef722f2b012b44bbc798814332[m
+Merge: 768dc59 83e6df9
+Author: 정예은 <skqhs7276@gmail.com>
+Date:   Mon Jul 29 15:55:26 2024 +0900
+
+    Merge branch 'BE-user-check-S11P12A708-48' into 'back-develop'
+    
+    전체적인 인증/인가 로직 처리
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!19
+
+[33mcommit 83e6df9b035ea163d263711de65327b55f71ac39[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Mon Jul 29 15:27:50 2024 +0900
+
+    refactor: accessToken math userId with accessToken change email to userId
+
+[33mcommit c34839470f12b315331843b8eb275bc64eeed995[m
+Author: kyungkeun <wlrudrms19@naver.com>
+Date:   Mon Jul 29 13:17:55 2024 +0900
+
+    Feat: video, mic toggle added
+
+[33mcommit 4c14521f72681c0c95a5ea95590ebb2ac08bc66a[m
+Merge: 6a755b3 b4add78
+Author: 정호성 <ghtjd1551@naver.com>
+Date:   Mon Jul 29 11:36:22 2024 +0900
+
+    Merge branch 'FE-groupList-S11P12A708-8-api' into 'front-develop'
+    
+    feat: store.js
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!17
+
+[33mcommit b4add78b1c2ccf4f80cf0d893bcae0c42f21e2e1[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Mon Jul 29 11:32:27 2024 +0900
+
+    feat:
+    store 작성
+    그룹 목록, 참여, 생성 api 연동
+
+[33mcommit 768dc592c3a9eda5fd6a0b9e791436d1e2c98995[m
+Merge: c52e78d 3697224
+Author: 정예은 <skqhs7276@gmail.com>
+Date:   Mon Jul 29 11:28:17 2024 +0900
+
+    Merge branch 'BE-signup-S11P12A708-12' into 'back-develop'
+    
+    Sign up function with email authentication
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!15
+
+[33mcommit 1ea79c17fe6adebab90b148a607d05a06d32894b[m
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Mon Jul 29 11:26:20 2024 +0900
+
+    Design: icon png 추가
+
+[33mcommit 36972247f94ff8ca07c41eebdbcf9447665fe236[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Mon Jul 29 11:22:26 2024 +0900
+
+    refactor: separate mail template
+
+[33mcommit c6d5a93b82308ac35c3931411c9e0e9287c89d2d[m
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Mon Jul 29 10:37:50 2024 +0900
+
+    Feat: accounts API 시도
+
+[33mcommit 919db7532243ca45fb7e455c02b2c732c5e5c8bd[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Mon Jul 29 10:28:58 2024 +0900
+
+    chore: main port change to ssl
+
+[33mcommit 2b301e623372ebbc8cc9250ea6ad9ce9e451cd5b[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Mon Jul 29 10:05:20 2024 +0900
+
+    fix: encrypt password of user seed data
+
+[33mcommit a998249f89e3e51eecca628653827aefadf6824f[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Mon Jul 29 09:56:10 2024 +0900
+
+    feat : add calendar api
+
+[33mcommit 12594006115f7c66fe612d6a44f8bb8e2033886b[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Fri Jul 26 16:22:59 2024 +0900
+
+    feat: add user seed data
+
+[33mcommit 8b92ee1777e9ccedab28598514e2e77b6b8c9289[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Fri Jul 26 15:48:29 2024 +0900
+
+    chore: merge back develop
+
+[33mcommit 3cb4b5ba314fc35c56a95d5d451ca8277bdb4b66[m
+Merge: 3feb579 c52e78d
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Fri Jul 26 15:48:17 2024 +0900
+
+    chore: merge back develop
+
+[33mcommit 3feb579f3460912322e147f790c9e08012effc5a[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Fri Jul 26 15:42:27 2024 +0900
+
+    feat: normal sign up function
+
+[33mcommit c52e78d04b9371331b80284e9fed0e8e15b1d8e6[m
+Merge: 1cae002 153f37c
+Author: 곽지혁 <kwlgur0416@gmail.com>
+Date:   Fri Jul 26 14:35:18 2024 +0900
+
+    Merge branch 'BE-TeamOutline-MainPage-S11P12A708-56' into 'back-develop'
+    
+    Team Main Management
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!7
+
+[33mcommit 85cbe9fc9932cbd1f978c006eb363fea50314425[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Fri Jul 26 14:07:19 2024 +0900
+
+    chore: change naver to gmail stmp
+
+[33mcommit 237bc92671d0c7ea09d3d29350d3245c3d52c3fe[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Fri Jul 26 13:28:19 2024 +0900
+
+    refactor: modfiy authcontroller response result
+
+[33mcommit c685b733e7c6d28e1c9109a2472aa597fdd6a699[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Fri Jul 26 13:23:46 2024 +0900
+
+    feat: verify email auth code
+
+[33mcommit 3c8a7c176e2d01525400d10fba9fabd3ef3b154e[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Fri Jul 26 13:23:09 2024 +0900
+
+    chore: mail expired time set to 5
+
+[33mcommit c7a8c920ccd877700fe5d2769fc7aece41234514[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Fri Jul 26 09:08:31 2024 +0900
+
+    feat: send mail function for signup
+
+[33mcommit 22a8a8a053bec94f64931f5ade024f66d2f92a1c[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Fri Jul 26 09:03:26 2024 +0900
+
+    feat: add mail init setting
+
+[33mcommit 6a755b317d6aa405fe0a84c9d73d6bb6e9547b4f[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Thu Jul 25 20:27:46 2024 +0900
+
+    design:
+    화상회의 시작하기 버튼 생성
+    화상회의 시작하기 버튼에서 마우스 커서 변경
+    userInfo에서 default 이미지 변경
+    그룹페이지 사이드바 일부 css 변경
+
+[33mcommit 153f37c8f5a128e2e3ed6e620299f4d41f798b42[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Jul 25 17:41:16 2024 +0900
+
+    rename : rename methods
+
+[33mcommit 170f93b56a61ecc7edc724a7ce8921f7ba450f92[m[33m ([m[1;31morigin/FE-GroupPageUI-S11P12A708-74[m[33m)[m
+Merge: e4abecd 49a72df
+Author: 지경근 <wlrudrms19@naver.com>
+Date:   Thu Jul 25 17:34:19 2024 +0900
+
+    Merge branch 'FE-for-merge-0725-03' into 'front-develop'
+    
+    Fe for merge 0725 03
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!14
+
+[33mcommit 49a72dfc7c01600dd11ac5f1d00ae6cb5a82c840[m
+Merge: e90f454 e4abecd
+Author: kyungkeun <wlrudrms19@naver.com>
+Date:   Thu Jul 25 17:31:31 2024 +0900
+
+    merge by kk
+
+[33mcommit e4abecd2aab9beae9252d49f27e5fbe59efa211e[m
+Author: 김효준 <gywns2zang9@gmail.com>
+Date:   Thu Jul 25 17:12:52 2024 +0900
+
+    FIX:
+    error resolve
+
+[33mcommit f29fd8e5787fa08f82ee22148b074d553a309def[m
+Merge: 99fc95c 451d21c
+Author: 김효준 <gywns2zang9@gmail.com>
+Date:   Thu Jul 25 17:06:13 2024 +0900
+
+    Merge branch 'FE-for-merge-0725-02' into 'front-develop'
+    
+    Fe for merge 0725 02
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!11
+
+[33mcommit 451d21c4c2087c6d6e8d5a6add731a0c77bfd6a4[m
+Merge: 99fc95c 9cb2e5b
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Thu Jul 25 17:02:53 2024 +0900
+
+    Merge branch 'FE-for-merge-0725-02' of https://lab.ssafy.com/s11-webmobile1-sub2/S11P12A708 into FE-for-merge-0725-02
+
+[33mcommit 1cae00220cd5a8323ad58023fa43db85add85742[m
+Merge: 3658103 3e59500
+Author: 정예은 <skqhs7276@gmail.com>
+Date:   Thu Jul 25 16:47:29 2024 +0900
+
+    Merge branch 'BE-login-S11P12A708-48' into 'back-develop'
+    
+    login function with jwt token, jwt filter & get user information
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!6
+
+[33mcommit 3e59500113e56649d80b486e4cf2eb83e580a5aa[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Jul 25 16:10:32 2024 +0900
+
+    style: change field to constructor
+
+[33mcommit e90f45449d7354d0f8926ceb8cf4a03c050bf32e[m
+Author: kyungkeun <wlrudrms19@naver.com>
+Date:   Thu Jul 25 16:09:17 2024 +0900
+
+    kyungkeun
+
+[33mcommit 99fc95c29c7041738e6a318d5a64e0367fdd0fca[m
+Merge: 8ec1c93 f4a8ca9
+Author: 정호성 <ghtjd1551@naver.com>
+Date:   Thu Jul 25 16:08:56 2024 +0900
+
+    Merge branch 'FE-for-merge-0725-01' into 'front-develop'
+    
+    FE : for merge by hosung
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!8
+
+[33mcommit 9cb2e5bce47bb6a8d9761297c48c79ece1acd43c[m
+Author: gywns2zang9 <gywns2zang9@gmai.com>
+Date:   Thu Jul 25 16:05:12 2024 +0900
+
+    gywns2zang9
+
+[33mcommit f4a8ca9f547bae4143a2ff1031b4b21a69ff24c0[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Thu Jul 25 16:04:18 2024 +0900
+
+    for merge
+    merge를 위한 브랜치
+    by hosung
+    2024-07-25 16:04
+
+[33mcommit 6b2602bd2cedec17d42cfd74903735ba2b004e5b[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Jul 25 15:42:15 2024 +0900
+
+    style: remove unnecessary import
+
+[33mcommit 00086cd355799ef75d4d85276169181a00f898cd[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Jul 25 15:31:47 2024 +0900
+
+    feat: add invalid password exception
+
+[33mcommit 0cb39b4ac96ef0b3bcf276dde47f265ebf6ee8f4[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Jul 25 15:20:02 2024 +0900
+
+    style: modfiy api name to verb
+
+[33mcommit e93c4ba4f76009d71351b52ef1538ee1898292a4[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Jul 25 15:15:55 2024 +0900
+
+    style: modify user service get user api
+
+[33mcommit 78fe01e99283f589e85640b353c5860237755aae[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Jul 25 15:12:40 2024 +0900
+
+    feat: add auth resolver and modify jwt token function
+
+[33mcommit ec7793885c0a2b7d76fbafb0334fcefa3ad9a064[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Jul 25 11:56:26 2024 +0900
+
+    test : test list of groupMain
+
+[33mcommit b630c6df67bac2d5d07b242277268d0fbf0f715f[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Jul 25 09:40:21 2024 +0900
+
+    feat: normal login function
+
+[33mcommit e32504acd98887c52f53308b041f17eb2cdfd3c6[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Jul 25 09:39:46 2024 +0900
+
+    feat: set jwt & jwt filer
+
+[33mcommit 8e528daebd0e370d48fe536fc731c7a7c969b23c[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Jul 25 09:38:25 2024 +0900
+
+    feat: get user info in user page
+
+[33mcommit 129bd4ceb9393e8626696a623a097ca936191b6d[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Jul 25 09:36:49 2024 +0900
+
+    chore: jwt build
+
+[33mcommit a24ec5d980c971c5ef38c3654e24cf14804a193b[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Thu Jul 25 09:35:30 2024 +0900
+
+    chore: add jwt setting & hide important info(db, jwt)
+    ;
+
+[33mcommit 36581035f403e4128e16385e14c7e3b5b32f3177[m
+Merge: 67b5355 501cd27
+Author: 곽지혁 <kwlgur0416@gmail.com>
+Date:   Thu Jul 25 09:16:14 2024 +0900
+
+    Merge branch 'BE-TeamAuth-S11P12A708-35' into 'back-develop'
+    
+    Test of Team management and TeamCode creation
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!5
+
+[33mcommit a6218d4f15ddd8b5fcd8fdf68221466dc2db12f8[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Thu Jul 25 09:06:25 2024 +0900
+
+    feat : exit group api
+
+[33mcommit 447b2f4b1fcd24309d8d46eea73ac1974b602268[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Wed Jul 24 17:21:02 2024 +0900
+
+    feat : checking Leader and changing Leader
+
+[33mcommit 092ae7f0f7206ec6218cf99d392ad6b87a5efbcb[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Wed Jul 24 15:53:22 2024 +0900
+
+    feat : update Team Info
+
+[33mcommit ac5d99f4fab3656dfe797f74722473d0a075545b[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Wed Jul 24 15:06:14 2024 +0900
+
+    feat : find Team Members
+
+[33mcommit f7a3757ab1e26c78f303e6949f0599f6c47998cc[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Wed Jul 24 14:32:29 2024 +0900
+
+    feat : implement Team Detail
+
+[33mcommit 278efc2486be67f6147869bf179052af2c502553[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Wed Jul 24 14:28:30 2024 +0900
+
+    rename : organize TeamAuth folder structure
+
+[33mcommit 501cd277a8bd13466808026ccc6d6615986aa920[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Wed Jul 24 13:24:07 2024 +0900
+
+    rename : divide GroupAuth Controller, service
+
+[33mcommit 809427b8f422f9a4c77c2c907f21514c4d49ede0[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Wed Jul 24 12:12:01 2024 +0900
+
+    test : test of Team management and TeamCode creation
+
+[33mcommit 67b5355dbd52db9b0320036d16d834be30559475[m[33m ([m[1;31morigin/BE-GroupOutLineMainPage-S11P12A708-56[m[33m)[m
+Merge: 40ae7b5 c430f44
+Author: 곽지혁 <kwlgur0416@gmail.com>
+Date:   Wed Jul 24 10:21:46 2024 +0900
+
+    Merge branch 'BE-TeamAuth-S11P12A708-35' into 'back-develop'
+    
+    Team Management and Team code generation
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!4
+
+[33mcommit c430f44834b68d5e68bccdfe6c13f69628dbc61d[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Wed Jul 24 09:59:10 2024 +0900
+
+    fix : import TeamCodeResponse
+
+[33mcommit 86ef63f3644baf01e7c6cfaddffd795ee439620a[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Wed Jul 24 09:13:32 2024 +0900
+
+    feat : Implement team code creation
+
+[33mcommit fc6910f3123d25f9730f92e6a9fa254b88d1e2c3[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Tue Jul 23 16:56:48 2024 +0900
+
+    feat : Implement team creation and listing
+
+[33mcommit 40ae7b5cf08823e0bc33a2c0e2284f06acf89bb4[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Tue Jul 23 11:57:54 2024 +0900
+
+    chore : add QueryDsl setting
+
+[33mcommit bd28a96ce4f83a5dc4e355d12aeaeb96aed655e3[m
+Merge: 478f3c0 98efa0b
+Author: 곽지혁 <kwlgur0416@gmail.com>
+Date:   Tue Jul 23 09:08:44 2024 +0900
+
+    Merge branch 'BE-setting-S11P12A708-122' into 'back-develop'
+    
+    feat : Custom Exception Setting and Cors Setting
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!3
+
+[33mcommit 98efa0bbfc0dc6ca01dd896b057b99c55ed4d8e4[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Mon Jul 22 16:07:51 2024 +0900
+
+    feat : add global exception handling
+
+[33mcommit 9a0ac733645f65dc355845f68b48e51e4d8ef3a0[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Mon Jul 22 13:53:13 2024 +0900
+
+    feat : add Setting of Cors
+
+[33mcommit 17324c4c903cde1b78b372a803a0f9e0a8b02794[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Mon Jul 22 12:35:36 2024 +0900
+
+    feat : Custom Exception
+
+[33mcommit 478f3c0857a24080c322e14be85d0b30015cdf3b[m
+Merge: a524e3b 1744ce5
+Author: 곽지혁 <kwlgur0416@gmail.com>
+Date:   Mon Jul 22 09:47:27 2024 +0900
+
+    Merge branch 'BE-setting-S11P12A708-122' into 'back-develop'
+    
+    Chore : Configure application settings and implement Entity Class
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!2
+
+[33mcommit 1744ce5aacaf2d574a4950c9415c32c9392d4958[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Mon Jul 22 09:41:05 2024 +0900
+
+    refactor : add missing settings
+
+[33mcommit 539cdc1df74873b7f326e9755b3188fa71be7ed3[m
+Author: hyukji <kwlgur0416@gmail.com>
+Date:   Mon Jul 22 09:38:11 2024 +0900
+
+    style : Change Enum Type Naming
+
+[33mcommit 8ec1c93a04c13eb89eb00dcfcc48c961d86e1dae[m
+Author: JHS <ghtjd1551@naver.com>
+Date:   Sun Jul 21 22:30:35 2024 +0900
+
+    feat_main_page_except_func_07212230
+
+[33mcommit 6e41f86e8970ef9e842be0c71e77453506281028[m
+Author: 정호성 <ghtjd1551@naver.com>
+Date:   Sun Jul 21 22:05:03 2024 +0900
+
+    Docs_edit_READ_ME
+
+[33mcommit f7caa63ec317d147b2d67b8c922bdc2f9afa02ab[m
+Author: kwlgur0416@gmail.com <kwlgur0416@gmail.com>
+Date:   Sun Jul 21 02:02:15 2024 +0900
+
+    Chore : Configure application settings and implement Entity Class
+
+[33mcommit a524e3b6b0c9de0a435aea19a9e2d8634ccfbcb9[m
+Author: kwlgur0416@gmail.com <kwlgur0416@gmail.com>
+Date:   Fri Jul 19 21:38:48 2024 +0900
+
+    docs : update .gitignore for macOS
+
+[33mcommit a0eaef0ef4e108846e0a7c60e273c09003db060a[m
+Merge: b93eb82 053f9ab
+Author: 정예은 <skqhs7276@gmail.com>
+Date:   Fri Jul 19 17:28:24 2024 +0900
+
+    Merge branch 'BE-init' into 'back-develop'
+    
+    rename: edit backend default setting
+    
+    See merge request s11-webmobile1-sub2/S11P12A708!1
+
+[33mcommit 053f9aba2aea84218163150e22c342fe7cc3b02b[m
+Author: skqhs7276 <skqhs7276@gmail.com>
+Date:   Fri Jul 19 16:53:24 2024 +0900
+
+    rename: edit backend default setting
+
+[33mcommit b93eb829f0013d99cdcec6c8ab9732622db12cdf[m
+Author: oneblue14 <oneblue14@gmail.com>
+Date:   Wed Jul 17 14:44:53 2024 +0900
+
+    07/17-init

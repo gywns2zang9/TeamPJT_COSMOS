@@ -1,11 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import GroupDetailInfo from '../components/group/groupDetailInfo.jsx';
 import SideBar from '../components/group/sideBar.jsx';
 import '../css/group/groupDetail.css';
 
-const GroupDetailView = () => {
+const GroupDetailView = (type) => {
+    useEffect(()=>{
+        console.log(type);
+    })
     const { pageId, groupId } = useParams();
+    if (pageId === undefined) {
+        return (
+            <div id="group-detail-info">
+            <div id="sidebar">
+            <SideBar groupId={groupId}/>
+            </div>
+            <div id='group-detail-info-page'>
+            <GroupDetailInfo groupId={groupId} type='main' pageId={pageId}/>
+            </div>
+        </div>
+        )
+    }
     return (
         <div id="group-detail-info">
             <div id="sidebar">

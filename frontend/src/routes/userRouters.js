@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import UserProfileView from "../views/UserProfileView";
 import UserInfoChange from "../components/user/userInfoChange";
-import PasswordChange from "../components/accounts/passwordChange";
+import UserCode from "../components/user/userCode";
 
 const UserRouters = () => {
     return (
@@ -11,8 +11,8 @@ const UserRouters = () => {
             <Route path=":userId" element={<UserProfileView />} />
             {/* 사용자 정보 수정 페이지 */}
             <Route path=":userId/change" element={<UserInfoChange />} />
-            {/* 비밀번호 변경 페이지 */}
-            <Route path=":userId/change/password" element={<PasswordChange />} />
+            {/* 유저 코드 페이지 */}
+            <Route path=":userId/Code" element={<UserCode />} />
         </Routes>
     );
 };

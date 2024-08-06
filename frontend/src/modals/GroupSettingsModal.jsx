@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import '../css/group/groupSettingsModal.css';
 import useGroupStore from '../store/group';
-
+import { useNavigate } from 'react-router-dom';
 function GroupSettingsModal({ show, handleClose, groupId }) {
-    // 그룹 코드 받아오기 api 연결해야함
-    
-    const  [isLeader, setIsLeader] = useState(false);
+    const navigate = useNavigate();
+    const [isLeader, setIsLeader] = useState(false);
     
     const [groupName, setGroupName] = useState('');
     const [groupDescription, setGroupDescription] = useState('');
@@ -28,22 +27,21 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
             const loadGroupDetails = async () => {
                 try {
                     // 그룹 정보 로드
-                    const { teamName, description, teamCode } = await groupDetailLoad({ groupId });
-                    setGroupName(teamName);
+                    const {name, description } = await groupDetailLoad({ groupId });
+                    setGroupName(name);
                     setGroupDescription(description);
-                    setTeamCode(teamCode);
-
+                    
                     // 멤버 목록 로드
                     const memberList = await groupMemberListLoad({ groupId });
                     setMembers(memberList);
 
                     // 초대 코드 체크
                     const inviteCode = await checkInviteCode({ groupId });
-                    setTeamCode(inviteCode);
-
+                    setTeamCode(inviteCode.teamCode);
+                    
                     // 그룹장 여부 확인
                     const leaderResponse = await checkGroupLeader({ groupId });
-                    setIsLeader(leaderResponse.isLeader); 
+                    setIsLeader(leaderResponse); 
                 } catch (err) {
                     console.error('그룹 정보 로드 실패 -> ', err);
                 }
@@ -51,6 +49,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
 
             loadGroupDetails();
         }
+        console.log(teamCode);
     }, [show, groupId, groupDetailLoad, groupMemberListLoad, checkInviteCode, checkGroupLeader]);
 
     
@@ -58,7 +57,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
     const handleSaveChanges = async () => {
         try {
             if (isLeader) {
-                await updateGroupInfo({ groupId, groupName, groupDescription });
+                await updateGroupInfo({ groupId, groupName, description:groupDescription });
                 if (newLeader) {
                     await updateGroupLeader({ groupId, userId: newLeader });
                 }
@@ -91,7 +90,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
                             <Form.Label>그룹 이름</Form.Label>
                             <Form.Control 
                                 type="text" 
-                                placeholder="그룹 이름을 입력하세요" 
+                                placeholder={groupName} 
                                 value={groupName}
                                 onChange={(e) => setGroupName(e.target.value)} 
                             />
@@ -101,7 +100,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
                             <Form.Control 
                                 as="textarea" 
                                 rows={3} 
-                                placeholder="그룹 소개를 입력하세요" 
+                                placeholder={groupDescription}
                                 value={groupDescription}
                                 onChange={(e) => setGroupDescription(e.target.value)} 
                             />

@@ -35,21 +35,21 @@
 }
 
 #login-email-group,
-#login-pw-group,
-#login-btn {
+#login-password-group,
+#login-button {
   width: 100%; /* 너비를 100%로 설정 */
   max-width: 400px; /* 최대 너비를 400px로 설정 */
   margin: 10px; /* 상하좌우 여백 10px */
 }
 
 #login-email-group,
-#login-pw-group {
+#login-password-group {
   display: flex;
   flex-direction: column; /* 세로 방향으로 배치 */
   align-items: flex-start; /* 왼쪽 정렬 */
 }
 
-#login-btn {
+#login-button {
   padding: 12px; /* 내부 여백 설정 */
   background-color: #d9d9d9; /* 배경색 설정 */
   border: none; /* 테두리 제거 */
@@ -60,7 +60,7 @@
 }
 
 #login-email-label,
-#login-pw-label {
+#login-password-label {
   display: block; /* 블록 요소로 설정 */
   margin-bottom: 8px; /* 하단 여백 설정 */
   color: #fff; /* 글꼴 색상 설정 */
@@ -70,7 +70,7 @@
 }
 
 #login-email-input,
-#login-pw-input {
+#login-password-input {
   width: 100%;
   padding: 12px; /* 내부 여백 설정 */
   border: 1px solid #f3f3f3; /* 테두리 설정 */
@@ -83,14 +83,14 @@
 }
 
 /* 비밀번호 찾기 링크 스타일 */
-#pw-find-link {
+#password-find-link {
   color: #2f95dc;
   margin-top: 5px; /* 입력 필드와 링크 사이 여백 */
   text-decoration: none;
   font-size: 16px; /* 링크 폰트 사이즈 조정 */
 }
 
-#login-btn:hover {
+#login-button:hover {
   background-color: #c0c0c0; /* hover 시 배경색 변경 */
 }
 
@@ -117,14 +117,14 @@
 }
 
 /* 소셜 버튼 컨테이너 스타일 */
-#social-login-btns {
+#social-login-buttons {
   display: flex;
   gap: 20px; /* 버튼 사이 여백 */
 }
 
 /* 소셜 버튼 스타일 */
-#social-login-btn-naver,
-#social-login-btn-kakao {
+#social-login-button-naver,
+#social-login-button-kakao {
   display: flex;
   align-items: center;
   border: none;
@@ -136,19 +136,19 @@
 }
 
 /* 소셜 버튼 hover 상태 스타일 */
-#social-login-btn-naver:hover,
-#social-login-btn-kakao:hover {
+#social-login-button-naver:hover,
+#social-login-button-kakao:hover {
   background-color: #fff;
 }
 
 /* 네이버 버튼 색상 */
-#social-login-btn-naver {
-  background-color: #03ec66; /* 네이버 색상 */
+#social-login-button-naver {
+  background-color: #03C75A; /* 네이버 색상 */
 }
 
 /* 카카오 버튼 색상 */
-#social-login-btn-kakao {
-  background-color: #fae100; /* 카카오 색상 */
+#social-login-button-kakao {
+  background-color: #FEE500; /* 카카오 색상 */
 }
 
 /* 소셜 버튼 아이콘 스타일 */
@@ -160,7 +160,7 @@
 }
 
 /* 안내 메세지 스타일 */
-#login-error-msg {
+#login-error-message {
   margin-top: 5px; /* 입력 필드와 링크 사이 여백 */
   margin-bottom: 0;
   text-decoration: none;
@@ -172,6 +172,6 @@
   color: #2f95dc;
 } */
 
-#login-error-msg {
+#login-error-message {
   color: #d32f2f;
 }
