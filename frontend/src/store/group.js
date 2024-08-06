@@ -180,15 +180,18 @@ const useGroupStore = create((set) => ({
     },
 
     // 그룹 초대 가능한 회원 조회하기
-    invitePossibleUsers: async ({ teamId, nickName }) => {
+    invitePossibleUsers: async ({ groupId, nickName }) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
         try {
-            const url = `${BASE_URL}/teams/auth/${teamId}/members`;
+            const url = `${BASE_URL}/teams/auth/${groupId}/members`;
             const data = {
                 nickName,
             };
-            const response = await get(url, data);
-            console.log(response);
-            return response
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const responseData = await post(url, data, headers);
+            return responseData
         } catch (err) {
             console.log('그룹 초대 가능한 회원 조회하기 실패 -> ', err);
             throw err;
@@ -225,6 +228,7 @@ const useGroupStore = create((set) => ({
                 "emails": emailArray
             };
             await post(url, data, headers);
+            console.log(`${emailArray}로 발송 완료!`)
         } catch (err) {
             console.log('그룹 참여 이메일 발송하기 실패-> ', err);
             throw err;

@@ -8,38 +8,70 @@ import useGroupStore from "../store/group";
 function InviteGroupModal({ show, handleClose, groupId }) {
     const [inviteMethod, setInviteMethod] = useState('email');
     const [groupCode, setGroupCode] = useState(''); 
-    const [nickname, setNickname] = useState('');
     const [emails, setEmails] = useState('');
-    const checkInviteCode = useGroupStore((state) => state.checkInviteCode);
+    const [nickName, setNickname] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+    const [findNickName, setFindNickName] = useState(false);
 
+    const checkInviteCode = useGroupStore((state) => state.checkInviteCode);
     const invitePossibleUsers = useGroupStore((state) => state.invitePossibleUsers);
     const sendInviteEmail = useGroupStore((state) => state.sendInviteEmail);
 
     const handleInviteMethodChange = (event) => {
+        setEmails('')
+        setNickname(''); 
+        setSuggestions([]); 
+        setFindNickName(false);
         setInviteMethod(event.target.value);
     };
 
+
     useEffect(() => {
-        console.log(groupId);
         const getDetails = async () => {
-            try {
-                const inviteCode = await checkInviteCode({ groupId })
-                setGroupCode(inviteCode.teamCode);
-            } catch (err) {
-                console.error('실패 -> ', err);
+            if (groupId) {
+                try {
+                    const inviteCode = await checkInviteCode({ groupId });
+                    setGroupCode(inviteCode.teamCode);
+                } catch (err) {
+                    console.error('실패 -> ', err);
+                }
             }
-        }
+        };
         getDetails();
-    }, [groupId]);
+    }, [groupId, checkInviteCode]);
+
+    useEffect(() => {
+        const fetchSuggestions = async () => {
+            if (inviteMethod === 'nickName' && nickName) {
+                try {
+                    const responseData = await invitePossibleUsers({ groupId, nickName });
+                    setSuggestions(responseData.map(user => user.nickName));
+                    if (responseData.length === 1 && responseData[0].nickName === nickName) {
+                        setFindNickName(true);
+                    } else {
+                        setFindNickName(false);
+                    }
+                } catch (err) {
+                    console.error('닉네임으로 초대 실패 -> ', err);
+                    setFindNickName(false);
+                }
+            } else {
+                setSuggestions([]);
+                setFindNickName(false);
+            }
+        };
+        fetchSuggestions();
+    }, [nickName, inviteMethod, groupId, invitePossibleUsers]);
 
     const handleInvite = async () => {
         try {
             if (inviteMethod === 'email') {
                 await sendInviteEmail({ groupId, emails });
             } else {
-                const response = await invitePossibleUsers({ teamId: groupId, nickName:nickname });
-                console.log(response);
-                // 닉네임으로 초대 요청하는 API만들어서 로직생성해야함
+                const responseData = await invitePossibleUsers({groupId, nickName });
+                console.log(responseData);
+                const emails = responseData[0].email
+                await sendInviteEmail({ groupId, emails })
             }
         } catch (err) {
             console.error('초대 실패 -> ', err.message);
@@ -67,10 +99,10 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                         <Form.Check
                             type="radio"
                             id="inviteNickname"
-                            label="닉네임으로 초대"
+                            label="닉네임으로 검색"
                             name="inviteMethod"
-                            value="nickname"
-                            checked={inviteMethod === 'nickname'}
+                            value="nickName"
+                            checked={inviteMethod === 'nickName'}
                             onChange={handleInviteMethodChange}
                         />
                     </Form.Group>
@@ -79,21 +111,30 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                             <Form.Label>이메일 주소</Form.Label>
                             <Form.Control 
                                 type="email" 
-                                placeholder="이메일 주소를 입력하세요" 
+                                placeholder="이메일 주소를 입력하세요. ( ,로 구분)"
                                 value={emails}
                                 onChange={(e) => setEmails(e.target.value)}
                             />
                         </Form.Group>
                     )}
-                    {inviteMethod === 'nickname' && (
+                    {inviteMethod === 'nickName' && (
                         <Form.Group controlId="nicknameInvite">
                             <Form.Label>닉네임</Form.Label>
                             <Form.Control 
                                 type="text" 
                                 placeholder="닉네임을 입력하세요" 
-                                value={nickname}
+                                value={nickName}
                                 onChange={(e) => setNickname(e.target.value)}
                             />
+                            {suggestions.length > 0 && (
+                                <ul id="suggestions">
+                                    {suggestions.map((suggestion) => (
+                                        <li key={suggestion.id}>
+                                            {suggestion}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </Form.Group>
                     )}
                     <Form.Group controlId="groupCode">
@@ -105,9 +146,12 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                 <Button variant="secondary" onClick={handleClose}>
                     나가기
                 </Button>
-                <Button variant="primary" onClick={handleInvite}>
+                { inviteMethod === 'email' && <Button variant="primary" onClick={handleInvite}>
                     초대하기
-                </Button>
+                </Button>}
+                { inviteMethod === 'nickName' && <Button variant="primary" onClick={handleInvite} disabled={!findNickName}>
+                    초대하기1
+                </Button>}
             </Modal.Footer>
         </Modal>
     );
