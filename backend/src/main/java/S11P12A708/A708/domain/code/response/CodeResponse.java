@@ -1,5 +1,7 @@
 package S11P12A708.A708.domain.code.response;
 
+import S11P12A708.A708.domain.code.entity.Code;
+import S11P12A708.A708.domain.code.entity.Language;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,15 +14,17 @@ import lombok.NoArgsConstructor;
 public class CodeResponse {
 
     @NotNull
-    Integer depth;
-
-    @NotNull
-    Long codeId;
+    Long id;
 
     @NotBlank
-    String problemName;
+    String content;
 
     @NotBlank
-    String fileName;
+    Language language;
 
+    public CodeResponse(Code code) {
+        this.id = code.getId();
+        this.content = code.getContent();
+        this.language = code.getLanguage();
+    }
 }

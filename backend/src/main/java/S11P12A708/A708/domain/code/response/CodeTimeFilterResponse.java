@@ -23,7 +23,7 @@ public class CodeTimeFilterResponse {
     @NotNull
     Long studyId;
 
-    List<CodeResponse> codes;
+    List<CodeFilterResponse> codes;
 
     public CodeTimeFilterResponse(Integer depth, Long studyId, Integer time) {
         this.studyId = studyId;

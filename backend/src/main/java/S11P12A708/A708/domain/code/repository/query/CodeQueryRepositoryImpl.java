@@ -1,6 +1,6 @@
 package S11P12A708.A708.domain.code.repository.query;
 
-import S11P12A708.A708.domain.code.response.CodeResponse;
+import S11P12A708.A708.domain.code.response.CodeFilterResponse;
 import S11P12A708.A708.domain.study.entity.Study;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class CodeQueryRepositoryImpl implements CodeQueryRepository {
     }
 
     @Override
-    public List<CodeResponse> findCodesListByStudyId(Long studyId, Long userId) {
+    public List<CodeFilterResponse> findCodesListByStudyId(Long studyId, Long userId) {
         return queryFactory
                 .select(code.id, problem.name, file.name)
                 .from(code)
@@ -41,7 +41,7 @@ public class CodeQueryRepositoryImpl implements CodeQueryRepository {
                 .where(problem.study.id.eq(studyId), file.user.id.eq(userId))
                 .fetch()
                 .stream()
-                .map(tuple -> new CodeResponse(
+                .map(tuple -> new CodeFilterResponse(
                         4,
                         tuple.get(code.id),
                         tuple.get(problem.name),
