@@ -18,6 +18,8 @@ public class Code {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Column(nullable = false)
@@ -38,4 +40,8 @@ public class Code {
         return new Code("", Language.JAVA);
     }
 
+    public void update(Code newCode) {
+        this.content = newCode.getContent();
+        this.language = newCode.getLanguage();
+    }
 }
