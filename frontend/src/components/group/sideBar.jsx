@@ -507,10 +507,12 @@ function SideBar({ groupId }) {
       <GroupSettingsModal
         show={showSettingsModal}
         handleClose={handleCloseSettingsModal}
+        groupId={groupId}
       />
       <InviteGroupModal
         show={showInviteModal}
         handleClose={handleCloseInviteModal}
+        groupId={groupId}
       />
       <CreateItemModal
         show={showCreateItemModal}

@@ -72,6 +72,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
     const handleLeaveGroup = async () => {
         try {
             await outGroup({ groupId });
+            navigate('/group')
             handleClose();
         } catch (err) {
             console.error('그룹 탈퇴 실패 -> ', err);
