@@ -1,12 +1,13 @@
 package S11P12A708.A708.domain.code.service;
 
-import S11P12A708.A708.domain.auth.request.AuthUserDto;
 import S11P12A708.A708.domain.code.repository.query.CodeQueryRepository;
 import S11P12A708.A708.domain.code.request.ExecuteCodeRequest;
 import S11P12A708.A708.domain.code.response.*;
 import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
+import S11P12A708.A708.domain.user.exception.UserNotFoundException;
+import S11P12A708.A708.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,9 +23,11 @@ public class CodeService {
 
     private final CodeQueryRepository codeQueryRepository;
     private final TeamRepository teamRepository;
+    private final UserRepository userRepository;
 
-    public List<CodeYearFilterResponse> getCodeFilter(AuthUserDto authUser, Long teamId) {
+    public List<CodeYearFilterResponse> getCodeFilter(Long teamId, Long userId) {
         teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         List<Study> studies = codeQueryRepository.findStudiesFilter(teamId);
 
         List<CodeYearFilterResponse> yearFilters = new ArrayList<>();
@@ -43,7 +46,7 @@ public class CodeService {
                         .toList());
 
                 for (CodeTimeFilterResponse timesFilter : timesFilters) {
-                    List<CodeResponse> res = codeQueryRepository.findCodesListByStudyId(timesFilter.getStudyId(), authUser.getId());
+                    List<CodeResponse> res = codeQueryRepository.findCodesListByStudyId(timesFilter.getStudyId(), userId);
                     timesFilter.setCodes(res);
                 }
 
