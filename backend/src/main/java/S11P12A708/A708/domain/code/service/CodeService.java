@@ -5,6 +5,7 @@ import S11P12A708.A708.domain.code.exception.CodeNotFoundException;
 import S11P12A708.A708.domain.code.repository.CodeRepository;
 import S11P12A708.A708.domain.code.repository.query.CodeQueryRepository;
 import S11P12A708.A708.domain.code.request.ExecuteCodeRequest;
+import S11P12A708.A708.domain.code.request.PatchCodeRequest;
 import S11P12A708.A708.domain.code.response.*;
 import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
@@ -76,6 +77,14 @@ public class CodeService {
         Code code = codeRepository.findById(codeId).orElseThrow(CodeNotFoundException::new);
 
         return new CodeResponse(code);
+    }
+
+    public void storeCode(Long teamId, Long codeId, PatchCodeRequest req) {
+        teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        Code code = codeRepository.findById(codeId).orElseThrow(CodeNotFoundException::new);
+
+        code.update(new Code(req.getContent(), req.getLanguage()));
+        codeRepository.save(code);
     }
 
     public ExecuteCodeResponse getExecuteResult(ExecuteCodeRequest request) throws IOException, InterruptedException {

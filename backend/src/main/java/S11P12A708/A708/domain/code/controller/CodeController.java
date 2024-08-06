@@ -1,6 +1,7 @@
 package S11P12A708.A708.domain.code.controller;
 
 import S11P12A708.A708.domain.code.request.ExecuteCodeRequest;
+import S11P12A708.A708.domain.code.request.PatchCodeRequest;
 import S11P12A708.A708.domain.code.response.CodeResponse;
 import S11P12A708.A708.domain.code.response.CodeYearFilterResponse;
 import S11P12A708.A708.domain.code.response.ExecuteCodeResponse;
@@ -32,6 +33,13 @@ public class CodeController {
             @PathVariable Long teamId, @PathVariable Long codeId) {
         CodeResponse response = codeService.getCode(teamId, codeId);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PatchMapping("/teams/{teamId}/codes/{codeId}")
+    public ResponseEntity<Void> patchCode(
+            @PathVariable Long teamId, @PathVariable Long codeId, @RequestBody PatchCodeRequest patchCodeRequest) {
+        codeService.storeCode(teamId, codeId, patchCodeRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/execute")
