@@ -153,18 +153,18 @@ function SideBar({ groupId }) {
           content: "",
         };
         console.log(newItem);
-        if (newItem.Type === "folder") {
+        if (newItem.type === "folder") {
           createFolder({
             groupId,
-            parentId: parentId,
-            folderName: newItemName,
+            parentId: newItem.parentId,
+            folderName: newItem.name,
           });
-        } else if (newItemType === "file") {
+        } else  {
           createFile({
             groupId,
-            folderId: parentId,
-            fileName: newItemName,
-            type: newItemType,
+            folderId: newItem.parentId,
+            fileName: newItem.name,
+            type: newItem.type,
           });
         }
 
@@ -349,7 +349,7 @@ useEffect(() => {
                   autoFocus
                 />
               ) : (
-                <span>{folder.name}</span>
+                <span className="folder-name">{folder.name}</span>
               )}
             </div>
           </OverlayTrigger>
@@ -424,7 +424,7 @@ useEffect(() => {
                     autoFocus
                   />
                 ) : (
-                  <span>{file.name}</span>
+                  <span className="file-name">{file.name}</span>
                 )}
               </div>
             </OverlayTrigger>
@@ -451,11 +451,22 @@ useEffect(() => {
     <div className="sidebar" ref={sidebarRef} style={{ width: sidebarWidth }}>
       <div className="sidebar-header" onClick={toggleSideBar}>
         <Button variant="link" size="m" >
-          {isOpen ? <FaAngleDoubleLeft /> : <FaAngleDoubleRight />}
+          <OverlayTrigger
+            placement="top"
+            overlay={
+              <Tooltip>
+                {isOpen ? '사이드바 접기' : '사이드바 펼치기'}
+              </Tooltip>
+            }
+          >
+            <Button variant="link" size="m">
+              {isOpen ? <FaAngleDoubleLeft /> : <FaAngleDoubleRight />}
+            </Button>
+          </OverlayTrigger>
         </Button>
       </div>
       <div style={{ textAlign: "center" }}>
-        <OverlayTrigger placement="top" overlay={<Tooltip>화상회의</Tooltip>}>
+        <OverlayTrigger placement="top" overlay={<Tooltip>버튼을 눌러 화상회의를 시작하세요</Tooltip>}>
           <Button
             variant="link"
             size="sm"
@@ -467,7 +478,7 @@ useEffect(() => {
       </div>
       {isOpen && (
         <div className="sidebar-content">
-          <div className="actions">
+          <div className="add-items">
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>폴더 추가</Tooltip>}
