@@ -32,11 +32,10 @@ public class JwtAuthFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String path = httpRequest.getRequestURI();
-
         String token = getJwtFromRequest(httpRequest);
 
         if (token != null && jwtTokenUtil.validateToken(token)) {
+            String path = httpRequest.getRequestURI();
             String tokenUserId = jwtTokenUtil.getUserIdFromToken(token);
             String urlUserId = extractUserIdFromUrl(path);
 
@@ -73,9 +72,6 @@ public class JwtAuthFilter implements Filter {
     }
 
     private boolean isNumeric(String str) {
-        if (str == null || str.isEmpty()) {
-            return false;
-        }
         try {
             Long.parseLong(str); // long 타입으로 변환해볼 수 있음
             return true;
