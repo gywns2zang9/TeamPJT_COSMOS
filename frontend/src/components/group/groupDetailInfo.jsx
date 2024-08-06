@@ -11,15 +11,15 @@ function GroupDetailInfo({ pageId, groupId, type }) {
     const renderTemplate = () => {
         switch (type) {
             case 'main':
-                return <MainPageTemplates groupId={groupId} />;
+                return <MainPageTemplates groupId={groupId} pageId={pageId}/>;
             case 'overview':
-                return <OverviewPageTemplagtes groupId={groupId} />;
+                return <OverviewPageTemplagtes groupId={groupId} pageId={pageId}/>;
             case 'code':
-                return <CodePageTemplates groupId={groupId} />;
+                return <CodePageTemplates groupId={groupId} pageId={pageId}/>;
             case 'normal':
-                return <NormalTemplates groupId={groupId} />;
+                return <NormalTemplates groupId={groupId} pageId={pageId}/>;
             case 'time-overview':
-                return <TimeOverviewTemplates groupId={groupId} />;
+                return <TimeOverviewTemplates groupId={groupId} pageId={pageId}/>;
             default:
                 return <MarkdownEditor pageId={pageId} groupId={groupId} />;
         }

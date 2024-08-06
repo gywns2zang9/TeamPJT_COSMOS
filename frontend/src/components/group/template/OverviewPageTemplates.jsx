@@ -6,20 +6,19 @@ import { useLocation } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import CreateStudyModal from '../../../modals/CreateStudyModal';
 
-const OverviewPageTemplates = ({ groupId }) => {
+const OverviewPageTemplates = ({ groupId, pageId }) => {
     const [members, setMembers] = useState([]);
     const groupMemberListLoad = useGroupStore((state) => state.groupMemberListLoad);
-    const location = useLocation();
     const getContentsLoad = useGroupStore((state) => state.getFile);
     const [problems, setProblems] = useState([]);
     const [showModal, setShowModal] = useState(false);
 
+
     useEffect(() => {
-        const fileId = location.state.fileId
         const getContents = async () => {
             try {
-                const response = await getContentsLoad({groupId, fileId})
-                await setProblems(response.problems);
+                const response = await getContentsLoad({groupId, fileId:pageId})
+                setProblems(response.problems);
             } catch (err) {
                 console.error('파일불러오기 실패 -> ', err);
             }
@@ -34,7 +33,7 @@ const OverviewPageTemplates = ({ groupId }) => {
         };
         getContents();
         loadMembers();
-    }, [groupId, groupMemberListLoad, getContentsLoad, location.state]);
+    }, [groupId, groupMemberListLoad, getContentsLoad]);
 
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);

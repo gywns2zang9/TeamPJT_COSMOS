@@ -266,6 +266,26 @@ const useGroupStore = create((set) => ({
         }
     },
 
+    // 문제 추가하기
+    createProblem: async ({ groupId, problemNumber, studyId }) => {
+        try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const url = `${BASE_URL}/teams/${groupId}/folders`;
+            const data = {
+                problemNumber,
+                studyId
+            };
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await post(url, data, headers);
+            return response
+        } catch (err) {
+            console.log('문제 생성 실패 -> ', err);
+            
+        }
+    },
+
     // 폴더 생성하기
     createFolder: async ({ groupId, parentId, folderName }) => {
         try {
