@@ -46,7 +46,7 @@ public class CodeService {
                         .toList());
 
                 for (CodeTimeFilterResponse timesFilter : timesFilters) {
-                    List<CodeResponse> res = codeQueryRepository.findCodesListByStudyId(timesFilter.getStudyId(), userId);
+                    List<CodeFilterResponse> res = codeQueryRepository.findCodesListByStudyId(timesFilter.getStudyId(), userId);
                     timesFilter.setCodes(res);
                 }
 

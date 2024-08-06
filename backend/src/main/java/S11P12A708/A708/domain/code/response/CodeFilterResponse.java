@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CodeResponse {
+public class CodeFilterResponse {
 
     @NotNull
     Integer depth;
