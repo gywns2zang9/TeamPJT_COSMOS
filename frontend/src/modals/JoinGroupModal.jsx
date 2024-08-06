@@ -4,36 +4,33 @@ import '../css/group/style.css';
 import { useNavigate } from 'react-router-dom';
 import useGroupStore from '../store/group';
 import useAuthStore from '../store/auth';
+import useAuthStore from '../store/auth';
 
 // 참여버튼 누르면 코드 확인 api 요청 -> 코드 일치하면, 그룹페이지로 이동
 
-function JoinGroupModal({ show, handleClose }) {
-    const [userId, setUserId] = useState('')
-    const getUserInfo = useAuthStore(state => state.getUserInfo)
-    useEffect(() => {
-        const getUser = async () => {
-            const response = await getUserInfo()
-            setUserId(response.userId);
-        }
-        getUser();
-    })
+function JoinGroupModal({ show, handleClose, onSuccess }) {
     // 참여 코드 보내기
     const [teamCode, setTeamCode] = useState('');
     const navigate = useNavigate();
     const joinGroup = useGroupStore(state => state.joinGroup);
+    const getUserInfo = useAuthStore(state => state.getUserInfo)
     const handleTeamCodeChange = (e) => {
         setTeamCode(e.target.value);
     }
 
     const handleJoinGroup = async () => {
         try {
-            const response = await joinGroup({ userId, teamCode});
-            console.log(response);
-            if (response === 'success') {
-                navigate(`/group/${response.team.id}/0`);
-            } else {
-                console.error('그룹 참여 실패 -> ', response);
-            }
+            // const response = await joinGroup({ userId, teamCode});
+            // console.log(response);
+            // if (response === 'success') {
+            //     navigate(`/group/${response.team.id}/0`);
+            // } else {
+            //     console.error('그룹 참여 실패 -> ', response);
+            // }
+            const userId = getUserInfo().userId;
+            await joinGroup({ userId, teamCode});
+            onSuccess(); 
+            handleClose();
         } catch (err) {
             console.error('그룹 참여 중 에러 -> ', err);
         }

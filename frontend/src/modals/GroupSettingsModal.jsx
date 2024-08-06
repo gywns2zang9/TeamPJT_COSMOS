@@ -74,6 +74,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
             await outGroup({ groupId });
             navigate('/group')
             handleClose();
+            navigate("../")
         } catch (err) {
             console.error('그룹 탈퇴 실패 -> ', err);
         }

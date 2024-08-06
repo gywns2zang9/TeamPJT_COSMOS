@@ -34,7 +34,7 @@ const useGroupStore = create((set) => ({
             const accessToken = useAuthStore.getState().getAccessToken();
             const url = `${BASE_URL}/users/${userId}/team`;
             const data = {
-                teamName:groupName,
+                teamName: groupName,
                 description
             };
             const headers = {
@@ -177,15 +177,18 @@ const useGroupStore = create((set) => ({
     },
 
     // 그룹 초대 가능한 회원 조회하기
-    invitePossibleUsers: async ({ teamId, nickName }) => {
+    invitePossibleUsers: async ({ groupId, nickName }) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
         try {
-            const url = `${BASE_URL}/teams/auth/${teamId}/members`;
+            const url = `${BASE_URL}/teams/auth/${groupId}/members`;
             const data = {
                 nickName,
             };
-            const response = await get(url, data);
-            console.log(response);
-            return response
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const responseData = await post(url, data, headers);
+            return responseData
         } catch (err) {
             console.log('그룹 초대 가능한 회원 조회하기 실패 -> ', err);
             throw err;
@@ -211,19 +214,19 @@ const useGroupStore = create((set) => ({
     },
 
     // 그룹 참여 이메일 발송하기
-    sendInviteEmail: async ({ groupId, email }) => {
+    sendInviteEmail: async ({ groupId, emails }) => {
         const accessToken = await useAuthStore.getState().getAccessToken();
         const headers = {
             Authorization: `Bearer ${accessToken}`,
         };
+        const emailArray = emails.split(',').map(email => email.trim()); //리스트에 담음
         try {
-            const url = `${BASE_URL}/teams/auth/${groupId}/teamCode/`;
+            const url = `${BASE_URL}/teams/auth/${groupId}/teamCode`;
             const data = {
-                email,
+                "emails": emailArray
             };
-            const response = await post(url, data, headers);
-            console.log(response);
-            return response
+            await post(url, data, headers);
+            console.log(`${emailArray}로 발송 완료!`)
         } catch (err) {
             console.log('그룹 참여 이메일 발송하기 실패-> ', err);
             throw err;
@@ -324,8 +327,7 @@ const useGroupStore = create((set) => ({
     },
 
     // 파일 생성하기
-    createFile: async ({ groupId, folderId, fileName, type}) => {
-        console.log(type);
+    createFile: async ({ groupId, folderId, fileName, type }) => {
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
             const headers = {
@@ -335,7 +337,7 @@ const useGroupStore = create((set) => ({
             if (type === 'NORMAL') {
                 url = `${BASE_URL}/teams/${groupId}/file`;
             } else {
-            url = `${BASE_URL}/teams/${groupId}/file/code`;
+                url = `${BASE_URL}/teams/${groupId}/file/code`;
             }
             const data = {
                 folderId,
