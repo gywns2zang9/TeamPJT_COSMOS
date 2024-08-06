@@ -9,7 +9,7 @@ function InviteGroupModal({ show, handleClose, groupId }) {
     const [inviteMethod, setInviteMethod] = useState('email');
     const [groupCode, setGroupCode] = useState(''); 
     const [nickname, setNickname] = useState('');
-    const [email, setEmail] = useState('');
+    const [emails, setEmails] = useState('');
     const checkInviteCode = useGroupStore((state) => state.checkInviteCode);
 
     const invitePossibleUsers = useGroupStore((state) => state.invitePossibleUsers);
@@ -35,7 +35,7 @@ function InviteGroupModal({ show, handleClose, groupId }) {
     const handleInvite = async () => {
         try {
             if (inviteMethod === 'email') {
-                await sendInviteEmail({ groupId, email });
+                await sendInviteEmail({ groupId, emails });
             } else {
                 const response = await invitePossibleUsers({ teamId: groupId, nickName:nickname });
                 console.log(response);
@@ -80,8 +80,8 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                             <Form.Control 
                                 type="email" 
                                 placeholder="이메일 주소를 입력하세요" 
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                value={emails}
+                                onChange={(e) => setEmails(e.target.value)}
                             />
                         </Form.Group>
                     )}
