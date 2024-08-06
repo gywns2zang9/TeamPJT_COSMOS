@@ -273,10 +273,10 @@ const useGroupStore = create((set) => ({
     createProblem: async ({ groupId, problemNumber, studyId }) => {
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
-            const url = `${BASE_URL}/teams/${groupId}/folders`;
+            const url = `${BASE_URL}/teams/${groupId}/problems`;
             const data = {
                 problemNumber,
-                studyId
+                studyId:1
             };
             const headers = {
                 Authorization: `Bearer ${accessToken}`,

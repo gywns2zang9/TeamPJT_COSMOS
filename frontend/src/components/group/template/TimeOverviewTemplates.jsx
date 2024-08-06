@@ -22,6 +22,7 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
                 const response = await getFile({groupId, fileId:pageId});
                 console.log(response);
                 setProblems(response.problems);
+                setStudyId(response.fileId)
             } catch (err) {
                 console.error('파일 로드 실패 -> ', err);
             }
@@ -50,7 +51,7 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
                 show={showModal} 
                 handleClose={handleCloseModal} 
                 groupId={groupId}
-                studyId={1}
+                studyId={studyId}
             /> 
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                 <thead>
