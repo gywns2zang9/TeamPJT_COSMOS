@@ -18,14 +18,14 @@ const NormalTemplates = ({ pageId, groupId }) => {
         });
         setEditor(simpleMDE);
 
-        // 페이지 로딩 시 내용 가져오기
+        // TODO - 페이지 로딩 시 내용 가져오기
         axios.get(`/api/pages/${pageId}`)
             .then(response => {
                 simpleMDE.value(response.data.content || '');
             })
             .catch(error => console.error(error));
 
-        // 내용 변경 시 자동 저장
+        // TODO - 내용 변경 시 자동 저장
         simpleMDE.codemirror.on('change', () => {
             const newContent = simpleMDE.value();
             axios.post(`/api/pages/${pageId}`, { content: newContent })

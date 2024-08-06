@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import useGroupStore from '../store/group';
+import { useLocation } from 'react-router-dom';
 
 function CreateStudyModal({ show, handleClose, groupId }) {
     const currentYear = new Date().getFullYear();
@@ -17,18 +18,12 @@ function CreateStudyModal({ show, handleClose, groupId }) {
         handleClose();
     }
     const handleCreateStudy = () => {
-        // TODO: API 스터디 생성
-        console.log(year, month);
         const createStudy = async () => {
             const response = await createStudyOverview({ groupId, year, month });
             console.log(response);
-
-            if (response.success) {
-                alert('스터디 생성 성공!');
-            } else {
-                alert('스터디 생성 실패!');
-            }
+            window.location.reload();
         }
+        createStudy();
         handleCloseModal()
     };
 

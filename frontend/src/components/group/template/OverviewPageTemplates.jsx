@@ -47,6 +47,7 @@ const OverviewPageTemplates = ({ groupId, pageId }) => {
                 handleClose={handleCloseModal} 
                 groupId={groupId}
             />
+            <div>우리가 푼 문제들</div>
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                 <thead>
                     <tr>
