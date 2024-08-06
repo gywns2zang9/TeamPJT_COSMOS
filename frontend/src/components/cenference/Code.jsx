@@ -10,6 +10,11 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const [editor, setEditor] = useState(null);
   const [provider, setProvider] = useState(null);
   const [binding, setBinding] = useState(null);
+  const [language, setLanguage] = useState("java");
+
+  const handleLanguageChange = (event) => {
+    setLanguage(event.target.value);
+  };
 
   useEffect(() => {
     const provider = new WebsocketProvider(
@@ -46,10 +51,10 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
       <div className="code-upper-space">
         <div>
           <button className="button">내 코드 불러오기</button>
-          <select className="code-select">
-            <option value="code1">Java</option>
-            <option value="code2">Python</option>
-            <option value="code3">C++</option>
+          <select className="code-select" onChange={handleLanguageChange}>
+            <option value="java">Java</option>
+            <option value="python">Python</option>
+            <option value="cpp">C++</option>
           </select>
         </div>
         <div>
@@ -60,20 +65,20 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
       </div>
       <div className="code-space">
         <Editor
-          height="100%"
-          // defaultValue="sdfsdfsdfsdf"
-          // theme="vs-dark"
-          defaultLanguage="java"
+          // height="100%"
+          value="abcde"
+          language={language}
           onMount={(editor) => {
             setEditor(editor);
           }}
         />
       </div>
+      <div></div>
       <div className="code-lower-space">
         <div className="code-buttons">
           <button className="button">내 코드 공유</button>
           <button className="button">코드 저장</button>
-          <button className="button">내 코드 보기</button>
+          <button className="button">코드 보기</button>
           <button className="button">공유 코드 보기</button>
         </div>
         <div className="compile-button">

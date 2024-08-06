@@ -45,7 +45,7 @@ video {
   display: flex;
   flex: 1;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
 }
 
 .left-space {
@@ -263,5 +263,6 @@ video {
 }
 
 .code-select:hover {
-  background-color: #3a6695;
+  border: 1px solid #ddd;
+  /* background-color: #3a6695; */
 }
