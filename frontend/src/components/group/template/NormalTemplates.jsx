@@ -6,7 +6,7 @@ import axios from 'axios';
 // 페이지 떠날 때, 페이지를 저장하는 API
 // 페이지 렌더링 할 때, 페이지를 받는 API
 
-const MarkdownEditor = ({ pageId, groupId }) => {
+const NormalTemplates = ({ pageId, groupId }) => {
     const editorRef = useRef(null);
     const [editor, setEditor] = useState(null);
 
@@ -81,4 +81,4 @@ const MarkdownEditor = ({ pageId, groupId }) => {
     );
 };
 
-export default MarkdownEditor;
+export default NormalTemplates;

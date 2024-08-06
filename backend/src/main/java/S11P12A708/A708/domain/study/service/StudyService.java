@@ -95,6 +95,24 @@ public class StudyService {
         studyRepository.deleteById(studyId);
     }
 
+    public Folder findStudyFolder(Long teamId, Long studyId) {
+        // 스터디 폴더 및 내부 삭제
+        final Study study = studyRepository.findById(studyId).orElseThrow(StudyNotFoundException::new);
+        final Folder rootFolder = folderQueryRepository.findRootFolderByTeam(teamId).orElseThrow(FolderNotFoundException::new);
+
+        final String yearMonthFolderName = formatYearMonth(study.getYear(), study.getMonth());
+        final Folder yearMonthFolder = rootFolder.getSubFolders().stream()
+                .filter(subFolder -> yearMonthFolderName.equals(subFolder.getName()))
+                .findFirst()
+                .orElseThrow(FolderNotFoundException::new);
+
+        final String timeFolderName = study.getTimes() + "회차";
+        return yearMonthFolder.getSubFolders().stream()
+                .filter(subFolder -> timeFolderName.equals(subFolder.getName()))
+                .findFirst()
+                .orElseThrow(FolderNotFoundException::new);
+    }
+
     private String formatYearMonth(Integer year, Integer month) {
         String shortYear = String.format("%02d", year % 100);
         String formattedMonth = String.format("%d", month);

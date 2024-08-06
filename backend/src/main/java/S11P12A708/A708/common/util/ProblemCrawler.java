@@ -2,6 +2,8 @@ package S11P12A708.A708.common.util;
 
 import S11P12A708.A708.domain.problem.entity.Problem;
 import S11P12A708.A708.domain.problem.entity.SiteInfoType;
+import S11P12A708.A708.domain.problem.exception.ProblemNotExistException;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +12,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+@Slf4j
 @Component
 public class ProblemCrawler {
     private static final String BOJ_API_URL = "https://solved.ac/api/v3/problem/show";
@@ -19,6 +22,7 @@ public class ProblemCrawler {
         try {
             // API 호출
             String jsonResponse = sendGetRequest(number);
+            if (jsonResponse.equals("fail")) return null;
 
             // JSON 데이터 처리
             JSONObject jsonObject = new JSONObject(jsonResponse);
@@ -41,6 +45,7 @@ public class ProblemCrawler {
 
         int responseCode = con.getResponseCode();
         System.out.println("GET Response Code :: " + responseCode);
+        if (responseCode == 404) return "fail";
 
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;

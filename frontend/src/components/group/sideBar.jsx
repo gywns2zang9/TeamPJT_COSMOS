@@ -19,14 +19,14 @@ import {
 import "../../css/group/sideBar.css";
 import GroupSettingsModal from "../../modals/GroupSettingsModal";
 import InviteGroupModal from "../../modals/InviteGroupModal";
-import CreateItemModal from "../../modals/CreateItemModal.jsx";
-import StartVideoModal from "../../modals/StartVideoModal.jsx";
-import ItemDeleteModal from "../../modals/ItemDeleteModal.jsx";
-import useGroupStore from "../../store/group.js";
-import MainPageTemplates from "./template/mainPageTemplates.jsx";
-import CodePageTemplates from "./template/codePageTemplates.jsx";
-import MarkDownEditor from "./template/markdownEditor.jsx";
-import StudyPageTemplates from "./template/studyPageTemplates.jsx";
+import CreateItemModal from '../../modals/CreateItemModal.jsx';
+import StartVideoModal from '../../modals/StartVideoModal.jsx';
+import ItemDeleteModal from '../../modals/ItemDeleteModal.jsx';
+import useGroupStore from '../../store/group.js';
+import MainPageTemplates from './template/mainPageTemplates.jsx';
+import CodePageTemplates from './template/codePageTemplates.jsx';
+import MarkDownEditor from './template/NormalTemplates.jsx';
+import OverviewPageTemplates from './template/OverviewPageTemplates.jsx';
 
 // 초기 폴더와 파일 구조
 const initialStructure = {
@@ -106,40 +106,36 @@ function SideBar({ groupId }) {
     };
   }, []);
 
-  // 최상위 폴더 로드
-  useEffect(() => {
-    const loadRootFolders = async () => {
-      console.log(1);
-      try {
-        const { folderId, folders, files } = await loadFolderInfo({
-          groupId,
-          folderId: 0,
-        });
-        const rootFolder = {
-          type: "folder",
-          id: folderId,
-          name: "Root",
-          parentId: null,
+    // 최상위 폴더 로드
+    useEffect(() => {
+        const loadRootFolders = async () => {
+            try {
+                const { folderId, folders, files } = await loadFolderInfo({groupId, folderId:0});
+                const rootFolder = {
+                    'type':'folder',
+                    'id':folderId,
+                    'name':'Root',
+                    'parentId':null,
+                }
+                setRootId(folderId);
+                setExpandedFolders(prev => ({
+                    ...prev,
+                    [folderId]: true,
+                }));
+                setStructure(prev => ({
+                    folders,
+                    files
+                }));
+                setStructure(prev => ({
+                    ...prev,
+                    folders: [rootFolder]
+                }));
+            } catch (err) {
+                console.error('폴더 로딩 실패 -> ', err);
+            }
         };
-        setRootId(folderId);
-        setExpandedFolders((prev) => ({
-          ...prev,
-          [folderId]: true,
-        }));
-        setStructure((prev) => ({
-          folders,
-          files,
-        }));
-        setStructure((prev) => ({
-          ...prev,
-          folders: [rootFolder],
-        }));
-      } catch (err) {
-        console.error("폴더 로딩 실패 -> ", err);
-      }
-    };
-    loadRootFolders();
-  }, [groupId, loadFolderInfo]);
+        loadRootFolders();
+    }, [groupId, loadFolderInfo]);
 
   // 설정 모달
   const handleOpenSettingsModal = () => {
@@ -430,8 +426,8 @@ function SideBar({ groupId }) {
   const handleFileClick = (file) => {
     const { id, type } = file;
     const pageMap = {
-      MAIN: `/group/${groupId}/main/`,
-      OVERVIEW: `/group/${groupId}/overview/`,
+      MAIN: `/group/${groupId}/main/${id}/`,
+      OVERVIEW: `/group/${groupId}/overview/${id}/`,
       NORMAL: `/group/${groupId}/${id}/`,
       CODE: `/group/${groupId}/code/${id}/`,
       TIME_OVERVIEW: `/group/${groupId}/time-overview/${id}/`,
@@ -441,8 +437,8 @@ function SideBar({ groupId }) {
 
   return (
     <div className="sidebar" ref={sidebarRef} style={{ width: sidebarWidth }}>
-      <div className="sidebar-header">
-        <Button variant="link" size="m" onClick={toggleSideBar}>
+      <div className="sidebar-header" onClick={toggleSideBar}>
+        <Button variant="link" size="m" >
           {isOpen ? <FaAngleDoubleLeft /> : <FaAngleDoubleRight />}
         </Button>
       </div>
