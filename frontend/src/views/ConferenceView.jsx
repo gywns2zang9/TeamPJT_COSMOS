@@ -353,7 +353,7 @@ function ConferenceView(props) {
         </div>
       ) : null}
       <div className="code-paint-space">
-        <Code toggleVideo={toggleVideo} isOpen={isOpen} />
+        <Code toggleVideo={toggleVideo} isOpen={isOpen} groupId={groupId} />
         <div className="right-space">
           <div className="paint-upper-space">
             <div>

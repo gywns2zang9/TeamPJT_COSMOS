@@ -5,7 +5,7 @@ import { MonacoBinding } from "y-monaco";
 import Editor from "@monaco-editor/react";
 import "../../css/conference/conference.css";
 
-const Code = ({ toggleVideo, isOpen }) => {
+const Code = ({ toggleVideo, isOpen, groupId }) => {
   const ydoc = useMemo(() => new Y.Doc(), []);
   const [editor, setEditor] = useState(null);
   const [provider, setProvider] = useState(null);
@@ -14,7 +14,8 @@ const Code = ({ toggleVideo, isOpen }) => {
   useEffect(() => {
     const provider = new WebsocketProvider(
       "wss://demos.yjs.dev/ws",
-      "monaco-react-2",
+      groupId,
+      // "monaco-react-2",
       ydoc
     );
     setProvider(provider);
@@ -22,7 +23,7 @@ const Code = ({ toggleVideo, isOpen }) => {
       provider?.destroy();
       ydoc.destroy();
     };
-  }, [ydoc]);
+  }, [ydoc, groupId]);
 
   useEffect(() => {
     if (provider == null || editor == null) {
