@@ -12,7 +12,7 @@ import java.io.*;
 public class CodeService {
 
     public ExecuteCodeResponse getExecuteResult(ExecuteCodeRequest request) throws IOException, InterruptedException {
-        String language = request.getLanguage().label(); // 언어
+        String language = request.getLanguage().getExtension(); // 언어
         String code = request.getContent(); // 코드
         String[] inputs = request.getInputs(); // input 값들
 
@@ -31,14 +31,14 @@ public class CodeService {
         // 언어에 따라서 지정하는 위치에 TempFile 생성
         // ex) Main##.py (##은 파일명이 겹치는 것을 대비해서 랜덤 숫자 자동 생성)
         File file = switch (language) {
-            case "python" -> File.createTempFile("Main", ".py", new File("C:\\SSAFY\\"));
-            // case "cpp" -> File.createTempFile("Main", ".cpp", new File("C:\\SSAFY\\"));
-            case "java" -> File.createTempFile("Main", ".java", new File("C:\\SSAFY\\"));
+            case ".py" -> File.createTempFile("Main", ".py", new File("C:\\SSAFY\\"));
+            // case ".cc" -> File.createTempFile("Main", ".cpp", new File("C:\\SSAFY\\"));
+            case ".java" -> File.createTempFile("Main", ".java", new File("C:\\SSAFY\\"));
             default -> throw new UnsupportedOperationException("Language not supported: " + language);
         };
 
         // 자바 파일의 경우, 파일명과 class 이름을 동일하게 설정
-        if (language.equals("java")) {
+        if (language.equals(".java")) {
             code = code.replaceAll("Main", file.getName().replace(".java", ""));
         }
 
@@ -52,7 +52,7 @@ public class CodeService {
 
         // file.getAbsolutePath(): 파일의 위치 + 이름
         // ex) C:\SSAFY\Main4753250257583809457.py
-        if (language.equals("python")) {
+        if (language.equals(".py")) {
             // 명령어: python(python.exe 명령어가 있는 절대 위치 필요) 파일 이름(파일이 있는 절대적 위치 필요)
             processBuilder = new ProcessBuilder("C:\\Users\\SSAFY\\AppData\\Local\\Programs\\Python\\Python312\\python", file.getAbsolutePath());
             processBuilder.redirectErrorStream(true);
@@ -104,7 +104,7 @@ public class CodeService {
 
         // 실행한 파일 삭제
         file.delete();
-        if (language.equals("java")) {
+        if (language.equals(".java")) {
             File classFile = new File(file.getParent(), file.getName().replace(".java", ".class"));
             if (classFile.exists()) {
                 classFile.delete();
