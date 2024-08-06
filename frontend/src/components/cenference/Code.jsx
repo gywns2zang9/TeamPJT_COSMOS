@@ -45,9 +45,12 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
     <div className="left-space">
       <div className="code-upper-space">
         <div>
-          <button className="button">백준</button>
-          <button className="button">프로그래머스</button>
-          <button className="button">SWEA</button>
+          <button className="button">내 코드 불러오기</button>
+          <select className="code-select">
+            <option value="code1">Java</option>
+            <option value="code2">Python</option>
+            <option value="code3">C++</option>
+          </select>
         </div>
         <div>
           <button className="button" onClick={toggleVideo}>
@@ -57,8 +60,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
       </div>
       <div className="code-space">
         <Editor
-          // height="100%"
-          // defaultValue="// some comment"
+          height="100%"
+          // defaultValue="sdfsdfsdfsdf"
+          // theme="vs-dark"
           defaultLanguage="java"
           onMount={(editor) => {
             setEditor(editor);
@@ -66,10 +70,15 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
         />
       </div>
       <div className="code-lower-space">
-        <button className="button">코드 공유하기</button>
-        <button className="button">코드 저장하기</button>
-        <button className="button">내 코드 보기</button>
-        <button className="button">공유 코드 보기</button>
+        <div className="code-buttons">
+          <button className="button">내 코드 공유</button>
+          <button className="button">코드 저장</button>
+          <button className="button">내 코드 보기</button>
+          <button className="button">공유 코드 보기</button>
+        </div>
+        <div className="compile-button">
+          <button className="button">컴파일</button>
+        </div>
       </div>
     </div>
   );

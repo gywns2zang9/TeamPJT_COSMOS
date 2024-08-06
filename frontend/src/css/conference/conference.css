@@ -13,9 +13,8 @@
   align-items: center; /* 세로 방향 중앙 정렬 */
   flex: 0.2; /* 플렉스 비율 설정 */
   width: 100%; /* 가로 폭을 부모 컨테이너에 맞춤 */
-  height: 100vh; /* 높이를 화면 전체 높이에 맞춤 */
-  margin: 0 auto; /* 양옆 자동 여백 설정으로 중앙 정렬 */
-  transition: max-height 0.3s ease-in-out;
+  margin: 0 auto;
+  transition: all 0.3s ease-in-out;
   overflow: hidden;
 }
 
@@ -35,11 +34,11 @@ video {
 }
 
 .video.open {
-  max-height: 100%; /* 비디오 컨테이너가 열릴 때 최대 높이 */
+  max-height: 100%;
 }
 
 .video.closed {
-  max-height: 0; /* 비디오 컨테이너가 닫힐 때 높이 0 */
+  max-height: 0;
 }
 
 .code-paint-space {
@@ -57,6 +56,7 @@ video {
   color: white;
   padding: 10px;
   border-radius: 8px;
+  overflow: hidden;
 }
 
 .code-upper-space {
@@ -72,6 +72,10 @@ video {
   border-radius: 5px;
   padding: 15px 5px;
   color: black;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
 }
 
 .right-space {
@@ -117,8 +121,16 @@ video {
 .code-lower-space {
   margin-top: 10px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
+}
+
+.code-buttons {
+  display: flex;
+}
+
+.compile-button {
+  display: flex;
 }
 
 .button {
@@ -169,12 +181,6 @@ video {
 
 .button-quit:hover {
   background-color: #ff1f1f;
-}
-
-.video-volume {
-  display: flex;
-  padding: 0px 10px;
-  gap: 10px;
 }
 
 .share-quit-buttons {
@@ -242,5 +248,20 @@ video {
 }
 
 .chat-footer button:hover {
+  background-color: #3a6695;
+}
+
+.code-select {
+  margin-left: 10px;
+  padding: 6px 12px;
+  /* border: 1px solid #ddd; */
+  border-radius: 5px;
+  background-color: #2f5074;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.code-select:hover {
   background-color: #3a6695;
 }
