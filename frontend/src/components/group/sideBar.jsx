@@ -93,33 +93,6 @@ function SideBar({ groupId }) {
     };
   }, []);
 
-    // 최상위 폴더 로드 - 
-    useEffect(() => {
-      const loadRootFolder = async () => {
-          try {
-              const { folderId, folders, files } = await loadFolderInfo({ groupId, folderId: 0 });
-              const rootFolder = {
-                  type: 'folder',
-                  id: folderId,
-                  name: 'Root',
-                  parentId: null,
-              };
-              setRootId(folderId);
-              setExpandedFolders({ [folderId]: true });
-              setStructure({
-                  folders: [rootFolder, ...folders],
-                  files: files,
-              });
-          } catch (err) {
-              console.error('루트폴더 로드 실패 -> ', err);
-          }
-      };
-
-      if (structure.files.length === 0) {
-          loadRootFolder();
-      }
-    }, [groupId, loadFolderInfo]);
-
   // 설정 모달
   const handleOpenSettingsModal = () => {
     setShowSettingsModal(true);
@@ -138,18 +111,16 @@ function SideBar({ groupId }) {
     setShowInviteModal(false);
   };
 
-  // 화상회의시작하기
+  // 화상회의 모달
   const handleOpenVideoStartModal = () => {
     setShowConfirmVideoStart(true);
   };
 
-  // 화상회의 모달 닫기
   const handleCloseVideoStartModal = () => {
     setShowConfirmVideoStart(false);
   };
 
   const handleStartVideo = () => {
-    // 화상 회의 시작 로직 추가
     navigate(`/conference/${groupId}`);
     setShowConfirmVideoStart(false);
   };
@@ -181,7 +152,8 @@ function SideBar({ groupId }) {
           parentId: parentId,
           content: "",
         };
-        if (newItemType === "folder") {
+        console.log(newItem);
+        if (newItem.Type === "folder") {
           createFolder({
             groupId,
             parentId: parentId,
@@ -260,20 +232,53 @@ function SideBar({ groupId }) {
     setEditName("");
   };
 
+// 최상위 폴더 로드 
+useEffect(() => {
+  const loadRootFolder = async () => {
+    try {
+        const { folderId, folders, files } = await loadFolderInfo({ groupId, folderId: 0 });
+        const rootFolder = {
+            type: 'folder',
+            id: folderId,
+            name: 'Root',
+            parentId: null,
+        };
+        setRootId(folderId);
+        setExpandedFolders({ [folderId]: true });
+        setStructure({
+            folders: [rootFolder, ...folders],
+            files: files,
+        });
+    } catch (err) {
+        console.error('루트폴더 로드 실패 -> ', err);
+    }
+  };
+
+    if (structure.files.length === 0) {
+        loadRootFolder();
+    }
+  }, [groupId, loadFolderInfo]);
+
   // 서브폴더 로드
   const loadSubFolders = async (parentId) => {
     try {
         const { folders, files } = await loadFolderInfo({ groupId, folderId: parentId });
         setStructure((prev) => ({
-            folders: [...prev.folders, ...folders],
-            files: [...prev.files, ...files],
-        }));
+          folders: [
+              ...prev.folders,
+              ...folders.filter(f => !prev.folders.some(existingFolder => existingFolder.id === f.id))
+          ],
+          files: [
+              ...prev.files,
+              ...files.filter(f => !prev.files.some(existingFile => existingFile.id === f.id))
+          ],
+      }));
     } catch (err) {
         console.error('Failed to load subfolders:', err);
     }
   };
 
-  // 폴더 확장 - TODO
+  // 폴더 확장
   const toggleFolderExpansion = (folderId) => {
       const isExpanded = expandedFolders[folderId];
       if (isExpanded) {
@@ -311,11 +316,12 @@ function SideBar({ groupId }) {
     if (folder.id === rootId) {
       return (
         <div key={folder.id} className="sidebar-content">
-          {structure.folders.filter((f) => f.parentId === folder.id).map(renderFolder)}
           {renderFiles(structure.files.filter((f) => f.parentId === folder.id))}
+          {structure.folders.filter((f) => f.parentId === folder.id).map(renderFolder)}
         </div>
       );
     }
+
     const isExpanded = expandedFolders[folder.id] || false;
     const childFolders = structure.folders.filter((f) => f.parentId === folder.id);
     const childFiles = structure.files.filter((f) => f.parentId === folder.id);
@@ -385,8 +391,8 @@ function SideBar({ groupId }) {
         </div>
         {isExpanded && (
           <div className="folder-contents ms-3">
-            {childFolders.map(renderFolder)}
             {renderFiles(childFiles)}
+            {childFolders.map(renderFolder)}
           </div>
         )}
       </div>

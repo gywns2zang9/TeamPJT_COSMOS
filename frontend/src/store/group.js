@@ -382,6 +382,49 @@ const useGroupStore = create((set) => ({
         }
     },
 
+    // 일반 페이지 수정하기
+    updateNormalFile: async ({ groupId, fileId, name, content }) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+        };
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/files/${fileId}`;
+            const data = {
+                name,
+                content
+            };
+            const response = await get(url, data, headers);
+            console.log(response);
+            return response
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+
+    // 코드 페이지 수정하기
+    updateCodeFile: async ({ groupId, fileId, name, code, content, language }) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+        };
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/files/codes/${fileId}`;
+            const data = {
+                name,
+                code,
+                content,
+                language
+            };
+            const response = await get(url, data, headers);
+            console.log(response);
+            return response
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
     // 캘린더 일정 목록 불러오기
     loadCalendarScheduleList: async ({ groupId }) => {
         try {

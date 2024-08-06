@@ -2,9 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import SimpleMDE from 'simplemde';
 import 'simplemde/dist/simplemde.min.css';
 import axios from 'axios';
-
-// 페이지 떠날 때, 페이지를 저장하는 API
-// 페이지 렌더링 할 때, 페이지를 받는 API
+import useGroupStore from '../../../store/group.js';
 
 const NormalTemplates = ({ pageId, groupId }) => {
     const editorRef = useRef(null);
@@ -35,7 +33,7 @@ const NormalTemplates = ({ pageId, groupId }) => {
                 .catch(error => console.error('Save error', error));
         });
 
-        // 단축기 설정
+        // 단축키 설정
         const editorInstance = simpleMDE.codemirror;
         editorInstance.setOption('extraKeys', {
             'Ctrl-B': () => {
