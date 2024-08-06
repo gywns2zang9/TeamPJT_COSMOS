@@ -1,5 +1,8 @@
 package S11P12A708.A708.domain.code.service;
 
+import S11P12A708.A708.domain.code.entity.Code;
+import S11P12A708.A708.domain.code.exception.CodeNotFoundException;
+import S11P12A708.A708.domain.code.repository.CodeRepository;
 import S11P12A708.A708.domain.code.repository.query.CodeQueryRepository;
 import S11P12A708.A708.domain.code.request.ExecuteCodeRequest;
 import S11P12A708.A708.domain.code.response.*;
@@ -24,6 +27,7 @@ public class CodeService {
     private final CodeQueryRepository codeQueryRepository;
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
+    private final CodeRepository codeRepository;
 
     public List<CodeYearFilterResponse> getCodeFilter(Long teamId, Long userId) {
         teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
@@ -65,6 +69,13 @@ public class CodeService {
         }
 
         return yearFilters;
+    }
+
+    public CodeResponse getCode(Long teamId, Long codeId) {
+        teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        Code code = codeRepository.findById(codeId).orElseThrow(CodeNotFoundException::new);
+
+        return new CodeResponse(code);
     }
 
     public ExecuteCodeResponse getExecuteResult(ExecuteCodeRequest request) throws IOException, InterruptedException {
