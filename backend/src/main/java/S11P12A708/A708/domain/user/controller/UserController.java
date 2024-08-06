@@ -29,8 +29,8 @@ public class UserController {
 
     @GetMapping("/{userId}/codes")
     public ResponseEntity<List<UserCode>> getUserCode(@PathVariable Long userId) {
-        final List<UserCode> userCode = userService.getUserCodeByUserID(userId);
-        return new ResponseEntity<>(userCode, HttpStatus.OK);
+        final List<UserCode> userCodes = userService.getUserCodeByUserID(userId);
+        return new ResponseEntity<>(userCodes, HttpStatus.OK);
     }
 
     @PatchMapping("/{userId}")

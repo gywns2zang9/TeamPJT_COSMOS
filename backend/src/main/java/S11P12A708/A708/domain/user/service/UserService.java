@@ -4,6 +4,7 @@ import S11P12A708.A708.domain.auth.exception.InvalidPasswordException;
 import S11P12A708.A708.domain.auth.service.AuthService;
 import S11P12A708.A708.domain.folder.repository.FolderRepository;
 import S11P12A708.A708.domain.problem.entity.ProblemUser;
+import S11P12A708.A708.domain.problem.exception.ProblemNotFoundException;
 import S11P12A708.A708.domain.problem.repository.ProblemRepository;
 import S11P12A708.A708.domain.problem.repository.ProblemUserRepository;
 import S11P12A708.A708.domain.team.entity.Team;
@@ -59,7 +60,7 @@ public class UserService {
                 .map(problemUser -> {
                     long problemId = problemUser.getProblem().getId();
                     String title = problemRepository.findById(problemId)
-                            .orElseThrow(ProblemNotExistException::new)
+                            .orElseThrow(ProblemNotFoundException::new)
                             .getName();
 
                     long fileId = problemUser.getFile().getId();

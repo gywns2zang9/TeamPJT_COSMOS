@@ -23,9 +23,4 @@ public class UserCode {
     @NotBlank
     String problem;
 
-    public UserCode(String fileId, Long teamId, String problem) {
-        this.fileId = Long.parseLong(fileId);
-        this.teamId = teamId;
-        this.problem = problem;
-    }
 }
