@@ -437,8 +437,8 @@ function SideBar({ groupId }) {
 
   return (
     <div className="sidebar" ref={sidebarRef} style={{ width: sidebarWidth }}>
-      <div className="sidebar-header">
-        <Button variant="link" size="m" onClick={toggleSideBar}>
+      <div className="sidebar-header" onClick={toggleSideBar}>
+        <Button variant="link" size="m" >
           {isOpen ? <FaAngleDoubleLeft /> : <FaAngleDoubleRight />}
         </Button>
       </div>

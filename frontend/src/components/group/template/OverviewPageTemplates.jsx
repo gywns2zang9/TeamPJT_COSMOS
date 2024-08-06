@@ -19,7 +19,7 @@ const OverviewPageTemplates = ({ groupId, pageId }) => {
         };
         loadMembers();
     }, [groupId, groupMemberListLoad]);
-
+    
     return (
         <div style={{ color: 'white' }}>
             <h1>7월 2주차 스터디</h1>
