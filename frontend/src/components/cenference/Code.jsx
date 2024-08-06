@@ -3,9 +3,10 @@ import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
 import { MonacoBinding } from "y-monaco";
 import Editor from "@monaco-editor/react";
-import "../../css/conference/conference.css";
+import "../../css/conference/code.css";
 
 const Code = ({ toggleVideo, isOpen, groupId }) => {
+  // Yjs 문서 인스턴스를 생성
   const ydoc = useMemo(() => new Y.Doc(), []);
   const [editor, setEditor] = useState(null);
   const [provider, setProvider] = useState(null);
@@ -17,14 +18,17 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   };
 
   useEffect(() => {
+    // WebsocketProvider를 생성하여 Yjs 문서와 연결
     const provider = new WebsocketProvider(
-      "wss://demos.yjs.dev/ws",
-      groupId,
-      // "monaco-react-2",
-      ydoc
+      "wss://demos.yjs.dev/ws", // Yjs WebSocket 서버 URL
+      groupId, // 그룹 ID
+      ydoc // Yjs 문서 인스턴스
     );
     setProvider(provider);
+
     return () => {
+      // 컴포넌트 언마운트 시 Yjs 문서 내용을 삭제
+      ydoc.getText().delete(0, ydoc.getText().length);
       provider?.destroy();
       ydoc.destroy();
     };
@@ -34,11 +38,13 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
     if (provider == null || editor == null) {
       return;
     }
+
+    // MonacoBinding을 생성하여 Yjs 문서와 Monaco Editor를 연결
     const binding = new MonacoBinding(
-      ydoc.getText(),
-      editor.getModel(),
-      new Set([editor]),
-      provider.awareness
+      ydoc.getText(), // Yjs 문서의 텍스트 데이터
+      editor.getModel(), // Monaco Editor의 모델
+      new Set([editor]), // 에디터 인스턴스 Set으로 감싸기
+      provider.awareness // 사용자 커서 등의 상태를 동기화하는 Awareness 인스턴스
     );
     setBinding(binding);
     return () => {
@@ -73,12 +79,11 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
           }}
         />
       </div>
-      <div></div>
       <div className="code-lower-space">
         <div className="code-buttons">
           <button className="button">내 코드 공유</button>
           <button className="button">코드 저장</button>
-          <button className="button">코드 보기</button>
+          <button className="button">내 코드 보기</button>
           <button className="button">공유 코드 보기</button>
         </div>
         <div className="compile-button">
