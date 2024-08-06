@@ -1,15 +1,68 @@
 package S11P12A708.A708.domain.code.service;
 
+import S11P12A708.A708.domain.auth.request.AuthUserDto;
+import S11P12A708.A708.domain.code.repository.query.CodeQueryRepository;
 import S11P12A708.A708.domain.code.request.ExecuteCodeRequest;
-import S11P12A708.A708.domain.code.response.ExecuteCodeResponse;
+import S11P12A708.A708.domain.code.response.*;
+import S11P12A708.A708.domain.study.entity.Study;
+import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
+import S11P12A708.A708.domain.team.repository.TeamRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CodeService {
+
+    private final CodeQueryRepository codeQueryRepository;
+    private final TeamRepository teamRepository;
+
+    public List<CodeYearFilterResponse> getCodeFilter(AuthUserDto authUser, Long teamId) {
+        teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        List<Study> studies = codeQueryRepository.findStudiesFilter(teamId);
+
+        List<CodeYearFilterResponse> yearFilters = new ArrayList<>();
+        List<Integer> yearArray = studies.stream().map(Study::getYear).distinct().toList();
+
+        for (Integer yearValue : yearArray) {
+            CodeYearFilterResponse yearFilter = new CodeYearFilterResponse(1, yearValue);
+            List<CodeMonthFilterResponse> monthFilters = new ArrayList<>();
+            List<Integer> monthArray = studies.stream().filter(study -> study.getYear().equals(yearValue)).map(Study::getMonth).distinct().toList();
+
+            for (Integer monthValue : monthArray) {
+                CodeMonthFilterResponse monthFilter = new CodeMonthFilterResponse(2, monthValue);
+                List<CodeTimeFilterResponse> timesFilters = new ArrayList<>(studies.stream()
+                        .filter(study -> study.getYear().equals(yearValue) && study.getMonth().equals(monthValue))
+                        .map(study -> new CodeTimeFilterResponse(3, study.getId(), study.getTimes()))
+                        .toList());
+
+                for (CodeTimeFilterResponse timesFilter : timesFilters) {
+                    List<CodeResponse> res = codeQueryRepository.findCodesListByStudyId(timesFilter.getStudyId(), authUser.getId());
+                    timesFilter.setCodes(res);
+                }
+
+                timesFilters.removeIf(timesFilter -> timesFilter.getCodes().isEmpty());
+
+                if (!timesFilters.isEmpty()) {
+                    monthFilter.setTimes(timesFilters);
+                    monthFilters.add(monthFilter);
+                }
+            }
+
+            if (!monthFilters.isEmpty()) {
+                yearFilter.setMonths(monthFilters);
+                yearFilters.add(yearFilter);
+            }
+        }
+
+        return yearFilters;
+    }
 
     public ExecuteCodeResponse getExecuteResult(ExecuteCodeRequest request) throws IOException, InterruptedException {
         String language = request.getLanguage().getExtension(); // 언어
