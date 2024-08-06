@@ -1,7 +1,7 @@
 import { OpenVidu } from "openvidu-browser";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Code from "../components/cenference/Code";
 import Paint from "../components/cenference/Paint";
 import VideocamIcon from "@mui/icons-material/Videocam";
@@ -10,6 +10,7 @@ import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
 import axios from "axios";
 import UserVideoComponent from "../components/cenference/UserVideoComponent";
+import LeaveSessionModal from "../modals/LeaveSessionModal";
 import "../css/conference/conference.css";
 
 import useAuthStore from "../store/auth";
@@ -18,12 +19,13 @@ import useAuthStore from "../store/auth";
 const APPLICATION_SERVER_URL = "http://localhost:8080/";
 
 function ConferenceView(props) {
-  // 닉네임 불러오는 코드 추가
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
   const getUserInfo = useAuthStore((state) => state.getUserInfo);
   const userInfo = getUserInfo();
-  const [myUserName, setMyUserName] = useState(userInfo.nickName);
-
+  const navigate = useNavigate();
   const { groupId } = useParams();
+
+  const [myUserName, setMyUserName] = useState(userInfo.nickName);
   const [isOpen, setIsOpen] = useState(true);
   const [isVideoEnabled, setisVideoEnabled] = useState(true);
   const [isMicEnabled, setisMicEnabled] = useState(true);
@@ -183,8 +185,6 @@ function ConferenceView(props) {
     return () => {
       window.removeEventListener("beforeunload", onbeforeunload);
       // leaveSession();
-      window.removeEventListener("beforeunload", onbeforeunload);
-      // leaveSession();
     };
   }, []);
 
@@ -285,6 +285,21 @@ function ConferenceView(props) {
     setMyUserName(myUserName);
     setMainStreamManager(undefined);
     setPublisher(undefined);
+
+    navigate(`/group/${groupId}/1`);
+  };
+
+  const handleLeaveButtonClick = () => {
+    setShowLeaveModal(true);
+  };
+
+  const handleCloseLeaveModal = () => {
+    setShowLeaveModal(false);
+  };
+
+  const handleLeaveSession = () => {
+    leaveSession();
+    setShowLeaveModal(false);
   };
 
   async function getToken() {
@@ -405,9 +420,14 @@ function ConferenceView(props) {
               <button className="button-share" onClick={toggleScreenShare}>
                 화면 공유하기
               </button>
-              <button className="button-quit" onClick={leaveSession}>
+              <button className="button-quit" onClick={handleLeaveButtonClick}>
                 나가기
               </button>
+              <LeaveSessionModal
+                show={showLeaveModal}
+                handleClose={handleCloseLeaveModal}
+                handleLeaveSession={handleLeaveSession}
+              />
             </div>
           </div>
         </div>
