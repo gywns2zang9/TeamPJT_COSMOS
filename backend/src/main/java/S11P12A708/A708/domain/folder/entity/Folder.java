@@ -66,6 +66,14 @@ public class Folder {
         subFolder.setParentFolder(null);
     }
 
+    public void addFile(File file) {
+        files.add(file);
+    }
+
+    public void removeFile(File file) {
+        files.remove(file);
+    }
+
     public Folder(String name, User user, Team team, Folder parentFolder, Problem problem) {
         this.name = name;
         this.user = user;
@@ -81,6 +89,14 @@ public class Folder {
 
     public static Folder createRootFolder(Team team) {
         return new Folder("root", team, null);
+    }
+
+    public static Folder createProblemFolder(Team team, Folder parentFolder, Problem problem) {
+        return new Folder(problem.getName(), null, team, parentFolder, problem);
+    }
+
+    public static Folder createIndividualCodeFolder(Team team, User user,Folder parentFolder, Problem problem) {
+        return new Folder(user.getNickname(), user, team, parentFolder, problem);
     }
 
 }

@@ -1,19 +1,16 @@
 package S11P12A708.A708.domain.code.entity;
 
+import lombok.Getter;
+
+@Getter
 public enum Language {
 
-    PYTHON("python"),
-    CPP("cpp"),
-    JAVA("java")
-    ;
+    JAVA(".java"), PYTHON(".py"), CPP(".cc");
 
-    private final String label;
+    private final String extension;
 
-    Language(String label) {
-        this.label = label;
+    Language(String extension) {
+        this.extension = extension;
     }
 
-    public String label() {
-        return label;
-    }
 }

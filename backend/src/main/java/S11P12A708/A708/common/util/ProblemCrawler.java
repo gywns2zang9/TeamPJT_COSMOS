@@ -2,6 +2,8 @@ package S11P12A708.A708.common.util;
 
 import S11P12A708.A708.domain.problem.entity.Problem;
 import S11P12A708.A708.domain.problem.entity.SiteInfoType;
+import S11P12A708.A708.domain.problem.exception.ProblemNotExistException;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
@@ -10,28 +12,24 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+@Slf4j
 @Component
 public class ProblemCrawler {
     private static final String BOJ_API_URL = "https://solved.ac/api/v3/problem/show";
-
-//    public static void main(String[] args) {
-//        System.out.println(ProblemCrawler.getBojProblem(12422));
-//    }
+    private static final String BOJ_Problem_URL = "https://www.acmicpc.net/problem/";
 
     public static BojProblem getBojProblem(int number){
         try {
             // API 호출
             String jsonResponse = sendGetRequest(number);
+            if (jsonResponse.equals("fail")) return null;
 
             // JSON 데이터 처리
             JSONObject jsonObject = new JSONObject(jsonResponse);
-//            System.out.println("Problem ID: " + jsonObject.getInt("problemId"));
-//            System.out.println("Title: " + jsonObject.getString("titleKo"));
-//            System.out.println("Difficulty: " + jsonObject.getInt("level"));
             String title = jsonObject.getString("titleKo");
             String level = getRating(jsonObject.getInt("level"));
-
-            return new BojProblem(SiteInfoType.BAEKJOON,number,title,level);
+            String url = new StringBuilder().append(BOJ_Problem_URL).append(number).toString();
+            return new BojProblem(SiteInfoType.BAEKJOON,number,title,level,url);
             // 필요한 다른 필드를 추가로 출력할 수 있습니다.
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,6 +45,7 @@ public class ProblemCrawler {
 
         int responseCode = con.getResponseCode();
         System.out.println("GET Response Code :: " + responseCode);
+        if (responseCode == 404) return "fail";
 
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
@@ -69,7 +68,7 @@ public class ProblemCrawler {
             case 0:
                 return "unrated";
             case 1:
-                return "BRONZE V";
+                return "Bronze V";
             case 2:
                 return "Bronze IV";
             case 3:

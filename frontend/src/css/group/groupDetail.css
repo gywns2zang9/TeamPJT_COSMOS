@@ -1,0 +1,13 @@
+#group-detail-info {
+    display: flex;
+    background-color: transparent;
+}
+
+#sidebar {
+    flex: 0 0 auto; /* 사이드바 크기 고정 */
+}
+
+#group-detail-info-page {
+    flex: 1 1 auto; /* 남은 영역 차지 */
+    overflow: auto - 20px; /* 내용이 많을 경우 스크롤 가능 */
+}

@@ -10,10 +10,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FolderInfoResponse {
 
+    private Long folderId;
     private List<FolderResponse> folders;
     private List<FileResponse> files;
 
-    public FolderInfoResponse(List<FolderResponse> folders, List<FileResponse> files) {
+    public FolderInfoResponse(Long folderId, List<FolderResponse> folders, List<FileResponse> files) {
+        this.folderId = folderId;
         this.folders = folders;
         this.files = files;
     }
@@ -21,6 +23,7 @@ public class FolderInfoResponse {
     public static FolderInfoResponse of(Folder folder) {
         final Long folderId = folder.getId();
         return new FolderInfoResponse(
+                folder.getId(),
                 folder.getSubFolders().stream().
                         map(FolderResponse::fromFolder)
                         .toList(),

@@ -18,6 +18,8 @@ public class Code {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Column(nullable = false)
@@ -28,4 +30,18 @@ public class Code {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    public Code(String content, Language language) {
+        this.content = content;
+        this.language = language;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public static Code createBasic() {
+        return new Code("", Language.JAVA);
+    }
+
+    public void update(Code newCode) {
+        this.content = newCode.getContent();
+        this.language = newCode.getLanguage();
+    }
 }

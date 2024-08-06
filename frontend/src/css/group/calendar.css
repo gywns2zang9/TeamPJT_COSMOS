@@ -1,0 +1,70 @@
+.fullcalendar-wrapper {
+    width: 100%;
+    border: 1px solid #2F95DC;
+    border-radius: 5%;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: transparent;
+}
+
+.fc-daygrid-day-number {
+    color: white;
+    text-decoration: none; /* 숫자 부분의 기본 밑줄 제거 */
+    cursor: pointer; /* 마우스 모양을 손 모양으로 변경 */
+}
+
+.fc-daygrid-day-number:hover {
+    color: lightgray; /* 마우스를 올렸을 때 색상 변경 */
+}
+
+
+.fc-daygrid-day.fc-day-sun .fc-daygrid-day-number,
+.fc-col-header-cell.fc-day.fc-day-sun .fc-scrollgrid-sync-inner .fc-col-header-cell-cushion {
+    color: red; /* 일요일 숫자 색상 */
+}
+
+.fc-daygrid-day.fc-day-sat .fc-daygrid-day-number,
+.fc-col-header-cell.fc-day.fc-day-sat .fc-scrollgrid-sync-inner .fc-col-header-cell-cushion {
+    color: blue; /* 토요일 숫자 색상 */
+}
+
+.fc-toolbar-title {
+    color: white;
+}
+
+.fc-col-header-cell-cushion {
+    text-decoration: none;
+    color: white;
+}
+
+.fc-col-header-cell-cushion:hover {
+    text-decoration: none !important;
+    cursor: default !important;
+    color: #0D6EFD;
+}
+
+/* 주별, 일별에서 보이는 시간 글씨 색상 */
+.fc-timegrid-slot-label {
+    color: white;
+}
+
+/* 시간 단위를 2시간 단위로 설정 */
+.fc-timegrid-slot-lane {
+    height: 4em; /* 한 줄의 높이를 조절 */
+}
+
+.fc-timegrid-axis-cushion.fc-scrollgrid-shrink-cushion.fc-scrollgrid-sync-inner {
+    color: white;
+}
+
+.tooltip-inner {
+    background-color: #7044c2; /* 툴팁 배경색 */
+    color: #fff; /* 툴팁 글자색 */
+    padding: 5px 5px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.tooltip-arrow {
+    display: none;
+}

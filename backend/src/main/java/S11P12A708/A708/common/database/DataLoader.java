@@ -29,7 +29,7 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void createTestUser(String testName) {
-        User user = new User(testName, testName, UserType.NORMAL, testName);
+        User user = new User(testName, testName, UserType.NORMAL, testName, "hyukji", "AlgorithmProblem");
         user.hashPassword(bCryptPasswordEncoder);
         userRepository.save(user);
     }

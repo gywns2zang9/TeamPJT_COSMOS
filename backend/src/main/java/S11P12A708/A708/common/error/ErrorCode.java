@@ -16,8 +16,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(UNPROCESSABLE_ENTITY, "user", "user not found."),
     USER_INVALID(UNPROCESSABLE_ENTITY, "user", "user request is incorrect."),
     USER_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "user", "email is already exist."),
-    INVALID_ACCESS(UNPROCESSABLE_ENTITY, "user", "Token userId does not match URL userId."),
-    ONLY_NORMAL_PW(UNPROCESSABLE_ENTITY, "user", "Only NORMAL login users can change password."),
+    INVALID_ACCESS(UNPROCESSABLE_ENTITY, "user", "token userId does not match URL userId."),
+    ONLY_NORMAL_PW(UNPROCESSABLE_ENTITY, "user", "only NORMAL login users can change password."),
 
     // Auth-Code
     FAIL_MAIL(UNPROCESSABLE_ENTITY, "auth-code", "failed to send email."),
@@ -45,11 +45,25 @@ public enum ErrorCode {
     CALENDAR_NOT_FOUND(UNPROCESSABLE_ENTITY, "calendar", "This Calendar is not exist"),
     CALENDAR_TIME_FORMAT(UNPROCESSABLE_ENTITY, "calendar", "Calendar time format is invaild"),
 
+    // Problem
+    PROBLEM_NOT_FOUND(UNPROCESSABLE_ENTITY, "problem", "problem is not found."),
+    PROBLEM_NOT_EXIST(UNPROCESSABLE_ENTITY, "problem", "problem is not exist."),
+    CODE_NOT_EXIST(UNPROCESSABLE_ENTITY, "problem", "code is not exist."),
+    USER_INFO_NECESSARY(UNPROCESSABLE_ENTITY, "problem", "user's git, repo information is necessary for crawling."),
+
     //Folder
     FOLDER_NOT_FOUND(UNPROCESSABLE_ENTITY, "folder", "This Folder is not exist"),
     FOLDER_NAME_DUPLICATE(UNPROCESSABLE_ENTITY, "folder", "This Folder name already exist"),
-    FOLDER_NOT_BELONG_TO_TEAM(UNPROCESSABLE_ENTITY, "folder", "Folder does not belong to the specified team");
+    FOLDER_NOT_BELONG_TO_TEAM(UNPROCESSABLE_ENTITY, "folder", "Folder does not belong to the specified team"),
 
+    // file
+    FILE_NOT_FOUND(UNPROCESSABLE_ENTITY, "file", "This file is not exist"),
+    FILE_NAME_DUPLICATE(UNPROCESSABLE_ENTITY, "file", "This file name already exist"),
+    FOLDER_NOT_PROBLEM_INFO(UNPROCESSABLE_ENTITY, "file", "this folder cannot have code file"),
+
+    // Study
+    STUDY_NOT_FOUND(UNPROCESSABLE_ENTITY, "study", "This study is not exist"),
+    STUDY_NOT_BELONG_TO_TEAM(UNPROCESSABLE_ENTITY, "study", "study does not belong to the specified team");
 
     private final HttpStatus code;
     private final String body;
