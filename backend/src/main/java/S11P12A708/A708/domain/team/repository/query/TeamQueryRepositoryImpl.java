@@ -1,13 +1,16 @@
 package S11P12A708.A708.domain.team.repository.query;
 
+import static S11P12A708.A708.domain.problem.entity.QProblemUser.problemUser;
 import static S11P12A708.A708.domain.team.entity.QTeam.team;
 import static S11P12A708.A708.domain.team.entity.QTeamUser.teamUser;
 import static S11P12A708.A708.domain.user.entity.QUser.user;
 
+import S11P12A708.A708.domain.file.response.SolveStatusResponse;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.entity.TeamUser;
 import S11P12A708.A708.domain.team.entity.TeamUserRole;
 import S11P12A708.A708.domain.user.entity.User;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -76,5 +79,19 @@ public class TeamQueryRepositoryImpl implements TeamQueryRepository {
                 ), user.nickname.contains(nickName))
                 .fetch()
                 .stream().toList();
+    }
+
+    @Override
+    public List<SolveStatusResponse> findSolveUsersByProblemId(Long problemId) {
+        return queryFactory
+                .select(Projections.constructor(SolveStatusResponse.class,
+                        user.id,
+                        user.nickname,
+                        problemUser.status,
+                        problemUser.file.id))
+                .from(problemUser)
+                .join(problemUser.user, user)
+                .where(problemUser.problem.id.eq(problemId))
+                .fetch();
     }
 }

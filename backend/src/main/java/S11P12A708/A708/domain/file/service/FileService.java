@@ -13,6 +13,7 @@ import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.file.request.FileCreateRequest;
 import S11P12A708.A708.domain.file.request.FileUpdateRequest;
 import S11P12A708.A708.domain.file.response.FileInfoResponse;
+import S11P12A708.A708.domain.file.response.FileProblemResponse;
 import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.folder.exception.FolderNotBelongToTeamException;
 import S11P12A708.A708.domain.folder.exception.FolderNotFoundException;
@@ -24,6 +25,8 @@ import S11P12A708.A708.domain.study.repository.StudyRepository;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
+import S11P12A708.A708.domain.team.repository.TeamUserRepository;
+import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.user.repository.UserRepository;
@@ -32,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -43,10 +47,12 @@ public class FileService {
     private final FolderRepository folderRepository;
     private final FileRepository fileRepository;
     private final TeamRepository teamRepository;
+    private final TeamQueryRepository teamQueryRepository;
     private final UserRepository userRepository;
     private final ProblemRepository problemRepository;
     private final StudyRepository studyRepository;
     private final CodeRepository codeRepository;
+    private final TeamUserRepository teamUserRepository;
 
     public FileInfoResponse createNormalFile(Long teamId, FileCreateRequest request) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
@@ -107,21 +113,29 @@ public class FileService {
 
         if(file.getType() == FileType.OVERVIEW) {
             final List<Study> studies = studyRepository.findByTeam(team);
-            final List<Problem> problems = new java.util.ArrayList<>();
+            final List<FileProblemResponse> fileProblems = new ArrayList<>();
             for(Study study : studies) {
-                problems.addAll(problemRepository.findByStudy(study)); // 팀에 소속된 전체 문제들
+                for (Problem problem : problemRepository.findByStudy(study)) { // 팀에 소속된 전체 문제들
+                    fileProblems.add(
+                            FileProblemResponse.of(problem, teamQueryRepository.findSolveUsersByProblemId(problem.getId())));
+                }
             }
 
-            return FileInfoResponse.fromOverViewFile(file, problems);
+            return FileInfoResponse.fromOverViewFile(file, fileProblems);
         }
 
         if(file.getType() == FileType.TIME_OVERVIEW) {
             final Folder folder = file.getFolder();
+            final List<FileProblemResponse> fileProblems = new ArrayList<>();
             final List<Problem> problems = folder.getSubFolders().stream()
                     .map(Folder::getProblem)
                     .toList();
+            for (Problem problem : problems) {
+                fileProblems.add(
+                        FileProblemResponse.of(problem, teamQueryRepository.findSolveUsersByProblemId(problem.getId())));
+            }
 
-            return FileInfoResponse.fromTimeOverViewFile(file, problems, file.getStudy());
+            return FileInfoResponse.fromTimeOverViewFile(file, fileProblems, file.getStudy());
         }
 
         if(file.getType() == FileType.CODE) {
