@@ -169,7 +169,7 @@ public class FileService {
     }
 
     private static void validateProblemFolder(Folder folder) {
-        if(folder.getProblem().equals(null)) throw new FolderNotProblemInfoException();
+        if (folder.getProblem() == null) throw new FolderNotProblemInfoException();
     }
 
     public void deleteFile(Long teamId, Long fileId) {
