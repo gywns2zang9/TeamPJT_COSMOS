@@ -100,7 +100,7 @@ public class FileService {
                     .map(Folder::getProblem)
                     .toList();
 
-            return FileResponse.fromOverViewFile(file, problems);
+            return FileResponse.fromTimeOverViewFile(file, problems, file.getStudy());
         }
 
         if(file.getType() == FileType.CODE) {
