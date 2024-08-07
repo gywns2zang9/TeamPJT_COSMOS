@@ -43,7 +43,7 @@ public class FileService {
     private final ProblemRepository problemRepository;
     private final StudyRepository studyRepository;
 
-    public void createNormalFile(Long teamId, FileCreateRequest request) {
+    public FileResponse createNormalFile(Long teamId, FileCreateRequest request) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final Folder folder = folderRepository.findById(request.getFolderId()).orElseThrow(FolderNotFoundException::new);
         validateTeamFolder(folder, team);
@@ -51,6 +51,8 @@ public class FileService {
 
         final File newFile = File.createNormalFile(request.getFileName(), folder);
         fileRepository.save(newFile);
+
+        return FileResponse.fromFile(newFile);
     }
 
     public void updateNormalFile(Long teamId, Long fileId, FileUpdateRequest request) {

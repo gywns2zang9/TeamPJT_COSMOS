@@ -21,11 +21,11 @@ public class FileController {
     private final FileService fileService;
 
     @PostMapping("/teams/{teamId}/file")
-    public ResponseEntity<Void> createNormalFile(
+    public ResponseEntity<FileResponse> createNormalFile(
             @PathVariable("teamId") Long teamId,
             @Valid @RequestBody FileCreateRequest request) {
-        fileService.createNormalFile(teamId, request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        final FileResponse response = fileService.createNormalFile(teamId, request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PatchMapping("/teams/{teamId}/file/{fileId}")
