@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import ShareCode from "./ShareCode"; // ShareCode 컴포넌트 import
+import axios from "axios";
 import "../../css/conference/code.css";
 
 const Code = ({ toggleVideo, isOpen, groupId }) => {
   const [language, setLanguage] = useState("java");
   const [isShared, setIsShared] = useState(false);
   const [personalCode, setPersonalCode] = useState("");
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
 
   const handleLanguageChange = (event) => {
     setLanguage(event.target.value);
@@ -31,6 +34,23 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const handleEditorChange = (value) => {
     setPersonalCode(value);
     localStorage.setItem("personalCode", value); // 개인 코드를 localStorage에 저장
+  };
+
+  const handleCompile = async () => {
+    try {
+      const response = await axios.post(`/teams/${groupId}/codes/execute`, {
+        content: personalCode,
+        language: language,
+        inputs: input,
+      });
+
+      const results = response.data;
+      const resultString = results.map((res) => res.result).join("\n");
+      setOutput(resultString);
+    } catch (error) {
+      console.error("Error compiling code:", error);
+      setOutput("Error compiling code");
+    }
   };
 
   return (
@@ -67,6 +87,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
         ) : (
           <Editor
             height="100%"
+            // theme="vs-dark"
             language={language}
             value={personalCode}
             onChange={handleEditorChange}
@@ -76,8 +97,20 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
       {!isShared ? (
         <div>
           <div className="input-output">
-            <textarea name="input" id="input" placeholder="input"></textarea>
-            <textarea name="output" id="output" placeholder="output"></textarea>
+            <textarea
+              name="input"
+              id="input"
+              placeholder="input"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            ></textarea>
+            <textarea
+              name="output"
+              id="output"
+              placeholder="output"
+              value={output}
+              // readOnly
+            ></textarea>
           </div>
           <div className="code-lower-space">
             <div className="code-buttons">
@@ -85,13 +118,15 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
               <button className="button">코드 저장</button>
             </div>
             <div className="compile-button">
-              <button className="button">컴파일</button>
+              <button className="button" onClick={handleCompile}>
+                컴파일
+              </button>
             </div>
           </div>
         </div>
-      ) : (
-        <div className="code-lower-space"></div>
-      )}
+      ) : null
+      // <div className="code-lower-space"></div>
+      }
     </div>
   );
 };

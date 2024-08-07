@@ -17,8 +17,9 @@
 
 .code-space {
   flex: 1;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: white;
+  /* background-color: rgb(30, 30, 30); */
+  /* border: 1px solid #ddd; */
   border-radius: 5px;
   padding: 15px 5px;
   color: black;
@@ -57,7 +58,7 @@ textarea {
   display: flex;
 }
 
-.compile-button {
+.compiler-button {
   display: flex;
 }
 
@@ -80,12 +81,17 @@ textarea {
   margin-right: 10px;
   padding: 6px 12px;
   border: none;
-  border-top-left-radius: 5px; /* 왼쪽 위 꼭지점 */
-  border-top-right-radius: 5px; /* 오른쪽 위 꼭지점 */
+  border-radius: 5px;
+  /* border-top-left-radius: 5px;
+  border-top-right-radius: 5px; */
   background-color: #2f5074;
   color: white;
   cursor: pointer;
   font-size: 14px;
+}
+
+.mode-button:hover {
+  background-color: #3a6695;
 }
 
 .mode-button.active {
