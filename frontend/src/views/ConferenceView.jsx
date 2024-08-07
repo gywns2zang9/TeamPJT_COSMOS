@@ -286,7 +286,7 @@ function ConferenceView(props) {
     setMainStreamManager(undefined);
     setPublisher(undefined);
 
-    navigate(`/group/${groupId}/1`);
+    navigate(`/group/${groupId}/main`);
   };
 
   const handleLeaveButtonClick = () => {
