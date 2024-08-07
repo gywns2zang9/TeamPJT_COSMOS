@@ -38,7 +38,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
 
   const handleCompile = async () => {
     try {
-      const response = await axios.post(`/teams/${groupId}/codes/execute`, {
+      const response = await axios.get(`/teams/${groupId}/codes/execute`, {
         content: personalCode,
         language: language,
         inputs: input,
@@ -94,38 +94,39 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
           />
         )}
       </div>
-      {!isShared ? (
-        <div>
-          <div className="input-output">
-            <textarea
-              name="input"
-              id="input"
-              placeholder="input"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-            ></textarea>
-            <textarea
-              name="output"
-              id="output"
-              placeholder="output"
-              value={output}
-              // readOnly
-            ></textarea>
-          </div>
-          <div className="code-lower-space">
-            <div className="code-buttons">
-              <button className="button">코드 불러오기</button>
-              <button className="button">코드 저장</button>
+      {
+        !isShared ? (
+          <div>
+            <div className="input-output">
+              <textarea
+                name="input"
+                id="input"
+                placeholder="input"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+              ></textarea>
+              <textarea
+                name="output"
+                id="output"
+                placeholder="output"
+                value={output}
+                // readOnly
+              ></textarea>
             </div>
-            <div className="compile-button">
-              <button className="button" onClick={handleCompile}>
-                컴파일
-              </button>
+            <div className="code-lower-space">
+              <div className="code-buttons">
+                <button className="button">코드 불러오기</button>
+                <button className="button">코드 저장</button>
+              </div>
+              <div className="compile-button">
+                <button className="button" onClick={handleCompile}>
+                  컴파일
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      ) : null
-      // <div className="code-lower-space"></div>
+        ) : null
+        // <div className="code-lower-space"></div>
       }
     </div>
   );

@@ -18,7 +18,7 @@ const getRandomColor = () => {
 // 이름이 영어인지 한글인지 확인하는 함수
 const isEnglish = (name) => {
   // 모든 문자가 영어 알파벳인 경우 true 반환
-  return /^[A-Za-z\s]+$/.test(name);
+  return /^[A-Za-z0-9\s]+$/.test(name);
 };
 
 // 이름을 영어와 한글에 맞게 잘라내는 함수
