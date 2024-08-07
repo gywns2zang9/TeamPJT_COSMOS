@@ -38,7 +38,7 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
 
         loadMembers();
         loadFile();
-    }, [groupId, groupMemberListLoad, getFile]);
+    }, [pageId, groupId, groupMemberListLoad, getFile]);
 
     const handleShowModal = () => setShowModal(true)
     const handleCloseModal = () => setShowModal(false)

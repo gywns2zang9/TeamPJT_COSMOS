@@ -390,7 +390,7 @@ const useGroupStore = create((set) => ({
                 name,
                 content
             };
-            const response = await get(url, data, headers);
+            const response = await patch(url, data, headers);
             console.log(response);
             return response
         } catch (err) {
@@ -496,6 +496,27 @@ const useGroupStore = create((set) => ({
             return response
         } catch (err) {
             console.log('캘린더 일정 삭제 실패 -> ', err);
+            throw err;
+        }
+    },
+
+    // 코드 실행하기 
+    executeCode: async ({ groupId, content, language, inputs }) => {
+        try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const url = `${BASE_URL}/teams/${groupId}/codes/execute`;
+            const data = {
+                content,
+                language,
+                inputs
+            };
+            const response = await post(url, data, headers);
+            return response
+        } catch (err) {
+            console.log('코드 실행 실패 -> ', err);
             throw err;
         }
     },

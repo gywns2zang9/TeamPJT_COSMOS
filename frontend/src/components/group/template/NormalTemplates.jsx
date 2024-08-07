@@ -7,6 +7,9 @@ import useGroupStore from '../../../store/group.js';
 const NormalTemplates = ({ pageId, groupId }) => {
     const editorRef = useRef(null);
     const [editor, setEditor] = useState(null);
+    const updateFile = useGroupStore((state) => state.updateNormalFile)
+    const loadFile = useGroupStore((state) => state.getFile)
+    const [title, setTitle] = useState('22');
 
     useEffect(() => {
         const simpleMDE = new SimpleMDE({
@@ -19,18 +22,29 @@ const NormalTemplates = ({ pageId, groupId }) => {
         setEditor(simpleMDE);
 
         // TODO - 페이지 로딩 시 내용 가져오기
-        axios.get(`/api/pages/${pageId}`)
-            .then(response => {
-                simpleMDE.value(response.data.content || '');
-            })
-            .catch(error => console.error(error));
+        const getFile = async () => {
+            try {
+                const response = await loadFile({ groupId, fileId:pageId })
+                console.log(response);
+                simpleMDE.value(response.content || '');
+            } catch (err) {
+                console.error('페이지 로딩 실패 -> ', err);
+            }
+        }
+        
+        const editFile = async (content) => {
+            try {
+                const response = await updateFile({ groupId, fileId:pageId, name:title, content })
+
+            } catch (err) {
+                console.error('페이지  실패 -> ', err);
+            }
+        }
 
         // TODO - 내용 변경 시 자동 저장
         simpleMDE.codemirror.on('change', () => {
             const newContent = simpleMDE.value();
-            axios.post(`/api/pages/${pageId}`, { content: newContent })
-                .then(response => console.log('Saved'))
-                .catch(error => console.error('Save error', error));
+            editFile(newContent);
         });
 
         // 단축키 설정
@@ -66,7 +80,7 @@ const NormalTemplates = ({ pageId, groupId }) => {
             },
         });
 
-        // 컴포넌트 언마운트 시 SimpleMDE 인스턴스 정리
+        getFile();
         return () => {
             simpleMDE.toTextArea();
         };
