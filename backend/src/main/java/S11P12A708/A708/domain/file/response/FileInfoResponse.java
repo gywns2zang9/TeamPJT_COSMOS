@@ -39,19 +39,19 @@ public class FileInfoResponse {
         return new FileInfoResponse(file, null, null, null);
     }
 
-    public static FileInfoResponse fromTimeOverViewFile(File file, List<Problem> problems, Study study) {
+    public static FileInfoResponse fromTimeOverViewFile(File file, List<FileProblemResponse> problems, Study study) {
         return new FileInfoResponse(
                 file,
                 null,
-                problems.stream().map(FileProblemResponse::of).toList(),
+                problems,
                 StudyResponse.of(study));
     }
 
-    public static FileInfoResponse fromOverViewFile(File file, List<Problem> problems) {
+    public static FileInfoResponse fromOverViewFile(File file, List<FileProblemResponse> problems) {
         return new FileInfoResponse(
                 file,
                 null,
-                problems.stream().map(FileProblemResponse::of).toList(),
+                problems,
                 null);
     }
 

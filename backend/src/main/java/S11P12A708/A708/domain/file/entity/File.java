@@ -26,7 +26,8 @@ public class File {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Column(nullable = false)

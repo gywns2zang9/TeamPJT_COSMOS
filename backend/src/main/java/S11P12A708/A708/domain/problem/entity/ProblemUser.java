@@ -31,6 +31,9 @@ public class ProblemUser {
     @JoinColumn(name = "file_id")
     private File file;
 
+    @Column(nullable = false)
+    private boolean status;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -39,6 +42,11 @@ public class ProblemUser {
         this.problem = problem;
         this.user = user;
         this.file = file;
+        this.status = false;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void updateStatus() {
+        this.status = true;
     }
 }
