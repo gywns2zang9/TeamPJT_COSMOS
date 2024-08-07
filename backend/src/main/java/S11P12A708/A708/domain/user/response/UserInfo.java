@@ -26,8 +26,6 @@ public class UserInfo {
     @NotBlank
     Enum<UserType> type;
 
-    String img;
-
     String gitId;
 
     String repo;
@@ -39,7 +37,6 @@ public class UserInfo {
         this.email = user.getEmail();
         this.nickName = user.getNickname();
         this.type = user.getType();
-        this.img = user.getImg();
         this.gitId = user.getGitId();
         this.repo = user.getRepo();
         this.description = user.getDescription();
