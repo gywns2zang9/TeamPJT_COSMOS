@@ -42,7 +42,7 @@ public class CodeController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/execute")
+    @PostMapping("/codes/execute")
     public ResponseEntity<ExecuteCodeResponse> executeCode(@RequestBody ExecuteCodeRequest executeCodeRequest) {
         try {
             ExecuteCodeResponse response = codeService.getExecuteResult(executeCodeRequest);
