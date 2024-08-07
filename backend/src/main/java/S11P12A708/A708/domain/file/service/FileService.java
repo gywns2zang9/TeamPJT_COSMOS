@@ -12,7 +12,7 @@ import S11P12A708.A708.domain.file.repository.FileRepository;
 import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.file.request.FileCreateRequest;
 import S11P12A708.A708.domain.file.request.FileUpdateRequest;
-import S11P12A708.A708.domain.file.response.FileResponse;
+import S11P12A708.A708.domain.file.response.FileInfoResponse;
 import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.folder.exception.FolderNotBelongToTeamException;
 import S11P12A708.A708.domain.folder.exception.FolderNotFoundException;
@@ -48,7 +48,7 @@ public class FileService {
     private final StudyRepository studyRepository;
     private final CodeRepository codeRepository;
 
-    public void createNormalFile(Long teamId, FileCreateRequest request) {
+    public FileInfoResponse createNormalFile(Long teamId, FileCreateRequest request) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final Folder folder = folderRepository.findById(request.getFolderId()).orElseThrow(FolderNotFoundException::new);
         validateTeamFolder(folder, team);
@@ -56,9 +56,11 @@ public class FileService {
 
         final File newFile = File.createNormalFile(request.getFileName(), folder);
         fileRepository.save(newFile);
+
+        return FileInfoResponse.fromFile(newFile);
     }
 
-    public void updateNormalFile(Long teamId, Long fileId, FileUpdateRequest request) {
+    public FileInfoResponse updateNormalFile(Long teamId, Long fileId, FileUpdateRequest request) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final File file = fileRepository.findById(fileId).orElseThrow(FileNotFoundException::new);
         validateTeamFolder(file.getFolder(), team); // 해당 파일이 이 팀의 파일이 맞는 지 확인
@@ -66,9 +68,11 @@ public class FileService {
 
         final File updateFile = FileUpdateRequestToFile(request, file.getFolder());
         file.update(updateFile);
+
+        return FileInfoResponse.fromFile(file);
     }
 
-    public void createCodeFile(Long teamId, AuthUserDto authUser, FileCreateRequest request) {
+    public FileInfoResponse createCodeFile(Long teamId, AuthUserDto authUser, FileCreateRequest request) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final Folder folder = folderRepository.findById(request.getFolderId()).orElseThrow(FolderNotFoundException::new);
         final User user = userRepository.findById(authUser.getId()).orElseThrow(UserNotFoundException::new);
@@ -79,9 +83,11 @@ public class FileService {
         final Code code = codeRepository.save(Code.createBasic());
         final File newFile = File.createCodeFile(request.getFileName(), user, folder, code);
         fileRepository.save(newFile);
+
+        return FileInfoResponse.fromFile(newFile);
     }
 
-    public void updateCodeFile(Long teamId, Long fileId, CodeFileUpdateRequest request) {
+    public FileInfoResponse updateCodeFile(Long teamId, Long fileId, CodeFileUpdateRequest request) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         File file = fileRepository.findById(fileId).orElseThrow(FileNotFoundException::new);
         Code code = file.getCode();
@@ -90,9 +96,11 @@ public class FileService {
 
         code.update(new Code(request.getCode(), request.getLanguage()));
         file.update(request);
+
+        return FileInfoResponse.fromFile(file);
     }
 
-    public FileResponse getFileInfo(Long teamId, AuthUserDto authUser, Long fileId) {
+    public FileInfoResponse getFileInfo(Long teamId, AuthUserDto authUser, Long fileId) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final User user = userRepository.findById(authUser.getId()).orElseThrow(UserNotFoundException::new);
         final File file = fileRepository.findById(fileId).orElseThrow(FileNotFoundException::new);
@@ -104,7 +112,7 @@ public class FileService {
                 problems.addAll(problemRepository.findByStudy(study)); // 팀에 소속된 전체 문제들
             }
 
-            return FileResponse.fromOverViewFile(file, problems);
+            return FileInfoResponse.fromOverViewFile(file, problems);
         }
 
         if(file.getType() == FileType.TIME_OVERVIEW) {
@@ -113,14 +121,14 @@ public class FileService {
                     .map(Folder::getProblem)
                     .toList();
 
-            return FileResponse.fromOverViewFile(file, problems);
+            return FileInfoResponse.fromTimeOverViewFile(file, problems, file.getStudy());
         }
 
         if(file.getType() == FileType.CODE) {
-            return FileResponse.fromCodeFile(file, file.getCode());
+            return FileInfoResponse.fromCodeFile(file, file.getCode());
         }
 
-        return FileResponse.fromFile(file);
+        return FileInfoResponse.fromFile(file);
     }
 
     private File FileUpdateRequestToFile(FileUpdateRequest request, Folder folder) {
