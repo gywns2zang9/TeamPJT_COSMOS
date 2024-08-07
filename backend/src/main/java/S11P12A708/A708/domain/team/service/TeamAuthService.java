@@ -92,13 +92,15 @@ public class TeamAuthService {
         return new TeamCodeResponse(teamCode);
     }
 
-    public void joinTeam(Long userId, TeamJoinRequest request) {
+    public TeamResponse joinTeam(Long userId, TeamJoinRequest request) {
         final User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         final Team team = teamRepository.findByTeamCode(request.getTeamCode()).orElseThrow(TeamNotFoundException::new);
         final TeamUser teamUser = teamUserRepository.findByTeamAndUser(team, user);
         if(teamUser != null) throw new TeamAlreadyJoinException();
 
         teamUserRepository.save(new TeamUser(user, team, MEMBER));
+
+        return TeamResponse.of(team);
     }
 
     private Team requestToEntity(TeamInfoRequest request) {
