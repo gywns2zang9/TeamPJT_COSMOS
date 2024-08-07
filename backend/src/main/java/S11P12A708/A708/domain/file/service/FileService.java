@@ -9,6 +9,7 @@ import S11P12A708.A708.domain.file.exception.FileNameDuplicateException;
 import S11P12A708.A708.domain.file.exception.FileNotFoundException;
 import S11P12A708.A708.domain.file.exception.FolderNotProblemInfoException;
 import S11P12A708.A708.domain.file.repository.FileRepository;
+import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.file.request.FileCreateRequest;
 import S11P12A708.A708.domain.file.request.FileUpdateRequest;
 import S11P12A708.A708.domain.file.response.FileResponse;
@@ -78,6 +79,17 @@ public class FileService {
         final Code code = codeRepository.save(Code.createBasic());
         final File newFile = File.createCodeFile(request.getFileName(), user, folder, code);
         fileRepository.save(newFile);
+    }
+
+    public void updateCodeFile(Long teamId, Long fileId, CodeFileUpdateRequest request) {
+        final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        File file = fileRepository.findById(fileId).orElseThrow(FileNotFoundException::new);
+        Code code = file.getCode();
+        validateTeamFolder(file.getFolder(), team); // 해당 파일이 이 팀의 파일이 맞는 지 확인
+        validateDuplicateFileName(file.getFolder(), request.getName());
+
+        code.update(new Code(request.getCode(), request.getLanguage()));
+        file.update(request);
     }
 
     public FileResponse getFileInfo(Long teamId, AuthUserDto authUser, Long fileId) {

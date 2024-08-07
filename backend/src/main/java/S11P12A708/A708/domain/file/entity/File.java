@@ -1,6 +1,7 @@
 package S11P12A708.A708.domain.file.entity;
 
 import S11P12A708.A708.domain.code.entity.Code;
+import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -104,6 +105,13 @@ public class File {
     public void update(File updateFile) {
         this.name = updateFile.getName();
         this.content = updateFile.getContent();
+        this.modifiedAt = LocalDateTime.now();
+    }
+
+    public void update(CodeFileUpdateRequest req) {
+        this.name = req.getName();
+        this.content = req.getContent();
+        this.modifiedAt = LocalDateTime.now();
     }
 
 }
