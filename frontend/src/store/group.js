@@ -385,13 +385,12 @@ const useGroupStore = create((set) => ({
             Authorization: `Bearer ${accessToken}`,
         };
         try {
-            const url = `${BASE_URL}/teams/${groupId}/files/${fileId}`;
+            const url = `${BASE_URL}/teams/${groupId}/file/${fileId}`;
             const data = {
                 name,
                 content
             };
             const response = await patch(url, data, headers);
-            console.log(response);
             return response
         } catch (err) {
             console.log(err);

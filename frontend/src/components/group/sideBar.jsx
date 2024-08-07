@@ -277,6 +277,24 @@ useEffect(() => {
         console.error('Failed to load subfolders:', err);
     }
   };
+  
+  // 페이지 제목 변경 감지 및 사이드바 업데이트
+  useEffect(() => {
+    const checkTitleChange = () => {
+      const currentTitle = document.title;
+      if (currentTitle !== document.title) {
+        // 페이지 제목이 변경되었을 때 데이터 다시 불러오기
+        loadFolderInfo({ groupId }).then(({ folderId, folders, files }) => {
+          setRootId(folderId);
+          setStructure({ folders, files });
+        });
+      }
+    };
+  
+    const intervalId = setInterval(checkTitleChange, 1000); // 1초마다 제목 변경 확인
+  
+    return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
+  }, [groupId, loadFolderInfo]);
 
   // 폴더 확장
   const toggleFolderExpansion = (folderId) => {
