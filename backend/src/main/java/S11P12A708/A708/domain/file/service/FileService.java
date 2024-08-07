@@ -8,6 +8,7 @@ import S11P12A708.A708.domain.file.entity.FileType;
 import S11P12A708.A708.domain.file.exception.FileNameDuplicateException;
 import S11P12A708.A708.domain.file.exception.FileNotFoundException;
 import S11P12A708.A708.domain.file.exception.FolderNotProblemInfoException;
+import S11P12A708.A708.domain.file.exception.InvalidDeleteFileException;
 import S11P12A708.A708.domain.file.repository.FileRepository;
 import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.file.request.FileCreateRequest;
@@ -166,6 +167,25 @@ public class FileService {
 
     private static void validateProblemFolder(Folder folder) {
         if(folder.getProblem().equals(null)) throw new FolderNotProblemInfoException();
+    }
+
+    public void deleteFile(Long teamId, Long fileId) {
+        teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        final File file = fileRepository.findById(fileId).orElseThrow(FileNotFoundException::new);
+
+        if (file.getType() == FileType.NORMAL) {
+            deleteNormalFile(fileId);
+        } else if (file.getType() == FileType.CODE) {
+            deleteCodeFile(fileId);
+        } else throw new InvalidDeleteFileException();
+    }
+
+    private void deleteNormalFile(Long fileId) {
+        fileRepository.deleteById(fileId);
+    }
+
+    private void deleteCodeFile(Long fileId) {
+        
     }
 
 }
