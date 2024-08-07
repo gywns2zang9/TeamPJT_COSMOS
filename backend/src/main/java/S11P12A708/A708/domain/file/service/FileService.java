@@ -63,7 +63,7 @@ public class FileService {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final File file = fileRepository.findById(fileId).orElseThrow(FileNotFoundException::new);
         validateTeamFolder(file.getFolder(), team); // 해당 파일이 이 팀의 파일이 맞는 지 확인
-        if (!Objects.equals(file.getName(), request.getName())) validateDuplicateFileName(file.getFolder(), request.getName());
+        if (!file.getName().equals(request.getName())) validateDuplicateFileName(file.getFolder(), request.getName());
 
         final File updateFile = FileUpdateRequestToFile(request, file.getFolder());
         file.update(updateFile);
@@ -87,7 +87,7 @@ public class FileService {
         File file = fileRepository.findById(fileId).orElseThrow(FileNotFoundException::new);
         Code code = file.getCode();
         validateTeamFolder(file.getFolder(), team); // 해당 파일이 이 팀의 파일이 맞는 지 확인
-        if (!Objects.equals(file.getName(), request.getName())) validateDuplicateFileName(file.getFolder(), request.getName());
+        if (!file.getName().equals(request.getName())) validateDuplicateFileName(file.getFolder(), request.getName());
 
         code.update(new Code(request.getCode(), request.getLanguage()));
         file.update(request);
