@@ -5,7 +5,6 @@ import useGroupStore from '../../../store/group';
 import { useLocation } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import CreateProblemModal from '../../../modals/CreateProblemModal';
-
 const TimeOverviewTemplates = ({ groupId, pageId }) => {
     const [members, setMembers] = useState([]);
     const groupMemberListLoad = useGroupStore((state) => state.groupMemberListLoad);
@@ -14,6 +13,10 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
     const [problems, setProblems] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [studyId, setStudyId] = useState('');
+    const [month, setMonth] = useState('');
+    const [order, setOrder] = useState('');
+    const [year, setYear] = useState('');
+    const getCode = useGroupStore((state) => state.loadCode);
 
     useEffect(() => {
         
@@ -22,7 +25,10 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
                 const response = await getFile({groupId, fileId:pageId});
                 console.log(response);
                 setProblems(response.problems);
-                setStudyId(response.fileId)
+                setStudyId(response.study.id);
+                setYear(response.study.year)
+                setMonth(response.study.month)
+                setOrder(response.study.times)
             } catch (err) {
                 console.error('파일 로드 실패 -> ', err);
             }
@@ -38,14 +44,22 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
 
         loadMembers();
         loadFile();
-    }, [groupId, groupMemberListLoad, getFile]);
+    }, [pageId, groupId, groupMemberListLoad, getFile]);
 
     const handleShowModal = () => setShowModal(true)
     const handleCloseModal = () => setShowModal(false)
 
+    // 코드페이지로 이동
+    const navigateCodePage = async () => {
+
+    }
+    
+    // 코드 자동 불러오기
+    const importCode = async () => {
+    }
     return (
         <div style={{ color: 'white' }}>
-            <h1>7월 2주차 스터디</h1>
+            <h1>{year}년 {month}월 {order}회차 스터디</h1>
             <Button variant="primary" onClick={handleShowModal}>문제 추가하기</Button> 
             <CreateProblemModal 
                 show={showModal} 
@@ -73,7 +87,10 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.name}</td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.level}</td>
                             {members.map((_, memberIndex) => (
-                                <td key={memberIndex} style={{ border: '1px solid #ddd', padding: '8px' }}><FaFileAlt /><MdRefresh /></td>
+                                <td key={memberIndex} style={{ border: '1px solid #ddd', padding: '8px' }}>
+                                    <FaFileAlt onClick={navigateCodePage()}/>
+                                    <MdRefresh onClick={importCode()}/>
+                                </td>
                             ))}
                         </tr>
                     ))}
