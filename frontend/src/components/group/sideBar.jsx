@@ -46,6 +46,8 @@ function SideBar({ groupId }) {
   const createFile = useGroupStore((state) => state.createFile);
   const createFolder = useGroupStore((state) => state.createFolder);
   const [itemToDelete, setItemToDelete] = useState(null); // 삭제
+  const deleteFolder = useGroupStore((state) => state.deleteFolder); // 폴더 삭제
+  const deleteFile = useGroupStore((state) => state.deleteFile); // 파일 삭제
   const [showConfirmDelete, setShowConfirmDelete] = useState(false); // 삭제확인
 
   // 사이드바 토글
@@ -186,22 +188,33 @@ function SideBar({ groupId }) {
     setShowCreateItemModal(false);
   };
 
-  // 항목 삭제
-  const handleDeleteItem = (id, parentId) => {
-    setItemToDelete({ id, parentId });
+  // 항목 삭제 모달 
+  const handleDeleteItem = ({id, parentId, type}) => {
+    console.log(id, parentId, type);
+    setItemToDelete({ id, parentId, type });
     setShowConfirmDelete(true);
   };
 
-  // 삭제 확인
-  const handleConfirmDelete = () => {
-    if (itemToDelete) {
-      const { id } = itemToDelete;
+  // 삭제 실행
+  const handleConfirmDelete = async () => {
+    const { id, parentId, type } = itemToDelete;
+    console.log(itemToDelete);
+    console.log(id, parentId, type);
+    try {
+
+      if (type === 'folder') {
+        await deleteFolder({ groupId, folderId:id })
+      } else {
+        await deleteFile({ groupId, fileId:id })
+      }
       setStructure((prev) => ({
         ...prev,
         folders: prev.folders.filter((folder) => folder.id !== id),
         files: prev.files.filter((file) => file.id !== id),
       }));
       setShowConfirmDelete(false);
+    } catch (err) {
+      console.error('삭제 실패 -> ', err);
     }
   };
 
@@ -401,7 +414,7 @@ useEffect(() => {
               <Button
                 variant="link"
                 size="sm"
-                onClick={() => handleDeleteItem(folder.id)}
+                  onClick={() => handleDeleteItem({ id:folder.id, parentId:folder.parentId, type:'folder'})}
               >
                 <FaTrashAlt />
               </Button>
@@ -452,7 +465,7 @@ useEffect(() => {
                 <Button
                   variant="link"
                   size="sm"
-                  onClick={() => handleDeleteItem(file.id)}
+                  onClick={() => handleDeleteItem({ id:file.id, parentId:file.parentId, type:'file'})}
                 >
                   <FaTrashAlt />
                 </Button>
