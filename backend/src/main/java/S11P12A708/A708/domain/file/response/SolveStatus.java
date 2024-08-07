@@ -21,4 +21,7 @@ public class SolveStatus {
     @NotNull
     private boolean status;
 
+    @NotNull
+    private Long fileId;
+
 }

@@ -87,7 +87,8 @@ public class TeamQueryRepositoryImpl implements TeamQueryRepository {
                 .select(Projections.constructor(SolveStatus.class,
                         user.id,
                         user.nickname,
-                        problemUser.status))
+                        problemUser.status,
+                        problemUser.file.id))
                 .from(problemUser)
                 .join(problemUser.user, user)
                 .where(problemUser.problem.id.eq(problemId))
