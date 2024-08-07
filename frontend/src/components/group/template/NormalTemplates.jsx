@@ -9,7 +9,7 @@ const NormalTemplates = ({ pageId, groupId }) => {
     const [editor, setEditor] = useState(null);
     const updateFile = useGroupStore((state) => state.updateNormalFile)
     const loadFile = useGroupStore((state) => state.getFile)
-    const [title, setTitle] = useState('22');
+    const [title, setTitle] = useState('');
 
     useEffect(() => {
         const simpleMDE = new SimpleMDE({
@@ -35,7 +35,7 @@ const NormalTemplates = ({ pageId, groupId }) => {
         const editFile = async (content) => {
             try {
                 const response = await updateFile({ groupId, fileId:pageId, name:title, content })
-
+                console.log(response);
             } catch (err) {
                 console.error('페이지  실패 -> ', err);
             }
@@ -45,6 +45,9 @@ const NormalTemplates = ({ pageId, groupId }) => {
         simpleMDE.codemirror.on('change', () => {
             const newContent = simpleMDE.value();
             editFile(newContent);
+            axios.post(`/api/pages/${pageId}`, { content: newContent })
+                .then(response => console.log('Saved'))
+                .catch(error => console.error('Save error', error));
         });
 
         // 단축키 설정
