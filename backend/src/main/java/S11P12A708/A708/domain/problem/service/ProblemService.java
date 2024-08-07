@@ -2,6 +2,7 @@ package S11P12A708.A708.domain.problem.service;
 
 import S11P12A708.A708.common.util.BojProblem;
 import S11P12A708.A708.common.util.CodeCrawler;
+import S11P12A708.A708.common.util.ProblemStatus;
 import S11P12A708.A708.domain.code.entity.Code;
 import S11P12A708.A708.domain.code.repository.CodeRepository;
 import S11P12A708.A708.domain.file.entity.File;
@@ -88,7 +89,7 @@ public class ProblemService {
             individualCodeFolder.addFile(UserCodeFile);
 
             final ProblemUser problemUser = new ProblemUser(savedProblem, user, UserCodeFile);
-            if (!code.getContent().isEmpty()) problemUser.updateStatus();
+            if (ProblemStatus.check(user.getGitId(), problem.getNumber())) problemUser.updateStatus();
             problemUserRepository.save(problemUser);
         }
     }
@@ -122,10 +123,8 @@ public class ProblemService {
         final Code code = problemUser.getFile().getCode();
         final Code newCode = codeCrawler.createByCrawler(user, problem.getNumber());
 
-        if (!code.getContent().isEmpty()) {
-            problemUser.updateStatus();
-            code.update(newCode);
-        }
+        if (!code.getContent().isEmpty()) code.update(newCode);
+        if (ProblemStatus.check(user.getGitId(), problem.getNumber())) problemUser.updateStatus();
     }
 
     private void checkUserInfoForCrawling(User user) {
