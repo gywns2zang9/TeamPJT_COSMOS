@@ -2,7 +2,6 @@ package S11P12A708.A708.domain.file.service;
 
 import S11P12A708.A708.domain.auth.request.AuthUserDto;
 import S11P12A708.A708.domain.code.entity.Code;
-import S11P12A708.A708.domain.code.exception.CodeNotFoundException;
 import S11P12A708.A708.domain.code.repository.CodeRepository;
 import S11P12A708.A708.domain.file.entity.File;
 import S11P12A708.A708.domain.file.entity.FileType;
@@ -21,12 +20,12 @@ import S11P12A708.A708.domain.problem.entity.Problem;
 import S11P12A708.A708.domain.problem.entity.ProblemUser;
 import S11P12A708.A708.domain.problem.repository.ProblemRepository;
 import S11P12A708.A708.domain.problem.repository.ProblemUserRepository;
+import S11P12A708.A708.domain.problem.repository.query.ProblemQueryRepository;
 import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.study.repository.StudyRepository;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
-import S11P12A708.A708.domain.team.repository.TeamUserRepository;
 import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
@@ -52,9 +51,9 @@ public class FileService {
     private final TeamQueryRepository teamQueryRepository;
     private final UserRepository userRepository;
     private final ProblemRepository problemRepository;
+    private final ProblemQueryRepository problemQueryRepository;
     private final StudyRepository studyRepository;
     private final CodeRepository codeRepository;
-    private final TeamUserRepository teamUserRepository;
     private final ProblemUserRepository problemUserRepository;
 
     public FileInfoResponse createNormalFile(Long teamId, FileCreateRequest request) {
@@ -120,7 +119,7 @@ public class FileService {
             for(Study study : studies) {
                 for (Problem problem : problemRepository.findByStudy(study)) { // 팀에 소속된 전체 문제들
                     fileProblems.add(
-                            FileProblemResponse.of(problem, teamQueryRepository.findSolveUsersByProblemId(problem.getId())));
+                            FileProblemResponse.of(problem, problemQueryRepository.findSolveUsersByProblemId(problem.getId())));
                 }
             }
 
@@ -135,7 +134,7 @@ public class FileService {
                     .toList();
             for (Problem problem : problems) {
                 fileProblems.add(
-                        FileProblemResponse.of(problem, teamQueryRepository.findSolveUsersByProblemId(problem.getId())));
+                        FileProblemResponse.of(problem, problemQueryRepository.findSolveUsersByProblemId(problem.getId())));
             }
 
             return FileInfoResponse.fromTimeOverViewFile(file, fileProblems, file.getStudy());
