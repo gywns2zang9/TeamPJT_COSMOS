@@ -7,11 +7,9 @@ import S11P12A708.A708.domain.problem.entity.ProblemUser;
 import S11P12A708.A708.domain.problem.exception.ProblemNotFoundException;
 import S11P12A708.A708.domain.problem.repository.ProblemRepository;
 import S11P12A708.A708.domain.problem.repository.ProblemUserRepository;
-import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.user.entity.UserType;
 import S11P12A708.A708.domain.user.exception.OnlyNormalPwException;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
-import S11P12A708.A708.domain.problem.exception.ProblemNotExistException;
 import S11P12A708.A708.domain.folder.exception.FolderNotFoundException;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.repository.UserRepository;
@@ -23,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -100,6 +97,5 @@ public class UserService {
         }
         throw new InvalidPasswordException();
     }
-
 
 }

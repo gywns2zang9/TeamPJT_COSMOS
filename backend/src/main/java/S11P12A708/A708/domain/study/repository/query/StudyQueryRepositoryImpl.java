@@ -13,12 +13,12 @@ public class StudyQueryRepositoryImpl implements StudyQueryRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Integer findMaxTimesByYearAndMonth(Integer year, Integer month) {
+    public Integer findMaxTimesByYearAndMonth(Long teamId, Integer year, Integer month) {
         return queryFactory
                 .select(study.times.max().coalesce(0))
                 .from(study)
                 .where(study.year.eq(year)
-                        .and(study.month.eq(month)))
+                        .and(study.month.eq(month)).and(study.team.id.eq(teamId)))
                 .fetchOne();
     }
 
