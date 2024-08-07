@@ -12,8 +12,12 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
     setLanguage(event.target.value);
   };
 
-  const toggleShareMode = () => {
-    setIsShared(!isShared);
+  const switchToPersonalMode = () => {
+    setIsShared(false);
+  };
+
+  const switchToSharedMode = () => {
+    setIsShared(true);
   };
 
   useEffect(() => {
@@ -33,10 +37,18 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
     <div className="left-space">
       <div className="code-upper-space">
         <div>
-          <button className="button" onClick={toggleShareMode}>
-            {isShared ? "내 코드" : "공유 코드"}
+          <button
+            className={`mode-button ${!isShared ? "active" : ""}`}
+            onClick={switchToPersonalMode}
+          >
+            내 코드
           </button>
-
+          <button
+            className={`mode-button ${isShared ? "active" : ""}`}
+            onClick={switchToSharedMode}
+          >
+            공유 코드
+          </button>
           <select className="code-select" onChange={handleLanguageChange}>
             <option value="java">Java</option>
             <option value="python">Python</option>
@@ -62,13 +74,19 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
         )}
       </div>
       {!isShared ? (
-        <div className="code-lower-space">
-          <div className="code-buttons">
-            <button className="button">코드 불러오기</button>
-            <button className="button">코드 저장</button>
+        <div>
+          <div className="input-output">
+            <textarea name="input" id="input" placeholder="input"></textarea>
+            <textarea name="output" id="output" placeholder="output"></textarea>
           </div>
-          <div className="compile-button">
-            <button className="button">컴파일</button>
+          <div className="code-lower-space">
+            <div className="code-buttons">
+              <button className="button">코드 불러오기</button>
+              <button className="button">코드 저장</button>
+            </div>
+            <div className="compile-button">
+              <button className="button">컴파일</button>
+            </div>
           </div>
         </div>
       ) : (
