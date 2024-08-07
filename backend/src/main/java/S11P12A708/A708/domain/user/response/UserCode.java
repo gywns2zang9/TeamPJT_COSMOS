@@ -1,7 +1,5 @@
 package S11P12A708.A708.domain.user.response;
 
-import S11P12A708.A708.domain.user.entity.User;
-import S11P12A708.A708.domain.user.entity.UserType;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

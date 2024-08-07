@@ -2,6 +2,7 @@ package S11P12A708.A708.domain.file.controller;
 
 import S11P12A708.A708.domain.auth.annotation.AuthUser;
 import S11P12A708.A708.domain.auth.request.AuthUserDto;
+import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.file.request.FileCreateRequest;
 import S11P12A708.A708.domain.file.request.FileUpdateRequest;
 import S11P12A708.A708.domain.file.response.FileResponse;
@@ -43,6 +44,15 @@ public class FileController {
             @PathVariable("teamId") Long teamId,
             @Valid @RequestBody FileCreateRequest request) {
         fileService.createCodeFile(teamId, authUser, request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/teams/{teamId}/files/{fileId}/code")
+    public ResponseEntity<Void> updateCodeFile(
+            @PathVariable("teamId") Long teamId,
+            @PathVariable("fileId") Long fileId,
+            @Valid @RequestBody CodeFileUpdateRequest request) {
+        fileService.updateCodeFile(teamId, fileId, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
