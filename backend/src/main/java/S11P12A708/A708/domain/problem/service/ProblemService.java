@@ -88,6 +88,7 @@ public class ProblemService {
             individualCodeFolder.addFile(UserCodeFile);
 
             final ProblemUser problemUser = new ProblemUser(savedProblem, user, UserCodeFile);
+            if (!code.getContent().isEmpty()) problemUser.updateStatus();
             problemUserRepository.save(problemUser);
         }
     }
@@ -121,9 +122,10 @@ public class ProblemService {
         final Code code = problemUser.getFile().getCode();
         final Code newCode = codeCrawler.createByCrawler(user, problem.getNumber());
 
-        code.update(newCode);
-
-        // TODO: 코드 뿐만 아니라, 해당 README.md 도 같이 저장되었으면 어떨지 논의 필요
+        if (!code.getContent().isEmpty()) {
+            problemUser.updateStatus();
+            code.update(newCode);
+        }
     }
 
     private void checkUserInfoForCrawling(User user) {
