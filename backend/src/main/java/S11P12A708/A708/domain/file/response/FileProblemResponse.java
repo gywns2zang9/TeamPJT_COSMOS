@@ -16,25 +16,25 @@ public class FileProblemResponse {
     private String name;
     private String level;
     private String url;
-    private List<SolveStatus> status;
+    private List<SolveStatus> statuses;
 
-    public FileProblemResponse(SiteInfoType site, Integer number, String name, String level, String url, List<SolveStatus> status) {
+    public FileProblemResponse(SiteInfoType site, Integer number, String name, String level, String url, List<SolveStatus> statuses) {
         this.site = site;
         this.number = number;
         this.name = name;
         this.level = level;
         this.url = url;
-        this.status = status;
+        this.statuses = statuses;
     }
 
-    public static FileProblemResponse of(Problem problem, List<SolveStatus> status) {
+    public static FileProblemResponse of(Problem problem, List<SolveStatus> statuses) {
         return new FileProblemResponse(
                 problem.getSite(),
                 problem.getNumber(),
                 problem.getName(),
                 problem.getLevel(),
                 problem.getUrl(),
-                status
+                statuses
         );
     }
 
