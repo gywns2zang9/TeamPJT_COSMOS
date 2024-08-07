@@ -141,7 +141,9 @@ public class FileService {
         }
 
         if(file.getType() == FileType.CODE) {
-            return FileInfoResponse.fromCodeFile(file, file.getCode());
+            final List<FileProblemResponse> fileProblems = new ArrayList<>();
+            fileProblems.add(FileProblemResponse.of(file.getFolder().getProblem(), null));
+            return FileInfoResponse.fromCodeFile(file, file.getCode(), fileProblems);
         }
 
         return FileInfoResponse.fromFile(file);
