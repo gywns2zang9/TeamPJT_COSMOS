@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -30,10 +31,14 @@ public class Code {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
+    private LocalDateTime modifiedAt;
+
     public Code(String content, Language language) {
         this.content = content;
         this.language = language;
         this.createdAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
     }
 
     public static Code createBasic() {
@@ -43,5 +48,6 @@ public class Code {
     public void update(Code newCode) {
         this.content = newCode.getContent();
         this.language = newCode.getLanguage();
+        this.modifiedAt = LocalDateTime.now();
     }
 }

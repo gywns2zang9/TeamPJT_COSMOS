@@ -45,6 +45,7 @@ public class TeamUser {
         this.user = user;
         this.team = team;
         this.role = role;
+        this.createdAt = LocalDateTime.now();
     }
 
     public Boolean isLeader() {
@@ -57,6 +58,7 @@ public class TeamUser {
 
     public void changeRole(final TeamUserRole role) {
         this.role = role;
+        this.modifiedAt = LocalDateTime.now();
     }
 
     public void verifyTeamLeader() {
