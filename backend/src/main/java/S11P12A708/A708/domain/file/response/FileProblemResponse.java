@@ -16,9 +16,9 @@ public class FileProblemResponse {
     private String name;
     private String level;
     private String url;
-    private List<SolveStatus> statuses;
+    private List<SolveStatusResponse> statuses;
 
-    public FileProblemResponse(SiteInfoType site, Integer number, String name, String level, String url, List<SolveStatus> statuses) {
+    public FileProblemResponse(SiteInfoType site, Integer number, String name, String level, String url, List<SolveStatusResponse> statuses) {
         this.site = site;
         this.number = number;
         this.name = name;
@@ -27,7 +27,7 @@ public class FileProblemResponse {
         this.statuses = statuses;
     }
 
-    public static FileProblemResponse of(Problem problem, List<SolveStatus> statuses) {
+    public static FileProblemResponse of(Problem problem, List<SolveStatusResponse> statuses) {
         return new FileProblemResponse(
                 problem.getSite(),
                 problem.getNumber(),

@@ -1,6 +1,5 @@
 package S11P12A708.A708.domain.file.response;
 
-import S11P12A708.A708.domain.user.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SolveStatus {
+public class SolveStatusResponse {
 
     @NotNull
     private Long userId;

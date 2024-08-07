@@ -5,7 +5,7 @@ import static S11P12A708.A708.domain.team.entity.QTeam.team;
 import static S11P12A708.A708.domain.team.entity.QTeamUser.teamUser;
 import static S11P12A708.A708.domain.user.entity.QUser.user;
 
-import S11P12A708.A708.domain.file.response.SolveStatus;
+import S11P12A708.A708.domain.file.response.SolveStatusResponse;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.entity.TeamUser;
 import S11P12A708.A708.domain.team.entity.TeamUserRole;
@@ -82,9 +82,9 @@ public class TeamQueryRepositoryImpl implements TeamQueryRepository {
     }
 
     @Override
-    public List<SolveStatus> findSolveUsersByProblemId(Long problemId) {
+    public List<SolveStatusResponse> findSolveUsersByProblemId(Long problemId) {
         return queryFactory
-                .select(Projections.constructor(SolveStatus.class,
+                .select(Projections.constructor(SolveStatusResponse.class,
                         user.id,
                         user.nickname,
                         problemUser.status,

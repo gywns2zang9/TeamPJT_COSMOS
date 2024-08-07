@@ -1,6 +1,6 @@
 package S11P12A708.A708.domain.team.repository.query;
 
-import S11P12A708.A708.domain.file.response.SolveStatus;
+import S11P12A708.A708.domain.file.response.SolveStatusResponse;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.entity.TeamUser;
 import S11P12A708.A708.domain.user.entity.User;
@@ -21,5 +21,5 @@ public interface TeamQueryRepository {
 
     List<User> findUsersByNickNameAndNonGroupId(Long teamId, String nickName);
 
-    List<SolveStatus> findSolveUsersByProblemId(Long problemId);
+    List<SolveStatusResponse> findSolveUsersByProblemId(Long problemId);
 }
