@@ -35,7 +35,7 @@ public class StudyService {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
 
         // 새로운 회차 계산.
-        int time = studyQueryRepository.findMaxTimesByYearAndMonth(request.getYear(), request.getMonth()) + 1;
+        int time = studyQueryRepository.findMaxTimesByYearAndMonth(teamId, request.getYear(), request.getMonth()) + 1;
 
         // 스터디 생성
         Study study = Study.createStudy(request.getYear(), request.getMonth(), time, team);
