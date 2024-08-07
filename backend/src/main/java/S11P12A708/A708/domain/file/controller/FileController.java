@@ -65,4 +65,10 @@ public class FileController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @DeleteMapping("/teams/{teamId}/files/{fileId}")
+    public ResponseEntity<Void> deleteFile(@PathVariable Long teamId, @PathVariable Long fileId) {
+        fileService.deleteFile(teamId, fileId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

@@ -5,9 +5,7 @@ import S11P12A708.A708.domain.code.entity.Code;
 import S11P12A708.A708.domain.code.repository.CodeRepository;
 import S11P12A708.A708.domain.file.entity.File;
 import S11P12A708.A708.domain.file.entity.FileType;
-import S11P12A708.A708.domain.file.exception.FileNameDuplicateException;
-import S11P12A708.A708.domain.file.exception.FileNotFoundException;
-import S11P12A708.A708.domain.file.exception.FolderNotProblemInfoException;
+import S11P12A708.A708.domain.file.exception.*;
 import S11P12A708.A708.domain.file.repository.FileRepository;
 import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.file.request.FileCreateRequest;
@@ -19,13 +17,15 @@ import S11P12A708.A708.domain.folder.exception.FolderNotBelongToTeamException;
 import S11P12A708.A708.domain.folder.exception.FolderNotFoundException;
 import S11P12A708.A708.domain.folder.repository.FolderRepository;
 import S11P12A708.A708.domain.problem.entity.Problem;
+import S11P12A708.A708.domain.problem.entity.ProblemUser;
 import S11P12A708.A708.domain.problem.repository.ProblemRepository;
+import S11P12A708.A708.domain.problem.repository.ProblemUserRepository;
+import S11P12A708.A708.domain.problem.repository.query.ProblemQueryRepository;
 import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.study.repository.StudyRepository;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
-import S11P12A708.A708.domain.team.repository.TeamUserRepository;
 import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -50,9 +51,10 @@ public class FileService {
     private final TeamQueryRepository teamQueryRepository;
     private final UserRepository userRepository;
     private final ProblemRepository problemRepository;
+    private final ProblemQueryRepository problemQueryRepository;
     private final StudyRepository studyRepository;
     private final CodeRepository codeRepository;
-    private final TeamUserRepository teamUserRepository;
+    private final ProblemUserRepository problemUserRepository;
 
     public FileInfoResponse createNormalFile(Long teamId, FileCreateRequest request) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
@@ -117,7 +119,7 @@ public class FileService {
             for(Study study : studies) {
                 for (Problem problem : problemRepository.findByStudy(study)) { // 팀에 소속된 전체 문제들
                     fileProblems.add(
-                            FileProblemResponse.of(problem, teamQueryRepository.findSolveUsersByProblemId(problem.getId())));
+                            FileProblemResponse.of(problem, problemQueryRepository.findSolveUsersByProblemId(problem.getId())));
                 }
             }
 
@@ -132,7 +134,7 @@ public class FileService {
                     .toList();
             for (Problem problem : problems) {
                 fileProblems.add(
-                        FileProblemResponse.of(problem, teamQueryRepository.findSolveUsersByProblemId(problem.getId())));
+                        FileProblemResponse.of(problem, problemQueryRepository.findSolveUsersByProblemId(problem.getId())));
             }
 
             return FileInfoResponse.fromTimeOverViewFile(file, fileProblems, file.getStudy());
@@ -166,6 +168,29 @@ public class FileService {
 
     private static void validateProblemFolder(Folder folder) {
         if(folder.getProblem().equals(null)) throw new FolderNotProblemInfoException();
+    }
+
+    public void deleteFile(Long teamId, Long fileId) {
+        teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        final File file = fileRepository.findById(fileId).orElseThrow(FileNotFoundException::new);
+
+        if (file.getType() == FileType.NORMAL) {
+            deleteNormalFile(fileId);
+        } else if (file.getType() == FileType.CODE) {
+            deleteCodeFile(file);
+        } else throw new InvalidDeleteFileException();
+    }
+
+    private void deleteNormalFile(Long fileId) {
+        fileRepository.deleteById(fileId);
+    }
+
+    private void deleteCodeFile(File file) {
+        Optional<ProblemUser> problemUser = problemUserRepository.findProblemUserByFile(file);
+        if (problemUser.isPresent()) throw new InvalidDeleteCodeFileException();
+
+        codeRepository.delete(file.getCode());
+        fileRepository.delete(file);
     }
 
 }
