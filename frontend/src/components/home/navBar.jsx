@@ -31,6 +31,9 @@ function NavBar() {
             {login ? (
               <>
                 {/* 프로필 링크를 userId를 포함하여 동적으로 생성 */}
+                <Nav.Link as={Link} to={`/group`} id="nav-group-page">
+                  MY GROUP
+                </Nav.Link>
                 <Nav.Link as={Link} to={`/users/${userId}`} id="nav-user-profile">
                   PROFILE
                 </Nav.Link>
