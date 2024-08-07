@@ -13,7 +13,7 @@ import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
-public class FileResponse {
+public class FileInfoResponse {
 
     private Long fileId;
     private FileType fileType;
@@ -25,7 +25,7 @@ public class FileResponse {
 
     private List<FileProblemResponse> problems;
 
-    public FileResponse(File file, FileCodeResponse fileCodeResponse, List<FileProblemResponse> fileProblemResponses, StudyResponse studyResponse) {
+    public FileInfoResponse(File file, FileCodeResponse fileCodeResponse, List<FileProblemResponse> fileProblemResponses, StudyResponse studyResponse) {
         this.fileId = file.getId();
         this.fileType = file.getType();
         this.fileName = file.getName();
@@ -35,28 +35,28 @@ public class FileResponse {
         this.study = studyResponse;
     }
 
-    public static FileResponse fromFile(File file) {
-        return new FileResponse(file, null, null, null);
+    public static FileInfoResponse fromFile(File file) {
+        return new FileInfoResponse(file, null, null, null);
     }
 
-    public static FileResponse fromTimeOverViewFile(File file, List<Problem> problems, Study study) {
-        return new FileResponse(
+    public static FileInfoResponse fromTimeOverViewFile(File file, List<Problem> problems, Study study) {
+        return new FileInfoResponse(
                 file,
                 null,
                 problems.stream().map(FileProblemResponse::of).toList(),
                 StudyResponse.of(study));
     }
 
-    public static FileResponse fromOverViewFile(File file, List<Problem> problems) {
-        return new FileResponse(
+    public static FileInfoResponse fromOverViewFile(File file, List<Problem> problems) {
+        return new FileInfoResponse(
                 file,
                 null,
                 problems.stream().map(FileProblemResponse::of).toList(),
                 null);
     }
 
-    public static FileResponse fromCodeFile(File file, Code code) {
-        return new FileResponse(
+    public static FileInfoResponse fromCodeFile(File file, Code code) {
+        return new FileInfoResponse(
                 file,
                 FileCodeResponse.of(code),
                 null, null);
