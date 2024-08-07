@@ -2,13 +2,11 @@ package S11P12A708.A708.domain.file.service;
 
 import S11P12A708.A708.domain.auth.request.AuthUserDto;
 import S11P12A708.A708.domain.code.entity.Code;
+import S11P12A708.A708.domain.code.exception.CodeNotFoundException;
 import S11P12A708.A708.domain.code.repository.CodeRepository;
 import S11P12A708.A708.domain.file.entity.File;
 import S11P12A708.A708.domain.file.entity.FileType;
-import S11P12A708.A708.domain.file.exception.FileNameDuplicateException;
-import S11P12A708.A708.domain.file.exception.FileNotFoundException;
-import S11P12A708.A708.domain.file.exception.FolderNotProblemInfoException;
-import S11P12A708.A708.domain.file.exception.InvalidDeleteFileException;
+import S11P12A708.A708.domain.file.exception.*;
 import S11P12A708.A708.domain.file.repository.FileRepository;
 import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.file.request.FileCreateRequest;
@@ -20,7 +18,9 @@ import S11P12A708.A708.domain.folder.exception.FolderNotBelongToTeamException;
 import S11P12A708.A708.domain.folder.exception.FolderNotFoundException;
 import S11P12A708.A708.domain.folder.repository.FolderRepository;
 import S11P12A708.A708.domain.problem.entity.Problem;
+import S11P12A708.A708.domain.problem.entity.ProblemUser;
 import S11P12A708.A708.domain.problem.repository.ProblemRepository;
+import S11P12A708.A708.domain.problem.repository.ProblemUserRepository;
 import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.study.repository.StudyRepository;
 import S11P12A708.A708.domain.team.entity.Team;
@@ -38,6 +38,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -54,6 +55,7 @@ public class FileService {
     private final StudyRepository studyRepository;
     private final CodeRepository codeRepository;
     private final TeamUserRepository teamUserRepository;
+    private final ProblemUserRepository problemUserRepository;
 
     public FileInfoResponse createNormalFile(Long teamId, FileCreateRequest request) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
@@ -176,7 +178,7 @@ public class FileService {
         if (file.getType() == FileType.NORMAL) {
             deleteNormalFile(fileId);
         } else if (file.getType() == FileType.CODE) {
-            deleteCodeFile(fileId);
+            deleteCodeFile(file);
         } else throw new InvalidDeleteFileException();
     }
 
@@ -184,8 +186,12 @@ public class FileService {
         fileRepository.deleteById(fileId);
     }
 
-    private void deleteCodeFile(Long fileId) {
-        
+    private void deleteCodeFile(File file) {
+        Optional<ProblemUser> problemUser = problemUserRepository.findProblemUserByFile(file);
+        if (problemUser.isPresent()) throw new InvalidDeleteCodeFileException();
+
+        codeRepository.delete(file.getCode());
+        fileRepository.delete(file);
     }
 
 }

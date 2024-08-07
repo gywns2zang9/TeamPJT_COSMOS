@@ -64,6 +64,7 @@ public enum ErrorCode {
     FILE_NAME_DUPLICATE(UNPROCESSABLE_ENTITY, "file", "This file name already exist"),
     FOLDER_NOT_PROBLEM_INFO(UNPROCESSABLE_ENTITY, "file", "this folder cannot have code file"),
     INVALID_DELETE_FILE(UNPROCESSABLE_ENTITY, "file", "only normal, code file can delete."),
+    INVALID_DELETE_CODE_FILE(UNPROCESSABLE_ENTITY, "file", "only user made code file can delete."),
 
     // Study
     STUDY_NOT_FOUND(UNPROCESSABLE_ENTITY, "study", "This study is not exist"),
