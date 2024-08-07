@@ -3,6 +3,7 @@ package S11P12A708.A708.domain.file.entity;
 import S11P12A708.A708.domain.code.entity.Code;
 import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.folder.entity.Folder;
+import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -51,7 +52,11 @@ public class File {
     @JoinColumn(name = "code_id")
     private Code code;
 
-    public File(String name, String content, FileType type, LocalDateTime createdAt, LocalDateTime modifiedAt, User user, Folder folder, Code code) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_id", unique = true)
+    private Study study;
+
+    public File(String name, String content, FileType type, LocalDateTime createdAt, LocalDateTime modifiedAt, User user, Folder folder, Code code, Study study) {
         this.name = name;
         this.content = content;
         this.type = type;
@@ -60,6 +65,7 @@ public class File {
         this.user = user;
         this.folder = folder;
         this.code = code;
+        this.study = study;
     }
 
     public File(String name, String content, FileType type, Folder folder) {
@@ -67,6 +73,16 @@ public class File {
         this.content = content;
         this.type = type;
         this.folder = folder;
+        this.createdAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
+    }
+
+    public File(String name, String content, FileType type, Folder folder, Study study) {
+        this.name = name;
+        this.content = content;
+        this.type = type;
+        this.folder = folder;
+        this.study = study;
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }
@@ -98,8 +114,8 @@ public class File {
         return new File("메인 페이지", "", FileType.MAIN, folder);
     }
 
-    public static File createTimeOverViewFile(Folder folder) {
-        return new File("스터디 개요", "", FileType.TIME_OVERVIEW, folder);
+    public static File createTimeOverViewFile(Folder folder, Study study) {
+        return new File("스터디 개요", "", FileType.TIME_OVERVIEW, folder, study);
     }
 
     public void update(File updateFile) {

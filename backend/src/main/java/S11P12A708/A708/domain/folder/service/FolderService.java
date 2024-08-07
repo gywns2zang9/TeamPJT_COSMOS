@@ -8,6 +8,7 @@ import S11P12A708.A708.domain.folder.repository.FolderRepository;
 import S11P12A708.A708.domain.folder.repository.query.FolderQueryRepository;
 import S11P12A708.A708.domain.folder.request.FolderCreateRequest;
 import S11P12A708.A708.domain.folder.response.FolderInfoResponse;
+import S11P12A708.A708.domain.folder.response.FolderResponse;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
@@ -45,7 +46,7 @@ public class FolderService {
         return FolderInfoResponse.of(folder);
     }
 
-    public void createFolder(Long teamId, FolderCreateRequest request) {
+    public FolderResponse createFolder(Long teamId, FolderCreateRequest request) {
         final Folder parentFolder = folderRepository.findById(request.getParentId()).orElseThrow(FolderNotFoundException::new);
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         validateTeamFolder(parentFolder, team);
@@ -54,6 +55,8 @@ public class FolderService {
         final Folder newFolder = requestToFolder(request, team, parentFolder);
 
         folderRepository.save(newFolder);
+
+        return FolderResponse.fromFolder(newFolder);
     }
 
     public void deleteFolder(Long teamId, Long folderId) {

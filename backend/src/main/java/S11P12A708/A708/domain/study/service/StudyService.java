@@ -59,7 +59,7 @@ public class StudyService {
         yearMonthFolder.addSubFolder(timeFolder);
 
         // 1회차 스터디 개요 파일 추가.
-        final File timeOverViewFile = File.createTimeOverViewFile(timeFolder);
+        final File timeOverViewFile = File.createTimeOverViewFile(timeFolder, study);
         timeFolder.addFile(timeOverViewFile);
     }
 

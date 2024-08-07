@@ -5,7 +5,7 @@ import S11P12A708.A708.domain.auth.request.AuthUserDto;
 import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.file.request.FileCreateRequest;
 import S11P12A708.A708.domain.file.request.FileUpdateRequest;
-import S11P12A708.A708.domain.file.response.FileResponse;
+import S11P12A708.A708.domain.file.response.FileInfoResponse;
 import S11P12A708.A708.domain.file.service.FileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,46 +22,46 @@ public class FileController {
     private final FileService fileService;
 
     @PostMapping("/teams/{teamId}/file")
-    public ResponseEntity<Void> createNormalFile(
+    public ResponseEntity<FileInfoResponse> createNormalFile(
             @PathVariable("teamId") Long teamId,
             @Valid @RequestBody FileCreateRequest request) {
-        fileService.createNormalFile(teamId, request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        final FileInfoResponse response = fileService.createNormalFile(teamId, request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PatchMapping("/teams/{teamId}/file/{fileId}")
-    public ResponseEntity<Void> updateNormalFile(
+    public ResponseEntity<FileInfoResponse> updateNormalFile(
             @PathVariable("teamId") Long teamId,
             @PathVariable("fileId") Long fileId,
             @Valid @RequestBody FileUpdateRequest request) {
-        fileService.updateNormalFile(teamId, fileId, request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        final FileInfoResponse response = fileService.updateNormalFile(teamId, fileId, request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/teams/{teamId}/file/code")
-    public ResponseEntity<Void> createCodeFile(
+    public ResponseEntity<FileInfoResponse> createCodeFile(
             @AuthUser AuthUserDto authUser,
             @PathVariable("teamId") Long teamId,
             @Valid @RequestBody FileCreateRequest request) {
-        fileService.createCodeFile(teamId, authUser, request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        final FileInfoResponse response = fileService.createCodeFile(teamId, authUser, request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PatchMapping("/teams/{teamId}/files/{fileId}/code")
-    public ResponseEntity<Void> updateCodeFile(
+    public ResponseEntity<FileInfoResponse> updateCodeFile(
             @PathVariable("teamId") Long teamId,
             @PathVariable("fileId") Long fileId,
             @Valid @RequestBody CodeFileUpdateRequest request) {
-        fileService.updateCodeFile(teamId, fileId, request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        final FileInfoResponse response = fileService.updateCodeFile(teamId, fileId, request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/teams/{teamId}/file/{fileId}")
-    public ResponseEntity<FileResponse> getFileInfo(
+    public ResponseEntity<FileInfoResponse> getFileInfo(
             @AuthUser AuthUserDto authUser,
             @PathVariable("teamId") Long teamId,
             @PathVariable("fileId") Long fileId) {
-        final FileResponse response = fileService.getFileInfo(teamId, authUser, fileId);
+        final FileInfoResponse response = fileService.getFileInfo(teamId, authUser, fileId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
