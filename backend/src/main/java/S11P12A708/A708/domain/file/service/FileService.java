@@ -2,6 +2,7 @@ package S11P12A708.A708.domain.file.service;
 
 import S11P12A708.A708.domain.auth.request.AuthUserDto;
 import S11P12A708.A708.domain.code.entity.Code;
+import S11P12A708.A708.domain.code.repository.CodeRepository;
 import S11P12A708.A708.domain.file.entity.File;
 import S11P12A708.A708.domain.file.entity.FileType;
 import S11P12A708.A708.domain.file.exception.FileNameDuplicateException;
@@ -27,10 +28,12 @@ import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -42,6 +45,7 @@ public class FileService {
     private final UserRepository userRepository;
     private final ProblemRepository problemRepository;
     private final StudyRepository studyRepository;
+    private final CodeRepository codeRepository;
 
     public void createNormalFile(Long teamId, FileCreateRequest request) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
@@ -64,7 +68,6 @@ public class FileService {
     }
 
     public void createCodeFile(Long teamId, AuthUserDto authUser, FileCreateRequest request) {
-        // TODO : 현재 문제를 담는 폴더가 만들어 지지 않아 테스트가 불가함. 추후에 테스트까지 진행할 예정
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final Folder folder = folderRepository.findById(request.getFolderId()).orElseThrow(FolderNotFoundException::new);
         final User user = userRepository.findById(authUser.getId()).orElseThrow(UserNotFoundException::new);
@@ -72,7 +75,7 @@ public class FileService {
         validateDuplicateFileName(folder, request.getFileName());
         validateProblemFolder(folder);
 
-        final Code code = Code.createBasic();
+        final Code code = codeRepository.save(Code.createBasic());
         final File newFile = File.createCodeFile(request.getFileName(), user, folder, code);
         fileRepository.save(newFile);
     }
