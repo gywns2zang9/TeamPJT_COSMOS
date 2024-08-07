@@ -29,8 +29,10 @@ function SideBar({ groupId }) {
   // 사이드바 크기
   const [isOpen, setIsOpen] = useState(true); // 사이드바 오픈 여부
   const [sidebarWidth, setSidebarWidth] = useState(250); // 사이드바 너비
-  const sidebarRef = useRef(null); // 사이드바 크기조절
-  const resizerRef = useRef(null); // 사이드바 크기조절
+  const [isResizing, setIsResizing] = useState(false); // 사이드바 조절 상태
+
+  const sidebarRef = useRef(null); // 사이드바
+  const resizerRef = useRef(null); // 사이드바 조절 핸들
   // 페이지 이동
   const navigate = useNavigate(); 
   // 화상회의 시작
@@ -73,14 +75,17 @@ function SideBar({ groupId }) {
     };
 
     const handleMouseUp = () => {
+      setIsResizing(false);
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
 
     const handleMouseDown = (e) => {
       if (e.target === resizerRef.current) {
+        setIsResizing(true);
         document.addEventListener("mousemove", handleMouseMove);
         document.addEventListener("mouseup", handleMouseUp);
+        e.preventDefault();
       }
     };
 
@@ -91,7 +96,7 @@ function SideBar({ groupId }) {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, []);
+  }, [isResizing]);
 
   // 설정 모달
   const handleOpenSettingsModal = () => {
@@ -125,12 +130,6 @@ function SideBar({ groupId }) {
     setShowConfirmVideoStart(false);
   };
 
-  // 다음 ID 가져오기
-  const getNextId = (type) => {
-    const items = type === "folder" ? structure.folders : structure.files;
-    return items.reduce((max, item) => Math.max(max, item.id), 0) + 1;
-  };
-
   // 항목 추가
   const handleAddItemClick = (type, parentId) => {
     setNewItemType(type); // 타입
@@ -140,34 +139,32 @@ function SideBar({ groupId }) {
   };
 
   // 항목 추가 저장
-  const handleCreateItemSave = () => {
+  const handleCreateItemSave = async () => {
     if (newItemName.trim()) {
-      const newId = getNextId(newItemType);
+      const newItem = {
+        id:'',
+        type: newItemType,
+        name: newItemName,
+        parentId: newItemParentId || rootId,
+      };
+      
+      if (newItem.type === "folder") {
+        const newLoadFle = await createFolder({
+          groupId,
+          parentId: newItem.parentId,
+          folderName: newItem.name,
+        });
+        newItem.id = newLoadFle.fileId;
+      } else  {
+        const newLoadFle = await createFile({
+          groupId,
+          folderId: newItem.parentId,
+          fileName: newItem.name,
+          type: newItem.type,
+        });
+        newItem.id = newLoadFle.fileId;
+      }
       setStructure((prev) => {
-        const parentId = newItemParentId || rootId;
-        const newItem = {
-          id: newId,
-          type: newItemType,
-          name: newItemName,
-          parentId: parentId,
-          content: "",
-        };
-        console.log(newItem);
-        if (newItem.type === "folder") {
-          createFolder({
-            groupId,
-            parentId: newItem.parentId,
-            folderName: newItem.name,
-          });
-        } else  {
-          createFile({
-            groupId,
-            folderId: newItem.parentId,
-            fileName: newItem.name,
-            type: newItem.type,
-          });
-        }
-
         return {
           ...prev,
           [newItemType === "folder" ? "folders" : "files"]: [
@@ -176,6 +173,10 @@ function SideBar({ groupId }) {
           ],
         };
       });
+      navigate(
+        `/group/${groupId}/${newItem.id}/`, 
+        { state: { fileId: newItem.id } }
+      );
       setShowCreateItemModal(false);
     }
   };
@@ -326,7 +327,7 @@ useEffect(() => {
       CODE: `/group/${groupId}/code/${id}/`,
       TIME_OVERVIEW: `/group/${groupId}/time-overview/${id}/`,
     };
-    navigate(pageMap[type], { state: { fileId: id, fileName: file.name } });
+    navigate(pageMap[type], { state: { fileId: id } });
   };
 
   // 폴더 렌더링
@@ -466,7 +467,7 @@ useEffect(() => {
   
 
   return (
-    <div className="sidebar" ref={sidebarRef} style={{ width: sidebarWidth }}>
+    <div className={`sidebar ${isResizing ? 'resizing' : ''}`} ref={sidebarRef} style={{ width: sidebarWidth }}>
       <div className="sidebar-header" onClick={toggleSideBar}>
         <Button variant="link" size="m" >
           <OverlayTrigger
@@ -574,6 +575,20 @@ useEffect(() => {
         show={showConfirmDelete}
         handleClose={handleCancelDelete}
         handleDelete={handleConfirmDelete}
+      />
+      <div
+          ref={resizerRef}
+          className="resizer"
+          style={{
+              width: '10px',
+              height: '100%',
+              position: 'absolute',
+              top: '0',
+              right: '0',
+              cursor: 'ew-resize',
+              backgroundColor: isResizing ? '#aaa' : '#ddd',
+              transition: 'background-color 0.2s ease'
+          }}
       />
     </div>
   );

@@ -11,7 +11,6 @@ const NormalTemplates = ({ pageId, groupId }) => {
     const loadFile = useGroupStore((state) => state.getFile);
     const [title, setTitle] = useState('');
 
-    // Initialize the SimpleMDE editor once
     useEffect(() => {
         const simpleMDE = new SimpleMDE({
             element: editorRef.current,
@@ -29,7 +28,6 @@ const NormalTemplates = ({ pageId, groupId }) => {
         };
     }, []);
 
-    // Load file content and set the title when pageId or groupId changes
     useEffect(() => {
         const getFile = async () => {
             try {
@@ -49,7 +47,6 @@ const NormalTemplates = ({ pageId, groupId }) => {
         }
     }, [pageId, groupId, loadFile, editor]);
 
-    // Update file content when the editor changes
     useEffect(() => {
         const editFile = async (content) => {
             try {
@@ -74,13 +71,12 @@ const NormalTemplates = ({ pageId, groupId }) => {
         }
     }, [editor, pageId, groupId, title, updateFile]);
 
-    // Update the title
     const updateTitle = async () => {
         try {
-            const content = editor.value();
+            const content = editor?.value() || '';
             const response = await updateFile({ groupId, fileId: pageId, name: title, content });
-            window.location.reload();
             console.log(response);
+            window.location.reload();
         } catch (err) {
             console.error('제목 변경 실패 -> ', err);
         }
