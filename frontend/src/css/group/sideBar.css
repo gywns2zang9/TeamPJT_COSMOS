@@ -1,6 +1,6 @@
 /* 사이드바 기본 스타일 */
 .sidebar {
-    transition: width 0.3s;
+    transition: width 0.2s ease;
     overflow: hidden;
     background: linear-gradient(to right, #175491, #0D0220);
     color: #939cec;
@@ -72,6 +72,12 @@
 
 .sidebar-head:hover::before {
     display: block;
+}
+
+.folder-name, .file-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 @keyframes rotate-segment {

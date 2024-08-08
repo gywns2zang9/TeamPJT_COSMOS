@@ -39,8 +39,11 @@
     "react-router-dom": "^6.25.1",
     "react-scripts": "5.0.1",
     "react-simplemde-editor": "^5.2.0",
+    "react-syntax-highlighter": "^15.5.0",
     "react-window": "^1.8.10",
     "redux": "^5.0.1",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.0",
     "simple": "^0.2.0",
     "simplemde": "^1.11.2",
     "styled-components": "^6.1.12",
@@ -52,8 +55,8 @@
     "zustand": "^4.5.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "cross-env NODE_ENV=development react-scripts start",
+    "build": "cross-env NODE_ENV=production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

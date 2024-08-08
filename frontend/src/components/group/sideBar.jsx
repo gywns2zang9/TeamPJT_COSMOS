@@ -2,31 +2,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useRef, useEffect } from "react";
 import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import {
-  FaFolderPlus,
-  FaFileAlt,
-  FaTrashAlt,
-  FaCog,
-  FaPlay,
-  FaUserPlus,
-  FaFolder,
-  FaFile,
-  FaAngleDoubleLeft,
-  FaAngleDoubleRight,
-  FaChevronDown,
-  FaChevronRight,
-} from "react-icons/fa";
+import { FaFolderPlus, FaFileAlt, FaTrashAlt, FaCog, FaPlay, FaUserPlus, FaFolder, FaFile, FaAngleDoubleLeft, FaAngleDoubleRight, FaChevronDown, FaChevronRight } from "react-icons/fa";
 import "../../css/group/sideBar.css";
 import GroupSettingsModal from "../../modals/GroupSettingsModal";
 import InviteGroupModal from "../../modals/InviteGroupModal";
-import CreateItemModal from "../../modals/CreateItemModal.jsx";
-import StartVideoModal from "../../modals/StartVideoModal.jsx";
-import ItemDeleteModal from "../../modals/ItemDeleteModal.jsx";
-import useGroupStore from "../../store/group.js";
-import MainPageTemplates from "./template/mainPageTemplates.jsx";
-import CodePageTemplates from "./template/codePageTemplates.jsx";
-import MarkDownEditor from "./template/markdownEditor.jsx";
-import StudyPageTemplates from "./template/studyPageTemplates.jsx";
+import CreateItemModal from '../../modals/CreateItemModal.jsx';
+import StartVideoModal from '../../modals/StartVideoModal.jsx';
+import ItemDeleteModal from '../../modals/ItemDeleteModal.jsx';
+import useGroupStore from '../../store/group.js';
 
 // 초기 폴더와 파일 구조
 const initialStructure = {
@@ -36,28 +19,36 @@ const initialStructure = {
 
 function SideBar({ groupId }) {
   const loadFolderInfo = useGroupStore((state) => state.loadFolderInfo); // 폴더 정보 불러오기
-  const [isOpen, setIsOpen] = useState(true); // 사이드바 오픈 여부
   const [structure, setStructure] = useState(initialStructure); // 디렉토리 구조
-  const [showSettingsModal, setShowSettingsModal] = useState(false); // 그룹설정
-  const [showInviteModal, setShowInviteModal] = useState(false); // 그룹초대
   const [editingItemId, setEditingItemId] = useState(null); // 폴더/파일 이름변경
   const [editName, setEditName] = useState(""); // 폴더파일 이름변경
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false); // 삭제확인
-  const [itemToDelete, setItemToDelete] = useState(null); // 삭제
-  const [sidebarWidth, setSidebarWidth] = useState(250); // 사이드바 너비
   const [expandedFolders, setExpandedFolders] = useState({}); // 폴더 확장
-  const sidebarRef = useRef(null); // 사이드바 크기조절
-  const resizerRef = useRef(null); // 사이드바 크기조절
-  const navigate = useNavigate(); // 페이지 이동
-  const [showConfirmVideoStart, setShowConfirmVideoStart] = useState(false); // 화상회의 시작
-  // 아이템 생성 상태
+  // 설정
+  const [showInviteModal, setShowInviteModal] = useState(false); // 그룹초대
+  const [showSettingsModal, setShowSettingsModal] = useState(false); // 그룹설정
+  // 사이드바 크기
+  const [isOpen, setIsOpen] = useState(true); // 사이드바 오픈 여부
+  const [sidebarWidth, setSidebarWidth] = useState(250); // 사이드바 너비
+  const [isResizing, setIsResizing] = useState(false); // 사이드바 조절 상태
+
+  const sidebarRef = useRef(null); // 사이드바
+  const resizerRef = useRef(null); // 사이드바 조절 핸들
+  // 페이지 이동
+  const navigate = useNavigate(); 
+  // 화상회의 시작
+  const [showConfirmVideoStart, setShowConfirmVideoStart] = useState(false); 
+  // 아이템 생성 및 삭제
   const [showCreateItemModal, setShowCreateItemModal] = useState(false); // 아이템 생성 모달
   const [newItemType, setNewItemType] = useState(""); // 생성할 아이템의 타입
   const [newItemParentId, setNewItemParentId] = useState(null); // 생성할 아이템의 부모 ID
-  const [newItemName, setNewItemName] = useState(""); // 생성할 아이템의 이름을
+  const [newItemName, setNewItemName] = useState(""); // 생성할 아이템의 이름
   const [rootId, setRootId] = useState(null); // 루트폴더 아이디 저장
   const createFile = useGroupStore((state) => state.createFile);
   const createFolder = useGroupStore((state) => state.createFolder);
+  const [itemToDelete, setItemToDelete] = useState(null); // 삭제
+  const deleteFolder = useGroupStore((state) => state.deleteFolder); // 폴더 삭제
+  const deleteFile = useGroupStore((state) => state.deleteFile); // 파일 삭제
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false); // 삭제확인
 
   // 사이드바 토글
   const toggleSideBar = () => {
@@ -73,7 +64,7 @@ function SideBar({ groupId }) {
     setIsOpen(sidebarWidth > 100);
   }, [sidebarWidth]);
 
-  // 마우스 이벤트 핸들러 설정
+  // 마우스 이벤트 핸들러 설정 - TODO
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (resizerRef.current && e.buttons === 1) {
@@ -86,14 +77,17 @@ function SideBar({ groupId }) {
     };
 
     const handleMouseUp = () => {
+      setIsResizing(false);
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
 
     const handleMouseDown = (e) => {
       if (e.target === resizerRef.current) {
+        setIsResizing(true);
         document.addEventListener("mousemove", handleMouseMove);
         document.addEventListener("mouseup", handleMouseUp);
+        e.preventDefault();
       }
     };
 
@@ -104,42 +98,7 @@ function SideBar({ groupId }) {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, []);
-
-  // 최상위 폴더 로드
-  useEffect(() => {
-    const loadRootFolders = async () => {
-      console.log(1);
-      try {
-        const { folderId, folders, files } = await loadFolderInfo({
-          groupId,
-          folderId: 0,
-        });
-        const rootFolder = {
-          type: "folder",
-          id: folderId,
-          name: "Root",
-          parentId: null,
-        };
-        setRootId(folderId);
-        setExpandedFolders((prev) => ({
-          ...prev,
-          [folderId]: true,
-        }));
-        setStructure((prev) => ({
-          folders,
-          files,
-        }));
-        setStructure((prev) => ({
-          ...prev,
-          folders: [rootFolder],
-        }));
-      } catch (err) {
-        console.error("폴더 로딩 실패 -> ", err);
-      }
-    };
-    loadRootFolders();
-  }, [groupId, loadFolderInfo]);
+  }, [isResizing]);
 
   // 설정 모달
   const handleOpenSettingsModal = () => {
@@ -159,26 +118,18 @@ function SideBar({ groupId }) {
     setShowInviteModal(false);
   };
 
-  // 화상회의시작하기
+  // 화상회의 모달
   const handleOpenVideoStartModal = () => {
     setShowConfirmVideoStart(true);
   };
 
-  // 화상회의 모달 닫기
   const handleCloseVideoStartModal = () => {
     setShowConfirmVideoStart(false);
   };
 
   const handleStartVideo = () => {
-    // 화상 회의 시작 로직 추가
     navigate(`/conference/${groupId}`);
     setShowConfirmVideoStart(false);
-  };
-
-  // 다음 ID 가져오기
-  const getNextId = (type) => {
-    const items = type === "folder" ? structure.folders : structure.files;
-    return items.reduce((max, item) => Math.max(max, item.id), 0) + 1;
   };
 
   // 항목 추가
@@ -190,33 +141,32 @@ function SideBar({ groupId }) {
   };
 
   // 항목 추가 저장
-  const handleCreateItemSave = () => {
+  const handleCreateItemSave = async () => {
     if (newItemName.trim()) {
-      const newId = getNextId(newItemType);
+      const newItem = {
+        id:'',
+        type: newItemType,
+        name: newItemName,
+        parentId: newItemParentId || rootId,
+      };
+      
+      if (newItem.type === "folder") {
+        const newLoadFle = await createFolder({
+          groupId,
+          parentId: newItem.parentId,
+          folderName: newItem.name,
+        });
+        newItem.id = newLoadFle.fileId;
+      } else  {
+        const newLoadFle = await createFile({
+          groupId,
+          folderId: newItem.parentId,
+          fileName: newItem.name,
+          type: newItem.type,
+        });
+        newItem.id = newLoadFle.fileId;
+      }
       setStructure((prev) => {
-        const parentId = newItemParentId || rootId;
-        const newItem = {
-          id: newId,
-          type: newItemType,
-          name: newItemName,
-          parentId: parentId,
-          content: "",
-        };
-        if (newItemType === "folder") {
-          createFolder({
-            groupId,
-            parentId: parentId,
-            folderName: newItemName,
-          });
-        } else if (newItemType === "file") {
-          createFile({
-            groupId,
-            folderId: parentId,
-            fileName: newItemName,
-            type: newItemType,
-          });
-        }
-
         return {
           ...prev,
           [newItemType === "folder" ? "folders" : "files"]: [
@@ -225,6 +175,10 @@ function SideBar({ groupId }) {
           ],
         };
       });
+      navigate(
+        `/group/${groupId}/${newItem.id}/`, 
+        { state: { fileId: newItem.id } }
+      );
       setShowCreateItemModal(false);
     }
   };
@@ -234,22 +188,34 @@ function SideBar({ groupId }) {
     setShowCreateItemModal(false);
   };
 
-  // 항목 삭제
-  const handleDeleteItem = (id, parentId) => {
-    setItemToDelete({ id, parentId });
+  // 항목 삭제 모달 
+  const handleDeleteItem = ({id, parentId, type}) => {
+    console.log(id, parentId, type);
+    setItemToDelete({ id, parentId, type });
     setShowConfirmDelete(true);
   };
 
-  // 삭제 확인
-  const handleConfirmDelete = () => {
-    if (itemToDelete) {
-      const { id } = itemToDelete;
+  // 삭제 실행
+  const handleConfirmDelete = async () => {
+    const { id, parentId, type } = itemToDelete;
+    console.log(itemToDelete);
+    console.log(id, parentId, type);
+    try {
+
+      if (type === 'folder') {
+        await deleteFolder({ groupId, folderId:id })
+      } else {
+        await deleteFile({ groupId, fileId:id })
+      }
       setStructure((prev) => ({
         ...prev,
         folders: prev.folders.filter((folder) => folder.id !== id),
         files: prev.files.filter((file) => file.id !== id),
       }));
       setShowConfirmDelete(false);
+      console.log('삭제 성공');
+    } catch (err) {
+      console.error('삭제 실패 -> ', err);
     }
   };
 
@@ -281,30 +247,116 @@ function SideBar({ groupId }) {
     setEditName("");
   };
 
+// 최상위 폴더 로드 
+useEffect(() => {
+  const loadRootFolder = async () => {
+    try {
+        const { folderId, folders, files } = await loadFolderInfo({ groupId, folderId: 0 });
+        const rootFolder = {
+            type: 'folder',
+            id: folderId,
+            name: 'Root',
+            parentId: null,
+        };
+        setRootId(folderId);
+        setExpandedFolders({ [folderId]: true });
+        setStructure({
+            folders: [rootFolder, ...folders],
+            files: files,
+        });
+    } catch (err) {
+        console.error('루트폴더 로드 실패 -> ', err);
+    }
+  };
+
+    if (structure.files.length === 0) {
+        loadRootFolder();
+    }
+  }, [groupId, loadFolderInfo]);
+
+  // 서브폴더 로드
+  const loadSubFolders = async (parentId) => {
+    try {
+        const { folders, files } = await loadFolderInfo({ groupId, folderId: parentId });
+        setStructure((prev) => ({
+          folders: [
+              ...prev.folders,
+              ...folders.filter(f => !prev.folders.some(existingFolder => existingFolder.id === f.id))
+          ],
+          files: [
+              ...prev.files,
+              ...files.filter(f => !prev.files.some(existingFile => existingFile.id === f.id))
+          ],
+      }));
+    } catch (err) {
+        console.error('Failed to load subfolders:', err);
+    }
+  };
+  
+  // 페이지 제목 변경 감지 및 사이드바 업데이트
+  useEffect(() => {
+    const checkTitleChange = () => {
+      const currentTitle = document.title;
+      if (currentTitle !== document.title) {
+        // 페이지 제목이 변경되었을 때 데이터 다시 불러오기
+        loadFolderInfo({ groupId }).then(({ folderId, folders, files }) => {
+          setRootId(folderId);
+          setStructure({ folders, files });
+        });
+      }
+    };
+  
+    const intervalId = setInterval(checkTitleChange, 1000); // 1초마다 제목 변경 확인
+  
+    return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 인터벌 정리
+  }, [groupId, loadFolderInfo]);
+
   // 폴더 확장
   const toggleFolderExpansion = (folderId) => {
-    setExpandedFolders((prev) => ({
-      ...prev,
-      [folderId]: !prev[folderId],
-    }));
+      const isExpanded = expandedFolders[folderId];
+      if (isExpanded) {
+          setExpandedFolders((prev) => {
+              const { [folderId]: _, ...rest } = prev;
+              return rest;
+          });
+      } else {
+          setExpandedFolders((prev) => ({
+              ...prev,
+              [folderId]: true,
+          }));
+          const hasSubFolders = structure.folders.some((folder) => folder.parentId === folderId);
+          if (!hasSubFolders) {
+              loadSubFolders(folderId);
+          }
+      }
+  };
+
+  // 파일 클릭시 페이지 전환
+  const handleFileClick = (file) => {
+    const { id, type } = file;
+    const pageMap = {
+      MAIN: `/group/${groupId}/main/${id}/`,
+      OVERVIEW: `/group/${groupId}/overview/${id}/`,
+      NORMAL: `/group/${groupId}/${id}/`,
+      CODE: `/group/${groupId}/code/${id}/`,
+      TIME_OVERVIEW: `/group/${groupId}/time-overview/${id}/`,
+    };
+    navigate(pageMap[type], { state: { fileId: id } });
   };
 
   // 폴더 렌더링
   const renderFolder = (folder) => {
     if (folder.id === rootId) {
       return (
-        <div className="sidebar-content">
-          {renderFolder(
-            structure.folders.filter((f) => f.parentId === folder.id)
-          )}
+        <div key={folder.id} className="sidebar-content">
           {renderFiles(structure.files.filter((f) => f.parentId === folder.id))}
+          {structure.folders.filter((f) => f.parentId === folder.id).map(renderFolder)}
         </div>
       );
     }
+
     const isExpanded = expandedFolders[folder.id] || false;
-    const childFolders = structure.folders.filter(
-      (f) => f.parentId === folder.id
-    );
+    const childFolders = structure.folders.filter((f) => f.parentId === folder.id);
     const childFiles = structure.files.filter((f) => f.parentId === folder.id);
 
     return (
@@ -330,7 +382,7 @@ function SideBar({ groupId }) {
                   autoFocus
                 />
               ) : (
-                <span>{folder.name}</span>
+                <span className="folder-name">{folder.name}</span>
               )}
             </div>
           </OverlayTrigger>
@@ -363,7 +415,7 @@ function SideBar({ groupId }) {
               <Button
                 variant="link"
                 size="sm"
-                onClick={() => handleDeleteItem(folder.id)}
+                  onClick={() => handleDeleteItem({ id:folder.id, parentId:folder.parentId, type:'folder'})}
               >
                 <FaTrashAlt />
               </Button>
@@ -372,8 +424,8 @@ function SideBar({ groupId }) {
         </div>
         {isExpanded && (
           <div className="folder-contents ms-3">
-            {childFolders.map(renderFolder)}
             {renderFiles(childFiles)}
+            {childFolders.map(renderFolder)}
           </div>
         )}
       </div>
@@ -405,20 +457,22 @@ function SideBar({ groupId }) {
                     autoFocus
                   />
                 ) : (
-                  <span>{file.name}</span>
+                  <span className="file-name">{file.name}</span>
                 )}
               </div>
             </OverlayTrigger>
             <div className="file-actions ms-auto">
-              <OverlayTrigger placement="top" overlay={<Tooltip>삭제</Tooltip>}>
-                <Button
-                  variant="link"
-                  size="sm"
-                  onClick={() => handleDeleteItem(file.id)}
-                >
-                  <FaTrashAlt />
-                </Button>
-              </OverlayTrigger>
+              {(file.type === 'NORMAL' || file.type === 'CODE') && (
+                <OverlayTrigger placement="top" overlay={<Tooltip>삭제</Tooltip>}>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    onClick={() => handleDeleteItem({ id:file.id, parentId:file.parentId, type:'file'})}
+                  >
+                    <FaTrashAlt />
+                  </Button>
+                </OverlayTrigger>
+              )}
             </div>
           </div>
         ))}
@@ -426,28 +480,28 @@ function SideBar({ groupId }) {
     );
   };
 
-  // 파일 클릭시 페이지 전환
-  const handleFileClick = (file) => {
-    const { id, type } = file;
-    const pageMap = {
-      MAIN: `/group/${groupId}/main/`,
-      OVERVIEW: `/group/${groupId}/overview/`,
-      NORMAL: `/group/${groupId}/${id}/`,
-      CODE: `/group/${groupId}/code/${id}/`,
-      TIME_OVERVIEW: `/group/${groupId}/time-overview/${id}/`,
-    };
-    navigate(pageMap[type], { state: { fileId: id, fileName: file.name } });
-  };
+  
 
   return (
-    <div className="sidebar" ref={sidebarRef} style={{ width: sidebarWidth }}>
-      <div className="sidebar-header">
-        <Button variant="link" size="m" onClick={toggleSideBar}>
-          {isOpen ? <FaAngleDoubleLeft /> : <FaAngleDoubleRight />}
+    <div className={`sidebar ${isResizing ? 'resizing' : ''}`} ref={sidebarRef} style={{ width: sidebarWidth }}>
+      <div className="sidebar-header" onClick={toggleSideBar}>
+        <Button variant="link" size="m" >
+          <OverlayTrigger
+            placement="top"
+            overlay={
+              <Tooltip>
+                {isOpen ? '사이드바 접기' : '사이드바 펼치기'}
+              </Tooltip>
+            }
+          >
+            <Button variant="link" size="m">
+              {isOpen ? <FaAngleDoubleLeft /> : <FaAngleDoubleRight />}
+            </Button>
+          </OverlayTrigger>
         </Button>
       </div>
       <div style={{ textAlign: "center" }}>
-        <OverlayTrigger placement="top" overlay={<Tooltip>화상회의</Tooltip>}>
+        <OverlayTrigger placement="top" overlay={<Tooltip>버튼을 눌러 화상회의를 시작하세요</Tooltip>}>
           <Button
             variant="link"
             size="sm"
@@ -459,7 +513,7 @@ function SideBar({ groupId }) {
       </div>
       {isOpen && (
         <div className="sidebar-content">
-          <div className="actions">
+          <div className="add-items">
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>폴더 추가</Tooltip>}
@@ -486,13 +540,12 @@ function SideBar({ groupId }) {
             </OverlayTrigger>
           </div>
           <div className="folders">
-            {structure.folders
-              .filter((folder) => folder.parentId === null)
-              .map(renderFolder)}
+          {structure.folders.filter((folder) => folder.parentId === null).map(renderFolder)}
           </div>
         </div>
       )}
-
+      
+      {/* 사이드바 푸터 */}
       <div className="sidebar-footer">
         <OverlayTrigger placement="top" overlay={<Tooltip>설정</Tooltip>}>
           <Button variant="link" size="sm" onClick={handleOpenSettingsModal}>
@@ -508,13 +561,16 @@ function SideBar({ groupId }) {
 
       <div className="sidebar-resizer" ref={resizerRef}></div>
 
+      {/* 모달세팅 */}
       <GroupSettingsModal
         show={showSettingsModal}
         handleClose={handleCloseSettingsModal}
+        groupId={groupId}
       />
       <InviteGroupModal
         show={showInviteModal}
         handleClose={handleCloseInviteModal}
+        groupId={groupId}
       />
       <CreateItemModal
         show={showCreateItemModal}
@@ -535,6 +591,20 @@ function SideBar({ groupId }) {
         show={showConfirmDelete}
         handleClose={handleCancelDelete}
         handleDelete={handleConfirmDelete}
+      />
+      <div
+          ref={resizerRef}
+          className="resizer"
+          style={{
+              width: '10px',
+              height: '100%',
+              position: 'absolute',
+              top: '0',
+              right: '0',
+              cursor: 'ew-resize',
+              backgroundColor: isResizing ? '#aaa' : '#ddd',
+              transition: 'background-color 0.2s ease'
+          }}
       />
     </div>
   );

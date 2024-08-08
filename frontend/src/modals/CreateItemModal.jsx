@@ -20,41 +20,30 @@ function CreateItemModal({ show, handleClose, handleSave, nameValue, setNameValu
                             onChange={handleNameChange}
                         />
                     </Form.Group>
+                    <hr />
                     {typeValue !== 'folder' && (
-                        <Form.Group controlId="formItemType" className="mt-3">
-                            <Form.Label>유형</Form.Label>
-                            <Form.Check
-                                type="radio"
-                                label="일반페이지"
-                                name="itemType"
-                                value="NORMAL"
-                                checked={typeValue === "NORMAL"}
-                                onChange={handleTypeChange}
-                            />
-                            <Form.Check
-                                type="radio"
-                                label="코드페이지"
-                                name="itemType"
-                                value="CODE"
-                                checked={typeValue === "CODE"}
-                                onChange={handleTypeChange}
-                            />
-                            <Form.Check
-                                type="radio"
-                                label="전체개요페이지"
-                                name="itemType"
-                                value="OVERVIEW"
-                                checked={typeValue === "OVERVIEW"}
-                                onChange={handleTypeChange}
-                            />
-                            <Form.Check
-                                type="radio"
-                                label="개요페이지"
-                                name="itemType"
-                                value="OVERVIEW"
-                                checked={typeValue === "OVERVIEW"}
-                                onChange={handleTypeChange}
-                            />
+                        <Form.Group controlId="formItemType" >
+                            <Form.Label>어떤 페이지를 만드시나요?</Form.Label>
+                            <div className="mt-3 d-flex">
+                                <Form.Check
+                                    type="radio"
+                                    label="일반페이지"
+                                    name="itemType"
+                                    value="NORMAL"
+                                    checked={typeValue === "NORMAL"}
+                                    onChange={handleTypeChange}
+                                    className="me-5"
+                                />
+                                <Form.Check
+                                    type="radio"
+                                    label="코드페이지"
+                                    name="itemType"
+                                    value="CODE"
+                                    checked={typeValue === "CODE"}
+                                    onChange={handleTypeChange}
+                                    className="ms-5"
+                                />
+                            </div>
                         </Form.Group>
                     )}
                 </Form>

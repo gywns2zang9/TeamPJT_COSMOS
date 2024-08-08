@@ -27,6 +27,7 @@ const useAuthStore = create((set) => ({
 
     // 일반 로그인 요청
     login: async ({ email, password }) => {
+        console.log(BASE_URL);
         try {
             const url = `${BASE_URL}/auth/login`;
             const data = { email, password };
@@ -148,7 +149,7 @@ const useAuthStore = create((set) => ({
             return response;
 
         } catch (error) {
-            console.error("비밀번호 변경 요청 실패! ->", error);
+            console.error("비번찾기-비밀번호 변경 요청 실패! ->", error);
             throw error;
         }
     },
@@ -161,10 +162,12 @@ const useAuthStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await patch(url, data, headers)
+            console.log(response)
             return response
         }
         catch (error) {
-            console.log(error)
+            console.log("비밀번호 변경 요청 실패! ->", error);
+            throw error;
         }
     },
 

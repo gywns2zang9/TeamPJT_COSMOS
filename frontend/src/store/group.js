@@ -4,8 +4,8 @@ import { deleteRequest, get, patch, post } from '../api/api.js'
 import useAuthStore from './auth.js'
 
 const BASE_URL = useStore.getState().BASE_URL;
-
 const useGroupStore = create((set) => ({
+
     // 그룹 목록 불러오기
     loadGroupList: async ({ userId }) => {
         try {
@@ -34,7 +34,7 @@ const useGroupStore = create((set) => ({
             const accessToken = useAuthStore.getState().getAccessToken();
             const url = `${BASE_URL}/users/${userId}/team`;
             const data = {
-                teamName:groupName,
+                teamName: groupName,
                 description
             };
             const headers = {
@@ -54,8 +54,7 @@ const useGroupStore = create((set) => ({
     joinGroup: async ({ userId, teamCode }) => {
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
-
-            const url = `${BASE_URL}/users/${userId}/teams/join/`;
+            const url = `${BASE_URL}/users/${userId}/teams/teamCode`;
             const data = {
                 teamCode,
             };
@@ -63,8 +62,7 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await post(url, data, headers);
-            console.log(response);
-            return response
+            return 'success'
 
         } catch (err) {
             console.log('그룹 참여 실패 -> ', err);
@@ -97,7 +95,6 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await get(url, {}, headers);
-            console.log(response);
             return response
         } catch (err) {
             console.log('그룹 멤버 목록 불러오기 실패 -> ', err);
@@ -171,7 +168,6 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await deleteRequest(url, {}, headers);
-            console.log(response);
             return response
         } catch (err) {
             console.log('그룹 탈퇴 실패 -> ', err);
@@ -180,15 +176,18 @@ const useGroupStore = create((set) => ({
     },
 
     // 그룹 초대 가능한 회원 조회하기
-    invitePossibleUsers: async ({ teamId, nickName }) => {
+    invitePossibleUsers: async ({ groupId, nickName }) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
         try {
-            const url = `${BASE_URL}/teams/auth/${teamId}/members`;
+            const url = `${BASE_URL}/teams/auth/${groupId}/members`;
             const data = {
                 nickName,
             };
-            const response = await get(url, data);
-            console.log(response);
-            return response
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const responseData = await post(url, data, headers);
+            return responseData
         } catch (err) {
             console.log('그룹 초대 가능한 회원 조회하기 실패 -> ', err);
             throw err;
@@ -204,7 +203,6 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await get(url, {}, headers);
-            console.log(response);
             return response
         } catch (err) {
             console.log('그룹 참여코드 확인하기 실패 -> ', err);
@@ -213,19 +211,19 @@ const useGroupStore = create((set) => ({
     },
 
     // 그룹 참여 이메일 발송하기
-    sendInviteEmail: async ({ groupId, email }) => {
+    sendInviteEmail: async ({ groupId, emails }) => {
         const accessToken = await useAuthStore.getState().getAccessToken();
         const headers = {
             Authorization: `Bearer ${accessToken}`,
         };
+        const emailArray = emails.split(',').map(email => email.trim()); //리스트에 담음
         try {
-            const url = `${BASE_URL}/teams/auth/${groupId}/teamCode/`;
+            const url = `${BASE_URL}/teams/auth/${groupId}/teamCode`;
             const data = {
-                email,
+                "emails": emailArray
             };
-            const response = await post(url, data, headers);
-            console.log(response);
-            return response
+            await post(url, data, headers);
+            console.log(`${emailArray}로 발송 완료!`)
         } catch (err) {
             console.log('그룹 참여 이메일 발송하기 실패-> ', err);
             throw err;
@@ -245,6 +243,46 @@ const useGroupStore = create((set) => ({
         } catch (err) {
             console.log('그룹내 폴더정보 불러오기 실패 -> ', err);
             throw err;
+        }
+    },
+
+    // 스터디 생성하기
+    createStudy: async ({ groupId, year, month }) => {
+        try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const url = `${BASE_URL}/teams/${groupId}/study`;
+            const data = {
+                year,
+                month
+            };
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await post(url, data, headers);
+            return response
+        } catch (err) {
+            console.log('스터디 생성 실패 -> ', err);
+            throw err;
+        }
+    },
+
+    // 문제 추가하기
+    createProblem: async ({ groupId, problemNumber, studyId }) => {
+        try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const url = `${BASE_URL}/teams/${groupId}/problems`;
+            const data = {
+                problemNumber,
+                studyId:1
+            };
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await post(url, data, headers);
+            return response
+        } catch (err) {
+            console.log('문제 생성 실패 -> ', err);
+            
         }
     },
 
@@ -286,7 +324,7 @@ const useGroupStore = create((set) => ({
     },
 
     // 파일 생성하기
-    createFile: async ({ groupId, folderId, fileName, type}) => {
+    createFile: async ({ groupId, folderId, fileName, type }) => {
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
             const headers = {
@@ -296,7 +334,7 @@ const useGroupStore = create((set) => ({
             if (type === 'NORMAL') {
                 url = `${BASE_URL}/teams/${groupId}/file`;
             } else {
-            url = `${BASE_URL}/teams/${groupId}/file/code`;
+                url = `${BASE_URL}/teams/${groupId}/file/code`;
             }
             const data = {
                 folderId,
@@ -314,8 +352,13 @@ const useGroupStore = create((set) => ({
     // 파일 삭제하기
     deleteFile: async ({ groupId, fileId }) => {
         try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
             const url = `${BASE_URL}/teams/${groupId}/files/${fileId}`;
-            const response = await deleteRequest(url, {});
+            
+            const response = await deleteRequest(url, {}, headers);
             console.log(response);
             return response
         } catch (err) {
@@ -324,6 +367,84 @@ const useGroupStore = create((set) => ({
         }
     },
 
+    // 파일 불러오기
+    getFile: async ({ groupId, fileId }) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+        };
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/file/${fileId}`
+            const response = await get(url, {}, headers);
+            return response
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+
+    // 일반 페이지 수정하기
+    updateNormalFile: async ({ groupId, fileId, name, content }) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+        };
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/file/${fileId}`;
+            const data = {
+                name,
+                content
+            };
+            const response = await patch(url, data, headers);
+            return response
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+
+    // 코드 자동 불러오기
+    loadCode: async ({ groupId, userId, problemId}) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+        };
+        const data = {
+            userId,
+            problemId
+        }
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/problems/code`;
+            const response = await post(url, data, headers);
+            return response
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+
+    // 코드 페이지 수정하기
+    updateCodeFile: async ({ groupId, fileId, name, code, content, language }) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+        };
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/files/codes/${fileId}`;
+            const data = {
+                name,
+                code,
+                content,
+                language
+            };
+            const response = await get(url, data, headers);
+            console.log(response);
+            return response
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
     // 캘린더 일정 목록 불러오기
     loadCalendarScheduleList: async ({ groupId }) => {
         try {
@@ -345,15 +466,15 @@ const useGroupStore = create((set) => ({
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
             const url = `${BASE_URL}/teams/${groupId}/calendar`;
+            const formattedTime = time.replace('T', ' ').slice(0, 16);
             const data = {
                 title,
                 memo,
-                time
+                time: formattedTime
             };
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
             };
-            console.log(headers);
             const response = await post(url, data, headers);
             return response
 
@@ -399,6 +520,27 @@ const useGroupStore = create((set) => ({
             return response
         } catch (err) {
             console.log('캘린더 일정 삭제 실패 -> ', err);
+            throw err;
+        }
+    },
+
+    // 코드 실행하기 
+    executeCode: async ({ groupId, content, language, inputs }) => {
+        try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const url = `${BASE_URL}/teams/${groupId}/codes/execute`;
+            const data = {
+                content,
+                language,
+                inputs
+            };
+            const response = await post(url, data, headers);
+            return response
+        } catch (err) {
+            console.log('코드 실행 실패 -> ', err);
             throw err;
         }
     },
