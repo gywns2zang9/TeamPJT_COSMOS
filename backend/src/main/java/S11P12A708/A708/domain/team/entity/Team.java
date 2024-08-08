@@ -52,6 +52,7 @@ public class Team {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.createdAt = LocalDateTime.now();
     }
 
     public Team(String name, String description) {
@@ -74,5 +75,6 @@ public class Team {
         this.id = updateTeam.getId();
         this.name = updateTeam.getName();
         this.description = updateTeam.getDescription();
+        this.modifiedAt = LocalDateTime.now();
     }
 }

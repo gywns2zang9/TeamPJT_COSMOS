@@ -8,11 +8,12 @@ function CreateProblemModal({ show, handleClose, groupId, studyId }) {
     const createProblem = useGroupStore((state) => state.createProblem)
     
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(`Site: ${problemSite}, Number: ${problemNumber}`);
         // TODO: API 요청 (problemSite, problemNumber)
-        createProblem({ groupId, problemNumber, studyId });
+        await createProblem({ groupId, problemNumber, studyId });
+        window.location.reload();
         handleClose();
     };
 

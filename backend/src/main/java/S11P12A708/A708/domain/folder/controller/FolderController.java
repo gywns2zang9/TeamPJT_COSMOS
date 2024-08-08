@@ -2,6 +2,7 @@ package S11P12A708.A708.domain.folder.controller;
 
 import S11P12A708.A708.domain.folder.request.FolderCreateRequest;
 import S11P12A708.A708.domain.folder.response.FolderInfoResponse;
+import S11P12A708.A708.domain.folder.response.FolderResponse;
 import S11P12A708.A708.domain.folder.service.FolderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +27,11 @@ public class FolderController {
     }
 
     @PostMapping("/teams/{teamId}/folders")
-    public ResponseEntity<Void> createFolder(
+    public ResponseEntity<FolderResponse> createFolder(
             @PathVariable("teamId") Long teamId,
             @Valid @RequestBody FolderCreateRequest request) {
-        folderService.createFolder(teamId, request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        final FolderResponse response = folderService.createFolder(teamId, request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/teams/{teamId}/folder/{folderId}")

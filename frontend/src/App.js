@@ -1,10 +1,5 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import HomeView from "./views/HomeView";
 import ConferenceRoutes from "./routes/conferenceRoutes.js";
 import NavBar from "./components/home/navBar.jsx";
@@ -17,15 +12,27 @@ import SignUp from "./components/accounts/signUp.jsx";
 import PasswordFind from "./components/accounts/passwordFind.jsx";
 import HomeRoutes from "./routes/homeRoutes.js";
 import GroupRoutes from "./routes/groupRoutes.js";
-import UserRouters from "./routes/userRouters.js"; // UserRouters를 추가합니다.
+import UserRouters from "./routes/userRouters.js";
 import "./App.css";
 
 function AppContent() {
   const location = useLocation();
   const isConferenceRoute = location.pathname.startsWith("/conference");
+  const [hearts, setHearts] = useState([]);
 
+  const handleClick = (e) => {
+    const newHeart = {
+      id: Date.now(),
+      x: e.clientX,
+      y: e.clientY
+    };
+    setHearts((prev) => [...prev, newHeart]);
+    setTimeout(() => {
+      setHearts((prevHearts) => prevHearts.filter((heart) => heart.id !== newHeart.id));
+    }, 2000);
+  }
   return (
-    <div id="App">
+    <div id="App" onClick={handleClick}>
       {!isConferenceRoute && <NavBar />}
       <Routes>
         <Route path="/conference/*" element={<ConferenceRoutes />} />
@@ -39,9 +46,14 @@ function AppContent() {
         <Route path="*" element={<HomeRoutes />} />
         <Route path="/group/*" element={<GroupRoutes />} />
         <Route path="/users/*" element={<UserRouters />} />{" "}
-        {/* UserRouters를 추가합니다. */}
       </Routes>
       {!isConferenceRoute && <Footer />}
+
+      {hearts.map((heart) => (
+        <div key={heart.id} className="heart" style={{left:heart.x, top:heart.y}}>
+          ❤️
+        </div>
+      ))}
     </div>
   );
 }

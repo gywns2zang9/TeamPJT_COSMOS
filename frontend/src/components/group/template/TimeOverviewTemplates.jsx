@@ -2,9 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { FaFileAlt } from 'react-icons/fa';
 import { MdRefresh } from 'react-icons/md';
 import useGroupStore from '../../../store/group';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import CreateProblemModal from '../../../modals/CreateProblemModal';
+
+const initialHeaderState = {
+    year:'',
+    month:'',
+    order:'',
+};
 
 const TimeOverviewTemplates = ({ groupId, pageId }) => {
     const [members, setMembers] = useState([]);
@@ -14,15 +20,23 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
     const [problems, setProblems] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [studyId, setStudyId] = useState('');
+    const [header, setHeader] = useState(initialHeaderState)
+    const getCode = useGroupStore((state) => state.loadCode);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        
         const loadFile = async () => {
             try {
                 const response = await getFile({groupId, fileId:pageId});
-                console.log(response);
+                console.log(response.problems);
                 setProblems(response.problems);
-                setStudyId(response.fileId)
+                setStudyId(response.study.id);
+                const headerState = {
+                    year: response.study.year,
+                    month: response.study.month,
+                    order: response.study.times,
+                }
+                setHeader(headerState)
             } catch (err) {
                 console.error('파일 로드 실패 -> ', err);
             }
@@ -37,15 +51,27 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
         };
 
         loadMembers();
-        loadFile();
-    }, [groupId, groupMemberListLoad, getFile]);
+        loadFile();;
+    }, [pageId, groupId, groupMemberListLoad, getFile]);
 
     const handleShowModal = () => setShowModal(true)
     const handleCloseModal = () => setShowModal(false)
 
+    // 코드페이지로 이동
+    const navigateCodePage = async (memberStatus) => {
+        console.log(memberStatus);
+        navigate(`/group/${groupId}/code/${memberStatus.fileId}`);
+    }
+    
+    // 코드 자동 불러오기
+    const importCode = async (memberStatus, problemId) => {
+        const response = await getCode({ groupId, userId:memberStatus.userId, problemId})
+        console.log(response);
+    }
+
     return (
         <div style={{ color: 'white' }}>
-            <h1>7월 2주차 스터디</h1>
+            <h1>{header.year}년 {header.month}월 {header.order}회차 스터디</h1>
             <Button variant="primary" onClick={handleShowModal}>문제 추가하기</Button> 
             <CreateProblemModal 
                 show={showModal} 
@@ -72,9 +98,20 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.number}</td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.name}</td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.level}</td>
-                            {members.map((_, memberIndex) => (
-                                <td key={memberIndex} style={{ border: '1px solid #ddd', padding: '8px' }}><FaFileAlt /><MdRefresh /></td>
+                            {members.map((member, memberIndex) => (
+                                <td key={memberIndex} style={{ border: '1px solid #ddd', padding: '8px' }}>
+                                    {problem.statuses.map((memberStatus, statusIndex) => (
+                                        member.userId === memberStatus.userId ? (
+                                            <div key={statusIndex}>
+                                                <FaFileAlt onClick={() => navigateCodePage(memberStatus)} /> 
+                                                <MdRefresh onClick={() => importCode(memberStatus, problem.number)} />
+                                            </div>
+                                        ) : <div key={statusIndex}>
+                                            </div>
+                                    ))}
+                                </td>
                             ))}
+                            
                         </tr>
                     ))}
                 </tbody>

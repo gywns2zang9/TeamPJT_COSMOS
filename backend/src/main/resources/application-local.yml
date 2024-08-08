@@ -1,7 +1,6 @@
 spring:
-  application:
-    name: A708
   mail:
+    port: ${MAIL_PORT}
     username: ${EMAIL}
     password: ${EMAIL_PASSWORD}
 
@@ -27,3 +26,20 @@ logging:
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
+
+oauth:
+  kakao:
+    client-id: ${KAKAO_CLIENT_ID}
+    url:
+      auth: https://kauth.kakao.com
+      api: https://kapi.kakao.com
+  naver:
+    secret: ${NAVER_SECRET}
+    client-id: ${NAVER_CLIENT_ID}
+    url:
+      auth: https://nid.naver.com
+      api: https://openapi.naver.com
+
+openvidu:
+  url: https://i11a708.p.ssafy.io:${OPENVIDU_PORT}/
+  secret: ${OPENVIDU_SECRET}

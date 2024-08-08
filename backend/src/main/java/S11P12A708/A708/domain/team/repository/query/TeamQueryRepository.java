@@ -19,4 +19,5 @@ public interface TeamQueryRepository {
     TeamUser findTeamUserByIds(Long teamId, Long userId);
 
     List<User> findUsersByNickNameAndNonGroupId(Long teamId, String nickName);
+
 }

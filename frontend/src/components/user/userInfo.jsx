@@ -65,28 +65,28 @@ const UserInfo = () => {
             <label id="info-nickname-label" htmlFor="nickname">
               닉네임:
             </label>
-            <span id="info-nickname">{nickName || "정보가 없습니다."}   (<span>{type}</span>)</span>
+            <span id="info-nickname">{nickName || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}   (<span>{type}</span>)</span>
           </div>
 
           <div id="info-gitId-group">
             <label id="info-gitId-label" htmlFor="gitId">
               Git Id:
             </label>
-            <span id="info-gitId">{gitId || "정보가 없습니다."}</span>
+            <span id="info-gitId">{gitId || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
           </div>
 
           <div id="info-repo-group"> 
             <label id="info-repo-label" htmlFor="repo">
               Repository:
             </label>
-            <span id="info-repo">{repo || "정보가 없습니다."}</span> 
+            <span id="info-repo">{repo || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
           </div>
 
           <div id="info-description-group">
             <label id="info-description-label" htmlFor="description">
               내 소개:
             </label>
-            <span id="info-description">{description || "정보가 없습니다."}</span>
+            <span id="info-description">{description || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
           </div>
         </div>
       </div>

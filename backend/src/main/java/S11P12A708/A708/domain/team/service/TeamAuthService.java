@@ -75,8 +75,8 @@ public class TeamAuthService {
 
     private void createRootFolder(Team team) {
         final Folder rootFolder = Folder.createRootFolder(team);
-        rootFolder.addFile(File.createOverViewFile(rootFolder));
         rootFolder.addFile(File.createMainFile(rootFolder));
+        rootFolder.addFile(File.createOverViewFile(rootFolder));
 
         folderRepository.save(rootFolder);
     }
@@ -92,13 +92,15 @@ public class TeamAuthService {
         return new TeamCodeResponse(teamCode);
     }
 
-    public void joinTeam(Long userId, TeamJoinRequest request) {
+    public TeamResponse joinTeam(Long userId, TeamJoinRequest request) {
         final User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         final Team team = teamRepository.findByTeamCode(request.getTeamCode()).orElseThrow(TeamNotFoundException::new);
         final TeamUser teamUser = teamUserRepository.findByTeamAndUser(team, user);
         if(teamUser != null) throw new TeamAlreadyJoinException();
 
         teamUserRepository.save(new TeamUser(user, team, MEMBER));
+
+        return TeamResponse.of(team);
     }
 
     private Team requestToEntity(TeamInfoRequest request) {

@@ -68,8 +68,6 @@ public class TeamQueryRepositoryImpl implements TeamQueryRepository {
     public List<User> findUsersByNickNameAndNonGroupId(Long teamId, String nickName) {
         return queryFactory
                 .selectFrom(user)
-                .join(teamUser)
-                .on(teamUser.user.id.eq(user.id))
                 .where(user.id.notIn(
                         JPAExpressions
                                 .select(teamUser.user.id)
@@ -79,4 +77,5 @@ public class TeamQueryRepositoryImpl implements TeamQueryRepository {
                 .fetch()
                 .stream().toList();
     }
+
 }

@@ -35,6 +35,7 @@ const OverviewPageTemplates = ({ groupId, pageId }) => {
         loadMembers();
     }, [groupId, groupMemberListLoad, getContentsLoad]);
 
+
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
 

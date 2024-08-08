@@ -352,8 +352,13 @@ const useGroupStore = create((set) => ({
     // 파일 삭제하기
     deleteFile: async ({ groupId, fileId }) => {
         try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
             const url = `${BASE_URL}/teams/${groupId}/files/${fileId}`;
-            const response = await deleteRequest(url, {});
+            
+            const response = await deleteRequest(url, {}, headers);
             console.log(response);
             return response
         } catch (err) {
@@ -363,7 +368,7 @@ const useGroupStore = create((set) => ({
     },
 
     // 파일 불러오기
-    getFile: async ({ groupId, fileId, folderId }) => {
+    getFile: async ({ groupId, fileId }) => {
         const accessToken = await useAuthStore.getState().getAccessToken();
         const headers = {
             Authorization: `Bearer ${accessToken}`,
@@ -385,13 +390,32 @@ const useGroupStore = create((set) => ({
             Authorization: `Bearer ${accessToken}`,
         };
         try {
-            const url = `${BASE_URL}/teams/${groupId}/files/${fileId}`;
+            const url = `${BASE_URL}/teams/${groupId}/file/${fileId}`;
             const data = {
                 name,
                 content
             };
-            const response = await get(url, data, headers);
-            console.log(response);
+            const response = await patch(url, data, headers);
+            return response
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+
+    // 코드 자동 불러오기
+    loadCode: async ({ groupId, userId, problemId}) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+        };
+        const data = {
+            userId,
+            problemId
+        }
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/problems/code`;
+            const response = await post(url, data, headers);
             return response
         } catch (err) {
             console.log(err);
@@ -496,6 +520,27 @@ const useGroupStore = create((set) => ({
             return response
         } catch (err) {
             console.log('캘린더 일정 삭제 실패 -> ', err);
+            throw err;
+        }
+    },
+
+    // 코드 실행하기 
+    executeCode: async ({ groupId, content, language, inputs }) => {
+        try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const url = `${BASE_URL}/teams/${groupId}/codes/execute`;
+            const data = {
+                content,
+                language,
+                inputs
+            };
+            const response = await post(url, data, headers);
+            return response
+        } catch (err) {
+            console.log('코드 실행 실패 -> ', err);
             throw err;
         }
     },
