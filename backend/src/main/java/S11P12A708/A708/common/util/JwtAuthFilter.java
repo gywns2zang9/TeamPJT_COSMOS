@@ -1,6 +1,7 @@
 package S11P12A708.A708.common.util;
 
 import S11P12A708.A708.common.error.ErrorCode;
+import S11P12A708.A708.common.error.ErrorResponse;
 import S11P12A708.A708.common.error.exception.JwtAuthenticationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
@@ -9,8 +10,6 @@ import S11P12A708.A708.domain.user.repository.UserRepository;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Map;
 
 // HTTP 요청에서 JWT access 토큰을 추출하고 인증하는 필터
 @Slf4j
@@ -103,17 +101,9 @@ public class JwtAuthFilter implements Filter {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setError(Collections.singletonMap(error, errorMessage));
+        ErrorResponse errorResponse = ErrorResponse.from(error, errorMessage);
 
         String jsonResponse = objectMapper.writeValueAsString(errorResponse);
         response.getWriter().write(jsonResponse);
-    }
-
-    @Setter
-    @Getter
-    private static class ErrorResponse {
-        private Map<String, String> error;
-
     }
 }

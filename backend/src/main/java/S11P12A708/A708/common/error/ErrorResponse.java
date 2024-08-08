@@ -26,4 +26,10 @@ public class ErrorResponse  {
         return new ErrorResponse(errors);
     }
 
+    public static ErrorResponse from(String error, String Message) {
+        final HashMap<String, String> errors = new HashMap<>();
+        errors.put(error, Message);
+        return new ErrorResponse(errors);
+    }
+
 }
