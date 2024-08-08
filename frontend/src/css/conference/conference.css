@@ -11,10 +11,10 @@
   display: flex; /* 플렉스 박스 사용 */
   justify-content: center; /* 가로 방향 중앙 정렬 */
   align-items: center; /* 세로 방향 중앙 정렬 */
-  flex: 0.2; /* 플렉스 비율 설정 */
+  flex: 0.2;
   width: 100%; /* 가로 폭을 부모 컨테이너에 맞춤 */
   margin: 0 auto;
-  transition: all 0.3s ease-in-out;
+  /* transition: all 0.3s ease-in-out; */
   overflow: hidden;
 }
 
@@ -46,36 +46,6 @@ video {
   flex: 1;
   justify-content: space-between;
   gap: 8px;
-}
-
-.left-space {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: #0e253d;
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.code-upper-space {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.code-space {
-  flex: 1;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 15px 5px;
-  color: black;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  min-height: 0;
 }
 
 .right-space {

@@ -526,18 +526,20 @@ const useGroupStore = create((set) => ({
     },
 
     // 코드 실행하기 
-    executeCode: async ({ groupId, content, language, inputs }) => {
+    executeCode: async ({ content, language, input }) => {
         try {
+            console.log( content, language, input);
             const accessToken = await useAuthStore.getState().getAccessToken();
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
             };
-            const url = `${BASE_URL}/teams/${groupId}/codes/execute`;
+            const url = `${BASE_URL}/codes/execute`;
             const data = {
                 content,
                 language,
-                inputs
+                inputs:input
             };
+            console.log(data);
             const response = await post(url, data, headers);
             return response
         } catch (err) {

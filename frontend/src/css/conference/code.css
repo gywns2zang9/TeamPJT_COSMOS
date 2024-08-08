@@ -17,8 +17,9 @@
 
 .code-space {
   flex: 1;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: white;
+  /* background-color: rgb(30, 30, 30); */
+  /* border: 1px solid #ddd; */
   border-radius: 5px;
   padding: 15px 5px;
   color: black;
@@ -28,7 +29,31 @@
   min-height: 0;
 }
 
+.code-editor {
+  margin: 0;
+  padding: 0;
+  font-size: 0;
+}
+
+.input-output {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+textarea {
+  width: 49%;
+  height: 130px; /* 높이 조절 */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  resize: none;
+  overflow-x: auto; /* 가로 스크롤바 자동 표시 */
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
 .code-lower-space {
+  min-height: 34px;
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
@@ -39,7 +64,7 @@
   display: flex;
 }
 
-.compile-button {
+.compiler-button {
   display: flex;
 }
 
@@ -56,4 +81,40 @@
 
 .button:hover {
   background-color: #3a6695;
+}
+
+.mode-button {
+  margin-right: 10px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  /* border-top-left-radius: 5px;
+  border-top-right-radius: 5px; */
+  background-color: #2f5074;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.mode-button:hover {
+  background-color: #3a6695;
+}
+
+.mode-button.active {
+  background-color: #0068d6; /* 원하는 색상으로 변경 */
+  color: white;
+}
+
+.share-code-space {
+  position: relative;
+  flex: 1;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 0; /* 내부 패딩 제거 */
+  color: black;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+  height: 100%; /* 높이 100%로 설정 */
 }
