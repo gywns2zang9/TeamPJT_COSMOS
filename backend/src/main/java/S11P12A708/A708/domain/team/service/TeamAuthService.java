@@ -1,7 +1,6 @@
 package S11P12A708.A708.domain.team.service;
 
 import S11P12A708.A708.domain.file.entity.File;
-import S11P12A708.A708.domain.file.repository.FileRepository;
 import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.folder.repository.FolderRepository;
 import S11P12A708.A708.domain.authcode.exception.FailMailException;
