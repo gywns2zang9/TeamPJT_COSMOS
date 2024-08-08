@@ -27,6 +27,7 @@ const useAuthStore = create((set) => ({
 
     // 일반 로그인 요청
     login: async ({ email, password }) => {
+        console.log(BASE_URL);
         try {
             const url = `${BASE_URL}/auth/login`;
             const data = { email, password };
