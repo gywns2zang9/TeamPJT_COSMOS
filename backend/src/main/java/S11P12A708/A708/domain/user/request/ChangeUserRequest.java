@@ -15,19 +15,11 @@ public class ChangeUserRequest {
     @NotBlank
     String nickName;
 
-    // TODO NotBlank가 맞는지 데이터를 안넣어도 넘어가야 하는 거 아닌가?
-    @NotBlank
     String gitId;
 
-    // TODO NotBlank가 맞는지 데이터를 안넣어도 넘어가야 하는 거 아닌가?
-    @NotBlank
     String repo;
 
-    // TODO NotBlank가 맞는지 데이터를 안넣어도 넘어가야 하는 거 아닌가?
-    @NotBlank
     String branch;
 
-    // TODO NotBlank가 맞는지 데이터를 안넣어도 넘어가야 하는 거 아닌가?
-    @NotBlank
     String description;
 }
