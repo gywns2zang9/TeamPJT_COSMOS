@@ -405,6 +405,7 @@ const useGroupStore = create((set) => ({
 
     // 코드 자동 불러오기
     loadCode: async ({ groupId, userId, problemId}) => {
+        console.log(groupId, userId, problemId);
         const accessToken = await useAuthStore.getState().getAccessToken();
         const headers = {
             Authorization: `Bearer ${accessToken}`,
