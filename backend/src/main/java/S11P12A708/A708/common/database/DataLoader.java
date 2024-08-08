@@ -22,14 +22,20 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) {
         if (userRepository.count() == 0) {
-            createTestUser("test");
-            createTestUser("test1");
-            createTestUser("test2");
+            createTestUser("test", "hyukji", "AlgorithmProblem");
+            createTestUser("test1", "jyeun722", "Algorithm");
+            createNoGitUser("nogit");
         }
     }
 
-    private void createTestUser(String testName) {
-        User user = new User(testName, testName, UserType.NORMAL, testName, "hyukji", "AlgorithmProblem");
+    private void createTestUser(String testName, String gitId, String repo) {
+        User user = new User(testName, testName, UserType.NORMAL, testName, gitId, repo);
+        user.hashPassword(bCryptPasswordEncoder);
+        userRepository.save(user);
+    }
+
+    private void createNoGitUser(String testName) {
+        User user = new User(testName, testName, UserType.NORMAL, testName);
         user.hashPassword(bCryptPasswordEncoder);
         userRepository.save(user);
     }

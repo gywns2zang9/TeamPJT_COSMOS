@@ -3,6 +3,7 @@ package S11P12A708.A708.common.util;
 import S11P12A708.A708.domain.code.entity.Code;
 import S11P12A708.A708.domain.code.entity.Language;
 import S11P12A708.A708.domain.user.entity.User;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,24 +11,29 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 
+@Slf4j
 @Component
 public class CodeCrawler {
 
+    private boolean checkUserInfoForCrawling(User user) {
+        return ((user.getGitId() == null || user.getGitId().isEmpty()) ||
+                (user.getRepo() == null || user.getRepo().isEmpty()));
+    }
+
     public Code createByCrawler(User user, int pbNum)  {
+        if(checkUserInfoForCrawling(user)) return Code.createBasic();
+
         final String url = getBojUrl(user, pbNum);
         for(Language lang : Language.values()) {
             final String newUrl = url + lang.getExtension();
             final String codeContent = getCodeContent(newUrl);
             if(codeContent != null) return new Code(codeContent, lang);
         }
-
         return Code.createBasic();
     }
 
-    private String getBojUrl(User user, int pbNum)  {
-
+    private String getBojUrl(User user, int pbNum) {
         // Jsoup으로 HTML 파싱
         String url = "https://github.com/name/repo/blob/main/%EB%B0%B1%EC%A4%80/tier/number/lang";
 
@@ -96,10 +102,9 @@ public class CodeCrawler {
         return sb.toString();
     }
 
-    public String getCodeContent(String url) {
-        Document doc = null; // URL을 실제 URL로 대체하세요.
+    public String getCodeContent(String url)  {
         try {
-            doc = Jsoup.connect(url.replace("%20","%E2%80%85").replace(" ","%E2%80%85").replace("-","%EF%BC%8D")).get();
+            Document doc = Jsoup.connect(url.replace("%20", "%E2%80%85").replace(" ", "%E2%80%85").replace("-", "%EF%BC%8D")).get();
             // <script> 태그의 data-target 속성 값이 'react-app.embeddedData'인 태그를 찾기
             Elements scriptTags = doc.select("script[data-target=react-app.embeddedData]");
 
@@ -116,21 +121,18 @@ public class CodeCrawler {
                 JSONObject payload = jsonObject.getJSONObject("payload");
                 JSONObject blob = payload.getJSONObject("blob");
                 String content = blob.get("rawLines").toString();
-                String a =content.substring(2, content.length() - 2);
+                String a = content.substring(2, content.length() - 2);
                 String[] arr = a.split("\",\"");
 
                 StringBuilder res = new StringBuilder();
-                for(String s : arr){
+                for(String s : arr) {
                     String k = handleEscapes(s);
                     res.append(k).append("\n");
                 }
 
                 return res.toString();
             }
-        } catch (IOException e) {
-            return null;
-        }
-
+        } catch (Exception e) { return null; }
         return null;
     }
 
