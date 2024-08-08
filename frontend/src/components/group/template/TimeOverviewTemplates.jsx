@@ -65,8 +65,7 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
     
     // 코드 자동 불러오기
     const importCode = async (memberStatus, problemId) => {
-        const response = await getCode({ groupId, userId:memberStatus.userId, problemId})
-        console.log(response);
+        await getCode({ groupId, userId:memberStatus.userId, problemId})
     }
 
     return (
@@ -78,7 +77,7 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
                 handleClose={handleCloseModal} 
                 groupId={groupId}
                 studyId={studyId}
-            /> 
+            />  
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                 <thead>
                     <tr>
