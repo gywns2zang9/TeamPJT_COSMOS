@@ -104,7 +104,7 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
                                         member.userId === memberStatus.userId ? (
                                             <div key={statusIndex}>
                                                 <FaFileAlt onClick={() => navigateCodePage(memberStatus)} /> 
-                                                <MdRefresh onClick={() => importCode(memberStatus, problem.number)} />
+                                                <MdRefresh onClick={() => importCode(memberStatus, problem.problemId)} />
                                             </div>
                                         ) : <div key={statusIndex}>
                                             </div>
