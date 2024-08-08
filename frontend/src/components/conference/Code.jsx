@@ -91,7 +91,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
           <ShareCode groupId={groupId} language={language} isOpen={isOpen} />
         ) : (
           <Editor
-            height={isOpen ? "450px" : "550px"}
+            height={showIO ? "300px" : `{isOpen ? "450px" : "550px"}`}
             // theme="vs-dark"
             className="code-editor"
             language={language}
