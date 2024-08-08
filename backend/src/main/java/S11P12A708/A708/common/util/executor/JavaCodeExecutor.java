@@ -51,7 +51,6 @@ public class JavaCodeExecutor implements CodeExecutor {
     public File createCodeFile(String code, String hostPath) throws IOException {
         final File file = File.createTempFile("Main", JAVA.getExtension(), new File(hostPath));
 
-        System.out.println(file);
         // 자바 파일의 경우, 파일명과 class 이름을 동일하게 설정
         code = code.replaceAll("Main", file.getName().replace(".java", ""));
 
