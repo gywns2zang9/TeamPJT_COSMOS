@@ -12,9 +12,11 @@ const CodePageTemplates = ({ groupId, pageId }) => {
     const [fileName, setFileName] = useState('');
     const [content, setContent] = useState('');
     const [language, setLanguage] = useState('');
+    const [problemInfo, setProblemInfo] = useState({});
     const [codeContent, setCodeContent] = useState('');
     const [date, setDate] = useState('');
     const getFile = useGroupStore((state) => state.getFile);
+
     // 코드 컴파일
     const [showTextarea, setShowTextarea] = useState(false);
     const [input, setInput] = useState('');
@@ -40,6 +42,14 @@ const CodePageTemplates = ({ groupId, pageId }) => {
     const loadFile = async () => {
         try {
             const response = await getFile({ groupId, fileId: pageId });
+            console.log(response.problems[0].number);
+            console.log(response.problems[0].name);
+            console.log(response.problems[0].site);
+            setProblemInfo({
+                number: response.problems[0].number,
+                name: response.problems[0].name,
+                site: response.problems[0].site,
+            })
             setFileName(response.fileName);
             setContent(response.content);
             if (response.code) {
@@ -59,9 +69,9 @@ const CodePageTemplates = ({ groupId, pageId }) => {
     return (
         <>
             <Card style={{ color: 'black', padding: '20px', margin: '10px', maxWidth: '100%', width: '100%' }}>
-                <h1>백준 1001. A + B</h1>
-                <h3>저장한 날짜 : {date}</h3>
-                <h3 >언어 : {language}</h3>
+                <h3>{problemInfo.site} {problemInfo.number}. {problemInfo.name}</h3>
+                <h4>저장한 날짜 : {date}</h4>
+                <h4>언어 : {language}</h4>
 
                 <Card style={{ backgroundColor: 'black', border: '1px solid white', borderRadius: '10px', margin: '10px', padding: '10px', color: 'white' }}>
                     <div className='d-flex' style={{ justifyContent: 'space-between' }}>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FaFileAlt } from 'react-icons/fa';
 import { MdRefresh } from 'react-icons/md';
 import useGroupStore from '../../../store/group';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import CreateStudyModal from '../../../modals/CreateStudyModal';
 
@@ -12,12 +12,13 @@ const OverviewPageTemplates = ({ groupId, pageId }) => {
     const getContentsLoad = useGroupStore((state) => state.getFile);
     const [problems, setProblems] = useState([]);
     const [showModal, setShowModal] = useState(false);
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getContents = async () => {
             try {
                 const response = await getContentsLoad({groupId, fileId:pageId})
+                console.log(response);
                 setProblems(response.problems);
             } catch (err) {
                 console.error('파일불러오기 실패 -> ', err);
@@ -35,6 +36,11 @@ const OverviewPageTemplates = ({ groupId, pageId }) => {
         loadMembers();
     }, [groupId, groupMemberListLoad, getContentsLoad]);
 
+    // 코드페이지로 이동
+    const navigateCodePage = async (memberStatus) => {
+        console.log(memberStatus);
+        navigate(`/group/${groupId}/code/${memberStatus.fileId}`);
+    }
 
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
@@ -68,9 +74,19 @@ const OverviewPageTemplates = ({ groupId, pageId }) => {
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.number}</td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.name}</td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.level}</td>
-                            {members.map((_, memberIndex) => (
-                                <td key={memberIndex} style={{ border: '1px solid #ddd', padding: '8px' }}><FaFileAlt /></td>
+                            {members.map((member, memberIndex) => (
+                                <td key={memberIndex} style={{ border: '1px solid #ddd', padding: '8px' }}>
+                                    {problem.statuses.map((memberStatus, statusIndex) => (
+                                        member.userId === memberStatus.userId ? (
+                                            <div key={statusIndex}>
+                                                <FaFileAlt onClick={() => navigateCodePage(memberStatus)} /> 
+                                            </div>
+                                        ) : <div key={statusIndex}>
+                                            </div>
+                                    ))}
+                                </td>
                             ))}
+                            
                         </tr>
                     ))}
                 </tbody>
