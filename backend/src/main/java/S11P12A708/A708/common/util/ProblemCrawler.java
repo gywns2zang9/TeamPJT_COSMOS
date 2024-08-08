@@ -1,8 +1,6 @@
 package S11P12A708.A708.common.util;
 
-import S11P12A708.A708.domain.problem.entity.Problem;
 import S11P12A708.A708.domain.problem.entity.SiteInfoType;
-import S11P12A708.A708.domain.problem.exception.ProblemNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
