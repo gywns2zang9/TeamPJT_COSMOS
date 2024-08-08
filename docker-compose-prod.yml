@@ -9,6 +9,9 @@ services:
       - 8080:8080
     environment:
       - TZ=Asia/Seoul
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker 소켓 공유
+      - /tmp:/tmp  # 호스트의 /tmp 디렉토리를 컨테이너에 마운트
   client:
     container_name: client
     build:
@@ -18,3 +21,11 @@ services:
       - 3000:3000
     depends_on:
       - server
+  my-python-image:
+    build:
+      context: ./backend/execute
+      dockerfile: Dockerfile_python
+  my-java-image:
+    build:
+      context: ./backend/execute
+      dockerfile: Dockerfile_java
