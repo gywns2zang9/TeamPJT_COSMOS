@@ -49,7 +49,6 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
 
             loadGroupDetails();
         }
-        console.log(teamCode);
     }, [show, groupId, groupDetailLoad, groupMemberListLoad, checkInviteCode, checkGroupLeader]);
 
     
