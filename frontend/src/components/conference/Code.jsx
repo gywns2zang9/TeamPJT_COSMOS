@@ -10,6 +10,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const [personalCode, setPersonalCode] = useState("");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
+  const [showIO, setShowIO] = useState(false);
 
   const handleLanguageChange = (event) => {
     setLanguage(event.target.value);
@@ -36,7 +37,11 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
     localStorage.setItem("personalCode", value); // 개인 코드를 localStorage에 저장
   };
 
-  const handleCompile = async () => {
+  const toggleCompiler = () => {
+    setShowIO(!showIO); // 입력 및 출력 영역 표시
+  };
+
+  const handleExecute = async () => {
     try {
       const response = await axios.get(`/teams/${groupId}/codes/execute`, {
         content: personalCode,
@@ -72,7 +77,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
           <select className="code-select" onChange={handleLanguageChange}>
             <option value="java">Java</option>
             <option value="python">Python</option>
-            <option value="cpp">C++</option>
+            {/* <option value="cpp">C++</option> */}
           </select>
         </div>
         <div>
@@ -97,31 +102,38 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
       {
         !isShared ? (
           <div>
-            <div className="input-output">
-              <textarea
-                name="input"
-                id="input"
-                placeholder="input"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-              ></textarea>
-              <textarea
-                name="output"
-                id="output"
-                placeholder="output"
-                value={output}
-                // readOnly
-              ></textarea>
-            </div>
+            {showIO && (
+              <div className="input-output">
+                <textarea
+                  name="input"
+                  id="input"
+                  placeholder="input"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                ></textarea>
+                <textarea
+                  name="output"
+                  id="output"
+                  placeholder="output"
+                  value={output}
+                  readOnly
+                ></textarea>
+              </div>
+            )}
             <div className="code-lower-space">
               <div className="code-buttons">
                 <button className="button">코드 불러오기</button>
                 <button className="button">코드 저장</button>
               </div>
               <div className="compile-button">
-                <button className="button" onClick={handleCompile}>
-                  컴파일
+                <button className="button" onClick={toggleCompiler}>
+                  {showIO ? "컴파일러 닫기" : "컴파일러"}
                 </button>
+                {showIO && (
+                  <button className="button" onClick={handleExecute}>
+                    실행
+                  </button>
+                )}
               </div>
             </div>
           </div>
