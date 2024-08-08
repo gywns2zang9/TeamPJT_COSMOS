@@ -1,6 +1,29 @@
 #App {
   background-image: linear-gradient(to bottom, #0d0220 100%, #0d0220 87%);
 }
+
 .stream-container {
   padding: 0;
+}
+
+.heart {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  animation: pulseFade 2s forwards; 
+}
+
+@keyframes pulseFade {
+  0% {
+    opacity: 0;
+    transform: scale(1) translate(-50%, -50%);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5) translate(-50%, -50%);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1) translate(-50%, -50%);
+  }
 }
