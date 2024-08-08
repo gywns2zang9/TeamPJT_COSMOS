@@ -48,8 +48,11 @@ public enum ErrorCode {
     // Problem
     PROBLEM_NOT_FOUND(UNPROCESSABLE_ENTITY, "problem", "problem is not found."),
     PROBLEM_NOT_EXIST(UNPROCESSABLE_ENTITY, "problem", "problem is not exist."),
-    CODE_NOT_EXIST(UNPROCESSABLE_ENTITY, "problem", "code is not exist."),
     USER_INFO_NECESSARY(UNPROCESSABLE_ENTITY, "problem", "user's git, repo information is necessary for crawling."),
+
+    // Code
+    CODE_NOT_FOUND(UNPROCESSABLE_ENTITY, "code", "code is not found."),
+    CODE_NOT_EXIST(UNPROCESSABLE_ENTITY, "code", "code is not exist."),
 
     //Folder
     FOLDER_NOT_FOUND(UNPROCESSABLE_ENTITY, "folder", "This Folder is not exist"),
@@ -60,6 +63,8 @@ public enum ErrorCode {
     FILE_NOT_FOUND(UNPROCESSABLE_ENTITY, "file", "This file is not exist"),
     FILE_NAME_DUPLICATE(UNPROCESSABLE_ENTITY, "file", "This file name already exist"),
     FOLDER_NOT_PROBLEM_INFO(UNPROCESSABLE_ENTITY, "file", "this folder cannot have code file"),
+    INVALID_DELETE_FILE(UNPROCESSABLE_ENTITY, "file", "only normal, code file can delete."),
+    INVALID_DELETE_CODE_FILE(UNPROCESSABLE_ENTITY, "file", "only user made code file can delete."),
 
     // Study
     STUDY_NOT_FOUND(UNPROCESSABLE_ENTITY, "study", "This study is not exist"),

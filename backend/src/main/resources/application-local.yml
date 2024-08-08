@@ -1,7 +1,6 @@
 spring:
-  application:
-    name: A708
   mail:
+    port: ${MAIL_PORT}
     username: ${EMAIL}
     password: ${EMAIL_PASSWORD}
 
@@ -19,7 +18,7 @@ spring:
         default_batch_fetch_size: 1000
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 
 logging:
   level:
@@ -27,7 +26,6 @@ logging:
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
-
 
 oauth:
   kakao:
@@ -43,5 +41,5 @@ oauth:
       api: https://openapi.naver.com
 
 openvidu:
-  url: https://i11a708.p.ssafy.io:8443/
-  secret: MY_SECRET
+  url: https://i11a708.p.ssafy.io:${OPENVIDU_PORT}/
+  secret: ${OPENVIDU_SECRET}

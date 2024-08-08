@@ -3,7 +3,6 @@ spring:
     name: A708
   mail:
     host: smtp.gmail.com
-    port: 465
     properties:
       mail:
         smtp:
@@ -19,12 +18,8 @@ spring:
 
 server:
   servlet:
-    context-path: /
+    context-path: /api
   port: '8080'
-
-logging:
-  level:
-    root: info
 
 jwt:
   access:

@@ -2,6 +2,7 @@ package S11P12A708.A708.domain.problem.service;
 
 import S11P12A708.A708.common.util.BojProblem;
 import S11P12A708.A708.common.util.CodeCrawler;
+import S11P12A708.A708.common.util.ProblemStatus;
 import S11P12A708.A708.domain.code.entity.Code;
 import S11P12A708.A708.domain.code.repository.CodeRepository;
 import S11P12A708.A708.domain.file.entity.File;
@@ -56,7 +57,6 @@ public class ProblemService {
 
     private final CodeCrawler codeCrawler;
     private final CodeRepository codeRepository;
-    private final FolderService folderService;
     private final FolderRepository folderRepository;
 
     public void createProblem(Long teamId, CreateProblemRequest req) {
@@ -88,6 +88,7 @@ public class ProblemService {
             individualCodeFolder.addFile(UserCodeFile);
 
             final ProblemUser problemUser = new ProblemUser(savedProblem, user, UserCodeFile);
+            if (ProblemStatus.check(user.getGitId(), problem.getNumber())) problemUser.updateStatus();
             problemUserRepository.save(problemUser);
         }
     }
@@ -121,9 +122,8 @@ public class ProblemService {
         final Code code = problemUser.getFile().getCode();
         final Code newCode = codeCrawler.createByCrawler(user, problem.getNumber());
 
-        code.update(newCode);
-
-        // TODO: 코드 뿐만 아니라, 해당 README.md 도 같이 저장되었으면 어떨지 논의 필요
+        if (!code.getContent().isEmpty()) code.update(newCode);
+        if (ProblemStatus.check(user.getGitId(), problem.getNumber())) problemUser.updateStatus();
     }
 
     private void checkUserInfoForCrawling(User user) {

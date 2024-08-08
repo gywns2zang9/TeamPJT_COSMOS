@@ -1,14 +1,13 @@
 package S11P12A708.A708.domain.team.service;
 
+import S11P12A708.A708.domain.authcode.exception.FailMailException;
 import S11P12A708.A708.domain.file.entity.File;
-import S11P12A708.A708.domain.file.repository.FileRepository;
 import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.folder.repository.FolderRepository;
-import S11P12A708.A708.domain.authcode.exception.FailMailException;
-import S11P12A708.A708.domain.team.exception.TeamAlreadyJoinException;
-import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.entity.TeamUser;
+import S11P12A708.A708.domain.team.exception.TeamAlreadyJoinException;
+import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
 import S11P12A708.A708.domain.team.repository.TeamUserRepository;
 import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
@@ -75,8 +74,8 @@ public class TeamAuthService {
 
     private void createRootFolder(Team team) {
         final Folder rootFolder = Folder.createRootFolder(team);
-        rootFolder.addFile(File.createOverViewFile(rootFolder));
         rootFolder.addFile(File.createMainFile(rootFolder));
+        rootFolder.addFile(File.createOverViewFile(rootFolder));
 
         folderRepository.save(rootFolder);
     }
@@ -92,13 +91,15 @@ public class TeamAuthService {
         return new TeamCodeResponse(teamCode);
     }
 
-    public void joinTeam(Long userId, TeamJoinRequest request) {
+    public TeamResponse joinTeam(Long userId, TeamJoinRequest request) {
         final User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         final Team team = teamRepository.findByTeamCode(request.getTeamCode()).orElseThrow(TeamNotFoundException::new);
         final TeamUser teamUser = teamUserRepository.findByTeamAndUser(team, user);
         if(teamUser != null) throw new TeamAlreadyJoinException();
 
         teamUserRepository.save(new TeamUser(user, team, MEMBER));
+
+        return TeamResponse.of(team);
     }
 
     private Team requestToEntity(TeamInfoRequest request) {
