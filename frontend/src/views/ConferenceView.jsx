@@ -193,9 +193,8 @@ function ConferenceView(props) {
   };
 
   const handleMainVideoStream = (stream) => {
-    if (mainStreamManager !== stream) {
-      setMainStreamManager(stream);
-    }
+    setMainStreamManager(stream);
+    setShowPaint(false);
   };
 
   const deleteSubscriber = (streamManager) => {
@@ -358,7 +357,7 @@ function ConferenceView(props) {
           <div className="paint-upper-space">
             <div>
               <button className="button" onClick={handleTogglePaint}>
-                {showPaint ? "화면보기" : "그림판"}
+                그림판
               </button>
             </div>
             <div>
