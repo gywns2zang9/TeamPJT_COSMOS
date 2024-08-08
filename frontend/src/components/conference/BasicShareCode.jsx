@@ -49,7 +49,7 @@ const ShareCode = ({ groupId, language }) => {
 
   return (
     <Editor
-      height="100%"
+      height="90%"
       language={language}
       onMount={(editor) => {
         setEditor(editor);

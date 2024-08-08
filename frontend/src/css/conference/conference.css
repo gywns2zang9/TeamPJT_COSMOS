@@ -11,10 +11,10 @@
   display: flex; /* 플렉스 박스 사용 */
   justify-content: center; /* 가로 방향 중앙 정렬 */
   align-items: center; /* 세로 방향 중앙 정렬 */
-  flex: 0.2; /* 플렉스 비율 설정 */
+  flex: 0.2;
   width: 100%; /* 가로 폭을 부모 컨테이너에 맞춤 */
   margin: 0 auto;
-  transition: all 0.3s ease-in-out;
+  /* transition: all 0.3s ease-in-out; */
   overflow: hidden;
 }
 

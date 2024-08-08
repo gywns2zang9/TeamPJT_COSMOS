@@ -32,7 +32,7 @@ const truncateName = (name) => {
   }
 };
 
-const ShareCode = ({ groupId, language }) => {
+const ShareCode = ({ groupId, language, isOpen }) => {
   const ydoc = useMemo(() => new Y.Doc(), []);
   const [editor, setEditor] = useState(null);
   const [provider, setProvider] = useState(null);
@@ -117,7 +117,7 @@ const ShareCode = ({ groupId, language }) => {
       style={{ position: "relative", height: "100%" }}
     >
       <Editor
-        height="100%"
+        height={isOpen ? "500px" : "600px"}
         language={language}
         onMount={(editor) => {
           setEditor(editor);

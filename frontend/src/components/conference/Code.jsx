@@ -88,11 +88,12 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
       </div>
       <div className="code-space">
         {isShared ? (
-          <ShareCode groupId={groupId} language={language} />
+          <ShareCode groupId={groupId} language={language} isOpen={isOpen} />
         ) : (
           <Editor
-            height="100%"
+            height={isOpen ? "450px" : "550px"}
             // theme="vs-dark"
+            className="code-editor"
             language={language}
             value={personalCode}
             onChange={handleEditorChange}
