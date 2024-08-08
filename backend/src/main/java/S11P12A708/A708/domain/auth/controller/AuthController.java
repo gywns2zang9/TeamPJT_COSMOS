@@ -6,6 +6,7 @@ import S11P12A708.A708.domain.auth.oauth.request.NaverLoginParams;
 import S11P12A708.A708.domain.auth.request.*;
 import S11P12A708.A708.domain.auth.response.LoginResponse;
 import S11P12A708.A708.domain.auth.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,31 +22,31 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Boolean> signUp(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<Boolean> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         final boolean response = authService.signUp(signUpRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/check-nickname")
-    public ResponseEntity<Boolean> confirmDuplicateNickName(@RequestBody NickNameRequest nickNameRequest) {
+    public ResponseEntity<Boolean> confirmDuplicateNickName(@Valid @RequestBody NickNameRequest nickNameRequest) {
         final boolean response = authService.checkNickName(nickNameRequest.getNickName());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         final LoginResponse response = authService.login(loginRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/kakao-login")
-    public ResponseEntity<LoginResponse> loginKakao(@RequestBody KakaoLoginParams params) {
+    public ResponseEntity<LoginResponse> loginKakao(@Valid @RequestBody KakaoLoginParams params) {
         final LoginResponse response = authService.socialLogin(params);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/naver-login")
-    public ResponseEntity<LoginResponse> loginNaver(@RequestBody NaverLoginParams params) {
+    public ResponseEntity<LoginResponse> loginNaver(@Valid @RequestBody NaverLoginParams params) {
         final LoginResponse response = authService.socialLogin(params);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

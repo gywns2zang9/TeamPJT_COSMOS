@@ -35,7 +35,7 @@ public class CodeCrawler {
 
     private String getBojUrl(User user, int pbNum) {
         // Jsoup으로 HTML 파싱
-        String url = "https://github.com/name/repo/blob/main/%EB%B0%B1%EC%A4%80/tier/number/lang";
+        String url = "https://github.com/name/repo/blob/branch/%EB%B0%B1%EC%A4%80/tier/number/lang";
 
         BojProblem temp = ProblemCrawler.getBojProblem(pbNum);
         String tierCheck = temp.getLevel();
@@ -55,6 +55,7 @@ public class CodeCrawler {
 
         return url.replace("name", user.getGitId())
                 .replace("repo", user.getRepo())
+                .replace("branch", user.getBranch())
                 .replace("tier",tierCheck)
                 .replace("number",temp.getNumber()+".%20"+temp.getName())
                 .replace("lang",temp.getName());
