@@ -213,6 +213,7 @@ function SideBar({ groupId }) {
         files: prev.files.filter((file) => file.id !== id),
       }));
       setShowConfirmDelete(false);
+      console.log('삭제 성공');
     } catch (err) {
       console.error('삭제 실패 -> ', err);
     }
@@ -461,15 +462,17 @@ useEffect(() => {
               </div>
             </OverlayTrigger>
             <div className="file-actions ms-auto">
-              <OverlayTrigger placement="top" overlay={<Tooltip>삭제</Tooltip>}>
-                <Button
-                  variant="link"
-                  size="sm"
-                  onClick={() => handleDeleteItem({ id:file.id, parentId:file.parentId, type:'file'})}
-                >
-                  <FaTrashAlt />
-                </Button>
-              </OverlayTrigger>
+              {(file.type === 'NORMAL' || file.type === 'CODE') && (
+                <OverlayTrigger placement="top" overlay={<Tooltip>삭제</Tooltip>}>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    onClick={() => handleDeleteItem({ id:file.id, parentId:file.parentId, type:'file'})}
+                  >
+                    <FaTrashAlt />
+                  </Button>
+                </OverlayTrigger>
+              )}
             </div>
           </div>
         ))}

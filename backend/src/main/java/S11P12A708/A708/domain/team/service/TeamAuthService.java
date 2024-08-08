@@ -75,8 +75,8 @@ public class TeamAuthService {
 
     private void createRootFolder(Team team) {
         final Folder rootFolder = Folder.createRootFolder(team);
-        rootFolder.addFile(File.createOverViewFile(rootFolder));
         rootFolder.addFile(File.createMainFile(rootFolder));
+        rootFolder.addFile(File.createOverViewFile(rootFolder));
 
         folderRepository.save(rootFolder);
     }

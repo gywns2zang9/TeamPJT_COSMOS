@@ -42,8 +42,6 @@ public class User {
 
     private String description;
 
-    private String img;
-
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;

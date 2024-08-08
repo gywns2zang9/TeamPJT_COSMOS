@@ -357,6 +357,7 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const url = `${BASE_URL}/teams/${groupId}/files/${fileId}`;
+            
             const response = await deleteRequest(url, {}, headers);
             console.log(response);
             return response
@@ -402,25 +403,25 @@ const useGroupStore = create((set) => ({
         }
     },
 
-    // // 코드 자동 불러오기
-    // loadCode: async ({ groupId, userId, problemId}) => {
-    //     const accessToken = await useAuthStore.getState().getAccessToken();
-    //     const headers = {
-    //         Authorization: `Bearer ${accessToken}`,
-    //     };
-    //     const data = {
-    //         userId,
-    //         problemId
-    //     }
-    //     try {
-    //         const url = `${BASE_URL}/teams/${groupId}/problems//code`;
-    //         const response = await get(url, data, headers);
-    //         return response
-    //     } catch (err) {
-    //         console.log(err);
-    //         throw err;
-    //     }
-    // },
+    // 코드 자동 불러오기
+    loadCode: async ({ groupId, userId, problemId}) => {
+        const accessToken = await useAuthStore.getState().getAccessToken();
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+        };
+        const data = {
+            userId,
+            problemId
+        }
+        try {
+            const url = `${BASE_URL}/teams/${groupId}/problems/code`;
+            const response = await post(url, data, headers);
+            return response
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
 
     // 코드 페이지 수정하기
     updateCodeFile: async ({ groupId, fileId, name, code, content, language }) => {
