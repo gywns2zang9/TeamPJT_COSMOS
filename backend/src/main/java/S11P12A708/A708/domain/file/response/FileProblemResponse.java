@@ -12,14 +12,16 @@ import java.util.List;
 public class FileProblemResponse {
 
     private SiteInfoType site;
+    private Long problemId;
     private Integer number;
     private String name;
     private String level;
     private String url;
     private List<SolveStatusResponse> statuses;
 
-    public FileProblemResponse(SiteInfoType site, Integer number, String name, String level, String url, List<SolveStatusResponse> statuses) {
+    public FileProblemResponse(SiteInfoType site, Long problemId, Integer number, String name, String level, String url, List<SolveStatusResponse> statuses) {
         this.site = site;
+        this.problemId = problemId;
         this.number = number;
         this.name = name;
         this.level = level;
@@ -30,6 +32,7 @@ public class FileProblemResponse {
     public static FileProblemResponse of(Problem problem, List<SolveStatusResponse> statuses) {
         return new FileProblemResponse(
                 problem.getSite(),
+                problem.getId(),
                 problem.getNumber(),
                 problem.getName(),
                 problem.getLevel(),
