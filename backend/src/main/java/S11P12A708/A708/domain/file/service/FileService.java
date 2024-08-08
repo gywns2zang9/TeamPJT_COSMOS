@@ -26,7 +26,6 @@ import S11P12A708.A708.domain.study.repository.StudyRepository;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
-import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.user.repository.UserRepository;
@@ -48,7 +47,6 @@ public class FileService {
     private final FolderRepository folderRepository;
     private final FileRepository fileRepository;
     private final TeamRepository teamRepository;
-    private final TeamQueryRepository teamQueryRepository;
     private final UserRepository userRepository;
     private final ProblemRepository problemRepository;
     private final ProblemQueryRepository problemQueryRepository;
