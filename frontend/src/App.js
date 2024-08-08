@@ -21,13 +21,11 @@ function AppContent() {
   const [hearts, setHearts] = useState([]);
 
   const handleClick = (e) => {
-    console.log(e);
     const newHeart = {
       id: Date.now(),
       x: e.clientX,
       y: e.clientY
     };
-    console.log(newHeart);
     setHearts((prev) => [...prev, newHeart]);
     setTimeout(() => {
       setHearts((prevHearts) => prevHearts.filter((heart) => heart.id !== newHeart.id));
