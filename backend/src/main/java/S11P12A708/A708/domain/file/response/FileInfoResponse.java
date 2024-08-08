@@ -55,11 +55,11 @@ public class FileInfoResponse {
                 null);
     }
 
-    public static FileInfoResponse fromCodeFile(File file, Code code) {
+    public static FileInfoResponse fromCodeFile(File file, Code code, List<FileProblemResponse> problems) {
         return new FileInfoResponse(
                 file,
                 FileCodeResponse.of(code),
-                null, null);
+                problems, null);
     }
 
 }

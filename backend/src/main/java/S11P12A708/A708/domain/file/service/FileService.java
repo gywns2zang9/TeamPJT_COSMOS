@@ -26,7 +26,6 @@ import S11P12A708.A708.domain.study.repository.StudyRepository;
 import S11P12A708.A708.domain.team.entity.Team;
 import S11P12A708.A708.domain.team.exception.TeamNotFoundException;
 import S11P12A708.A708.domain.team.repository.TeamRepository;
-import S11P12A708.A708.domain.team.repository.query.TeamQueryRepository;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.user.repository.UserRepository;
@@ -48,7 +47,6 @@ public class FileService {
     private final FolderRepository folderRepository;
     private final FileRepository fileRepository;
     private final TeamRepository teamRepository;
-    private final TeamQueryRepository teamQueryRepository;
     private final UserRepository userRepository;
     private final ProblemRepository problemRepository;
     private final ProblemQueryRepository problemQueryRepository;
@@ -141,7 +139,9 @@ public class FileService {
         }
 
         if(file.getType() == FileType.CODE) {
-            return FileInfoResponse.fromCodeFile(file, file.getCode());
+            final List<FileProblemResponse> fileProblems = new ArrayList<>();
+            fileProblems.add(FileProblemResponse.of(file.getFolder().getProblem(), null));
+            return FileInfoResponse.fromCodeFile(file, file.getCode(), fileProblems);
         }
 
         return FileInfoResponse.fromFile(file);
@@ -167,7 +167,7 @@ public class FileService {
     }
 
     private static void validateProblemFolder(Folder folder) {
-        if(folder.getProblem().equals(null)) throw new FolderNotProblemInfoException();
+        if (folder.getProblem() == null) throw new FolderNotProblemInfoException();
     }
 
     public void deleteFile(Long teamId, Long fileId) {
