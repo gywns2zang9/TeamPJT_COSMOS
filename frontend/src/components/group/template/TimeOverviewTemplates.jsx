@@ -65,8 +65,7 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
     
     // 코드 자동 불러오기
     const importCode = async (memberStatus, problemId) => {
-        const response = await getCode({ groupId, userId:memberStatus.userId, problemId})
-        console.log(response);
+        await getCode({ groupId, userId:memberStatus.userId, problemId})
     }
 
     return (

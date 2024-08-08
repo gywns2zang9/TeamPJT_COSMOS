@@ -271,12 +271,14 @@ const useGroupStore = create((set) => ({
             const url = `${BASE_URL}/teams/${groupId}/problems`;
             const data = {
                 problemNumber,
-                studyId:1
+                studyId
             };
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
             };
+            console.log(url, data, headers);
             const response = await post(url, data, headers);
+            console.log('문제 생성 성공');
             return response
         } catch (err) {
             console.log('문제 생성 실패 -> ', err);
