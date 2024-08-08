@@ -1,5 +1,6 @@
 package S11P12A708.A708.common.util;
 
+import S11P12A708.A708.common.error.exception.JwtAuthenticationException;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,8 +58,10 @@ public class JwtTokenUtil {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
+        } catch (ExpiredJwtException e) {
+            throw new JwtAuthenticationException("Expired JWT token");
         } catch (Exception e) {
-            return false;
+            throw new JwtAuthenticationException("Unexpected error");
         }
     }
 }
