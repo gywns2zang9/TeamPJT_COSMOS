@@ -40,6 +40,8 @@ public class User {
 
     private String repo;
 
+    private String branch;
+
     private String description;
 
     @CreatedDate
@@ -52,13 +54,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<TeamUser> teamUsers = new ArrayList<>();
 
-    public User(String email, String password, UserType type, String nickname, String gitId, String repo) {
+    public User(String email, String password, UserType type, String nickname, String gitId, String repo, String branch) {
         this.email = email;
         this.password = password;
         this.type = type;
         this.nickname = nickname;
         this.gitId = gitId;
         this.repo = repo;
+        this.branch = branch;
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }
