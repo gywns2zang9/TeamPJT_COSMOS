@@ -539,6 +539,7 @@ const useGroupStore = create((set) => ({
                 language,
                 inputs:input
             };
+            console.log(data);
             const response = await post(url, data, headers);
             return response
         } catch (err) {

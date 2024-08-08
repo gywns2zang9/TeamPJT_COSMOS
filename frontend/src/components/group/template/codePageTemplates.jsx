@@ -24,9 +24,11 @@ const CodePageTemplates = ({ groupId, pageId }) => {
     const executeCode = useGroupStore((state) => state.executeCode)
     const runCode = async () => {
         try {
-            const stringCode = JSON.stringify({code: codeContent});
-            const response = await executeCode({ content:stringCode, language, input });
-            console.log(response);
+            const codeForSend = codeContent.toString()
+            console.log(typeof(codeForSend));
+            const response = await executeCode({ content:codeForSend, language, input });
+            console.log(response.results);
+            setOutput(response.results);
         } catch (err) {
             console.error('코드실행실패 -> ', err);
         }
@@ -132,11 +134,11 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                                     <div style={{ width: '45%' }}>
                                         <CardText>output</CardText>
                                         <CardText>
-                                            <textarea
-                                                value={output[index]}
-                                                onChange={(e) => handleOutputChange(index, e.target.value)}
-                                                style={{ width: '100%', height: '100px' }}
-                                            />
+                                            <pre
+                                                style={{ width: '100%', height: '100px', whiteSpace: 'pre-wrap', overflowY: 'auto' }}
+                                            >
+                                                {output[index] || ''}
+                                            </pre>
                                         </CardText>
                                     </div>
                                     {index > 0 && (
@@ -149,11 +151,6 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                             <Button onClick={addInputOutput}>입력 추가하기</Button>
                             <div>
                                 <Button onClick={handleRunCode}>코드 실행</Button>
-                                {output && (
-                                    <CardText style={{ marginTop: '10px', backgroundColor: 'white', color: 'black', padding: '10px', borderRadius: '5px' }}>
-                                        {output.join('\n')}
-                                    </CardText>
-                                )}
                             </div>
                         </>
                     )}
