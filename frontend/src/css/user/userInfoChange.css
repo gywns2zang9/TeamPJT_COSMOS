@@ -107,7 +107,6 @@
 
 #info-change-save-btn,
 #info-change-change-pw-btn,
-#info-change-signout-btn,
 #info-change-back-btn {
   background-color: #3a088f; /* 배경색 */
   background: linear-gradient(
@@ -129,7 +128,6 @@
 
 #info-change-save-btn:hover,
 #info-change-change-pw-btn:hover,
-#info-change-signout-btn:hover,
 #info-change-back-btn:hover {
   border: 1px solid #fff;
 }

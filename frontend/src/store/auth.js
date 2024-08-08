@@ -227,23 +227,6 @@ const useAuthStore = create((set) => ({
         }
     },
 
-    // 회원탈퇴 요청
-    signOut: async ({ accessToken, userId }) => {
-        try {
-            const url = `${BASE_URL}/auth/users/${userId}`
-            const headers = {
-                Authorization: `Bearer ${accessToken}`,
-            };
-            const response = await deleteRequest(url, {}, headers);
-            console.log(`회원탈퇴 성공! 안녕히가세요.`)
-            return response
-
-        } catch (error) {
-            console.log("회원탈퇴 요청 실패! ->", error);
-            throw error;
-        }
-    },
-
     //정보 수정 요청
     updateUserInfo: async ({ accessToken, userId, newUserInfo }) => {
         try {
