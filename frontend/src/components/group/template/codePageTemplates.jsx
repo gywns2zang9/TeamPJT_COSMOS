@@ -4,7 +4,6 @@ import { Light  } from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import useGroupStore from '../../../store/group';
 
-// 필요한 언어를 import합니다.
 import python from 'react-syntax-highlighter/dist/esm/languages/hljs/python';
 import java from 'react-syntax-highlighter/dist/esm/languages/hljs/java';
 
@@ -18,13 +17,15 @@ const CodePageTemplates = ({ groupId, pageId }) => {
     const getFile = useGroupStore((state) => state.getFile);
 
     // 코드 컴파일
+    const [compileNumbers, setCompileNumbers] = useState(1);
     const [showTextarea, setShowTextarea] = useState(false);
-    const [input, setInput] = useState('');
-    const [output, setOutput] = useState('');
+    const [input, setInput] = useState([]);
+    const [output, setOutput] = useState([]);
     const executeCode = useGroupStore((state) => state.executeCode)
     const runCode = async () => {
         try {
-            const response = await executeCode({ groupId, content:codeContent, language, input });
+            const stringCode = JSON.stringify({code: codeContent});
+            const response = await executeCode({ content:stringCode, language, input });
             console.log(response);
         } catch (err) {
             console.error('코드실행실패 -> ', err);
@@ -66,6 +67,34 @@ const CodePageTemplates = ({ groupId, pageId }) => {
         loadFile();
     }, [pageId]);
 
+    const handleInputChange = (index, value) => {
+        const newInputs = [...input];
+        newInputs[index] = value;
+        setInput(newInputs);
+    };
+
+    const handleOutputChange = (index, value) => {
+        const newOutputs = [...output];
+        newOutputs[index] = value;
+        setOutput(newOutputs);
+    };
+
+    const addInputOutput = () => {
+        setCompileNumbers(compileNumbers + 1);
+        setInput([...input, '']);
+        setOutput([...output, '']);
+    };
+
+    const handleRemoveInputOutput = (index) => {
+        if (index > 0) {
+            const newInputs = input.filter((_, i) => i !== index);
+            const newOutputs = output.filter((_, i) => i !== index);
+            setInput(newInputs);
+            setOutput(newOutputs);
+            setCompileNumbers(compileNumbers - 1);
+        }
+    };
+
     return (
         <>
             <Card style={{ color: 'black', padding: '20px', margin: '10px', maxWidth: '100%', width: '100%' }}>
@@ -88,23 +117,46 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                     </CardText>
                     {showTextarea && (
                         <>
-                            <CardText>input</CardText>
-                            <CardText>
-                                <textarea
-                                    value={input}
-                                    onChange={(e) => setInput(e.target.value)}
-                                    style={{ width: '100%', height: '100px' }}
-                                />
-                            </CardText>
-                            <Button onClick={handleRunCode}>코드 실행</Button>
-                            {output && (
-                                <CardText style={{ marginTop: '10px', backgroundColor: 'white', color: 'black', padding: '10px', borderRadius: '5px' }}>
-                                    {output}
-                                </CardText>
-                            )}
+                            {Array.from({ length: compileNumbers }).map((_, index) => (
+                                <div className='d-flex' style={{ justifyContent: 'space-around', marginBottom: '10px' }} key={index}>
+                                    <div style={{ width: '45%' }}>
+                                        <CardText>input</CardText>
+                                        <CardText>
+                                            <textarea
+                                                value={input[index]}
+                                                onChange={(e) => handleInputChange(index, e.target.value)}
+                                                style={{ width: '100%', height: '100px' }}
+                                            />
+                                        </CardText>
+                                    </div>
+                                    <div style={{ width: '45%' }}>
+                                        <CardText>output</CardText>
+                                        <CardText>
+                                            <textarea
+                                                value={output[index]}
+                                                onChange={(e) => handleOutputChange(index, e.target.value)}
+                                                style={{ width: '100%', height: '100px' }}
+                                            />
+                                        </CardText>
+                                    </div>
+                                    {index > 0 && (
+                                        <Button onClick={() => handleRemoveInputOutput(index)} style={{ height: '40px', alignSelf: 'center' }}>
+                                            삭제
+                                        </Button>
+                                    )}
+                                </div>
+                            ))}
+                            <Button onClick={addInputOutput}>입력 추가하기</Button>
+                            <div>
+                                <Button onClick={handleRunCode}>코드 실행</Button>
+                                {output && (
+                                    <CardText style={{ marginTop: '10px', backgroundColor: 'white', color: 'black', padding: '10px', borderRadius: '5px' }}>
+                                        {output.join('\n')}
+                                    </CardText>
+                                )}
+                            </div>
                         </>
-                        
-                    )}                    
+                    )}
                 </Card>
             </Card>
         </>

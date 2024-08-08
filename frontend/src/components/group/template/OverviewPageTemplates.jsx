@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaFileAlt } from 'react-icons/fa';
-import { MdRefresh } from 'react-icons/md';
 import useGroupStore from '../../../store/group';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import CreateStudyModal from '../../../modals/CreateStudyModal';
 
