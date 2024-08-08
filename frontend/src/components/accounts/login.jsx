@@ -36,7 +36,9 @@ const Login = () => {
     try {
       // 로그인 요청 보냄
       const { accessToken, refreshToken, userInfo } = await login({ email, password });
-      const userId = userInfo.userId
+      console.log(accessToken)
+      console.log(refreshToken)
+      console.log(userInfo)
       navigate(`/group`);
 
     } catch (error) {
