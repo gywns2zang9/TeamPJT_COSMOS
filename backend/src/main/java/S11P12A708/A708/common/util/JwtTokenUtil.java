@@ -1,6 +1,5 @@
 package S11P12A708.A708.common.util;
 
-import S11P12A708.A708.domain.user.service.UserService;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
