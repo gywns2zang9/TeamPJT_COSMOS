@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,6 +41,9 @@ public class User {
 
     private String repo;
 
+    @ColumnDefault("'main'")
+    private String branch;
+
     private String description;
 
     @CreatedDate
@@ -52,13 +56,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<TeamUser> teamUsers = new ArrayList<>();
 
-    public User(String email, String password, UserType type, String nickname, String gitId, String repo) {
+    public User(String email, String password, UserType type, String nickname, String gitId, String repo, String branch) {
         this.email = email;
         this.password = password;
         this.type = type;
         this.nickname = nickname;
         this.gitId = gitId;
         this.repo = repo;
+        this.branch = branch;
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }

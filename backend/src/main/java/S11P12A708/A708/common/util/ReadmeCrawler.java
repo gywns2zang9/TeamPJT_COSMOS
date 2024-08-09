@@ -6,9 +6,11 @@ import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URL;
 
 @Component
 public class ReadmeCrawler {
+
     public static String readmeCrawl(String nickname,String repo,int pbNum){
         String url = "https://raw.githubusercontent.com/name/repo/main/%EB%B0%B1%EC%A4%80/tier/number/README.md";
         BojProblem temp = ProblemCrawler.getBojProblem(pbNum);
@@ -36,7 +38,11 @@ public class ReadmeCrawler {
     public static String getReadmeContent(String url) {
         Document doc = null;
         try {
-            doc = Jsoup.connect(url.replace("%20","%E2%80%85").replace(" ","%E2%80%85").replace("-","%EF%BC%8D")).get();
+            doc = Jsoup.connect(url.replace("%20","%E2%80%85").replace(" ","%E2%80%85").replace("-","%EF%BC%8D"))
+                    .header("Content-Type", "application/x-www-form-urlencoded")
+                    .header("Accept-Encoding", "gzip, deflate, br")
+                    .header("Accept-Language", "ko-KR,ko;q=0.8,en-US;q=0.6,en;q=0.4")
+                    .get();
             Element body = doc.body();
 
             if (body == null) {
@@ -45,6 +51,7 @@ public class ReadmeCrawler {
             return body.toString();
 
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             return null;
         }
 

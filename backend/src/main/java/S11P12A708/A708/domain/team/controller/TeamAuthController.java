@@ -54,7 +54,7 @@ public class TeamAuthController {
     @PostMapping("/teams/auth/{teamId}/members")
     public ResponseEntity<List<NickNameLookUpResponse>> getUserListOfNickName(
             @PathVariable Long teamId,
-            @RequestBody NickNameLookUpRequest nickNameLookUpRequest) {
+            @Valid @RequestBody NickNameLookUpRequest nickNameLookUpRequest) {
         final List<NickNameLookUpResponse> response
                 = teamAuthService.getMembersOfNickName(teamId, nickNameLookUpRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -62,7 +62,7 @@ public class TeamAuthController {
 
     @PostMapping("/teams/auth/{teamId}/teamCode")
     public ResponseEntity<Void> sendInvitation(
-            @RequestBody InviteTeamRequest inviteTeamRequest,
+            @Valid @RequestBody InviteTeamRequest inviteTeamRequest,
             @PathVariable Long teamId) {
         teamAuthService.sendInviteEmail(teamId, inviteTeamRequest);
         return new ResponseEntity<>(HttpStatus.OK);
