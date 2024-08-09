@@ -53,7 +53,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
     const response = await getCode({groupId, codeId})
     console.log(response);
     setMyCode(response.content)
-    localStorage.setItem('myCode', response.code.content);
+    localStorage.setItem('myCode', response.content);
     handleModalClose();
   }
 
