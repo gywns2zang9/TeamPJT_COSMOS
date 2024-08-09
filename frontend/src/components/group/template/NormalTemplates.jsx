@@ -3,6 +3,9 @@ import SimpleMDE from 'simplemde';
 import 'simplemde/dist/simplemde.min.css';
 import useGroupStore from '../../../store/group.js';
 import { Card, Button } from 'react-bootstrap';
+// yjs
+import { setupYjsDoc } from '../../../utils/yjs-websocket.js'
+import * as Y from 'yjs'
 
 const NormalTemplates = ({ pageId, groupId }) => {
     const editorRef = useRef(null);
@@ -10,6 +13,7 @@ const NormalTemplates = ({ pageId, groupId }) => {
     const updateFile = useGroupStore((state) => state.updateNormalFile);
     const loadFile = useGroupStore((state) => state.getFile);
     const [title, setTitle] = useState('');
+    const yTextRef = useRef(null);
 
     useEffect(() => {
         const simpleMDE = new SimpleMDE({
@@ -20,13 +24,32 @@ const NormalTemplates = ({ pageId, groupId }) => {
             toolbar: false,
         });
         setEditor(simpleMDE);
+        // yjs 문서 설정
+        const { ydoc } = setupYjsDoc(`${groupId}-${pageId}`);
+        const yText = ydoc.getText('codemirror')
+        yTextRef.current = yText;
+        // yjs, simleMDE 동기화
+        yText.observe(event => {
+            const newText = yText.toString();
+            if (editor && editor.value() !== newText) {
+                editor.value(newText);
+            }
+        });
+
+        if (editor) {
+            editor.codemirror.on('change', () => {
+                yText.delete(0, yText.length);
+                yText.insert(0, editor.value());
+            });
+        }
 
         return () => {
             if (simpleMDE) {
                 simpleMDE.toTextArea();
             }
         };
-    }, []);
+    }, [pageId, groupId, loadFile, updateFile]
+    );
 
     useEffect(() => {
         const getFile = async () => {
@@ -47,29 +70,30 @@ const NormalTemplates = ({ pageId, groupId }) => {
         }
     }, [pageId, groupId, loadFile, editor]);
 
-    useEffect(() => {
-        const editFile = async (content) => {
-            try {
-                const response = await updateFile({ groupId, fileId: pageId, name: title, content });
-                console.log(response);
-            } catch (err) {
-                console.error('페이지 수정 실패 -> ', err);
-            }
-        };
+    // yjs 쓰면 수정은 어케할까...흠
+    // useEffect(() => {
+    //     const editFile = async (content) => {
+    //         try {
+    //             const response = await updateFile({ groupId, fileId: pageId, name: title, content });
+    //             console.log(response);
+    //         } catch (err) {
+    //             console.error('페이지 수정 실패 -> ', err);
+    //         }
+    //     };
 
-        if (editor) {
-            const handleChange = () => {
-                const newContent = editor.value();
-                editFile(newContent);
-            };
+    //     if (editor) {
+    //         const handleChange = () => {
+    //             const newContent = editor.value();
+    //             editFile(newContent);
+    //         };
 
-            editor.codemirror.on('change', handleChange);
+    //         editor.codemirror.on('change', handleChange);
 
-            return () => {
-                editor.codemirror.off('change', handleChange);
-            };
-        }
-    }, [editor, pageId, groupId, title, updateFile]);
+    //         return () => {
+    //             editor.codemirror.off('change', handleChange);
+    //         };
+    //     }
+    // }, [editor, pageId, groupId, title, updateFile]);
 
     const updateTitle = async () => {
         try {
