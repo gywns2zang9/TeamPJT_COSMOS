@@ -27,18 +27,22 @@
   flex-direction: column;
   overflow: hidden;
   min-height: 0;
+  position: relative;
 }
 
 .code-editor {
-  margin: 0;
-  padding: 0;
-  font-size: 0;
+  width: 100%;
 }
 
 .input-output {
+  position: absolute; /* 코드 공간 위에 위치하도록 설정 */
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  gap: 10px; /* 영역 간 간격 */
+  padding: 10px;
 }
 
 textarea {
