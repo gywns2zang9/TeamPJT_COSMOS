@@ -547,6 +547,37 @@ const useGroupStore = create((set) => ({
             throw err;
         }
     },
+
+    // 코드 목록 불러오기
+    loadCodeList: async ({ groupId, userId }) => {
+        try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const url = `${BASE_URL}/teams/${groupId}/users/${userId}/codes`;
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await get(url, {}, headers);
+            return response
+        } catch (err) {
+            console.log('코드 목록 불러오기 실패 -> ', err);
+            // throw err;
+        }
+    },
+
+    // 개인 코드 불러오기
+    loadPersonalCode: async ({ groupId, codeId }) => {
+        try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const url = `${BASE_URL}/teams/${groupId}/codes/${codeId}`;
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await get(url, {}, headers)
+            return response
+        } catch (err) {
+            console.log('코드 불러오기 실패 -> ', err);
+        }
+    }
 }));
 
 export default useGroupStore;

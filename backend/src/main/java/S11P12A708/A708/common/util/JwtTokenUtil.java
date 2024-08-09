@@ -1,6 +1,7 @@
 package S11P12A708.A708.common.util;
 
-import S11P12A708.A708.domain.user.service.UserService;
+import S11P12A708.A708.common.error.ErrorCode;
+import S11P12A708.A708.common.error.exception.JwtAuthenticationException;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,12 +55,16 @@ public class JwtTokenUtil {
         return claims.getSubject();
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token, boolean access) {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
+        } catch (ExpiredJwtException e) {
+            if (access) throw new JwtAuthenticationException(ErrorCode.ACCESS_TOKEN_EXPIRED);
+            else throw new JwtAuthenticationException(ErrorCode.REFRESH_TOKEN_EXPIRED);
         } catch (Exception e) {
-            return false;
+            if (access) throw new JwtAuthenticationException(ErrorCode.ACCESS_TOKEN_UNEXPECTED);
+            else throw new JwtAuthenticationException(ErrorCode.REFRESH_TOKEN_UNEXPECTED);
         }
     }
 }

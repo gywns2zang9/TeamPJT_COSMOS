@@ -1,6 +1,5 @@
 package S11P12A708.A708.common.util;
 
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

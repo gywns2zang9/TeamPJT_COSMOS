@@ -79,6 +79,7 @@ public class UserService {
         }
         user.setGitId(req.getGitId());
         user.setRepo(req.getRepo());
+        user.setBranch(req.getBranch());
         user.setDescription(req.getDescription());
         userRepository.save(user);
         return new UserInfo(user);

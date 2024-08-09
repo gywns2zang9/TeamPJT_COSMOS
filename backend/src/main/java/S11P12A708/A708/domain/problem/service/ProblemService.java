@@ -57,7 +57,6 @@ public class ProblemService {
 
     private final CodeCrawler codeCrawler;
     private final CodeRepository codeRepository;
-    private final FolderService folderService;
     private final FolderRepository folderRepository;
 
     public void createProblem(Long teamId, CreateProblemRequest req) {
@@ -117,20 +116,18 @@ public class ProblemService {
         teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final User user = userRepository.findById(req.getUserId()).orElseThrow(UserNotFoundException::new);
         final Problem problem = problemRepository.findById(req.getProblemId()).orElseThrow(ProblemNotFoundException::new);
-        checkUserInfoForCrawling(user);
+
+        // 업데이트할 코드 가져오기
+        final Code newCode = codeCrawler.createByCrawler(user, problem.getNumber());
+        if(newCode.getContent().isEmpty()) return; // 업데이트할 코드가 없다면 업데이트 하지 않음
 
         final ProblemUser problemUser = problemUserRepository.findByProblemAndUser(problem, user);
         final Code code = problemUser.getFile().getCode();
-        final Code newCode = codeCrawler.createByCrawler(user, problem.getNumber());
 
-        if (!code.getContent().isEmpty()) code.update(newCode);
+        code.update(newCode);
+        codeRepository.save(code);
+
         if (ProblemStatus.check(user.getGitId(), problem.getNumber())) problemUser.updateStatus();
     }
 
-    private void checkUserInfoForCrawling(User user) {
-        if ((user.getGitId() == null || user.getGitId().isEmpty()) ||
-                (user.getRepo() == null || user.getRepo().isEmpty())) {
-            throw new UserInfoNessaryException();
-        }
-    }
 }
