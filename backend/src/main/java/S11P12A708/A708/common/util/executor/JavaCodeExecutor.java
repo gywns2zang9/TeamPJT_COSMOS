@@ -1,51 +1,58 @@
 package S11P12A708.A708.common.util.executor;
 
 import java.io.*;
+import java.util.concurrent.*;
 
 import static S11P12A708.A708.domain.code.entity.Language.JAVA;
 
 public class JavaCodeExecutor implements CodeExecutor {
 
-    final static String imageName = "a708_1_my-java-image";
-    final static String hostPath = "/tmp";
+    final static String imageName = imagePrefix + "my-java-image";
 
     @Override
     public String executeCode(String code, String input) {
+        ExecutorService executor = null;
+        Future<String> future = null;
+        File file = null;
         try {
-            final File file = createCodeFile(code, hostPath);
-
-            // 컴파일
-            compileJavaFile(file);
+            file = createCodeFile(code, hostPath);
+            if (!compileJavaFile(file)) return compileErrorMessage;
 
             ProcessBuilder processBuilder = new ProcessBuilder(
                     "docker", "run", "--rm", "-i",
-                    "-v", hostPath + ":/app/exeFile", // 호스트의 /tmp 디렉토리를 컨테이너에 마운트
+                    "-m", "1g",
+                    "-v", hostPath + ":/app/exeFile",
                     imageName,
                     file.getName().replace(".java", "")
             );
-
             processBuilder.redirectErrorStream(true);
-            Process process = processBuilder.start();
 
-            // input 데이터를 실행중인 프로세스에 입력
-            try (BufferedWriter processInput = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()))) {
-                processInput.write(input);
-                processInput.newLine();
-                processInput.flush();
-            }
+            executor = Executors.newSingleThreadExecutor();
+            future = executor.submit(() -> {
+                Process process = processBuilder.start();
+                try (BufferedWriter processInput = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()))) {
+                    processInput.write(input);
+                    processInput.newLine();
+                    processInput.flush();
+                }
+                return readProcessOutput(process.getInputStream());
+            });
 
-            // 실행 결과 반환
-            String result = readProcessOutput(process.getInputStream());
-
-            // 실행한 파일들 삭제
-            file.delete();
-            new File(file.getAbsolutePath().replace(".java", ".class")).delete();
-
-            return result;
+            return future.get(timeLimit, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            future.cancel(true);
+            return executeTimeLimit;
         } catch (Exception e) {
             return "Exception occurred: " + e.getMessage();
+        } finally {
+            if (executor != null) executor.shutdownNow();
+            if (file != null && file.exists()) {
+                file.delete();
+                new File(file.getAbsolutePath().replace(".java", ".class")).delete();
+            }
         }
     }
+
 
     @Override
     public File createCodeFile(String code, String hostPath) throws IOException {
@@ -62,12 +69,23 @@ public class JavaCodeExecutor implements CodeExecutor {
         return file;
     }
 
-    private void compileJavaFile(File file) throws IOException, InterruptedException {
+    private boolean compileJavaFile(File file) throws IOException, InterruptedException {
         ProcessBuilder compileProcessBuilder = new ProcessBuilder(
                 "javac", file.getAbsolutePath()
         );
         Process compileProcess = compileProcessBuilder.start();
-        compileProcess.waitFor();
+
+        // 컴파일 실패 시, 에러 메시지를 출력하기 위해 오류 스트림을 읽음
+        InputStream errorStream = compileProcess.getErrorStream();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.err.println(line);  // 에러 메시지를 표준 오류 출력
+            }
+        }
+
+        int exitCode = compileProcess.waitFor();
+        return exitCode == 0;
     }
 
 }
