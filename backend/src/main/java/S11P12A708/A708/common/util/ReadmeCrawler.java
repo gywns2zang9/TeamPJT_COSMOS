@@ -40,7 +40,6 @@ public class ReadmeCrawler {
     public static String getReadmeContent(String url) {
         Document doc = null;
         try {
-            System.out.println(url.replace("%20","%E2%80%85").replace(" ","%E2%80%85").replace("-","%EF%BC%8D"));
             doc = Jsoup.connect(url.replace("%20","%E2%80%85").replace(" ","%E2%80%85").replace("-","%EF%BC%8D"))
                     .header("Content-Type", "application/x-www-form-urlencoded")
                     .header("Accept-Encoding", "gzip, deflate, br")
