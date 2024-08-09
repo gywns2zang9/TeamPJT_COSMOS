@@ -38,7 +38,7 @@ public class CodeController {
 
     @PatchMapping("/teams/{teamId}/codes/{codeId}")
     public ResponseEntity<Void> patchCode(
-            @PathVariable Long teamId, @PathVariable Long codeId, @RequestBody PatchCodeRequest patchCodeRequest) {
+            @PathVariable Long teamId, @PathVariable Long codeId, @Valid @RequestBody PatchCodeRequest patchCodeRequest) {
         codeService.storeCode(teamId, codeId, patchCodeRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -45,7 +45,8 @@ public class ProblemCrawler {
         System.out.println("GET Response Code :: " + responseCode);
         if (responseCode == 404) return "fail";
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        // 명시적으로 UTF-8 인코딩을 설정합니다.
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
         String inputLine;
         StringBuilder response = new StringBuilder();
         while ((inputLine = in.readLine()) != null) {
@@ -55,6 +56,7 @@ public class ProblemCrawler {
 
         return response.toString();
     }
+
 
     public static String getRating(int value) {
         if (value < 0 || value > 30) {
