@@ -23,3 +23,7 @@ body {
   /* Optional: Adjust additional styling if needed */
   /* border: 1px solid black; */
 }
+
+.tlui-debug-panel {
+  display: none;
+}

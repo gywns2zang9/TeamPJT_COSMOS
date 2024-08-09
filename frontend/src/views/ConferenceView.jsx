@@ -12,7 +12,6 @@ import axios from "axios";
 import UserVideoComponent from "../components/conference/UserVideoComponent";
 import LeaveSessionModal from "../modals/LeaveSessionModal";
 import "../css/conference/conference.css";
-
 import useAuthStore from "../store/auth";
 
 const APPLICATION_SERVER_URL = "https://i11a708.p.ssafy.io/";
@@ -307,22 +306,33 @@ function ConferenceView(props) {
   }
 
   async function createSession(sessionId) {
+    const accessToken = await useAuthStore.getState().getAccessToken();
     const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions",
+      APPLICATION_SERVER_URL + "api/sessions/teams/" + sessionId,
       { customSessionId: sessionId },
       {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
       }
     );
     return response.data; // The sessionId
   }
 
   async function createToken(sessionId) {
+    const accessToken = await useAuthStore.getState().getAccessToken();
     const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
+      APPLICATION_SERVER_URL +
+        "api/sessions/teams/" +
+        sessionId +
+        "/connections",
       {},
       {
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
       }
     );
     return response.data; // The token
