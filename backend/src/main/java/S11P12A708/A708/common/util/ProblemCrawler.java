@@ -18,9 +18,6 @@ public class ProblemCrawler {
     private static final String BOJ_API_URL = "https://solved.ac/api/v3/problem/show";
     private static final String BOJ_Problem_URL = "https://www.acmicpc.net/problem/";
 
-    public static void main(String[] args) {
-        System.out.println(ProblemCrawler.getBojProblem(1002));
-    }
     public static BojProblem getBojProblem(int number){
         try {
             // API 호출
@@ -45,7 +42,6 @@ public class ProblemCrawler {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");
-        //System.out.println("Content-Type: " + con.getHeaderField("Content-Type"));
 
         int responseCode = con.getResponseCode();
         System.out.println("GET Response Code :: " + responseCode);
