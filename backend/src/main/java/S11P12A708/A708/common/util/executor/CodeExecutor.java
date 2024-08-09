@@ -4,6 +4,13 @@ import java.io.*;
 
 public interface CodeExecutor {
 
+    int timeLimit = 5;
+    String hostPath = "/tmp";
+    String imagePrefix = "a708_1_";
+
+    String compileErrorMessage = "Compilation failed";
+    String executeTimeLimit = "Execution timed out after " + timeLimit + " seconds";
+
     String executeCode(String code, String input);
 
     File createCodeFile(String code, String hostPath) throws IOException;

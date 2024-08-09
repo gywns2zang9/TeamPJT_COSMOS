@@ -1,6 +1,7 @@
 package S11P12A708.A708.domain.user.entity;
 
 import S11P12A708.A708.domain.team.entity.TeamUser;
+import S11P12A708.A708.domain.user.request.ChangeUserRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -73,12 +74,24 @@ public class User {
         this.password = password;
         this.type = type;
         this.nickname = nickname;
+        this.createdAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
     }
 
     public User(String email, UserType type, String nickname) {
         this.email = email;
         this.type = type;
         this.nickname = nickname;
+        this.createdAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
+    }
+
+    public void update(ChangeUserRequest req) {
+        this.gitId = req.getGitId();
+        this.repo = req.getRepo();
+        this.branch = req.getBranch();
+        this.description = req.getDescription();
+        this.modifiedAt = LocalDateTime.now();
     }
 
     public void hashPassword(PasswordEncoder passwordEncoder) {
