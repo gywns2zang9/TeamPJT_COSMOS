@@ -24,6 +24,9 @@ import java.util.Collections;
 @Component
 public class JwtAuthFilter implements Filter {
 
+    private final static String refreshUrl = "/api/auth/refresh";
+    private final static String userUrl = "users";
+
     private final JwtTokenUtil jwtTokenUtil;
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
@@ -43,12 +46,13 @@ public class JwtAuthFilter implements Filter {
 
         try {
             String token = getJwtFromRequest(httpRequest);
-            if (token != null && jwtTokenUtil.validateToken(token)) {
+            boolean access = !path.equals(refreshUrl);
+            if (token != null && jwtTokenUtil.validateToken(token, access)) {
                 String tokenUserId = jwtTokenUtil.getUserIdFromToken(token);
                 String urlUserId = extractUserIdFromUrl(path);
 
                 if (urlUserId != null && !tokenUserId.equals(urlUserId)) {
-                    sendErrorResponse(httpResponse, ErrorCode.INVALID_ACCESS.getMessage(), "auth");
+                    sendErrorResponse(httpResponse, ErrorCode.INVALID_ACCESS);
                     return;
                 }
 
@@ -58,8 +62,7 @@ public class JwtAuthFilter implements Filter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (JwtAuthenticationException e) {
-            if (path.equals("/api/auth/refresh")) sendErrorResponse(httpResponse, e.getMessage(), "refreshToken");
-            else sendErrorResponse(httpResponse, e.getMessage(), "accessToken");
+            sendErrorResponse(httpResponse, e.getErrorCode());
             return;
         }
 
@@ -78,7 +81,7 @@ public class JwtAuthFilter implements Filter {
         String[] pathSegments = path.split("/");
 
         for (int i = 0; i < pathSegments.length; i++) {
-            if ("users".equals(pathSegments[i]) && i + 1 < pathSegments.length) {
+            if (userUrl.equals(pathSegments[i]) && i + 1 < pathSegments.length) {
                 String potentialUserId = pathSegments[i + 1];
                 if (isNumeric(potentialUserId)) {
                     return potentialUserId;
@@ -97,12 +100,11 @@ public class JwtAuthFilter implements Filter {
         }
     }
 
-    private void sendErrorResponse(HttpServletResponse response, String errorMessage, String error) throws IOException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    private void sendErrorResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        ErrorResponse errorResponse = ErrorResponse.from(error, errorMessage);
+        ErrorResponse errorResponse = ErrorResponse.of(errorCode);
 
         String jsonResponse = objectMapper.writeValueAsString(errorResponse);
         response.getWriter().write(jsonResponse);
