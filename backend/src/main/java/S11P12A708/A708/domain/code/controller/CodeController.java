@@ -45,12 +45,8 @@ public class CodeController {
 
     @PostMapping("/codes/execute")
     public ResponseEntity<ExecuteCodeResponse> executeCode(@Valid @RequestBody ExecuteCodeRequest executeCodeRequest) {
-        try {
-            ExecuteCodeResponse response = codeService.getExecuteResult(executeCodeRequest);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new RuntimeException();
-        }
+        ExecuteCodeResponse response = codeService.getExecuteResult(executeCodeRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
