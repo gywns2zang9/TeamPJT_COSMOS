@@ -66,7 +66,7 @@ function Calendar({ groupId }) {
 
   const handleSaveEvent = async () => {
     try {
-      const eventDate = new Date(currentEvent.start);
+      const eventDate = currentEvent.start
       const formattedDate = formatDateToMySQL(eventDate);
       if (isEditing) {
         await updateCalendarSchedule({
@@ -77,17 +77,18 @@ function Calendar({ groupId }) {
           time: formattedDate
         });
         setEvents(events.map(event =>
-          event.id === currentEventId ? { ...currentEvent, id: currentEventId } : event
+          event.id === currentEventId ? { ...currentEvent, id: currentEventId, start: formattedDate } : event
         ));
       } else {
         const response = await createCalendarSchedule({
           groupId,
           title: currentEvent.title,
           memo: currentEvent.description,
-          time: new Date(currentEvent.start)
+          time: formattedDate
         });
-        setEvents([...events, { ...currentEvent, id: response.calendarId }]);
+        setEvents([...events, { ...currentEvent, id: response.calendarId, start: formattedDate }]);
       }
+      window.location.reload();
       setShowModal(false);
       setCurrentEvent({ title: '', start: '', description: '' });
     } catch (err) {
@@ -97,8 +98,9 @@ function Calendar({ groupId }) {
 
   const handleDeleteEvent = async () => {
     try {
+      console.log(currentEvent);
       await deleteCalendarSchedule({ groupId, calendarId: currentEventId });
-      setEvents(events.filter(event => event.id !== currentEventId));
+      window.location.reload();
       setShowDeleteModal(false);
       setShowModal(false);
     } catch (err) {
