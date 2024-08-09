@@ -26,7 +26,8 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
 
     useEffect(() => {
         const getMyId = async () => {
-            const response = await useAuthStore.getState().getAccessToken();
+            const response = await useAuthStore.getState().getUserInfo();
+            console.log(response);
             setMyUserId(response.userId);
         }
         getMyId();
