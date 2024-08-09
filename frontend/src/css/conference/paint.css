@@ -9,6 +9,8 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
+  border-radius: 6px;
+  overflow: hidden;
   /* Optional: Add a specific size if necessary */
   /* For example, set a fixed size */
   /* width: 800px; */
