@@ -4,7 +4,6 @@ import S11P12A708.A708.common.error.ErrorCode;
 import S11P12A708.A708.common.error.ErrorResponse;
 import S11P12A708.A708.common.error.exception.JwtAuthenticationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.repository.UserRepository;
 import jakarta.servlet.*;
@@ -18,11 +17,15 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 
 // HTTP 요청에서 JWT access 토큰을 추출하고 인증하는 필터
 @Slf4j
 @Component
 public class JwtAuthFilter implements Filter {
+
+    private final static String refreshUrl = "/api/auth/refresh";
+    private final static String userUrl = "users";
 
     private final JwtTokenUtil jwtTokenUtil;
     private final UserRepository userRepository;
@@ -39,26 +42,28 @@ public class JwtAuthFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
+        String path = httpRequest.getRequestURI();
 
         try {
             String token = getJwtFromRequest(httpRequest);
-            if (token != null && jwtTokenUtil.validateToken(token)) {
-                String path = httpRequest.getRequestURI();
+            boolean access = !path.equals(refreshUrl);
+            if (token != null && jwtTokenUtil.validateToken(token, access)) {
                 String tokenUserId = jwtTokenUtil.getUserIdFromToken(token);
                 String urlUserId = extractUserIdFromUrl(path);
 
                 if (urlUserId != null && !tokenUserId.equals(urlUserId)) {
-                    sendErrorResponse(httpResponse, ErrorCode.INVALID_ACCESS.getMessage(), "auth");
+                    sendErrorResponse(httpResponse, ErrorCode.INVALID_ACCESS);
                     return;
                 }
 
-                User user = userRepository.findById(Long.parseLong(tokenUserId)).orElseThrow(UserNotFoundException::new);
+                Optional<User> user = userRepository.findById(Long.parseLong(tokenUserId));
+                if (user.isEmpty()) sendErrorResponse(httpResponse, ErrorCode.USER_NOT_FOUND);
 
                 Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (JwtAuthenticationException e) {
-            sendErrorResponse(httpResponse, e.getMessage(), "token");
+            sendErrorResponse(httpResponse, e.getErrorCode());
             return;
         }
 
@@ -77,7 +82,7 @@ public class JwtAuthFilter implements Filter {
         String[] pathSegments = path.split("/");
 
         for (int i = 0; i < pathSegments.length; i++) {
-            if ("users".equals(pathSegments[i]) && i + 1 < pathSegments.length) {
+            if (userUrl.equals(pathSegments[i]) && i + 1 < pathSegments.length) {
                 String potentialUserId = pathSegments[i + 1];
                 if (isNumeric(potentialUserId)) {
                     return potentialUserId;
@@ -89,19 +94,18 @@ public class JwtAuthFilter implements Filter {
 
     private boolean isNumeric(String str) {
         try {
-            Long.parseLong(str); // long 타입으로 변환해볼 수 있음
+            Long.parseLong(str);
             return true;
         } catch (NumberFormatException e) {
             return false;
         }
     }
 
-    private void sendErrorResponse(HttpServletResponse response, String errorMessage, String error) throws IOException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    private void sendErrorResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        ErrorResponse errorResponse = ErrorResponse.from(error, errorMessage);
+        ErrorResponse errorResponse = ErrorResponse.of(errorCode);
 
         String jsonResponse = objectMapper.writeValueAsString(errorResponse);
         response.getWriter().write(jsonResponse);

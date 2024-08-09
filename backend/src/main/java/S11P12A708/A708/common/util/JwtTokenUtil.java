@@ -1,5 +1,6 @@
 package S11P12A708.A708.common.util;
 
+import S11P12A708.A708.common.error.ErrorCode;
 import S11P12A708.A708.common.error.exception.JwtAuthenticationException;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
@@ -54,14 +55,16 @@ public class JwtTokenUtil {
         return claims.getSubject();
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token, boolean access) {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
-            throw new JwtAuthenticationException("Expired JWT token");
+            if (access) throw new JwtAuthenticationException(ErrorCode.ACCESS_TOKEN_EXPIRED);
+            else throw new JwtAuthenticationException(ErrorCode.REFRESH_TOKEN_EXPIRED);
         } catch (Exception e) {
-            throw new JwtAuthenticationException("Unexpected error");
+            if (access) throw new JwtAuthenticationException(ErrorCode.ACCESS_TOKEN_UNEXPECTED);
+            else throw new JwtAuthenticationException(ErrorCode.REFRESH_TOKEN_UNEXPECTED);
         }
     }
 }
