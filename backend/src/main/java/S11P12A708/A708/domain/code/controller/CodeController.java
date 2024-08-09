@@ -6,6 +6,7 @@ import S11P12A708.A708.domain.code.response.CodeResponse;
 import S11P12A708.A708.domain.code.response.CodeYearFilterResponse;
 import S11P12A708.A708.domain.code.response.ExecuteCodeResponse;
 import S11P12A708.A708.domain.code.service.CodeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,13 +38,13 @@ public class CodeController {
 
     @PatchMapping("/teams/{teamId}/codes/{codeId}")
     public ResponseEntity<Void> patchCode(
-            @PathVariable Long teamId, @PathVariable Long codeId, @RequestBody PatchCodeRequest patchCodeRequest) {
+            @PathVariable Long teamId, @PathVariable Long codeId, @Valid @RequestBody PatchCodeRequest patchCodeRequest) {
         codeService.storeCode(teamId, codeId, patchCodeRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/codes/execute")
-    public ResponseEntity<ExecuteCodeResponse> executeCode(@RequestBody ExecuteCodeRequest executeCodeRequest) {
+    public ResponseEntity<ExecuteCodeResponse> executeCode(@Valid @RequestBody ExecuteCodeRequest executeCodeRequest) {
         try {
             ExecuteCodeResponse response = codeService.getExecuteResult(executeCodeRequest);
             return new ResponseEntity<>(response, HttpStatus.OK);
