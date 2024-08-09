@@ -4,7 +4,6 @@ import S11P12A708.A708.common.error.ErrorCode;
 import S11P12A708.A708.common.error.ErrorResponse;
 import S11P12A708.A708.common.error.exception.JwtAuthenticationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.user.entity.User;
 import S11P12A708.A708.domain.user.repository.UserRepository;
 import jakarta.servlet.*;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 
 // HTTP 요청에서 JWT access 토큰을 추출하고 인증하는 필터
 @Slf4j
@@ -56,7 +56,8 @@ public class JwtAuthFilter implements Filter {
                     return;
                 }
 
-                User user = userRepository.findById(Long.parseLong(tokenUserId)).orElseThrow(UserNotFoundException::new);
+                Optional<User> user = userRepository.findById(Long.parseLong(tokenUserId));
+                if (user.isEmpty()) sendErrorResponse(httpResponse, ErrorCode.USER_NOT_FOUND);
 
                 Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
