@@ -102,6 +102,7 @@ public class JwtAuthFilter implements Filter {
     }
 
     private void sendErrorResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
