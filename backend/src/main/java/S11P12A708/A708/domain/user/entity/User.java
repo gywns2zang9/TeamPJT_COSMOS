@@ -41,7 +41,7 @@ public class User {
 
     private String repo;
 
-    @ColumnDefault("main")
+    @ColumnDefault("'main'")
     private String branch;
 
     private String description;
