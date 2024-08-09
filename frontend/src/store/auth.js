@@ -193,10 +193,8 @@ const useAuthStore = create((set) => ({
             const data = { email };
             const responseData = await post(url, data);
             const expiredTime = responseData.expiredTime
-            console.log(`회원가입-코드 전송 요청 성공! -> ${email}로 코드를 발송했습니다.`)
-            return expiredTime;
+            return expiredTime; //5
         } catch (error) {
-            console.log("회원가입-코드 전송 요청 실패!", error);
             throw error
         }
     },
@@ -207,9 +205,8 @@ const useAuthStore = create((set) => ({
             const url = `${BASE_URL}/auth-codes/verify-code`
             const data = { email, authCode }
             const response = await post(url, data);
-            return response;
+            return response; //true
         } catch (error) {
-            console.log("회원가입-코드 확인 요청 실패!", error);
             throw error;
         }
     },
@@ -222,7 +219,6 @@ const useAuthStore = create((set) => ({
             const response = await post(url, data);
             return response
         } catch (error) {
-            console.log("닉네임 검사 요청 실패! ->", error);
             throw error;
         }
     },
@@ -233,11 +229,8 @@ const useAuthStore = create((set) => ({
             const url = `${BASE_URL}/auth/signup`
             const data = { email, password, nickName }
             const response = await post(url, data);
-            console.log(`회원가입 성공! ${nickName}님 감사합니다.`)
             return response
-
         } catch (error) {
-            console.log("회원가입 요청 ->", error);
             throw error;
         }
     },

@@ -22,6 +22,7 @@ const SignUp = () => {
 
   const [password, setPassword] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState(''); 
+  const [isPasswordValid, setIsPasswordValid] = useState('')
   const [confirmPassword, setConfirmPassword] = useState(''); 
   const [matchPassword, setMatchPassword] = useState();
 
@@ -54,12 +55,13 @@ const SignUp = () => {
   
   // 코드 전송 버튼 핸들러
   const handleSendCode = async () => {
+    setEmailError("");
     setEmailSending(true);
     setEmailSent(false);
-    setEmailError("");
 
     try {
       const expiredTime = await sendSignUpEmail({ email });
+      // 타이머 함수
       const Timer = (minutes) => {
         let totalTime = minutes * 60;
         const intervalId = setInterval(() => {
@@ -70,29 +72,26 @@ const SignUp = () => {
             totalTime--;
           } else {
             clearInterval(intervalId);
-            console.log("타이머 종료");
             setTimeMessage("인증시간 만료");
           }
         }, 1000);
       };
-
       setEmailSending(false); 
       setEmailSent(true);
-      console.log(`타이머 시작: ${expiredTime}분`);
       Timer(expiredTime);
-
     } catch (error) {
       setEmailSending(false);
       let errorMessage;
       if (error.response.data.error.user) {
-        errorMessage = error.response.data.error.user
+        errorMessage = "이미 가입된 이메일입니다."
       }
       setEmailError(errorMessage || "이메일 전송에 실패했습니다.");
       
     }
   };
+
   // 코드 재전송 핸들러
-  const handleResendEmail = () => {
+  const handleResendCode = () => {
     handleSendCode();
   };
 
@@ -101,6 +100,7 @@ const SignUp = () => {
     setAuthErrorMessage("");
     setAuthCode(event.target.value);
   };
+
   // 인증코드 확인 핸들러
   const handleAuthCode = async () => {
     try {
@@ -115,23 +115,30 @@ const SignUp = () => {
 
   // 비밀번호 입력 핸들러
   const handlePasswordInput = (event) => {
-    setMatchPassword(false)
     setPassword(event.target.value);
     const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,13}$/;
     if (!passwordPattern.test(event.target.value)) {
+      setIsPasswordValid(false);
       setPasswordErrorMessage("비밀번호는 문자, 숫자, 특수문자를 조합해주세요. (8~13자)");
     } else {
+      setIsPasswordValid(true);
       setPasswordErrorMessage("");
+    }
+    if (confirmPassword === event.target.value) {
+      setMatchPassword(true)
+    } else {
+      setMatchPassword(false)
     }
   };
 
   // 비밀번호 확인 입력 핸들러
   const handleConfirmPasswordInput = (event) => {
     setConfirmPassword(event.target.value);
-    if (password !== event.target.value) {
-      setMatchPassword(false)
-    } else {
+    setMatchPassword(false)
+    if (password === event.target.value) {
       setMatchPassword(true)
+    } else {
+      setMatchPassword(false)
     }
   };
 
@@ -150,7 +157,6 @@ const SignUp = () => {
     }
   };
 
-
   // 닉네임 검사 핸들러
   const handleCheckNickName = async () => {
     if (!isNickNameValid){
@@ -162,11 +168,10 @@ const SignUp = () => {
       setNickNameCheckMessage("사용가능한 닉네임입니다.");
       
     } catch (error) {
-      console.log("닉네임 검사 실패 ->", error.response.data.error);
-      let errorMessage;
-      if (error.response.data.error.auth) {
-        errorMessage = error.response.data.error.auth
       setIsNickNameCheck(false)
+      let errorMessage;
+      if (error.response.data.error.auth && error.response.data.error.auth === "Nickname is already exist.") {
+        errorMessage = "이미 존재하는 닉네임입니다."
       }
       setNickNameCheckMessage(errorMessage||"사용불가능한 닉네임입니다.");
     }
@@ -180,23 +185,20 @@ const handleSignUp = async () => {
     const userInfo = getUserInfo();
     navigate(`/users/${userInfo.userId}`);
   } catch (error) {
-    console.log('회원가입에 실패했습니다.');
+  
   }
 };
 
 // 네이버 로그인 버튼 핸들러
 const handleNaverSignUp = () => {
-  // 임의의 STATE 생성 함수
+  //STATE 생성 함수
   const generateRandomString = () => {
     return Math.random().toString(36).slice(2, 10);
   };
-
   const NAVER_CLIENT_ID = process.env.REACT_APP_NAVER_CLIENT_ID;
   const NAVER_REDIRECT_URI = process.env.REACT_APP_NAVER_REDIRECT_URI;
   const NAVER_STATE = generateRandomString()
-  
   const naverURL= `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${NAVER_STATE}&redirect_uri=${NAVER_REDIRECT_URI}`
-  console.log("네이버로 로그인으로 이동");
   window.location.href = naverURL;
 };
 
@@ -208,6 +210,7 @@ const handleKakaoSignup = () => {
   console.log("카카오로 로그인으로 이동");
   window.location.href = kakaoURL;
 };
+
   return (
     <div id="signup-container">
       <div id="signup-box">
@@ -229,7 +232,7 @@ const handleKakaoSignup = () => {
             <button
               id="send-button"
               onClick={handleSendCode}
-              disabled={authVerified || !isEmailValid}
+              disabled={!isEmailValid || authVerified}
             >
               전송
             </button>
@@ -240,7 +243,7 @@ const handleKakaoSignup = () => {
               인증번호를 발송했습니다. {timeMessage && <span>{timeMessage}</span>}
               <div>
                 인증번호가 오지 않았나요?
-                <b id="email-send-fail-message" onClick={handleResendEmail}> 재전송</b>
+                <b id="email-send-fail-message" onClick={handleResendCode}> 재전송</b>
               </div>
             </div>
           )}
@@ -323,7 +326,7 @@ const handleKakaoSignup = () => {
         <button
           id="signup-button"
           onClick={handleSignUp}
-          disabled={!authVerified || !matchPassword || !isNickNameCheck}
+          disabled={!authVerified || !isPasswordValid || !matchPassword || !isNickNameCheck}
         >
           회원가입
         </button>
