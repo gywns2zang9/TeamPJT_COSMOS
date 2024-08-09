@@ -22,8 +22,8 @@ function AppContent() {
 
   return (
     <div id="App">
-      {!isConferenceRoute && <NavBar />}
       <RainbowTrail />
+      {!isConferenceRoute && <NavBar />}
       <Routes>
         <Route path="/conference/*" element={<ConferenceRoutes />} />
         <Route path="/login" element={<Login />} />
