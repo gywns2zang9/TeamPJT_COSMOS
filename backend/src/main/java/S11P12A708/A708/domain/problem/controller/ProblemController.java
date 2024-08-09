@@ -26,14 +26,16 @@ public class ProblemController {
     }
 
     @DeleteMapping("/teams/{teamId}/problems/{problemId}")
-    public ResponseEntity<Void> deleteProblem(@PathVariable Long teamId, @PathVariable Long problemId, @Valid @RequestBody DeleteProblemRequest req) {
+    public ResponseEntity<Void> deleteProblem(@PathVariable Long teamId,
+                                              @PathVariable Long problemId,
+                                              @Valid @RequestBody DeleteProblemRequest req) {
         problemService.deleteProblem(teamId, problemId, req);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/teams/{teamId}/problems/code")
     public ResponseEntity<Void> crawlAndSaveCode(@PathVariable Long teamId,
-                                                 @Valid  @RequestBody CrawlCodeRequest crawlCodeRequest) {
+                                                 @Valid @RequestBody CrawlCodeRequest crawlCodeRequest) {
         problemService.crawlCode(teamId, crawlCodeRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
