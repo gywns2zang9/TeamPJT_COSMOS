@@ -368,7 +368,7 @@ function ConferenceView(props) {
           </div>
           <div className="paint-space">
             {showPaint ? (
-              <Paint />
+              <Paint groupId={groupId} />
             ) : (
               mainStreamManager && (
                 <UserVideoComponent streamManager={mainStreamManager} />

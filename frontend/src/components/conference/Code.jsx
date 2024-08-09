@@ -92,7 +92,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
         ) : (
           <Editor
             // theme="vs-dark"
-            options={{ minimap: { enabled: false } }}
+            options={{
+              minimap: { enabled: false },
+            }}
             className="code-editor"
             language={language}
             value={personalCode}
