@@ -8,7 +8,7 @@ const UserCode = () => {
   const getUserInfo = useAuthStore((state) => state.getUserInfo);
   const getAccessToken = useAuthStore((state) => state.getAccessToken);
 
-  const [problems, setProblems] = useState([{ title: "임시1" },]);
+  const [problems, setProblems] = useState([{ title: "임시1" },{ title: "임시1" },{ title: "임시1임시1시1임시1임시1임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },{ title: "임시1" },]);
 
   return (
     <div id="code-container">

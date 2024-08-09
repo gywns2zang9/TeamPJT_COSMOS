@@ -46,7 +46,7 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                 try {
                     const responseData = await invitePossibleUsers({ groupId, nickName });
                     setSuggestions(responseData.map(user => user.nickName));
-                    if (responseData.length === 1 && responseData[0].nickName === nickName) {
+                    if (responseData[0].nickName === nickName) {
                         setFindNickName(true);
                     } else {
                         setFindNickName(false);
@@ -150,7 +150,7 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                     초대하기
                 </Button>}
                 { inviteMethod === 'nickName' && <Button variant="primary" onClick={handleInvite} disabled={!findNickName}>
-                    초대하기1
+                    초대하기
                 </Button>}
             </Modal.Footer>
         </Modal>
