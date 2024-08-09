@@ -6,6 +6,7 @@ import S11P12A708.A708.domain.code.response.CodeResponse;
 import S11P12A708.A708.domain.code.response.CodeYearFilterResponse;
 import S11P12A708.A708.domain.code.response.ExecuteCodeResponse;
 import S11P12A708.A708.domain.code.service.CodeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,13 +44,9 @@ public class CodeController {
     }
 
     @PostMapping("/codes/execute")
-    public ResponseEntity<ExecuteCodeResponse> executeCode(@RequestBody ExecuteCodeRequest executeCodeRequest) {
-        try {
-            ExecuteCodeResponse response = codeService.getExecuteResult(executeCodeRequest);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new RuntimeException();
-        }
+    public ResponseEntity<ExecuteCodeResponse> executeCode(@Valid @RequestBody ExecuteCodeRequest executeCodeRequest) {
+        ExecuteCodeResponse response = codeService.getExecuteResult(executeCodeRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
