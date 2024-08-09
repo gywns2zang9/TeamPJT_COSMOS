@@ -20,7 +20,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const [showModal, setShowModal] = useState(false);
   const [myCode, setMyCode] = useState('');
   const getCode = useGroupStore((state) => state.loadPersonalCode)
-
+  
   const handleLanguageChange = (event) => {
     setLanguage(event.target.value);
   };
@@ -49,7 +49,6 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
 
   // 코드 선택했을 때 내용 불러오기
   const loadCode = async ({ codeId }) => {
-    console.log(codeId);
     const response = await getCode({groupId, codeId})
     console.log(response);
     setMyCode(response.content)
@@ -58,6 +57,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   }
 
   const handleEditorChange = (value) => {
+    console.log(value);
     setMyCode(value);
     localStorage.setItem('myCode', value);
   };
@@ -68,7 +68,14 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
 
   // 코드 실행
   const handleExecute = async () => {
-    // runCode({ content, language, input });
+    const content = myCode.toString();
+    try {
+      const response = await runCode({ content, language, input:[input] });
+      console.log(response);
+      setOutput(response.results[0])
+    } catch (err) {
+      console.error('실행  실패', err);
+    }
   };
 
   return (
@@ -88,14 +95,14 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
             공유 코드
           </button>
           <select className="code-select" onChange={handleLanguageChange}>
-            <option value="java">Java</option>
-            <option value="python">Python</option>
+            <option value="JAVA">Java</option>
+            <option value="PYTHON">Python</option>
           </select>
         </div>
         <div>
-          {/* <button className="button" onClick={toggleVideo}>
+          <button className="button" onClick={toggleVideo}>
             {isOpen ? "⇑" : "⇓"}
-          </button> */}
+          </button>
         </div>
       </div>
       <div className="code-space">
