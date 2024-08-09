@@ -467,7 +467,9 @@ const useGroupStore = create((set) => ({
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
             const url = `${BASE_URL}/teams/${groupId}/calendar`;
+            console.log(time);
             const formattedTime = time.replace('T', ' ').slice(0, 16);
+            console.log(formattedTime);
             const data = {
                 title,
                 memo,
@@ -489,12 +491,14 @@ const useGroupStore = create((set) => ({
     updateCalendarSchedule: async ({ groupId, calendarId, title, memo, time }) => {
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
-            const url = `${BASE_URL}/${groupId}/calendar/${calendarId}`;
+            const url = `${BASE_URL}/teams/${groupId}/calendar/${calendarId}`;
+            const formattedTime = time.replace('T', ' ').slice(0, 16);
             const data = {
                 title,
                 memo,
-                time
+                time:formattedTime
             };
+            console.log(data);
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
             };
