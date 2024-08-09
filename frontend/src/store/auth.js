@@ -33,7 +33,7 @@ const useAuthStore = create((set) => ({
             localStorage.setItem("accessToken", newAccessToken);
             return newAccessToken
         } catch (error) {
-            console.log(error)
+            window.alert("세션이 만료되었습니다.")
             localStorage.clear();
             window.location.href = '/login';
         }

@@ -63,6 +63,7 @@ const PasswordChange = () => {
     const userId = getUserInfo().userId
     try {
       await passwordChange({ accessToken, userId, oldPassword, newPassword });
+      window.alert("비밀번호를 변경했습니다.")
       navigate(`../users/${userId}`);
     } catch (error) {
       if (error.response.data.error.auth) {
