@@ -51,7 +51,7 @@ function GroupPageView(props) {
     };
 
     return (
-        <>
+        <div id="group-list-container">
             {/* 그룹 목록 */}
             <div id="group-list">
                 {groups.map(group => (
@@ -88,7 +88,7 @@ function GroupPageView(props) {
                 handleClose={handleCloseJoinModal}
                 onSuccess={handleJoinSuccess} // 그룹 참여 성공 시 콜백 함수 전달
             />
-        </>
+        </div>
     );
 }
 

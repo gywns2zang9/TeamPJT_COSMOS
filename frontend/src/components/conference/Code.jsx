@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
-import ShareCode from "./ShareCode"; 
+import ShareCode from "./ShareCode";
 import "../../css/conference/code.css";
 import useGroupStore from "../../store/group.js";
 import useAuthStore from "../../store/auth.js";
@@ -15,12 +15,12 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const [showIO, setShowIO] = useState(false);
   // 코드 불러오기 및 실행
   const getCodeList = useGroupStore((state) => state.loadCodeList);
-  const runCode = useGroupStore((state) => state.executeCode)
-  const getUser = useAuthStore((state) => state.getUserInfo)
+  const runCode = useGroupStore((state) => state.executeCode);
+  const getUser = useAuthStore((state) => state.getUserInfo);
   const [showModal, setShowModal] = useState(false);
-  const [myCode, setMyCode] = useState('');
-  const getCode = useGroupStore((state) => state.loadPersonalCode)
-  
+  const [myCode, setMyCode] = useState("");
+  const getCode = useGroupStore((state) => state.loadPersonalCode);
+
   const handleLanguageChange = (event) => {
     setLanguage(event.target.value);
   };
@@ -34,32 +34,32 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   };
 
   // 모달 오픈 상태
-  const handleModalShow = () => setShowModal(true); 
-  const handleModalClose = () => setShowModal(false); 
+  const handleModalShow = () => setShowModal(true);
+  const handleModalClose = () => setShowModal(false);
 
   // 코드 목록 불러오기
   useEffect(() => {
     const fetchCodeList = async () => {
       const userInfo = await getUser();
-      const folders = await getCodeList({ groupId, userId:userInfo.userId })
-      setPersonalCodeList(Array.isArray(folders) ? folders : [])
+      const folders = await getCodeList({ groupId, userId: userInfo.userId });
+      setPersonalCodeList(Array.isArray(folders) ? folders : []);
     };
     fetchCodeList();
   }, [groupId, getCodeList]);
 
   // 코드 선택했을 때 내용 불러오기
   const loadCode = async ({ codeId }) => {
-    const response = await getCode({groupId, codeId})
+    const response = await getCode({ groupId, codeId });
     console.log(response);
-    setMyCode(response.content)
-    localStorage.setItem('myCode', response.content);
+    setMyCode(response.content);
+    localStorage.setItem("myCode", response.content);
     handleModalClose();
-  }
+  };
 
   const handleEditorChange = (value) => {
     console.log(value);
     setMyCode(value);
-    localStorage.setItem('myCode', value);
+    localStorage.setItem("myCode", value);
   };
 
   const toggleCompiler = () => {
@@ -70,11 +70,11 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const handleExecute = async () => {
     const content = myCode.toString();
     try {
-      const response = await runCode({ content, language, input:[input] });
+      const response = await runCode({ content, language, input: [input] });
       console.log(response);
-      setOutput(response.results[0])
+      setOutput(response.results[0]);
     } catch (err) {
-      console.error('실행  실패', err);
+      console.error("실행  실패", err);
     }
   };
 
@@ -100,9 +100,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
           </select>
         </div>
         <div>
-          <button className="button" onClick={toggleVideo}>
+          {/* <button className="button" onClick={toggleVideo}>
             {isOpen ? "⇑" : "⇓"}
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="code-space">
@@ -120,33 +120,33 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
             onChange={handleEditorChange}
           />
         )}
+        {showIO && (
+          <div className="input-output">
+            <textarea
+              name="input"
+              id="input"
+              placeholder="input"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            ></textarea>
+            <textarea
+              name="output"
+              id="output"
+              placeholder="output"
+              value={output}
+              readOnly
+            ></textarea>
+          </div>
+        )}
       </div>
       {
         !isShared ? (
           <div>
-            {showIO && (
-              <div className="input-output">
-                <textarea
-                  name="input"
-                  id="input"
-                  placeholder="input"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                ></textarea>
-                <textarea
-                  name="output"
-                  id="output"
-                  placeholder="output"
-                  value={output}
-                  readOnly
-                ></textarea>
-              </div>
-            )}
             <div className="code-lower-space">
               <div className="code-buttons">
-              <button className="button" onClick={handleModalShow}>
-                코드 불러오기
-              </button>
+                <button className="button" onClick={handleModalShow}>
+                  코드 불러오기
+                </button>
                 <button className="button">코드 저장</button>
               </div>
               <div className="compile-button">
@@ -162,15 +162,15 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
             </div>
           </div>
         ) : null
-        
+
         // <div className="code-lower-space"></div>
       }
       <MyCodeListModal
-          show={showModal}
-          handleClose={handleModalClose}
-          personalCodeList={personalCodeList}
-          loadCode={loadCode}
-        />
+        show={showModal}
+        handleClose={handleModalClose}
+        personalCodeList={personalCodeList}
+        loadCode={loadCode}
+      />
     </div>
   );
 };
