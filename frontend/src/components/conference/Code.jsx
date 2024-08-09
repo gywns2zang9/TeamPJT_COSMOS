@@ -81,9 +81,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
           </select>
         </div>
         <div>
-          <button className="button" onClick={toggleVideo}>
+          {/* <button className="button" onClick={toggleVideo}>
             {isOpen ? "⇑" : "⇓"}
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="code-space">
@@ -91,56 +91,53 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
           <ShareCode groupId={groupId} language={language} isOpen={isOpen} />
         ) : (
           <Editor
-            height={showIO ? "300px" : `{isOpen ? "450px" : "550px"}`}
             // theme="vs-dark"
+            options={{
+              minimap: { enabled: false },
+            }}
             className="code-editor"
             language={language}
             value={personalCode}
             onChange={handleEditorChange}
           />
         )}
-      </div>
-      {
-        !isShared ? (
-          <div>
-            {showIO && (
-              <div className="input-output">
-                <textarea
-                  name="input"
-                  id="input"
-                  placeholder="input"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                ></textarea>
-                <textarea
-                  name="output"
-                  id="output"
-                  placeholder="output"
-                  value={output}
-                  readOnly
-                ></textarea>
-              </div>
-            )}
-            <div className="code-lower-space">
-              <div className="code-buttons">
-                <button className="button">코드 불러오기</button>
-                <button className="button">코드 저장</button>
-              </div>
-              <div className="compile-button">
-                <button className="button" onClick={toggleCompiler}>
-                  {showIO ? "컴파일러 닫기" : "컴파일러"}
-                </button>
-                {showIO && (
-                  <button className="button" onClick={handleExecute}>
-                    실행
-                  </button>
-                )}
-              </div>
-            </div>
+        {showIO && !isShared && (
+          <div className="input-output">
+            <textarea
+              name="input"
+              id="input"
+              placeholder="input"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            ></textarea>
+            <textarea
+              name="output"
+              id="output"
+              placeholder="output"
+              value={output}
+              readOnly
+            ></textarea>
           </div>
-        ) : null
-        // <div className="code-lower-space"></div>
-      }
+        )}
+      </div>
+      {!isShared && (
+        <div className="code-lower-space">
+          <div className="code-buttons">
+            <button className="button">코드 불러오기</button>
+            <button className="button">코드 저장</button>
+          </div>
+          <div className="compile-button">
+            <button className="button" onClick={toggleCompiler}>
+              {showIO ? "컴파일러 닫기" : "컴파일러"}
+            </button>
+            {showIO && (
+              <button className="button" onClick={handleExecute}>
+                실행
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

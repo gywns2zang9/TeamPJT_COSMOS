@@ -49,7 +49,8 @@ const ShareCode = ({ groupId, language }) => {
 
   return (
     <Editor
-      height="90%"
+      options={{ minimap: { enabled: false } }}
+      height="100%"
       language={language}
       onMount={(editor) => {
         setEditor(editor);
