@@ -75,15 +75,6 @@ public class JavaCodeExecutor implements CodeExecutor {
         );
         Process compileProcess = compileProcessBuilder.start();
 
-        // 컴파일 실패 시, 에러 메시지를 출력하기 위해 오류 스트림을 읽음
-        InputStream errorStream = compileProcess.getErrorStream();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(errorStream))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.err.println(line);  // 에러 메시지를 표준 오류 출력
-            }
-        }
-
         int exitCode = compileProcess.waitFor();
         return exitCode == 0;
     }
