@@ -17,8 +17,9 @@ const PasswordFind = () => {
   const [authVerified, setAuthVerified] = useState(false); 
 
   const [newPassword, setNewPassword] = useState('');
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState(''); // 비밀번호 오류 메시지 상태
-  const [confirmPassword, setConfirmPassword] = useState(''); // 비밀번호 확인 상태
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [isPasswordValid, setIsPasswordValid] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [matchPassword, setMatchPassword] = useState();
 
   const sendPasswordFindEmail = useAuthStore((state) => state.sendPasswordFindEmail);
@@ -44,12 +45,13 @@ const PasswordFind = () => {
 
   // 코드 전송 버튼 핸들러
   const handleSendCode = async () => {
+    setEmailError("");
     setEmailSending(true);
     setEmailSent(false);
-    setEmailError("");
 
     try {
       const expiredTime = await sendPasswordFindEmail({ email });
+      // 타이머 함수
       const Timer = (minutes) => {
         let totalTime = minutes * 60;
         const intervalId = setInterval(() => {
@@ -65,25 +67,21 @@ const PasswordFind = () => {
           }
         }, 1000);
       };
-
       setEmailSending(false); 
       setEmailSent(true);
-      console.log(`타이머 시작: ${expiredTime}분`);
       Timer(expiredTime);
-
     } catch (error) {
       setEmailSending(false);
       let errorMessage;
       if (error.response.data.error.user) {
-        errorMessage = error.response.data.error.user
+        errorMessage = "존재하지 않는 유저입니다."
       }
       setEmailError(errorMessage || "이메일 전송에 실패했습니다.");
-      
     }
   };
 
   // 이메일 재전송 핸들러
-  const handleResendEmail = () => {
+  const handleResendCode = () => {
     handleSendCode();
   };
 
@@ -93,33 +91,40 @@ const PasswordFind = () => {
     setAuthCode(event.target.value);
   };
 
-  // 인증 코드 확인 버튼 핸들러
+  // 인증 코드 확인 핸들러
   const handleAuthCode = async () => {
     try {
       const response = await verifyAuthCode({ email, authCode });
       setAuthVerified(response);
       setAuthErrorMessage("");
     } catch (error) {
-      console.log(error.response.data.error);
       setAuthErrorMessage("인증번호가 올바르지 않습니다.");
     }
   };
 
   // 비밀번호 입력 핸들러
   const handlePasswordInput = (event) => {
-    setMatchPassword(false)
     setNewPassword(event.target.value);
+    setMatchPassword(false)
     const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,13}$/;
     if (!passwordPattern.test(event.target.value)) {
+      setIsPasswordValid(false);
       setPasswordErrorMessage("비밀번호는 문자, 숫자, 특수문자를 조합해주세요. (8~13자)");
     } else {
+      setIsPasswordValid(true);
       setPasswordErrorMessage("");
+    }
+    if (confirmPassword === event.target.value) {
+      setMatchPassword(true)
+    } else {
+      setMatchPassword(false)
     }
   };
 
   // 비밀번호 확인 입력 핸들러
   const handleConfirmPasswordInput = (event) => {
     setConfirmPassword(event.target.value);
+    setMatchPassword(false)
     if (newPassword !== event.target.value) {
       setMatchPassword(false)
     } else {
@@ -133,15 +138,12 @@ const PasswordFind = () => {
       setMatchPassword(false)
       return;
     }
-
     try {
       await changePassword({ email, newPassword }); 
-      console.log("비밀번호가 변경되었습니다.");
       await login({ email, newPassword });
       const userInfo = getUserInfo();
       navigate(`/users/${userInfo.userId}`);
     } catch (error) {
-      console.log('비밀번호 변경에 실패했습니다.');
     }
   };
 
@@ -175,7 +177,7 @@ const PasswordFind = () => {
               인증번호를 발송했습니다. {timeMessage && <span>{timeMessage}</span>}
               <div>
                 인증번호가 오지 않았나요?
-                <b id="email-send-fail-message" onClick={handleResendEmail}> 재전송</b>
+                <b id="email-send-fail-message" onClick={handleResendCode}> 재전송</b>
               </div>
             </div>
           )}
@@ -233,7 +235,7 @@ const PasswordFind = () => {
         <button
           id="change-password-button"
           onClick={handleChangePasswordButton}
-          disabled={!authVerified || !matchPassword}
+          disabled={!authVerified || !isPasswordValid || !matchPassword}
         >
           비밀번호 변경
         </button>
