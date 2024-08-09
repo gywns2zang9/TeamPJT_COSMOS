@@ -39,11 +39,11 @@ public class JwtAuthFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
+        String path = httpRequest.getRequestURI();
 
         try {
             String token = getJwtFromRequest(httpRequest);
             if (token != null && jwtTokenUtil.validateToken(token)) {
-                String path = httpRequest.getRequestURI();
                 String tokenUserId = jwtTokenUtil.getUserIdFromToken(token);
                 String urlUserId = extractUserIdFromUrl(path);
 
@@ -58,7 +58,8 @@ public class JwtAuthFilter implements Filter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (JwtAuthenticationException e) {
-            sendErrorResponse(httpResponse, e.getMessage(), "token");
+            if (path.equals("/api/auth/refresh")) sendErrorResponse(httpResponse, e.getMessage(), "refreshToken");
+            else sendErrorResponse(httpResponse, e.getMessage(), "accessToken");
             return;
         }
 
@@ -89,7 +90,7 @@ public class JwtAuthFilter implements Filter {
 
     private boolean isNumeric(String str) {
         try {
-            Long.parseLong(str); // long 타입으로 변환해볼 수 있음
+            Long.parseLong(str);
             return true;
         } catch (NumberFormatException e) {
             return false;
