@@ -15,8 +15,8 @@ import "../css/conference/conference.css";
 
 import useAuthStore from "../store/auth";
 
-// const APPLICATION_SERVER_URL = "https://i11a708.p.ssafy.io/";
-const APPLICATION_SERVER_URL = "http://localhost:8080/";
+const APPLICATION_SERVER_URL = "https://i11a708.p.ssafy.io/";
+// const APPLICATION_SERVER_URL = "http://localhost:8080/";
 
 function ConferenceView(props) {
   const [showLeaveModal, setShowLeaveModal] = useState(false);
