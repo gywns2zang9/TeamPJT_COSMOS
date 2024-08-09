@@ -171,11 +171,8 @@ const useAuthStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await patch(url, data, headers)
-            console.log(response)
-            return response
-        }
-        catch (error) {
-            console.log("비밀번호 변경 요청 실패! ->", error);
+            return response // true
+        } catch (error) {
             throw error;
         }
     },

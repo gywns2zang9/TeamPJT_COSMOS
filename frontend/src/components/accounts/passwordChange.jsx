@@ -4,35 +4,48 @@ import '../../css/accounts/passwordChange.css';
 import useAuthStore from "../../store/auth";
 
 const PasswordChange = () => {
-  const [oldPassword, setOldPassword] = useState(''); //현재 비밀번호
-  const [newPassword, setNewPassword] = useState(''); // 새 비밀번호
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState(''); // 비밀번호 오류 메시지 상태
-  const [confirmPassword, setConfirmPassword] = useState(''); // 비밀번호 확인 상태
+  const [oldPassword, setOldPassword] = useState(''); 
+  
+  const [newPassword, setNewPassword] = useState(''); 
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState(''); 
+  const [isPasswordValid, setIsPasswordValid] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [matchPassword, setMatchPassword] = useState();
   
+  const [passwordChangeErrorMessage, setPasswordChangeErrorMessage] = useState(''); 
+
   const getUserInfo = useAuthStore((state) => state.getUserInfo);
   const getAccessToken = useAuthStore((state) => state.getAccessToken)
   const passwordChange = useAuthStore((state) => state.passwordChange);
-
+  
   const handleOldPasswordInput = (event) => {
+    setPasswordChangeErrorMessage("")
     setOldPassword(event.target.value);
   };
 
   // 새 비밀번호 입력 핸들러
   const handleNewPasswordInput = (event) => {
-    setMatchPassword(false)
     setNewPassword(event.target.value);
+    setMatchPassword(false)
     const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,13}$/;
     if (!passwordPattern.test(event.target.value)) {
+      setIsPasswordValid(false);
       setPasswordErrorMessage("비밀번호는 문자, 숫자, 특수문자를 조합해주세요. (8~13자)");
     } else {
+      setIsPasswordValid(true);
       setPasswordErrorMessage("");
+    }
+    if (confirmPassword === event.target.value) {
+      setMatchPassword(true)
+    } else {
+      setMatchPassword(false)
     }
   };
 
   // 비밀번호 확인 입력 핸들러
   const handleConfirmPasswordInput = (event) => {
     setConfirmPassword(event.target.value);
+    setMatchPassword(false)
     if (newPassword !== event.target.value) {
       setMatchPassword(false)
     } else {
@@ -49,16 +62,17 @@ const PasswordChange = () => {
     const accessToken = getAccessToken()
     const userId = getUserInfo().userId
     try {
-      const res = await passwordChange({ accessToken, userId, oldPassword, newPassword });
-      console.log("비밀번호가 변경되었습니다.");
-      if (!res || res === null) {
-        ErrorEvent()
-      }
+      await passwordChange({ accessToken, userId, oldPassword, newPassword });
       navigate(`../users/${userId}`);
     } catch (error) {
-      console.log('비밀번호 변경에 실패했습니다.');
-      console.log(error)
-      window.alert(`${error.response.data.error.auth}`)
+      if (error.response.data.error.auth) {
+        let errorMessage;
+        if (error.response.data.error.auth === "password is incorrect.") {
+          errorMessage = "현재 비밀번호가 일치하지 않습니다."
+          setOldPassword("")
+        }
+        setPasswordChangeErrorMessage( errorMessage || "이메일과 비밀번호를 확인해주세요.");
+      }
     }
   };
 
@@ -116,13 +130,16 @@ const PasswordChange = () => {
           { matchPassword && <div id="password-confirm-success-message">비밀번호가 일치합니다.</div>}
         </div>
 
+         {passwordChangeErrorMessage && <p id="passwordchange-error-message">{passwordChangeErrorMessage}</p>}
+
         <div id="pw-change-btn-group">
           <button id="pw-change-change-pw-btn"
            onClick={handleChangePasswordButton}
-           disabled={!matchPassword}
+           disabled={!isPasswordValid || !matchPassword}
           >
             비밀번호 변경
             </button>
+
           <button id="pw-change-back-btn" onClick={handleToBack}>
             돌아가기
           </button>
