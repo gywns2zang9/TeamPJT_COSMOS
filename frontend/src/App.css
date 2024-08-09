@@ -2,15 +2,15 @@
   background-image: linear-gradient(to bottom, #0d0220 100%, #0d0220 87%);
 }
 
-.stream-container {
+/* .stream-container {
   padding: 0;
-}
+} */
 
 .heart {
   position: absolute;
   transform: translate(-50%, -50%);
   font-size: 16px;
-  animation: pulseFade 2s forwards; 
+  animation: pulseFade 2s forwards;
 }
 
 @keyframes pulseFade {

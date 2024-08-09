@@ -61,4 +61,10 @@ public class FileInfoResponse {
                 problems, null);
     }
 
+    // public static FileInfoResponse fromCodeFile(File file, Code code) {
+    //     return new FileInfoResponse(
+    //             file,
+    //             FileCodeResponse.of(code),
+    //             null, null);
+    // }
 }

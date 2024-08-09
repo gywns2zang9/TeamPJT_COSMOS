@@ -2,14 +2,14 @@ import { OpenVidu } from "openvidu-browser";
 
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Code from "../components/cenference/Code";
-import Paint from "../components/cenference/Paint";
+import Code from "../components/conference/Code";
+import Paint from "../components/conference/Paint";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
 import axios from "axios";
-import UserVideoComponent from "../components/cenference/UserVideoComponent";
+import UserVideoComponent from "../components/conference/UserVideoComponent";
 import LeaveSessionModal from "../modals/LeaveSessionModal";
 import "../css/conference/conference.css";
 
@@ -193,9 +193,8 @@ function ConferenceView(props) {
   };
 
   const handleMainVideoStream = (stream) => {
-    if (mainStreamManager !== stream) {
-      setMainStreamManager(stream);
-    }
+    setMainStreamManager(stream);
+    setShowPaint(false);
   };
 
   const deleteSubscriber = (streamManager) => {
@@ -286,7 +285,7 @@ function ConferenceView(props) {
     setMainStreamManager(undefined);
     setPublisher(undefined);
 
-    navigate(`/group/${groupId}/1`);
+    navigate(`/group/${groupId}/main`);
   };
 
   const handleLeaveButtonClick = () => {
@@ -358,7 +357,7 @@ function ConferenceView(props) {
           <div className="paint-upper-space">
             <div>
               <button className="button" onClick={handleTogglePaint}>
-                {showPaint ? "화면보기" : "그림판"}
+                그림판
               </button>
             </div>
             <div>
