@@ -132,11 +132,9 @@ const useAuthStore = create((set) => ({
             const data = { email };
             const responseData = await post(url, data);
             const expiredTime = responseData.expiredTime
-            console.log(`비번찾기-코드 전송 요청 성공! -> ${email}로 코드를 발송했습니다.`)
-            return expiredTime;
+            return expiredTime; // 5
 
         } catch (error) {
-            console.log("비번찾기-코드 전송 요청 실패! ->", error);
             throw error;
         }
     },
@@ -147,10 +145,8 @@ const useAuthStore = create((set) => ({
             const url = `${BASE_URL}/auth-codes/verify-pwd`;
             const data = { email, authCode };
             const response = await post(url, data);
-            return response;
-
+            return response; //true
         } catch (error) {
-            console.log("비번찾기-코드 확인 요청 실패! ->", error);
             throw error;
         }
     },
@@ -162,9 +158,7 @@ const useAuthStore = create((set) => ({
             const data = { email, newPassword };
             const response = await patch(url, data);
             return response;
-
         } catch (error) {
-            console.error("비번찾기-비밀번호 변경 요청 실패! ->", error);
             throw error;
         }
     },

@@ -86,7 +86,6 @@ const SignUp = () => {
         errorMessage = "이미 가입된 이메일입니다."
       }
       setEmailError(errorMessage || "이메일 전송에 실패했습니다.");
-      
     }
   };
 
@@ -108,7 +107,6 @@ const SignUp = () => {
       setAuthVerified(response);
       setAuthErrorMessage("");
     } catch (error) {
-      console.log(error.response.data.error);
       setAuthErrorMessage("인증번호가 올바르지 않습니다.");
     }
   };
