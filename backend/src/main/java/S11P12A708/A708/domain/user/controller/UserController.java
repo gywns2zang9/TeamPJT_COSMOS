@@ -5,6 +5,7 @@ import S11P12A708.A708.domain.user.request.ChangeUserRequest;
 import S11P12A708.A708.domain.user.response.UserCode;
 import S11P12A708.A708.domain.user.response.UserInfo;
 import S11P12A708.A708.domain.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -34,13 +35,13 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<UserInfo> changeUserInfo(@PathVariable Long userId, @RequestBody ChangeUserRequest changeUserRequest) {
+    public ResponseEntity<UserInfo> changeUserInfo(@PathVariable Long userId, @Valid @RequestBody ChangeUserRequest changeUserRequest) {
         final UserInfo userInfo = userService.updateUserInfo(userId, changeUserRequest);
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
     @PatchMapping("/{userId}/password")
-    public ResponseEntity<Boolean> changePassword(@PathVariable Long userId, @RequestBody ChangePwRequest changePwRequest) {
+    public ResponseEntity<Boolean> changePassword(@PathVariable Long userId, @Valid @RequestBody ChangePwRequest changePwRequest) {
         final boolean response = userService.changePassword(userId, changePwRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

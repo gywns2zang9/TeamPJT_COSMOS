@@ -178,12 +178,6 @@ public class AuthService {
         throw new InvalidPasswordException();
     }
 
-    public boolean deleteUser(Long userId) {
-        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        userRepository.deleteById(userId);
-        return true;
-    }
-
     public String getRefreshToken(AuthUserDto authUser) {
         return jwtTokenUtil.createAccessToken(String.valueOf(authUser.getId()));
     }

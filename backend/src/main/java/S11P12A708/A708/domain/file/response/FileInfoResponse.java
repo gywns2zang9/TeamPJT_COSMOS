@@ -3,7 +3,6 @@ package S11P12A708.A708.domain.file.response;
 import S11P12A708.A708.domain.code.entity.Code;
 import S11P12A708.A708.domain.file.entity.File;
 import S11P12A708.A708.domain.file.entity.FileType;
-import S11P12A708.A708.domain.problem.entity.Problem;
 import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.study.response.StudyResponse;
 import lombok.Getter;
