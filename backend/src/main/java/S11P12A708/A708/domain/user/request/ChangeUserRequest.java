@@ -15,12 +15,11 @@ public class ChangeUserRequest {
     @NotBlank
     String nickName;
 
-    @NotBlank
     String gitId;
 
-    @NotBlank
     String repo;
 
-    @NotBlank
+    String branch;
+
     String description;
 }

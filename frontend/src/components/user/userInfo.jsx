@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/auth";
 import "../../css/user/userInfo.css"; 
-import defaultImg from "../../assets/media/defaultimg.png"; 
 
 const UserInfo = () => {
   const navigate = useNavigate();
@@ -16,7 +15,7 @@ const UserInfo = () => {
   const [email, setEmail] = useState(userInfo.email);
   const [nickName, setNickName] = useState(userInfo.nickName);
   const [type, setType] = useState(userInfo.type);
-  const [img, setImg] = useState(userInfo.img);
+  const [branch, setBranch] = useState(userInfo.branch);
   const [gitId, setGitId] = useState(userInfo.gitId);
   const [repo, setRepo] = useState(userInfo.repo);
   const [description, setDescription] = useState(userInfo.description);
@@ -29,9 +28,9 @@ const UserInfo = () => {
     setEmail(userInfo.email);
     setNickName(userInfo.nickName);
     setType(userInfo.type);
-    setImg(userInfo.img);
     setGitId(userInfo.gitId);
     setRepo(userInfo.repo);
+    setBranch(userInfo.branch);
     setDescription(userInfo.description);
   }, [getUserInfo, getAccessToken]);
 
@@ -40,7 +39,7 @@ const UserInfo = () => {
   };
 
   const toCode = () => {
-    navigate("code"); // 경로를 수정하세요 아직 없음
+    navigate("code");
   };
   
   const handleGroup = () => {
@@ -56,16 +55,28 @@ const UserInfo = () => {
     <div id="info-container">
       <div id="info-title">내 정보</div> 
       <div id="info-box">
-        <div id="info-img-group">
-          <img id="info-img" src={img || defaultImg} alt="profile-img" />
-        </div>
 
         <div id="info-group">
+
           <div id="info-nickname-group">
             <label id="info-nickname-label" htmlFor="nickname">
               닉네임:
             </label>
             <span id="info-nickname">{nickName || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}   (<span>{type}</span>)</span>
+          </div>
+
+          <div id="info-email-group">
+            <label id="info-email-label" htmlFor="email">
+              가입 이메일:
+            </label>
+            <span id="info-email">{email || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
+          </div>
+
+          <div id="info-description-group">
+            <label id="info-description-label" htmlFor="description">
+              내 소개:
+            </label>
+            <span id="info-description">{description || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
           </div>
 
           <div id="info-gitId-group">
@@ -82,13 +93,15 @@ const UserInfo = () => {
             <span id="info-repo">{repo || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
           </div>
 
-          <div id="info-description-group">
-            <label id="info-description-label" htmlFor="description">
-              내 소개:
+          <div id="info-branch-group"> 
+            <label id="info-branch-label" htmlFor="branch">
+              Branch:
             </label>
-            <span id="info-description">{description || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
+            <span id="info-branch">{branch || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
           </div>
+
         </div>
+
       </div>
 
       {/* 버튼 그룹 */}

@@ -108,7 +108,7 @@ public class FileService {
 
     public FileInfoResponse getFileInfo(Long teamId, AuthUserDto authUser, Long fileId) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
-        final User user = userRepository.findById(authUser.getId()).orElseThrow(UserNotFoundException::new);
+        userRepository.findById(authUser.getId()).orElseThrow(UserNotFoundException::new);
         final File file = fileRepository.findById(fileId).orElseThrow(FileNotFoundException::new);
 
         if(file.getType() == FileType.OVERVIEW) {

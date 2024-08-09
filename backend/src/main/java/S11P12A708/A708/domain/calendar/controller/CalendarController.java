@@ -3,6 +3,7 @@ package S11P12A708.A708.domain.calendar.controller;
 import S11P12A708.A708.domain.calendar.request.CalendarRequest;
 import S11P12A708.A708.domain.calendar.response.CalendarResponse;
 import S11P12A708.A708.domain.calendar.service.CalendarService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class CalendarController {
     @PostMapping("/teams/{teamId}/calendar")
     public ResponseEntity<Void> createCalendar(
             @PathVariable("teamId") Long teamId,
-            @RequestBody CalendarRequest request) {
+            @Valid @RequestBody CalendarRequest request) {
         calendarService.createCalendar(teamId, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -36,7 +37,7 @@ public class CalendarController {
     public ResponseEntity<Void> updateCalendar(
             @PathVariable("teamId") Long teamId,
             @PathVariable("calendarId") Long calendarId,
-            @RequestBody CalendarRequest request) {
+            @Valid @RequestBody CalendarRequest request) {
         calendarService.updateCalendar(teamId, calendarId, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }

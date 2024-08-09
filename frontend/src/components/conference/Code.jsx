@@ -93,9 +93,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
           </select>
         </div>
         <div>
-          <button className="button" onClick={toggleVideo}>
+          {/* <button className="button" onClick={toggleVideo}>
             {isOpen ? "⇑" : "⇓"}
-          </button>
+          </button> */}
         </div>
       </div>
       <div className="code-space">
@@ -103,8 +103,10 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
           <ShareCode groupId={groupId} language={language} isOpen={isOpen} />
         ) : (
           <Editor
-            height={showIO ? "300px" : `{isOpen ? "450px" : "550px"}`}
             // theme="vs-dark"
+            options={{
+              minimap: { enabled: false },
+            }}
             className="code-editor"
             language={language}
             value={myCode}

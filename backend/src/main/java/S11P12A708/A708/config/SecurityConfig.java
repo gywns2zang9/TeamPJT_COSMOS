@@ -3,6 +3,7 @@ package S11P12A708.A708.config;
 import S11P12A708.A708.common.util.JwtAuthFilter;
 import S11P12A708.A708.common.util.JwtTokenUtil;
 import S11P12A708.A708.domain.user.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,10 +25,12 @@ public class SecurityConfig {
 
     private final JwtTokenUtil jwtTokenUtil;
     private final UserRepository userRepository;
+    private final ObjectMapper objectMapper;
 
-    public SecurityConfig(JwtTokenUtil jwtTokenUtil, UserRepository userRepository) {
+    public SecurityConfig(JwtTokenUtil jwtTokenUtil, UserRepository userRepository, ObjectMapper objectMapper) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.userRepository = userRepository;
+        this.objectMapper = objectMapper;
     }
 
     private static final String[] PERMIT_ALL_URLS = {
@@ -38,12 +41,11 @@ public class SecurityConfig {
             "/auth/naver-login",
             "/auth-codes/**",
             "/sessions/", "/sessions/**",
-            "/codes/execute"
     };
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        JwtAuthFilter accessTokenFilter = new JwtAuthFilter(jwtTokenUtil, userRepository);
+        JwtAuthFilter accessTokenFilter = new JwtAuthFilter(jwtTokenUtil, userRepository, objectMapper);
 
         return http
                 .formLogin(AbstractHttpConfigurer::disable)
