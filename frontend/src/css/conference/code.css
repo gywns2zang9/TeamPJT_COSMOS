@@ -28,27 +28,27 @@
   overflow: hidden;
   min-height: 0;
   position: relative;
+  box-sizing: border-box;
 }
 
-.code-editor {
+/* .code-editor {
   width: 100%;
-}
+} */
 
 .input-output {
   position: absolute; /* 코드 공간 위에 위치하도록 설정 */
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 5px;
+  left: 5px;
+  right: 5px;
   display: flex;
   justify-content: space-between;
-  gap: 10px; /* 영역 간 간격 */
-  padding: 10px;
+  /* gap: 5px; */
 }
 
 textarea {
-  width: 49%;
+  width: 49.5%;
   height: 130px; /* 높이 조절 */
-  padding: 10px;
+  /* padding: 10px; */
   border: 1px solid #ddd;
   border-radius: 5px;
   resize: none;
