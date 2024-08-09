@@ -66,8 +66,10 @@ const CodePageTemplates = ({ groupId, pageId }) => {
     };
 
     useEffect(() => {
+        setInput(['']);
+        setOutput(['']);
         loadFile();
-    }, [pageId]);
+    }, [groupId, pageId]);
 
     const handleInputChange = (index, value) => {
         const newInputs = [...input];
