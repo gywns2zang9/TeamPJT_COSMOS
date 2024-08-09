@@ -30,6 +30,8 @@ public class UserInfo {
 
     String repo;
 
+    String branch;
+
     String description;
 
     public UserInfo(User user) {
@@ -39,6 +41,7 @@ public class UserInfo {
         this.type = user.getType();
         this.gitId = user.getGitId();
         this.repo = user.getRepo();
+        this.branch = user.getBranch();
         this.description = user.getDescription();
     }
 }

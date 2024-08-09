@@ -3,6 +3,7 @@ package S11P12A708.A708.common.error;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 @Getter
@@ -16,10 +17,9 @@ public enum ErrorCode {
     USER_NOT_FOUND(UNPROCESSABLE_ENTITY, "user", "user not found."),
     USER_INVALID(UNPROCESSABLE_ENTITY, "user", "user request is incorrect."),
     USER_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "user", "email is already exist."),
-    INVALID_ACCESS(UNPROCESSABLE_ENTITY, "user", "token userId does not match URL userId."),
     ONLY_NORMAL_PW(UNPROCESSABLE_ENTITY, "user", "only NORMAL login users can change password."),
 
-    // Auth-Code
+    // Auth-Code,
     FAIL_MAIL(UNPROCESSABLE_ENTITY, "auth-code", "failed to send email."),
     AUTH_CODE_NOT_FOUND(UNPROCESSABLE_ENTITY, "auth-code", "auth code not found."),
     AUTH_CODE_EXPIRED(UNPROCESSABLE_ENTITY, "auth-code", "auth code expired."),
@@ -33,6 +33,13 @@ public enum ErrorCode {
     FAIL_SING_UP(UNPROCESSABLE_ENTITY, "auth", "sign up failed due to validation errors."),
     KAKAO_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "auth", "kakao email is already exist."),
     NAVER_ALREADY_EXIST(UNPROCESSABLE_ENTITY, "auth", "naver email is already exist."),
+    INVALID_ACCESS(UNPROCESSABLE_ENTITY, "auth", "token userId does not match URL userId."),
+
+    // token
+    REFRESH_TOKEN_EXPIRED(UNAUTHORIZED, "refreshToken", "Expired JWT token"),
+    REFRESH_TOKEN_UNEXPECTED(UNAUTHORIZED, "refreshToken", "Unexpected error"),
+    ACCESS_TOKEN_EXPIRED(UNAUTHORIZED, "accessToken", "Expired JWT token"),
+    ACCESS_TOKEN_UNEXPECTED(UNAUTHORIZED, "accessToken", "Unexpected error"),
 
     // Team
     TEAM_NOT_FOUND(UNPROCESSABLE_ENTITY, "team", "This Team is not exist"),
