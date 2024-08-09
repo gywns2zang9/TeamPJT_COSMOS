@@ -77,10 +77,8 @@ public class UserService {
         if (!req.getNickName().equals(user.getNickname()) && authService.checkNickName(req.getNickName())) {
             user.setNickname(req.getNickName());
         }
-        user.setGitId(req.getGitId());
-        user.setRepo(req.getRepo());
-        user.setBranch(req.getBranch());
-        user.setDescription(req.getDescription());
+
+        user.update(req);
         userRepository.save(user);
         return new UserInfo(user);
     }
