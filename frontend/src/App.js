@@ -18,21 +18,9 @@ import "./App.css";
 function AppContent() {
   const location = useLocation();
   const isConferenceRoute = location.pathname.startsWith("/conference");
-  const [hearts, setHearts] = useState([]);
 
-  const handleClick = (e) => {
-    const newHeart = {
-      id: Date.now(),
-      x: e.clientX,
-      y: e.clientY
-    };
-    setHearts((prev) => [...prev, newHeart]);
-    setTimeout(() => {
-      setHearts((prevHearts) => prevHearts.filter((heart) => heart.id !== newHeart.id));
-    }, 2000);
-  }
   return (
-    <div id="App" onClick={handleClick}>
+    <div id="App">
       {!isConferenceRoute && <NavBar />}
       <Routes>
         <Route path="/conference/*" element={<ConferenceRoutes />} />
@@ -48,12 +36,6 @@ function AppContent() {
         <Route path="/users/*" element={<UserRouters />} />{" "}
       </Routes>
       {!isConferenceRoute && <Footer />}
-
-      {hearts.map((heart) => (
-        <div key={heart.id} className="heart" style={{left:heart.x, top:heart.y}}>
-          ❤️
-        </div>
-      ))}
     </div>
   );
 }
