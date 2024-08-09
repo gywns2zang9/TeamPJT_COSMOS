@@ -20,6 +20,25 @@ const useAuthStore = create((set) => ({
         return localStorage.getItem("refreshToken");
     },
 
+    // 액세스 토큰 재발급
+    reissuanceAccessToken: async ({ refreshToken }) => {
+        console.log(`${refreshToken}로 액세스 토큰 재발급을 시도할게`)
+        try {
+            const url = `${BASE_URL}/auth/refresh`
+            const headers = {
+                Authorization: `Bearer ${refreshToken}`,
+            };
+            const newAccessToken = await get(url, {}, headers);
+            console.log("accessToken 재발급:", newAccessToken)
+            localStorage.setItem("accessToken", newAccessToken);
+            return newAccessToken
+        } catch (error) {
+            console.log(error)
+            localStorage.clear();
+            window.location.href = '/login';
+        }
+    },
+
     // 사용자 정보를 가져오는 함수
     getUserInfo: () => {
         return JSON.parse(localStorage.getItem("userInfo"));
@@ -223,23 +242,6 @@ const useAuthStore = create((set) => ({
 
         } catch (error) {
             console.log("회원가입 요청 ->", error);
-            throw error;
-        }
-    },
-
-    // 회원탈퇴 요청
-    signOut: async ({ accessToken, userId }) => {
-        try {
-            const url = `${BASE_URL}/auth/users/${userId}`
-            const headers = {
-                Authorization: `Bearer ${accessToken}`,
-            };
-            const response = await deleteRequest(url, {}, headers);
-            console.log(`회원탈퇴 성공! 안녕히가세요.`)
-            return response
-
-        } catch (error) {
-            console.log("회원탈퇴 요청 실패! ->", error);
             throw error;
         }
     },

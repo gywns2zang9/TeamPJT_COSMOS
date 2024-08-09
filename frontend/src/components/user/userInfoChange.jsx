@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/auth";
 import "../../css/user/userInfoChange.css"; 
-import defaultImg from "../../assets/media/defaultimg.png"; 
 
 const UserInfoChange = () => {
   const navigate = useNavigate();
@@ -11,8 +10,6 @@ const UserInfoChange = () => {
   const getUserInfo = useAuthStore((state) => state.getUserInfo);
   const getAccessToken = useAuthStore((state) => state.getAccessToken);
   const updateUserInfo = useAuthStore((state) => state.updateUserInfo);
-  const signOut = useAuthStore((state) => state.signOut);
-  const logout = useAuthStore((state) => state.logout);
   
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -22,7 +19,7 @@ const UserInfoChange = () => {
   const [email, setEmail] = useState(userInfo.email);
   const [nickName, setNickName] = useState(userInfo.nickName);
   const [type, setType] = useState(userInfo.type);
-  const [img, setImg] = useState(userInfo.img);
+  const [branch, setBranch] = useState(userInfo.img);
   const [gitId, setGitId] = useState(userInfo.gitId);
   const [repo, setRepo] = useState(userInfo.repo);
   const [description, setDescription] = useState(userInfo.description);
@@ -31,13 +28,13 @@ const UserInfoChange = () => {
     const userInfo = getUserInfo();
     setUserInfo(userInfo);
     setUserId(userInfo.userId);
-    setEmail(userInfo.email);
     setNickName(userInfo.nickName);
     setType(userInfo.type);
-    setImg(userInfo.img);
+    setEmail(userInfo.email);
+    setDescription(userInfo.description);
     setGitId(userInfo.gitId);
     setRepo(userInfo.repo);
-    setDescription(userInfo.description);
+    setBranch(userInfo.branch)
     const accessToken = getAccessToken()
     setAccessToken(accessToken)
     }, [getUserInfo, getAccessToken]);
@@ -45,7 +42,11 @@ const UserInfoChange = () => {
     const handleNickNameInput = (event) => {
       setNickName(event.target.value);
     };
-  
+    
+    const handleDescriptionInput = (event) => {
+      setDescription(event.target.value);
+    };
+
     const handleGitIdInput = (event) => {
       setGitId(event.target.value);
     };
@@ -54,17 +55,19 @@ const UserInfoChange = () => {
       setRepo(event.target.value);
     };
   
-    const handleDescriptionInput = (event) => {
-      setDescription(event.target.value);
+    const handleBranchInput = (event) => {
+      setBranch(event.target.value);
     };
 
     const handleUpdate = async () => {
       const newUserInfo = {
         nickName,
+        description,
         gitId,
         repo,
-        description,
+        branch
       };
+
       try {
         await updateUserInfo({ accessToken, userId, newUserInfo });
         navigate(`/users/${userId}`);
@@ -76,18 +79,6 @@ const UserInfoChange = () => {
     const handleChangePw = () => {
       navigate('/password-change');
     };
-  
-    const handleSignOut = async () => {
-      const userId = getUserInfo().userId
-      const accessToken = getAccessToken()
-      console.log("회원 탈퇴 실행");
-      try {
-        await signOut({ accessToken, userId });
-        logout();
-      } catch (error) {
-        console.error("회원 탈퇴 중 오류 발생:", error);
-      }
-    };
     
     const handleCancel = () => {
       navigate(`/users/${userId}`); 
@@ -97,16 +88,10 @@ const UserInfoChange = () => {
   return (
     <div id="info-change-container">
       <div id="info-change-title">내 정보 수정</div>
-
       <div id="info-change-box">
-        <div id="img-change-group">
-          <img id="info-change-img" src={img || defaultImg} alt="profile-img" />
-          <button id="change-img-btn" onClick={() => {/* Implement image change logic */}}>
-            프로필 이미지 변경
-          </button>
-        </div>
 
         <div id="info-change-group">
+
           <div id="nickname-change-group">
             <label id="nickname-label" htmlFor="nickname">
               닉네임:
@@ -116,6 +101,25 @@ const UserInfoChange = () => {
               type="text"
               value={nickName}
               onChange={handleNickNameInput}
+            />
+          </div>
+
+          <div id="info-email-group">
+            <label id="info-email-label" htmlFor="email">
+              가입 이메일:
+            </label>
+            <span id="info-email">{email || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
+          </div>
+
+          <div id="description-change-group">
+            <label id="description-label" htmlFor="description">
+              내 소개:
+            </label>
+            <input
+              id="description-input"
+              type="text"
+              value={description}
+              onChange={handleDescriptionInput}
             />
           </div>
 
@@ -143,19 +147,22 @@ const UserInfoChange = () => {
             />
           </div>
 
-          <div id="intro-change-group">
-            <label id="intro-label" htmlFor="intro">
-              내 소개:
+          
+          <div id="branch-change-group">
+            <label id="branch-label" htmlFor="branch">
+              Branch:
             </label>
             <input
-              id="intro-input"
+              id="branch-input"
               type="text"
-              value={description}
-              onChange={handleDescriptionInput}
+              value={branch}
+              onChange={handleBranchInput}
             />
           </div>
+
         </div>
       </div>
+
           {errorMessage && <div id="infochange-fail-message">{errorMessage}</div>}
 
       <div id="info-change-btn-group">
@@ -164,9 +171,6 @@ const UserInfoChange = () => {
         </div>
         <div id="info-change-change-pw-btn" onClick={handleChangePw}>
           비밀번호 변경
-        </div>
-        <div id="info-change-signout-btn" onClick={handleSignOut}>
-          회원 탈퇴
         </div>
         <div id="info-change-back-btn" onClick={handleCancel}>
           뒤로가기
