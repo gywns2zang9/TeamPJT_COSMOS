@@ -33,7 +33,7 @@ const useAuthStore = create((set) => ({
             localStorage.setItem("accessToken", newAccessToken);
             return newAccessToken
         } catch (error) {
-            console.log(error)
+            window.alert("세션이 만료되었습니다.")
             localStorage.clear();
             window.location.href = '/login';
         }
@@ -52,15 +52,11 @@ const useAuthStore = create((set) => ({
             const data = { email, password };
             const responseData = await post(url, data);
             const { accessToken, refreshToken, userInfo } = responseData;
-
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
             localStorage.setItem("userInfo", JSON.stringify(userInfo));
-            // 상태 업데이트
             set({ accessToken, refreshToken, userInfo });
-
-            console.log(`로그인 요청 성공! -> ${userInfo.nickName}님, 환영합니다!`);
-            return { accessToken, refreshToken, userInfo };
+            return responseData;
 
         } catch (error) {
             console.log("로그인 요청 실패! ->", error);
@@ -136,11 +132,9 @@ const useAuthStore = create((set) => ({
             const data = { email };
             const responseData = await post(url, data);
             const expiredTime = responseData.expiredTime
-            console.log(`비번찾기-코드 전송 요청 성공! -> ${email}로 코드를 발송했습니다.`)
-            return expiredTime;
+            return expiredTime; // 5
 
         } catch (error) {
-            console.log("비번찾기-코드 전송 요청 실패! ->", error);
             throw error;
         }
     },
@@ -151,10 +145,8 @@ const useAuthStore = create((set) => ({
             const url = `${BASE_URL}/auth-codes/verify-pwd`;
             const data = { email, authCode };
             const response = await post(url, data);
-            return response;
-
+            return response; //true
         } catch (error) {
-            console.log("비번찾기-코드 확인 요청 실패! ->", error);
             throw error;
         }
     },
@@ -166,9 +158,7 @@ const useAuthStore = create((set) => ({
             const data = { email, newPassword };
             const response = await patch(url, data);
             return response;
-
         } catch (error) {
-            console.error("비번찾기-비밀번호 변경 요청 실패! ->", error);
             throw error;
         }
     },
@@ -181,11 +171,8 @@ const useAuthStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await patch(url, data, headers)
-            console.log(response)
-            return response
-        }
-        catch (error) {
-            console.log("비밀번호 변경 요청 실패! ->", error);
+            return response // true
+        } catch (error) {
             throw error;
         }
     },
@@ -197,10 +184,8 @@ const useAuthStore = create((set) => ({
             const data = { email };
             const responseData = await post(url, data);
             const expiredTime = responseData.expiredTime
-            console.log(`회원가입-코드 전송 요청 성공! -> ${email}로 코드를 발송했습니다.`)
-            return expiredTime;
+            return expiredTime; //5
         } catch (error) {
-            console.log("회원가입-코드 전송 요청 실패!", error);
             throw error
         }
     },
@@ -211,9 +196,8 @@ const useAuthStore = create((set) => ({
             const url = `${BASE_URL}/auth-codes/verify-code`
             const data = { email, authCode }
             const response = await post(url, data);
-            return response;
+            return response; //true
         } catch (error) {
-            console.log("회원가입-코드 확인 요청 실패!", error);
             throw error;
         }
     },
@@ -226,7 +210,6 @@ const useAuthStore = create((set) => ({
             const response = await post(url, data);
             return response
         } catch (error) {
-            console.log("닉네임 검사 요청 실패! ->", error);
             throw error;
         }
     },
@@ -237,11 +220,8 @@ const useAuthStore = create((set) => ({
             const url = `${BASE_URL}/auth/signup`
             const data = { email, password, nickName }
             const response = await post(url, data);
-            console.log(`회원가입 성공! ${nickName}님 감사합니다.`)
             return response
-
         } catch (error) {
-            console.log("회원가입 요청 ->", error);
             throw error;
         }
     },

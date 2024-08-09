@@ -25,7 +25,6 @@ function InviteGroupModal({ show, handleClose, groupId }) {
         setInviteMethod(event.target.value);
     };
 
-
     useEffect(() => {
         const getDetails = async () => {
             if (groupId) {
@@ -46,7 +45,7 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                 try {
                     const responseData = await invitePossibleUsers({ groupId, nickName });
                     setSuggestions(responseData.map(user => user.nickName));
-                    if (responseData.length === 1 && responseData[0].nickName === nickName) {
+                    if (responseData[0].nickName === nickName) {
                         setFindNickName(true);
                     } else {
                         setFindNickName(false);
@@ -69,12 +68,17 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                 await sendInviteEmail({ groupId, emails });
             } else {
                 const responseData = await invitePossibleUsers({groupId, nickName });
-                console.log(responseData);
                 const emails = responseData[0].email
                 await sendInviteEmail({ groupId, emails })
             }
         } catch (err) {
             console.error('초대 실패 -> ', err.message);
+        }
+    };
+
+    const handleKeyPress = (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
         }
     };
 
@@ -84,7 +88,7 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                 <Modal.Title>초대하기</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form>
+                <Form onKeyPress={handleKeyPress}>
                     <Form.Group controlId="inviteMethod">
                         <Form.Label>초대 방법</Form.Label>
                         <Form.Check
@@ -129,7 +133,10 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                             {suggestions.length > 0 && (
                                 <ul id="suggestions">
                                     {suggestions.map((suggestion) => (
-                                        <li key={suggestion.id}>
+                                        <li key={suggestion.id}
+                                            onClick={() => setNickname(suggestion)}
+                                            style={{ cursor: 'pointer' }}
+                                        >
                                             {suggestion}
                                         </li>
                                     ))}
@@ -144,13 +151,13 @@ function InviteGroupModal({ show, handleClose, groupId }) {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
-                    나가기
+                    닫기
                 </Button>
                 { inviteMethod === 'email' && <Button variant="primary" onClick={handleInvite}>
                     초대하기
                 </Button>}
                 { inviteMethod === 'nickName' && <Button variant="primary" onClick={handleInvite} disabled={!findNickName}>
-                    초대하기1
+                    초대하기
                 </Button>}
             </Modal.Footer>
         </Modal>
