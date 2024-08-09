@@ -59,7 +59,7 @@ public class JwtAuthFilter implements Filter {
                 Optional<User> user = userRepository.findById(Long.parseLong(tokenUserId));
                 if (user.isEmpty()) sendErrorResponse(httpResponse, ErrorCode.USER_NOT_FOUND);
 
-                Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+                Authentication authentication = new UsernamePasswordAuthenticationToken(user.get(), null, Collections.emptyList());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (JwtAuthenticationException e) {
