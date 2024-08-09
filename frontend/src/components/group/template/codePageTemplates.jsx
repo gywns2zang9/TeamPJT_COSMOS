@@ -102,7 +102,17 @@ const CodePageTemplates = ({ groupId, pageId }) => {
     return (
         <>
             <Card style={{ color: 'black', padding: '20px', margin: '10px', maxWidth: '100%', width: '100%' }}>
-                <h3>{problemInfo.site} {problemInfo.number}. {problemInfo.name}</h3>
+                <h3>
+                    <a 
+                        href={`https://www.acmicpc.net/problem/${problemInfo.number}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        style={{ color: 'inherit', textDecoration: 'none' }}
+                    >
+                        {problemInfo.site} {problemInfo.number}. 
+                        {problemInfo.name}
+                    </a>
+                </h3>
                 <h4>저장한 날짜 : {date}</h4>
                 <h4>언어 : {language}</h4>
 
