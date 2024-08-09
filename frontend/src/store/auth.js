@@ -52,15 +52,11 @@ const useAuthStore = create((set) => ({
             const data = { email, password };
             const responseData = await post(url, data);
             const { accessToken, refreshToken, userInfo } = responseData;
-
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
             localStorage.setItem("userInfo", JSON.stringify(userInfo));
-            // 상태 업데이트
             set({ accessToken, refreshToken, userInfo });
-
-            console.log(`로그인 요청 성공! -> ${userInfo.nickName}님, 환영합니다!`);
-            return { accessToken, refreshToken, userInfo };
+            return responseData;
 
         } catch (error) {
             console.log("로그인 요청 실패! ->", error);

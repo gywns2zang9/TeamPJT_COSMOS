@@ -27,51 +27,40 @@ const Login = () => {
   // 로그인 버튼 핸들러
   const handleLoginButton = async () => {
     setLoginErrorMessage(""); 
-
     if (!email || !password) {
       setLoginErrorMessage("이메일과 비밀번호를 입력해주세요.");
       return;
     }
-    
     try {
-      // 로그인 요청 보냄
-      const { accessToken, refreshToken, userInfo } = await login({ email, password });
-      console.log(accessToken)
-      console.log(refreshToken)
-      console.log(userInfo)
+      await login({ email, password });
       navigate(`/group`);
-
     } catch (error) {
-      // 로그인 실패 시 에러 메시지 표시
-      console.log("로그인 실패! ->", error.response.data.error);
       let errorMessage;
-      if (error.response.data.error.user) {
-        errorMessage = error.response.data.error.user
-      } else if (error.response.data.error.auth) {
-        errorMessage = error.response.data.error.auth
+       if (error.response.data.error.auth) {
+        if (error.response.data.error.auth === "password is incorrect.") {
+          errorMessage = "비밀번호가 일치하지 않습니다."
+        } else if (error.response.data.error.auth === "kakao email is already exist.") {
+          errorMessage = "카카오 계정이 이미 존재합니다."
+        } else if (error.response.data.error.auth === "naver email is already exist.") {
+          errorMessage = "네이버 계정이 이미 존재합니다."
+        }
+       } else if (error.response.data.error.user && error.response.data.error.user === "user not found.") {
+        errorMessage = "존재하지 않는 유저입니다."
       }
-      setLoginErrorMessage( errorMessage||"이메일과 비밀번호를 확인해주세요.");
+      setLoginErrorMessage( errorMessage || "이메일과 비밀번호를 확인해주세요.");
     }
-  };
-
-  // 비밀번호 찾기 링크 핸들러
-  const handlePasswordFindLink = () => {
-    console.log("비밀번호 찾기로 이동");
   };
 
   // 네이버 로그인 버튼 핸들러
   const handleNaverLogin = () => {
-    // 임의의 STATE 생성 함수
+    // STATE 생성 함수
     const generateRandomString = () => {
       return Math.random().toString(36).slice(2, 10);
     };
-
     const NAVER_CLIENT_ID = process.env.REACT_APP_NAVER_CLIENT_ID;
     const NAVER_REDIRECT_URI = process.env.REACT_APP_NAVER_REDIRECT_URI;
     const NAVER_STATE = generateRandomString()
-    
     const naverURL= `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${NAVER_STATE}&redirect_uri=${NAVER_REDIRECT_URI}`
-    console.log("네이버로 로그인으로 이동");
     window.location.href = naverURL;
   };
 
@@ -80,15 +69,14 @@ const Login = () => {
     const KAKAO_CLIENT_ID = process.env.REACT_APP_KAKAO_CLIENT_ID;
     const KAKAO_REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
     const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
-    console.log("카카오로 로그인으로 이동");
     window.location.href = kakaoURL;
   };
 
   // 엔터키로 로그인 처리
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      event.preventDefault(); // 기본 엔터키 동작 방지
-      handleLoginButton(); // 로그인 핸들러 호출
+      event.preventDefault(); 
+      handleLoginButton(); 
     }
   };
 
@@ -121,12 +109,11 @@ const Login = () => {
             placeholder="비밀번호를 입력하세요"
             value={password}
             onChange={handlePasswordInput}
-            onKeyDown={handleKeyDown} // 엔터키 이벤트 추가
+            onKeyDown={handleKeyDown}
           />
           <Link
             to="/password-find"
             id="password-find-link"
-            onClick={handlePasswordFindLink}
           >
             비밀번호 찾기
           </Link>
@@ -137,7 +124,7 @@ const Login = () => {
 
         <button
           id="login-button"
-          onClick={handleLoginButton} // 로그인 버튼 클릭 핸들러
+          onClick={handleLoginButton}
         >
           로그인        
         </button>
