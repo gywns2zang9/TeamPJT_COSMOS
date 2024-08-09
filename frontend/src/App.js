@@ -14,25 +14,15 @@ import HomeRoutes from "./routes/homeRoutes.js";
 import GroupRoutes from "./routes/groupRoutes.js";
 import UserRouters from "./routes/userRouters.js";
 import "./App.css";
+import RainbowTrail from "./rainbowTrail";
 
 function AppContent() {
   const location = useLocation();
   const isConferenceRoute = location.pathname.startsWith("/conference");
-  const [hearts, setHearts] = useState([]);
 
-  const handleClick = (e) => {
-    const newHeart = {
-      id: Date.now(),
-      x: e.clientX,
-      y: e.clientY
-    };
-    setHearts((prev) => [...prev, newHeart]);
-    setTimeout(() => {
-      setHearts((prevHearts) => prevHearts.filter((heart) => heart.id !== newHeart.id));
-    }, 2000);
-  }
   return (
-    <div id="App" onClick={handleClick}>
+    <div id="App">
+      <RainbowTrail />
       {!isConferenceRoute && <NavBar />}
       <Routes>
         <Route path="/conference/*" element={<ConferenceRoutes />} />
@@ -48,12 +38,6 @@ function AppContent() {
         <Route path="/users/*" element={<UserRouters />} />{" "}
       </Routes>
       {!isConferenceRoute && <Footer />}
-
-      {hearts.map((heart) => (
-        <div key={heart.id} className="heart" style={{left:heart.x, top:heart.y}}>
-          ❤️
-        </div>
-      ))}
     </div>
   );
 }
