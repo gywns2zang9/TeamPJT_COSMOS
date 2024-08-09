@@ -241,7 +241,8 @@ const useAuthStore = create((set) => ({
 
             return responseData
         } catch (error) {
-            console.log("정보 수정 요청 실패! ->", error);
+            window.alert(`${error.response.data.error.auth}`)
+            throw error
         }
     },
 

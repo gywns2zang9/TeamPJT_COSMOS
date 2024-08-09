@@ -1,3 +1,6 @@
+#group-list-container {
+ min-height: 100vh;
+}
 #group-list {
     display: flex;
     flex-wrap: wrap;
