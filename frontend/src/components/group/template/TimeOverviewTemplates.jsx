@@ -95,7 +95,11 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
                         <tr key={index}>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.site}</td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.number}</td>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.name}</td>
+                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+                                <a href={`https://www.acmicpc.net/problem/${problem.number}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                                    {problem.name}
+                                </a>
+                            </td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.level}</td>
                             {members.map((member, memberIndex) => (
                                 <td key={memberIndex} style={{ border: '1px solid #ddd', padding: '8px' }}>

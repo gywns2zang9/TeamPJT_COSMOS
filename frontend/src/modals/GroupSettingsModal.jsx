@@ -3,6 +3,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import '../css/group/groupSettingsModal.css';
 import useGroupStore from '../store/group';
 import { useNavigate } from 'react-router-dom';
+
 function GroupSettingsModal({ show, handleClose, groupId }) {
     const navigate = useNavigate();
     const [isLeader, setIsLeader] = useState(false);
@@ -33,6 +34,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
                     
                     // 멤버 목록 로드
                     const memberList = await groupMemberListLoad({ groupId });
+                    console.log(memberList);
                     setMembers(memberList);
 
                     // 초대 코드 체크
@@ -56,11 +58,16 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
     const handleSaveChanges = async () => {
         try {
             if (isLeader) {
-                await updateGroupInfo({ groupId, groupName, description:groupDescription });
+                if (groupName.trim() === '' || groupDescription.trim() === '') {
+                    alert('그룹 이름과 소개를 모두 입력해주세요.');
+                    return;
+                }
+                await updateGroupInfo({ groupId, groupName, description: groupDescription });
                 if (newLeader) {
                     await updateGroupLeader({ groupId, userId: newLeader });
                 }
             }
+            window.location.reload();
             handleClose();
         } catch (err) {
             console.error('변경 내용 저장 실패 -> ', err);
@@ -115,7 +122,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
                             >
                                 <option value="">그룹원을 선택하세요</option>
                                 {members.map((member) => (
-                                    <option key={member.id} value={member.id}>{member.name}</option>
+                                    <option key={member.userId} value={member.userId}>{member.nickName}</option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
