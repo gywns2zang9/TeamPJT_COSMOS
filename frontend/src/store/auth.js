@@ -22,7 +22,7 @@ const useAuthStore = create((set) => ({
 
     // 액세스 토큰 재발급
     reissuanceAccessToken: async ({ refreshToken }) => {
-        console.log(`액세스 토큰 재발급을 위해 ${refreshToken}을 받음`)
+        console.log(`${refreshToken}로 액세스 토큰 재발급을 시도할게`)
         try {
             const url = `${BASE_URL}/auth/refresh`
             const headers = {
@@ -33,17 +33,11 @@ const useAuthStore = create((set) => ({
             localStorage.setItem("accessToken", newAccessToken);
             return newAccessToken
         } catch (error) {
-            if (error.response && error.response.status === 401) {
-                // 401 에러 응답 시 로컬스토리지를 비우고 로그아웃
-                localStorage.clear();
-                // 로그아웃 처리 (예: 로그인 페이지로 리다이렉트)
-                window.location.href = '/login';
-            } else {
-                console.log(error)
-            }
+            console.log(error)
+            localStorage.clear();
+            window.location.href = '/login';
         }
     },
-
 
     // 사용자 정보를 가져오는 함수
     getUserInfo: () => {
