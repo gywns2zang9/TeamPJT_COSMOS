@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
-import ShareCode from "./ShareCode"; // ShareCode 컴포넌트 import
-import axios from "axios";
+import ShareCode from "./ShareCode"; 
 import "../../css/conference/code.css";
+import useGroupStore from "../../store/group.js";
+import useAuthStore from "../../store/auth.js";
+import MyCodeListModal from "../../modals/MyCodeListModal.jsx";
 
 const Code = ({ toggleVideo, isOpen, groupId }) => {
   const [language, setLanguage] = useState("java");
   const [isShared, setIsShared] = useState(false);
-  const [personalCode, setPersonalCode] = useState("");
+  const [personalCodeList, setPersonalCodeList] = useState([]);
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [showIO, setShowIO] = useState(false);
+  // 코드 불러오기 및 실행
+  const getCodeList = useGroupStore((state) => state.loadCodeList);
+  const runCode = useGroupStore((state) => state.executeCode)
+  const getUser = useAuthStore((state) => state.getUserInfo)
+  const [showModal, setShowModal] = useState(false);
+  const [myCode, setMyCode] = useState('');
+  const getCode = useGroupStore((state) => state.loadPersonalCode)
 
   const handleLanguageChange = (event) => {
     setLanguage(event.target.value);
@@ -24,38 +33,42 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
     setIsShared(true);
   };
 
+  // 모달 오픈 상태
+  const handleModalShow = () => setShowModal(true); 
+  const handleModalClose = () => setShowModal(false); 
+
+  // 코드 목록 불러오기
   useEffect(() => {
-    // localStorage에서 개인 코드를 불러옴
-    const savedCode = localStorage.getItem("personalCode");
-    if (savedCode) {
-      setPersonalCode(savedCode);
-    }
-  }, []);
+    const fetchCodeList = async () => {
+      const userInfo = await getUser();
+      const folders = await getCodeList({ groupId, userId:userInfo.userId })
+      setPersonalCodeList(Array.isArray(folders) ? folders : [])
+    };
+    fetchCodeList();
+  }, [groupId, getCodeList]);
+
+  // 코드 선택했을 때 내용 불러오기
+  const loadCode = async ({ codeId }) => {
+    console.log(codeId);
+    const response = await getCode({groupId, codeId})
+    console.log(response);
+    setMyCode(response.content)
+    localStorage.setItem('myCode', response.code.content);
+    handleModalClose();
+  }
 
   const handleEditorChange = (value) => {
-    setPersonalCode(value);
-    localStorage.setItem("personalCode", value); // 개인 코드를 localStorage에 저장
+    setMyCode(value);
+    localStorage.setItem('myCode', value);
   };
 
   const toggleCompiler = () => {
     setShowIO(!showIO); // 입력 및 출력 영역 표시
   };
 
+  // 코드 실행
   const handleExecute = async () => {
-    try {
-      const response = await axios.get(`/teams/${groupId}/codes/execute`, {
-        content: personalCode,
-        language: language,
-        inputs: input,
-      });
-
-      const results = response.data;
-      const resultString = results.map((res) => res.result).join("\n");
-      setOutput(resultString);
-    } catch (error) {
-      console.error("Error compiling code:", error);
-      setOutput("Error compiling code");
-    }
+    // runCode({ content, language, input });
   };
 
   return (
@@ -77,7 +90,6 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
           <select className="code-select" onChange={handleLanguageChange}>
             <option value="java">Java</option>
             <option value="python">Python</option>
-            {/* <option value="cpp">C++</option> */}
           </select>
         </div>
         <div>
@@ -95,7 +107,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
             // theme="vs-dark"
             className="code-editor"
             language={language}
-            value={personalCode}
+            value={myCode}
             onChange={handleEditorChange}
           />
         )}
@@ -123,7 +135,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
             )}
             <div className="code-lower-space">
               <div className="code-buttons">
-                <button className="button">코드 불러오기</button>
+              <button className="button" onClick={handleModalShow}>
+                코드 불러오기
+              </button>
                 <button className="button">코드 저장</button>
               </div>
               <div className="compile-button">
@@ -139,8 +153,15 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
             </div>
           </div>
         ) : null
+        
         // <div className="code-lower-space"></div>
       }
+      <MyCodeListModal
+          show={showModal}
+          handleClose={handleModalClose}
+          personalCodeList={personalCodeList}
+          loadCode={loadCode}
+        />
     </div>
   );
 };
