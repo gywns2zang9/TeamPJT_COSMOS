@@ -184,7 +184,7 @@ function ConferenceView(props) {
     joinSession();
     return () => {
       window.removeEventListener("beforeunload", onbeforeunload);
-      // leaveSession();
+      leaveSession();
     };
   }, []);
 
