@@ -145,8 +145,9 @@ function Calendar({ groupId }) {
         initialView="dayGridMonth"
         events={events}
         headerToolbar={{
-          left: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay today,addEventButton"
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay addEventButton"
         }}
         customButtons={{
           addEventButton: {
@@ -157,11 +158,6 @@ function Calendar({ groupId }) {
               setShowModal(true);
             }
           }
-        }}
-        footerToolbar={{
-          left: "prev",
-          center: "",
-          right: "next"
         }}
         buttonText={{
           today: "오늘",
