@@ -3,6 +3,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import '../css/group/groupSettingsModal.css';
 import useGroupStore from '../store/group';
 import { useNavigate } from 'react-router-dom';
+import useAuthStore from '../store/auth';
 
 function GroupSettingsModal({ show, handleClose, groupId }) {
     const navigate = useNavigate();
@@ -13,6 +14,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
     const [newLeader, setNewLeader] = useState('');
     const [members, setMembers] = useState([]);
     const [teamCode, setTeamCode] = useState('');
+    const [myUserId, setMyUserId] = useState(false);
 
     const groupDetailLoad = useGroupStore((state) => state.groupDetailLoad);
     const groupMemberListLoad = useGroupStore((state) => state.groupMemberListLoad);
@@ -22,6 +24,13 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
     const outGroup = useGroupStore((state) => state.outGroup);
     const checkGroupLeader = useGroupStore((state) => state.checkGroupLeader);
 
+    useEffect(() => {
+        const getMyId = async () => {
+            const response = await useAuthStore.getState().getAccessToken();
+            setMyUserId(response.userId);
+        }
+        getMyId();
+    })
     // 그룹 정보 받기
     useEffect(() => {
         if (show && groupId) {
@@ -121,7 +130,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
                                 onChange={(e) => setNewLeader(e.target.value)}
                             >
                                 <option value="">그룹원을 선택하세요</option>
-                                {members.map((member) => (
+                                {members.filter(member => member.userId !== myUserId).map((member) => (
                                     <option key={member.userId} value={member.userId}>{member.nickName}</option>
                                 ))}
                             </Form.Control>
