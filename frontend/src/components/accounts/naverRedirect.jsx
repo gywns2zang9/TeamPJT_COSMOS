@@ -10,10 +10,14 @@ const KakaoRedirect = () => {
     useEffect(() => {
         const fetchKakaoUser = async () => {
             try {
-                const { accessToken, refreshToken, userInfo } = await naver({ authorizationCode, state });
-                navigate(`/users/${userInfo.userId}`);
+                const responseData = await naver({ authorizationCode, state });
+                const userId = responseData.userInfo.userId;
+                navigate(`/users/${userId}`)
+
             } catch (error) {
-                console.log("fetchKakaoUser 오류:", error.response.data.error.user);
+                if (error.response.data.error.user) {
+                    window.alert(`${error.response.data.error.user}`)
+                }
                 navigate('/login')
             }
         };
