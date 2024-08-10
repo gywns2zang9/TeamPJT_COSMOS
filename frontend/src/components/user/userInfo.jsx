@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react"; 
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/auth";
-import "../../css/user/userInfo.css"; 
+import "../../css/user/userInfo.css";
+
+import naverIcon from "../../assets/media/navericon.png";
+import kakaoIcon from "../../assets/media/kakaoicon.png";
 
 const UserInfo = () => {
   const navigate = useNavigate();
@@ -58,19 +61,23 @@ const UserInfo = () => {
 
         <div id="info-group">
 
+        <div id="info-email-group">
+            <label id="info-email-label" htmlFor="email">
+              가입 이메일:
+            </label>
+            {type && type === "NAVER" && <img id="icon-naver" src={naverIcon} alt="네이버 아이콘" />}
+            {type && type === "KAKAO" && <img id="icon-kakao" src={kakaoIcon} alt="카카오 아이콘" />}
+            <span id="info-email">{email || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
+          </div>
+
+
           <div id="info-nickname-group">
             <label id="info-nickname-label" htmlFor="nickname">
               닉네임:
             </label>
-            <span id="info-nickname">{nickName || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}   (<span>{type}</span>)</span>
+            <span id="info-nickname">{nickName || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>} </span>
           </div>
 
-          <div id="info-email-group">
-            <label id="info-email-label" htmlFor="email">
-              가입 이메일:
-            </label>
-            <span id="info-email">{email || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
-          </div>
 
           <div id="info-description-group">
             <label id="info-description-label" htmlFor="description">
