@@ -6,6 +6,6 @@ import { WebsocketProvider } from 'y-websocket';
 export const setupYjsDoc = (docId) => {
     const ydoc = new Y.Doc();
     const wsProvider = new WebsocketProvider('wss://demos.yjs.dev/ws', docId, ydoc);
-
-    return { ydoc, wsProvider };
+    const yText = ydoc.getText('codeContent');
+    return { ydoc, wsProvider, yText };
 };

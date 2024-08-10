@@ -1,29 +1,3 @@
-    // yjs 쓰면 수정은 어케할까...흠
-    // useEffect(() => {
-    //     const editFile = async (content) => {
-    //         try {
-    //             const response = await updateFile({ groupId, fileId: pageId, name: title, content });
-    //             console.log(response);
-    //         } catch (err) {
-    //             console.error('페이지 수정 실패 -> ', err);
-    //         }
-    //     };
-
-    //     if (editor) {
-    //         const handleChange = () => {
-    //             const newContent = editor.value();
-    //             editFile(newContent);
-    //         };
-
-    //         editor.codemirror.on('change', handleChange);
-
-    //         return () => {
-    //             editor.codemirror.off('change', handleChange);
-    //         };
-    //     }
-    // }, [editor, pageId, groupId, title, updateFile]);
-
-
 import React, { useEffect, useRef, useState } from 'react';
 import SimpleMDE from 'simplemde';
 import 'simplemde/dist/simplemde.min.css';
