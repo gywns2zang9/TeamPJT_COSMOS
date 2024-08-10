@@ -25,22 +25,21 @@ const UserInfo = () => {
   const [branch, setBranch] = useState(userInfo.branch);
 
   useEffect(() => {
-    const token = getAccessToken();
-    const info = getUserInfo();
-    loadUserInfo(token, info.userId);
-
-    if (token && info && info.userId) {
-      setAccessToken(token);
-      setUserInfo(info);
-      setUserId(info.userId);
-      setEmail(info.email);
-      setNickName(info.nickName);
-      setType(info.type);
-      setDescription(info.description);
-      setGitId(info.gitId);
-      setRepo(info.repo);
-      setBranch(info.branch);
-    }
+    const accessToken = getAccessToken();
+    const userInfo = getUserInfo();
+    const userId = userInfo.userId
+    loadUserInfo({ accessToken, userId });
+    setAccessToken(accessToken);
+    setUserInfo(userInfo);
+    setUserId(userInfo.userId);
+    setEmail(userInfo.email);
+    setNickName(userInfo.nickName);
+    setType(userInfo.type);
+    setDescription(userInfo.description);
+    setGitId(userInfo.gitId);
+    setRepo(userInfo.repo);
+    setBranch(userInfo.branch);
+    
   }, [getAccessToken, getUserInfo, loadUserInfo]);
   
 
