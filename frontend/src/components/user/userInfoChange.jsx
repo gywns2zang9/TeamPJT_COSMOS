@@ -1,63 +1,42 @@
 import { useState, useEffect } from "react"; 
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/auth";
-import "../../css/user/userInfoChange.css"; 
+import "../../css/user/userInfo.css";
+import naverIcon from "../../assets/media/navericon.png";
+import kakaoIcon from "../../assets/media/kakaoicon.png";
 
 const UserInfoChange = () => {
   const navigate = useNavigate();
   
-
   const getUserInfo = useAuthStore((state) => state.getUserInfo);
   const getAccessToken = useAuthStore((state) => state.getAccessToken);
   const updateUserInfo = useAuthStore((state) => state.updateUserInfo);
   
-  const [errorMessage, setErrorMessage] = useState("");
-
   const [userInfo, setUserInfo] = useState(getUserInfo());
   const [accessToken, setAccessToken] = useState(getAccessToken());
   const [userId, setUserId] = useState(userInfo.userId);
   const [email, setEmail] = useState(userInfo.email);
   const [nickName, setNickName] = useState(userInfo.nickName);
   const [type, setType] = useState(userInfo.type);
-  const [branch, setBranch] = useState(userInfo.img);
+  const [description, setDescription] = useState(userInfo.description);
   const [gitId, setGitId] = useState(userInfo.gitId);
   const [repo, setRepo] = useState(userInfo.repo);
-  const [description, setDescription] = useState(userInfo.description);
+  const [branch, setBranch] = useState(userInfo.img);
 
   useEffect(() => {
-    const userInfo = getUserInfo();
-    setUserInfo(userInfo);
-    setUserId(userInfo.userId);
-    setNickName(userInfo.nickName);
-    setType(userInfo.type);
-    setEmail(userInfo.email);
-    setDescription(userInfo.description);
-    setGitId(userInfo.gitId);
-    setRepo(userInfo.repo);
-    setBranch(userInfo.branch)
-    const accessToken = getAccessToken()
-    setAccessToken(accessToken)
-    }, [getUserInfo, getAccessToken]);
-
-    const handleNickNameInput = (event) => {
-      setNickName(event.target.value);
-    };
-    
-    const handleDescriptionInput = (event) => {
-      setDescription(event.target.value);
-    };
-
-    const handleGitIdInput = (event) => {
-      setGitId(event.target.value);
-    };
-  
-    const handleRepoInput = (event) => {
-      setRepo(event.target.value);
-    };
-  
-    const handleBranchInput = (event) => {
-      setBranch(event.target.value);
-    };
+    const token = getAccessToken();
+    const info = getUserInfo();
+    setAccessToken(token);
+    setUserInfo(info);
+    setUserId(info.userId);
+    setEmail(info.email);
+    setNickName(info.nickName);
+    setType(info.type);
+    setDescription(info.description);
+    setGitId(info.gitId);
+    setRepo(info.repo);
+    setBranch(info.branch);
+  }, [getUserInfo, getAccessToken]);
 
     const handleUpdate = async () => {
       const newUserInfo = {
@@ -67,115 +46,114 @@ const UserInfoChange = () => {
         repo,
         branch
       };
-
       try {
         await updateUserInfo({ accessToken, userId, newUserInfo });
+        window.alert("정상적으로 저장되었습니다.")
         navigate(`/users/${userId}`);
       } catch (error) {
-        console.error('정보 수정에 실패했습니다.', error);
+        let errorMessage
+        if (error.response.data.error.auth) {
+          if (error.response.data.error.auth === "nickname is incorrect.") {
+            errorMessage = "사용불가능한 닉네임입니다."
+          } else if (error.response.data.error.auth === "Nickname is already exist.") {
+            errorMessage = "이미 사용중인 닉네임입니다."
+          }
+          window.alert(errorMessage || "다시 시도해주세요.")
+        }
       }
     };
-
-    const handleChangePw = () => {
-      navigate('/password-change');
-    };
     
-    const handleCancel = () => {
-      navigate(`/users/${userId}`); 
-    };
-
-
   return (
-    <div id="info-change-container">
-      <div id="info-change-title">내 정보 수정</div>
-      <div id="info-change-box">
+    <div className="info-container">
+      {/* 타이틀 */}
+      <div className="info-title">내 정보</div>
 
-        <div id="info-change-group">
-
-          <div id="nickname-change-group">
-            <label id="nickname-label" htmlFor="nickname">
-              닉네임:
-            </label>
-            <input
-              id="nickname-input"
-              type="text"
-              value={nickName}
-              onChange={handleNickNameInput}
+      <div className="info-group">
+      {/* email */}
+        <div className="info-box">
+          <label className="info-label" htmlFor="email">
+            가입 이메일:
+          </label>
+          <span className="info-contents">
+            {type && type === "NAVER" && <img className="info-type-icon" src={naverIcon} alt="네이버 아이콘" />}
+            {type && type === "KAKAO" && <img className="info-type-icon" src={kakaoIcon} alt="카카오 아이콘" />}
+            {email || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}
+          </span>
+        </div>
+        {/* nickName */}
+        <div className="info-box">
+          <label className="info-label" htmlFor="nickname">
+            닉네임:
+          </label>
+          <input
+            className="info-input"
+            type="text"
+            value={nickName}
+            onChange={(e) => setNickName(e.target.value)}
+          />
+        </div>
+        {/* description */}
+        <div className="info-box">
+          <label className="info-label" htmlFor="description">
+            내 소개:
+          </label>
+          <input
+            className="info-input"
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+        {/* gitId */}
+        <div className="info-box">
+          <label className="info-label" htmlFor="gitId">
+            Git Id:
+          </label>
+          <input
+            className="info-input"
+            type="text"
+            value={gitId}
+            onChange={(e) => setGitId(e.target.value)}
+          />
+        </div>
+        {/* repo */}
+        <div className="info-box">
+          <label className="info-label" htmlFor="repo">
+            Repository:
+          </label>
+          <input
+            className="info-input"
+            type="text"
+            value={repo}
+            onChange={(e) => setRepo(e.target.value)}
+          />
+        </div>
+        {/* branch */}
+        <div className="info-box">
+          <label className="info-label" htmlFor="branch">
+            Branch:
+          </label>
+          <input
+            className="info-input"
+            type="text"
+            value={branch}
+            onChange={(e) => setBranch(e.target.value)}
             />
-          </div>
-
-          <div id="info-email-group">
-            <label id="info-email-label" htmlFor="email">
-              가입 이메일:
-            </label>
-            <span id="info-email">{email || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
-          </div>
-
-          <div id="description-change-group">
-            <label id="description-label" htmlFor="description">
-              내 소개:
-            </label>
-            <input
-              id="description-input"
-              type="text"
-              value={description}
-              onChange={handleDescriptionInput}
-            />
-          </div>
-
-          <div id="gitId-change-group">
-            <label id="gitId-label" htmlFor="gitId">
-              Git Id:
-            </label>
-            <input
-              id="gitId-input"
-              type="text"
-              value={gitId}
-              onChange={handleGitIdInput}
-            />
-          </div>
-
-          <div id="repo-change-group">
-            <label id="repo-label" htmlFor="repo">
-              Repository:
-            </label>
-            <input
-              id="repo-input"
-              type="text"
-              value={repo}
-              onChange={handleRepoInput}
-            />
-          </div>
-
-          
-          <div id="branch-change-group">
-            <label id="branch-label" htmlFor="branch">
-              Branch:
-            </label>
-            <input
-              id="branch-input"
-              type="text"
-              value={branch}
-              onChange={handleBranchInput}
-            />
-          </div>
-
         </div>
       </div>
 
-          {errorMessage && <div id="infochange-fail-message">{errorMessage}</div>}
-
-      <div id="info-change-btn-group">
-        <div id="info-change-save-btn" onClick={handleUpdate}>
+      <div className="info-btn-group"> 
+        <div className="info-btn" onClick={handleUpdate}>
           변경사항 저장
         </div>
-        <div id="info-change-change-pw-btn" onClick={handleChangePw}>
+        <div className="info-btn" onClick={() => navigate('/password-change')}>
           비밀번호 변경
         </div>
-        <div id="info-change-back-btn" onClick={handleCancel}>
+        <div className="info-btn" onClick={() => navigate(`/users/${userId}`)}        >
           뒤로가기
         </div>
       </div>
+      
     </div>
   );
 };

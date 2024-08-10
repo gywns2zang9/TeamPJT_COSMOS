@@ -226,22 +226,34 @@ const useAuthStore = create((set) => ({
         }
     },
 
+    //정보 불러오기
+    loadUserInfo: async ({ accessToken, userId }) => {
+        try {
+            const url = `${BASE_URL}/users/${userId}`;
+            const headers = {
+                Authorization: `Bearer ${accessToken}`
+            };
+            const responseData = await get(url, {}, headers);
+            localStorage.setItem("userInfo", JSON.stringify(responseData));
+            return responseData
+        } catch (error) {
+            throw error
+        }
+    },
+
     //정보 수정 요청
     updateUserInfo: async ({ accessToken, userId, newUserInfo }) => {
         try {
             const url = `${BASE_URL}/users/${userId}`;
             const data = newUserInfo;
-            console.log(data)
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
                 "Content-Type": "application/json"
             };
             const responseData = await patch(url, data, headers);
             localStorage.setItem("userInfo", JSON.stringify(responseData));
-
             return responseData
         } catch (error) {
-            window.alert(`${error.response.data.error.auth}`)
             throw error
         }
     },
