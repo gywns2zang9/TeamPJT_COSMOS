@@ -31,7 +31,7 @@ function HomeView(props) {
         </Card>
       </div>
 
-      <div id="home-img-card">
+      <div id="home-img-card" style = {{cursor:"pointer"}}>
         <div id="group-page-link" onClick={handleStartServiceClick}>
           <img src={homeImg} alt="home" id="home-img" />
           <div id="start-service">
