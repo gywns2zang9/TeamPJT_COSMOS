@@ -14,7 +14,7 @@ import HomeRoutes from "./routes/homeRoutes.js";
 import GroupRoutes from "./routes/groupRoutes.js";
 import UserRouters from "./routes/userRouters.js";
 import "./App.css";
-import RainbowTrail from "./rainbowTrail";
+// import RainbowTrail from "./rainbowTrail";
 
 function AppContent() {
   const location = useLocation();
@@ -22,7 +22,7 @@ function AppContent() {
 
   return (
     <div id="App">
-      <RainbowTrail />
+      {/* <RainbowTrail /> */}
       {!isConferenceRoute && <NavBar />}
       <Routes>
         <Route path="/conference/*" element={<ConferenceRoutes />} />
