@@ -4,6 +4,11 @@ import '../../css/accounts/passwordChange.css';
 import useAuthStore from "../../store/auth";
 
 const PasswordChange = () => {
+  
+  const getUserInfo = useAuthStore((state) => state.getUserInfo);
+  const getAccessToken = useAuthStore((state) => state.getAccessToken)
+  const passwordChange = useAuthStore((state) => state.passwordChange);
+  
   const [oldPassword, setOldPassword] = useState(''); 
   
   const [newPassword, setNewPassword] = useState(''); 
@@ -14,12 +19,8 @@ const PasswordChange = () => {
   
   const [passwordChangeErrorMessage, setPasswordChangeErrorMessage] = useState(''); 
 
-  const getUserInfo = useAuthStore((state) => state.getUserInfo);
-  const getAccessToken = useAuthStore((state) => state.getAccessToken)
-  const passwordChange = useAuthStore((state) => state.passwordChange);
-  
   const handleOldPasswordInput = (event) => {
-    setPasswordChangeErrorMessage("")
+    setPasswordChangeErrorMessage("") //
     setOldPassword(event.target.value);
   };
 
@@ -72,7 +73,9 @@ const PasswordChange = () => {
           errorMessage = "현재 비밀번호가 일치하지 않습니다."
           setOldPassword("")
         }
-        setPasswordChangeErrorMessage( errorMessage || "이메일과 비밀번호를 확인해주세요.");
+        setPasswordChangeErrorMessage( errorMessage || "비밀번호를 확인해주세요.");
+      } else if (error.response.data.error.user) {
+        window.alert(error.response.data.error.user)
       }
     }
   };
