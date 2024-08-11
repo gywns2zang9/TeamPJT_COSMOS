@@ -1,4 +1,3 @@
-// yjs-websocket.js
 import * as Y from 'yjs';
 import { WebrtcProvider } from 'y-webrtc';
 import { WebsocketProvider } from 'y-websocket';

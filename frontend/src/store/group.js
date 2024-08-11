@@ -438,7 +438,7 @@ const useGroupStore = create((set) => ({
                 content,
                 language
             };
-            const response = await get(url, data, headers);
+            const response = await patch(url, data, headers);
             console.log(response);
             return response
         } catch (err) {

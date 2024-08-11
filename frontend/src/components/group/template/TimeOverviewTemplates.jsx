@@ -77,6 +77,7 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
                 handleClose={handleCloseModal} 
                 groupId={groupId}
                 studyId={studyId}
+                existingProblems={problems}
             />  
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                 <thead>
