@@ -7,6 +7,7 @@ import S11P12A708.A708.domain.team.request.TeamLeaderRequest;
 import S11P12A708.A708.domain.team.response.TeamDetailResponse;
 import S11P12A708.A708.domain.team.response.TeamMemberResponse;
 import S11P12A708.A708.domain.team.service.TeamMainService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class TeamMainController {
     public ResponseEntity<Void> updateTeamDetail(
             @AuthUser AuthUserDto authUser,
             @PathVariable("teamId") Long teamId,
-            @RequestBody TeamInfoRequest request) {
+            @Valid @RequestBody TeamInfoRequest request) {
         teamMainService.updateTeamDetail(authUser.getId(), teamId, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -47,7 +48,7 @@ public class TeamMainController {
     public ResponseEntity<Void> updateTeamLeader(
             @AuthUser AuthUserDto authUser,
             @PathVariable("teamId") Long teamId,
-            @RequestBody TeamLeaderRequest request) {
+            @Valid @RequestBody TeamLeaderRequest request) {
         teamMainService.updateTeamLeader(authUser.getId(), teamId, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
