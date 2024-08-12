@@ -22,14 +22,12 @@ const useAuthStore = create((set) => ({
 
     // 액세스 토큰 재발급
     reissuanceAccessToken: async ({ refreshToken }) => {
-        console.log(`${refreshToken}로 액세스 토큰 재발급을 시도할게`)
         try {
             const url = `${BASE_URL}/auth/refresh`
             const headers = {
                 Authorization: `Bearer ${refreshToken}`,
             };
             const newAccessToken = await get(url, {}, headers);
-            console.log("accessToken 재발급:", newAccessToken)
             localStorage.setItem("accessToken", newAccessToken);
             return newAccessToken
         } catch (error) {
@@ -220,7 +218,6 @@ const useAuthStore = create((set) => ({
             };
             const responseData = await get(url, {}, headers);
             localStorage.setItem("userInfo", JSON.stringify(responseData));
-            console.log("정보가져옴")
             return responseData
         } catch (error) {
             throw error
@@ -244,21 +241,19 @@ const useAuthStore = create((set) => ({
         }
     },
 
-    // 내 코드 보기 (미완성)
-    myCode: async ({ accessToken, userId }) => {
+    // 내 코드 보기
+    getMyCodes: async ({ accessToken, userId }) => {
         try {
             const url = `${BASE_URL}/users/${userId}/codes`
-            const data = {}
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
             };
-            const responseData = await get(url, data, headers);
-            return responseData
-        } catch (error) {
-            console.log(error)
+            const responseData = await get(url, {}, headers);
+            return responseData //[]
+        } catch (err) {
+            throw err
         }
     },
-    //
 
 }));
 export default useAuthStore;
