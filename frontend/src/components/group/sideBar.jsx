@@ -337,7 +337,6 @@ useEffect(() => {
     const pageMap = {
       MAIN: `/group/${groupId}/main/${id}/`,
       OVERVIEW: `/group/${groupId}/overview/${id}/`,
-      NORMAL: `/group/${groupId}/${id}/`,
       CODE: `/group/${groupId}/code/${id}/`,
       TIME_OVERVIEW: `/group/${groupId}/time-overview/${id}/`,
     };
@@ -462,7 +461,7 @@ useEffect(() => {
               </div>
             </OverlayTrigger>
             <div className="file-actions ms-auto">
-              {(file.type === 'NORMAL' || file.type === 'CODE') && (
+              {(file.type === 'CODE') && (
                 <OverlayTrigger placement="top" overlay={<Tooltip>삭제</Tooltip>}>
                   <Button
                     variant="link"

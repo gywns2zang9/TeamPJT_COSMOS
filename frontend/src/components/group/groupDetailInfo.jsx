@@ -1,9 +1,7 @@
 import React from "react";
 import MainPageTemplates from "./template/mainPageTemplates"; 
-import MarkdownEditor from "./template/NormalTemplates"; 
 import CodePageTemplates from "./template/codePageTemplates";
 import OverviewPageTemplagtes from "./template/OverviewPageTemplates";
-import NormalTemplates from "./template/NormalTemplates";
 import TimeOverviewTemplates from "./template/TimeOverviewTemplates";
 
 function GroupDetailInfo({ pageId, groupId, type }) {
@@ -15,12 +13,10 @@ function GroupDetailInfo({ pageId, groupId, type }) {
                 return <OverviewPageTemplagtes groupId={groupId} pageId={pageId}/>;
             case 'code':
                 return <CodePageTemplates groupId={groupId} pageId={pageId}/>;
-            case 'normal':
-                return <NormalTemplates groupId={groupId} pageId={pageId}/>;
             case 'time-overview':
                 return <TimeOverviewTemplates groupId={groupId} pageId={pageId}/>;
             default:
-                return <MarkdownEditor pageId={pageId} groupId={groupId} />;
+                return <MainPageTemplates groupId={groupId} pageId={pageId}/>;
         }
     };
     return (
