@@ -70,7 +70,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const handleExecute = async () => {
     const content = myCode.toString();
     try {
-      const response = await runCode({ content, language, input: [input] });
+      const response = await runCode({ content, language, input: input });
       console.log(response);
       setOutput(response.results[0]);
     } catch (err) {
