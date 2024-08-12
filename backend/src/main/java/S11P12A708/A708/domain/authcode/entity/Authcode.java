@@ -1,11 +1,11 @@
 package S11P12A708.A708.domain.authcode.entity;
 
+import S11P12A708.A708.common.database.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 지연 로딩 proxy 을 위해서
-public class Authcode {
+public class Authcode extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,14 +29,9 @@ public class Authcode {
     @Column()
     private String authToken;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-
     public Authcode(String email, AuthType type, String authToken, LocalDateTime updatedAt) {
         this.email = email;
         this.type = type;
         this.authToken = authToken;
-        this.updatedAt = updatedAt;
     }
 }

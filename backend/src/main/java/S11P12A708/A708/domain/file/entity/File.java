@@ -1,5 +1,6 @@
 package S11P12A708.A708.domain.file.entity;
 
+import S11P12A708.A708.common.database.BaseEntity;
 import S11P12A708.A708.domain.code.entity.Code;
 import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.folder.entity.Folder;
@@ -9,15 +10,11 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 지연 로딩 proxy 을 위해서
-public class File {
+public class File extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,13 +30,6 @@ public class File {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private FileType type;
-
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -57,12 +47,10 @@ public class File {
     @JoinColumn(name = "study_id", unique = true)
     private Study study;
 
-    public File(String name, String content, FileType type, LocalDateTime createdAt, LocalDateTime modifiedAt, User user, Folder folder, Code code, Study study) {
+    public File(String name, String content, FileType type, User user, Folder folder, Code code, Study study) {
         this.name = name;
         this.content = content;
         this.type = type;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
         this.user = user;
         this.folder = folder;
         this.code = code;
@@ -74,8 +62,6 @@ public class File {
         this.content = content;
         this.type = type;
         this.folder = folder;
-        this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
     }
 
     public File(String name, String content, FileType type, Folder folder, Study study) {
@@ -84,8 +70,6 @@ public class File {
         this.type = type;
         this.folder = folder;
         this.study = study;
-        this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
     }
 
     public File(String name, String content, FileType type, User user, Folder folder, Code code) {
@@ -95,8 +79,6 @@ public class File {
         this.folder = folder;
         this.user = user;
         this.code = code;
-        this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
     }
 
     public static File createNormalFile(String name, Folder folder) {
@@ -122,13 +104,11 @@ public class File {
     public void update(File updateFile) {
         this.name = updateFile.getName();
         this.content = updateFile.getContent();
-        this.modifiedAt = LocalDateTime.now();
     }
 
     public void update(CodeFileUpdateRequest req) {
         this.name = req.getName();
         this.content = req.getContent();
-        this.modifiedAt = LocalDateTime.now();
     }
 
 }

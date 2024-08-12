@@ -1,5 +1,6 @@
 package S11P12A708.A708.domain.user.entity;
 
+import S11P12A708.A708.common.database.BaseEntity;
 import S11P12A708.A708.domain.team.entity.TeamUser;
 import S11P12A708.A708.domain.user.request.ChangeUserRequest;
 import jakarta.persistence.*;
@@ -8,11 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +18,7 @@ import java.util.List;
 @Setter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 지연 로딩 proxy 을 위해서
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,13 +45,6 @@ public class User {
 
     private String description;
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
-
     @OneToMany(mappedBy = "user")
     private List<TeamUser> teamUsers = new ArrayList<>();
 
@@ -65,8 +56,6 @@ public class User {
         this.gitId = gitId;
         this.repo = repo;
         this.branch = branch;
-        this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
     }
 
     public User(String email, String password, UserType type, String nickname) {
@@ -74,16 +63,12 @@ public class User {
         this.password = password;
         this.type = type;
         this.nickname = nickname;
-        this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
     }
 
     public User(String email, UserType type, String nickname) {
         this.email = email;
         this.type = type;
         this.nickname = nickname;
-        this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
     }
 
     public void update(ChangeUserRequest req) {
@@ -91,7 +76,6 @@ public class User {
         this.repo = req.getRepo();
         this.branch = req.getBranch();
         this.description = req.getDescription();
-        this.modifiedAt = LocalDateTime.now();
     }
 
     public void hashPassword(PasswordEncoder passwordEncoder) {

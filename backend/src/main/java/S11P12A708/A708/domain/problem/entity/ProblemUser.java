@@ -1,19 +1,17 @@
 package S11P12A708.A708.domain.problem.entity;
 
+import S11P12A708.A708.common.database.BaseEntity;
 import S11P12A708.A708.domain.file.entity.File;
 import S11P12A708.A708.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 지연 로딩 proxy 을 위해서
-public class ProblemUser {
+public class ProblemUser extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,16 +32,11 @@ public class ProblemUser {
     @Column(nullable = false)
     private boolean status;
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
     public ProblemUser(Problem problem, User user, File file) {
         this.problem = problem;
         this.user = user;
         this.file = file;
         this.status = false;
-        this.createdAt = LocalDateTime.now();
     }
 
     public void updateStatus() {

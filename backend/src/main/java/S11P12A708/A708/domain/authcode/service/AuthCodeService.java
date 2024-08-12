@@ -80,7 +80,6 @@ public class AuthCodeService {
             Authcode authCode = foundAuthCode.get();
             authCode.setType(type);
             authCode.setAuthToken(code);
-            authCode.setUpdatedAt(LocalDateTime.now());
             authCodeRepository.save(authCode);
         } else {
             Authcode newAuthCode = new Authcode(email, type, code, LocalDateTime.now());
@@ -127,6 +126,7 @@ public class AuthCodeService {
 
             mailSender.send(message);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new FailMailException();
         }
     }
