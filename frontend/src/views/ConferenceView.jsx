@@ -401,7 +401,7 @@ function ConferenceView(props) {
           <div className="paint-upper-space">
             <div>
               <button className="button" onClick={handleTogglePaint}>
-                그림판
+                {showPaint ? "화면 보기" : "그림판"}
               </button>
             </div>
             <div>

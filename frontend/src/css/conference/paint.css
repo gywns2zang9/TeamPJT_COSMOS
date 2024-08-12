@@ -31,3 +31,7 @@ body {
 .tlui-menu-zone {
   display: none;
 }
+
+.tl-embed {
+  display: none;
+}
