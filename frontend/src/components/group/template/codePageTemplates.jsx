@@ -106,13 +106,18 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                         href={`https://www.acmicpc.net/problem/${problemInfo.number}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        style={{ color: 'inherit', textDecoration: 'none' }}
+                        style={{ 
+                            color: '#63C5DA', 
+                            textDecoration: 'none'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                        onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
                     >
                         {problemInfo.site} {problemInfo.number}. {problemInfo.name}
                     </a>
                 </h3>
-                <h4>저장한 날짜 : {date}</h4>
-                <h4>언어 : {language}</h4>
+                <h5>{date}</h5>
+                <h5>언어 : {language}</h5>
 
                 <Card style={{ backgroundColor: 'black', border: '1px solid white', borderRadius: '10px', margin: '10px', padding: '10px', color: 'white' }}>
                     <div className='d-flex' style={{ justifyContent: 'space-between' }}>
@@ -124,7 +129,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                             <textarea
                                 value={codeContent}
                                 onChange={handleCodeContentChange}
-                                style={{ width: '100%', height: '200px', marginBottom: '10px', backgroundColor:'#808080' }}
+                                style={{ width: '100%', height: '200px', marginBottom: '10px', backgroundColor:'#e5e5e5', color:'#191919' }}
                             />
                             <Button onClick={saveCodeContent} style={{backgroundColor:'inherit' }}>저장</Button>
                             <Button onClick={() => setEditMode(false)} style={{backgroundColor:'inherit'}}>닫기</Button>

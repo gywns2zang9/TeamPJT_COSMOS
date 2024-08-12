@@ -83,10 +83,27 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
     }
 
     return (
-        <div style={{ color: 'white' }}>
-            <h1>{header.year}년 {header.month}월 {header.order}회차 스터디</h1>
-            <Button variant="primary" onClick={handleShowModal}>문제 추가하기</Button> 
-            <Button variant="primary" onClick={handleShowDeleteModal}>스터디 삭제하기</Button> 
+        <div style={{ color: 'white', margin:'10px', textAlign:'center' }}>
+            <h1
+                style={{display:'flex', justifyContent:'space-around'}}
+            >{header.year}년 {header.month}월 {header.order}회차 스터디
+                <Button 
+                    onClick={handleShowDeleteModal} 
+                    style={{
+                        backgroundColor:'inherit',
+                        color:'#bbbbbb'
+                    }}>
+                    스터디 삭제하기
+                </Button> 
+            </h1>
+            <Button  
+                onClick={handleShowModal}
+                style={{
+                    backgroundColor:'inherit',
+                    color:'#eeeeee'
+                }}>
+                    문제 추가하기
+            </Button> 
             <CreateProblemModal 
                 show={showModal} 
                 handleClose={handleCloseModal} 
@@ -117,11 +134,12 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
                         <tr key={index}>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.site}</td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.number}</td>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+                            <td style={{ border: '1px solid #ddd', padding: '8px'}}>
                                 <a href={`https://www.acmicpc.net/problem/${problem.number}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                                     {problem.name}
                                 </a>
-                                <FaTrash onClick={() => onDeleteFile(problem.problemId)}/>
+                                &nbsp;&nbsp;&nbsp;
+                                <FaTrash onClick={() => onDeleteFile(problem.problemId)} title="문제 삭제" style={{ cursor: 'pointer' }}/>
                             </td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.level}</td>
                             {members.map((member, memberIndex) => (
@@ -129,8 +147,8 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
                                     {problem.statuses.map((memberStatus, statusIndex) => (
                                         member.userId === memberStatus.userId ? (
                                             <div key={statusIndex}>
-                                                <FaFileAlt onClick={() => navigateCodePage(memberStatus)} /> 
-                                                <MdRefresh onClick={() => importCode(memberStatus, problem.problemId)} />
+                                                <FaFileAlt onClick={() => navigateCodePage(memberStatus)} title="풀이로 이동" style={{ cursor: 'pointer' }}/> 
+                                                <MdRefresh onClick={() => importCode(memberStatus, problem.problemId)} title="코드 불러오기" style={{ cursor: 'pointer' }}/>
                                             </div>
                                         ) : <div key={statusIndex}>
                                             </div>
