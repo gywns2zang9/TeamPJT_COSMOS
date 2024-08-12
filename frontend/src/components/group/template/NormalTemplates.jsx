@@ -153,9 +153,9 @@ const NormalTemplates = ({ pageId, groupId }) => {
                             type="text" 
                             value={title} 
                             onChange={(e) => setTitle(e.target.value)} 
-                            style={{ backgroundColor:'inherit', width:'70%', marginRight:'10px' }}
+                            style={{ backgroundColor:'inherit', width:'70%', marginRight:'10px', fontSize:'24px' }}
                         />
-                        <Button onClick={updateTitle}>제목 변경</Button>
+                        <Button onClick={updateTitle} >제목 변경</Button>
                     </Card.Header>
                 </Card>
             </div>
