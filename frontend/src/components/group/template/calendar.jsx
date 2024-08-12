@@ -149,7 +149,7 @@ function Calendar({ groupId }) {
         };  
     const eventTime = convertTo24HourFormat(eventInfo.timeText);
     return (
-      <div>
+      <div style={{ cursor: 'pointer' }}> {/* 커서 스타일을 포인터로 설정 */}
         <b>{eventInfo.event.title}</b>
         <p>({eventTime})</p>
         {eventInfo.view.type !== 'dayGridMonth' && <i>{eventInfo.event.title}</i>}
