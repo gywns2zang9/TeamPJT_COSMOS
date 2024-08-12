@@ -3,10 +3,13 @@ import useStore from './index.js';
 import { deleteRequest, get, patch, post } from '../api/api.js'
 import useAuthStore from './auth.js'
 import axios from 'axios';
-import { useNavigate  } from 'react-router-dom';
 
 const BASE_URL = useStore.getState().BASE_URL;
+
+
 const useGroupStore = create((set) => ({
+    Loading:false,
+    setLoading: (isLoading) => (set) => set({loading: isLoading}),
 
     // 그룹 목록 불러오기
     loadGroupList: async ({ userId }) => {
@@ -31,6 +34,7 @@ const useGroupStore = create((set) => ({
 
     // 그룹 생성하기
     makeGroup: async ({ userId, groupName, description }) => {
+        set({ loading: true });
         try {
             const accessToken = useAuthStore.getState().getAccessToken();
             const url = `${BASE_URL}/users/${userId}/team`;
@@ -47,7 +51,10 @@ const useGroupStore = create((set) => ({
         } catch (err) {
             console.log('그룹 생성 실패 -> ', err);
             throw err;
+        } finally {
+            set({ loading: false }); // 로딩 종료
         }
+
     },
 
     // 그룹 참여하기
@@ -212,6 +219,7 @@ const useGroupStore = create((set) => ({
 
     // 그룹 참여 이메일 발송하기
     sendInviteEmail: async ({ groupId, emails }) => {
+        set({ loading: true });
         const accessToken = await useAuthStore.getState().getAccessToken();
         const headers = {
             Authorization: `Bearer ${accessToken}`,
@@ -227,11 +235,14 @@ const useGroupStore = create((set) => ({
         } catch (err) {
             console.log('그룹 참여 이메일 발송하기 실패-> ', err);
             throw err;
+        } finally {
+            set({ loading: false }); // 로딩 종료
         }
     },
 
     // 그룹 내 폴더 정보 불러오기 id=0이면 최상위폴더
     loadFolderInfo: async ({ groupId, folderId }) => {
+        set({ loading: true });
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
             const url = `${BASE_URL}/teams/${groupId}/folder/${folderId}`;
@@ -243,6 +254,8 @@ const useGroupStore = create((set) => ({
         } catch (err) {
             console.log('그룹내 폴더정보 불러오기 실패 -> ', err);
             throw err;
+        } finally {
+            set({ loading: false }); // 로딩 종료
         }
     },
 
@@ -284,6 +297,7 @@ const useGroupStore = create((set) => ({
 
     // 문제 추가하기
     createProblem: async ({ groupId, problemNumber, studyId }) => {
+        set({ loading: true });
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
             const url = `${BASE_URL}/teams/${groupId}/problems`;
@@ -300,8 +314,10 @@ const useGroupStore = create((set) => ({
             return response
         } catch (err) {
             console.log('문제 생성 실패 -> ', err);
-
+        } finally {
+            set({ loading: false }); // 로딩 종료
         }
+
     },
 
     // 문제 삭제하기
@@ -418,8 +434,9 @@ const useGroupStore = create((set) => ({
             const response = await get(url, {}, headers);
             return response
         } catch (err) {
-            console.log(err);
-            throw err;
+            console.log(err.message);
+            alert('페이지를 찾을 수 없습니다')
+            window.history.back();
         }
     },
 
@@ -445,7 +462,7 @@ const useGroupStore = create((set) => ({
 
     // 코드 자동 불러오기
     loadCode: async ({ groupId, userId, problemId }) => {
-        console.log(groupId, userId, problemId);
+        set({ loading: true });
         const accessToken = await useAuthStore.getState().getAccessToken();
         const headers = {
             Authorization: `Bearer ${accessToken}`,
@@ -461,7 +478,10 @@ const useGroupStore = create((set) => ({
         } catch (err) {
             console.log(err);
             throw err;
+        } finally {
+            set({ loading: false }); // 로딩 종료
         }
+
     },
 
     // 코드 페이지 수정하기
