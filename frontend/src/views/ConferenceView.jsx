@@ -40,6 +40,7 @@ function ConferenceView(props) {
   const [showChat, setShowChat] = useState(false); // 채팅창 모달 상태
   const [chatMessages, setChatMessages] = useState([]); // 채팅 메시지 상태
   const [newMessage, setNewMessage] = useState(""); // 새로운 메시지 입력 상태
+  const [hasNewMessage, setHasNewMessage] = useState(false);
 
   const VideoToggleIcon = isVideoEnabled ? VideocamIcon : VideocamOffIcon;
   const MicToggleIcon = isMicEnabled ? MicIcon : MicOffIcon;
@@ -54,6 +55,7 @@ function ConferenceView(props) {
 
   const handleToggleChat = () => {
     setShowChat((prevShowChat) => !prevShowChat);
+    setHasNewMessage(false);
   };
 
   const handleSendMessage = () => {
@@ -72,6 +74,7 @@ function ConferenceView(props) {
           console.error(error);
         });
     }
+    console.log(newMessage);
   };
 
   const handleNewMessageChange = (e) => {
@@ -79,22 +82,35 @@ function ConferenceView(props) {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !e.shiftKey) {
       handleSendMessage();
+      e.preventDefault(); // 기본 Enter 키 동작 방지 (Shift 키가 눌리지 않은 경우에만)
     }
   };
+
+  useEffect(() => {
+    const chatBody = document.querySelector(".chat-body");
+    chatBody.scrollTop = chatBody.scrollHeight; // 스크롤을 아래로 이동
+  }, [chatMessages]); // chatMessages가 업데이트될 때마다 실행
 
   useEffect(() => {
     if (session) {
       session.on("signal:my-chat", (event) => {
         const senderData = JSON.parse(event.from.data);
+        const isCurrentUser = senderData.clientData === myUserName; // 현재 사용자가 보낸 메시지인지 확인
+
         setChatMessages((prevMessages) => [
           ...prevMessages,
-          { from: senderData.clientData, text: event.data },
+          { from: senderData.clientData, text: event.data, isCurrentUser },
         ]);
+
+        // 새 메시지가 현재 사용자에게서 오지 않은 경우에만 알림을 표시
+        if (!isCurrentUser) {
+          setHasNewMessage(true);
+        }
       });
     }
-  }, [session]);
+  }, [session, myUserName]);
 
   const toggleScreenShare = async () => {
     if (!isScreenSharing) {
@@ -267,7 +283,7 @@ function ConferenceView(props) {
         })
         .catch((error) => {
           console.log("세션에 연결하는 동안 오류가 발생했습니다:", error);
-          navigate(`/group`);
+          // navigate(`/group`);
         });
     });
 
@@ -325,8 +341,8 @@ function ConferenceView(props) {
       return response.data; // sessionId
     } catch (error) {
       // 여기서 그룹에 속하지 않은 경우 또는 인증 실패 시 처리
-      alert("접근 권한이 없습니다.");
-      navigate(`/group`); // 그룹 메인 페이지로 이동
+
+      // navigate(`/group`); // 그룹 메인 페이지로 이동
       console.log(error);
     }
   }
@@ -350,7 +366,8 @@ function ConferenceView(props) {
       return response.data; // token
     } catch (error) {
       // 토큰 발급 실패 시 처리
-      navigate(`/group`);
+      // alert("접근 권한이 없습니다.");
+      // navigate(`/group`);
       console.log(error);
     }
   }
@@ -388,8 +405,11 @@ function ConferenceView(props) {
               </button>
             </div>
             <div>
-              <button className="button" onClick={handleToggleChat}>
+              <button className="button chat-button" onClick={handleToggleChat}>
                 채팅
+                {hasNewMessage && (
+                  <span className="new-message-indicator"></span>
+                )}
               </button>
             </div>
           </div>
@@ -414,15 +434,20 @@ function ConferenceView(props) {
             </div>
             <div className="chat-body">
               {chatMessages.map((msg, index) => (
-                <div key={index}>
-                  <strong>{msg.from}: </strong>
+                <div
+                  key={index}
+                  className={`message ${
+                    msg.isCurrentUser ? "current-user" : "other-user"
+                  }`}
+                >
+                  <strong>{msg.from}</strong>
+                  <br />
                   {msg.text}
                 </div>
               ))}
             </div>
             <div className="chat-footer">
-              <input
-                type="text"
+              <textarea
                 value={newMessage}
                 onChange={handleNewMessageChange}
                 onKeyDown={handleKeyPress}
