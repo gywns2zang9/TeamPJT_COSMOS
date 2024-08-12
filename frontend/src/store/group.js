@@ -314,6 +314,9 @@ const useGroupStore = create((set) => ({
             return response
         } catch (err) {
             console.log('문제 생성 실패 -> ', err);
+            if (err.response.data.error.problem === 'problem is not exist.') {
+                window.alert('해당 문제번호는 존재하지 않습니다.')
+            }
         } finally {
             set({ loading: false }); // 로딩 종료
         }
