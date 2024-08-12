@@ -185,15 +185,14 @@ function ConferenceView(props) {
     const handleBeforeUnload = (event) => {
       leaveSession(session);
       event.preventDefault();
-      event.returnValue = '';
+      event.returnValue = "";
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
- 
     return () => {
       leaveSession(session);
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 
@@ -276,7 +275,7 @@ function ConferenceView(props) {
         });
     });
 
-    return newSession
+    return newSession;
   };
 
   const leaveSession = (session) => {
