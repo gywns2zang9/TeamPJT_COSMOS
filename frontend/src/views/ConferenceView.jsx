@@ -108,7 +108,7 @@ function ConferenceView(props) {
         // 새로운 화면 공유 스트림 생성
         const screenPublisher = await OV.initPublisherAsync(undefined, {
           videoSource: "screen",
-          publishAudio: false, // 필요시 오디오 포함 여부 설정
+          publishAudio: true, // 필요시 오디오 포함 여부 설정
           mirror: false,
         });
 
@@ -235,7 +235,6 @@ function ConferenceView(props) {
       newSession
         .connect(token, { clientData: myUserName })
         .then(async () => {
-          // 5) 자신의 카메라 스트림 가져오기
           let newPublisher = await newOV.initPublisherAsync(undefined, {
             audioSource: undefined,
             videoSource: undefined,
@@ -268,7 +267,6 @@ function ConferenceView(props) {
         })
         .catch((error) => {
           console.log("세션에 연결하는 동안 오류가 발생했습니다:", error);
-          // alert("세션에 연결할 수 없습니다.");
           navigate(`/group`);
         });
     });
@@ -352,7 +350,6 @@ function ConferenceView(props) {
       return response.data; // token
     } catch (error) {
       // 토큰 발급 실패 시 처리
-      // alert("토큰을 발급받지 못했습니다.");
       navigate(`/group`);
       console.log(error);
     }
