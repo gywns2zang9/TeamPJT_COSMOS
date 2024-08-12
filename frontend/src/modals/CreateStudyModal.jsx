@@ -45,8 +45,8 @@ function CreateStudyModal({ show, handleClose, groupId }) {
                             onChange={(e) => setYear(Number(e.target.value))}
                         >
                             {years.map((yr) => (
-                                <option key={yr} value={yr}>
-                                    {yr}
+                                <option key={yr} value={yr} style={{ backgroundColor: "#ffffff", color: "#495057"}}>
+                                    {yr}년
                                 </option>
                             ))}
                         </Form.Control>
@@ -59,8 +59,8 @@ function CreateStudyModal({ show, handleClose, groupId }) {
                             onChange={(e) => setMonth(Number(e.target.value))}
                         >
                             {months.map((mn) => (
-                                <option key={mn} value={mn}>
-                                    {mn}
+                                <option key={mn} value={mn} style={{ backgroundColor: "#ffffff", color: "#495057"}}>
+                                    {mn}월
                                 </option>
                             ))}
                         </Form.Control>

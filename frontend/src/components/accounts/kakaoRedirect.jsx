@@ -10,10 +10,13 @@ const KakaoRedirect = () => {
     useEffect(() => {
         const fetchKakaoUser = async () => {
             try {
-                const { accessToken, refreshToken, userInfo } = await kakao({ authorizationCode });
-                navigate(`/users/${userInfo.userId}`);
+                const responseData = await kakao({ authorizationCode });
+                const userId = responseData.userInfo.userId;
+                navigate(`/users/${userId}`)
             } catch (error) {
-                console.log("fetchKakaoUser 오류:", error.response.data.error.user);
+                if (error.response.data.error.user) {
+                    window.alert(`${error.response.data.error.user}`)
+                }
                 navigate('/login')
             }
         };
@@ -25,15 +28,7 @@ const KakaoRedirect = () => {
 
     return (
         <div>
-            <h1>카카오 로그인 페이지!!!</h1>
-            <h1>카카오 로그인 페이지!!!</h1>
-            <h1>카카오 로그인 페이지!!!</h1>
-            <h1>카카오 로그인 페이지!!!</h1>
-            <h1>카카오 로그인 페이지!!!</h1>
-            <h1>카카오 로그인 페이지!!!</h1>
-            <h1>카카오 로그인 페이지!!!</h1>
-            <h1>카카오 로그인 페이지!!!</h1>
-            <h1>카카오 로그인 페이지!!!</h1>
+            <h1>카카오 로그인 중입니다...</h1>
         </div>
     );
 };

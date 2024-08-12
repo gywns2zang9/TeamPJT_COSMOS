@@ -46,7 +46,6 @@ const useAuthStore = create((set) => ({
 
     // 일반 로그인 요청
     login: async ({ email, password }) => {
-        console.log(BASE_URL);
         try {
             const url = `${BASE_URL}/auth/login`;
             const data = { email, password };
@@ -57,9 +56,7 @@ const useAuthStore = create((set) => ({
             localStorage.setItem("userInfo", JSON.stringify(userInfo));
             set({ accessToken, refreshToken, userInfo });
             return responseData;
-
         } catch (error) {
-            console.log("로그인 요청 실패! ->", error);
             throw error;
         }
     },
@@ -71,17 +68,12 @@ const useAuthStore = create((set) => ({
             const data = { authorizationCode };
             const responseData = await post(url, data);
             const { accessToken, refreshToken, userInfo } = responseData;
-
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
             localStorage.setItem("userInfo", JSON.stringify(userInfo));
             set({ accessToken, refreshToken, userInfo });
-
-            console.log(`카카오 로그인 요청 성공! -> ${userInfo.nickName}님, 환영합니다!`);
-            return { accessToken, refreshToken, userInfo };
-
+            return responseData;
         } catch (error) {
-            console.log("카카오 로그인 요청 실패! ->", error);
             throw error;
         }
     },
@@ -92,17 +84,12 @@ const useAuthStore = create((set) => ({
             const data = { authorizationCode, state };
             const responseData = await post(url, data);
             const { accessToken, refreshToken, userInfo } = responseData;
-
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
             localStorage.setItem("userInfo", JSON.stringify(userInfo));
             set({ accessToken, refreshToken, userInfo });
-
-            console.log(`네이버 로그인 성공! -> ${userInfo.nickName}님, 환영합니다!`);
-            return { accessToken, refreshToken, userInfo };
-
+            return responseData;
         } catch (error) {
-            console.log("네아버 로그인 실패! ->", error);
             throw error;
         }
     },
@@ -112,10 +99,8 @@ const useAuthStore = create((set) => ({
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("userInfo");
-        // localStorage.clear();
+        localStorage.clear();
         set({ accessToken: null, refreshToken: null, userInfo: null });
-
-        // 홈 페이지로 리다이렉트
         window.location.href = "/";
     },
 
@@ -133,7 +118,6 @@ const useAuthStore = create((set) => ({
             const responseData = await post(url, data);
             const expiredTime = responseData.expiredTime
             return expiredTime; // 5
-
         } catch (error) {
             throw error;
         }
@@ -162,6 +146,7 @@ const useAuthStore = create((set) => ({
             throw error;
         }
     },
+
     // 비밀번호 변경 요청
     passwordChange: async ({ accessToken, userId, oldPassword, newPassword }) => {
         try {
@@ -226,22 +211,35 @@ const useAuthStore = create((set) => ({
         }
     },
 
+    //정보 불러오기
+    loadUserInfo: async ({ accessToken, userId }) => {
+        try {
+            const url = `${BASE_URL}/users/${userId}`;
+            const headers = {
+                Authorization: `Bearer ${accessToken}`
+            };
+            const responseData = await get(url, {}, headers);
+            localStorage.setItem("userInfo", JSON.stringify(responseData));
+            console.log("정보가져옴")
+            return responseData
+        } catch (error) {
+            throw error
+        }
+    },
+
     //정보 수정 요청
     updateUserInfo: async ({ accessToken, userId, newUserInfo }) => {
         try {
             const url = `${BASE_URL}/users/${userId}`;
             const data = newUserInfo;
-            console.log(data)
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
                 "Content-Type": "application/json"
             };
             const responseData = await patch(url, data, headers);
             localStorage.setItem("userInfo", JSON.stringify(responseData));
-
             return responseData
         } catch (error) {
-            window.alert(`${error.response.data.error.auth}`)
             throw error
         }
     },
