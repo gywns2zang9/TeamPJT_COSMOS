@@ -25,6 +25,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(teamInterceptor)
                 .addPathPatterns("/teams/**") /* 인터셉터가 실행될 url 패턴 */
+                .addPathPatterns("/sessions/**")
 //                .excludePathPatterns("/teams/auth") /* 인터셉터가 실행되지 않을 url 패턴 */
         ;
     }

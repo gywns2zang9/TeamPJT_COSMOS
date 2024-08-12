@@ -23,18 +23,20 @@ public class RtcController {
 
     private OpenVidu openvidu;
 
+    private final static String customSessionId = "customSessionId";
+
     @PostConstruct
     public void init() {
         this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
 
     /**
-     * @param params The Session properties
      * @return The Session ID
      */
-    @PostMapping("/sessions")
-    public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params)
+    @PostMapping("/sessions/teams/{teamId}")
+    public ResponseEntity<String> initializeSession(@PathVariable("teamId") String teamId)
             throws OpenViduJavaClientException, OpenViduHttpException {
+        Map<String, Object> params = Map.of(customSessionId, teamId);
         SessionProperties properties = SessionProperties.fromJson(params).build();
         Session session = openvidu.createSession(properties);
         return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
@@ -45,8 +47,8 @@ public class RtcController {
      * @param params    The Connection properties
      * @return The Token associated to the Connection
      */
-    @PostMapping("/sessions/{sessionId}/connections")
-    public ResponseEntity<String> createConnection(@PathVariable("sessionId") String sessionId,
+    @PostMapping("/sessions/teams/{teamId}/connections")
+    public ResponseEntity<String> createConnection(@PathVariable("teamId") String sessionId,
                                                    @RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
         Session session = openvidu.getActiveSession(sessionId);
