@@ -5,6 +5,9 @@ import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.folder.exception.FolderNotFoundException;
 import S11P12A708.A708.domain.folder.repository.FolderRepository;
 import S11P12A708.A708.domain.folder.repository.query.FolderQueryRepository;
+import S11P12A708.A708.domain.problem.entity.Problem;
+import S11P12A708.A708.domain.problem.repository.ProblemRepository;
+import S11P12A708.A708.domain.problem.repository.ProblemUserRepository;
 import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.study.exception.StudyNotBelongToTeamException;
 import S11P12A708.A708.domain.study.exception.StudyNotFoundException;
@@ -30,6 +33,8 @@ public class StudyService {
     private final FolderQueryRepository folderQueryRepository;
     private final FolderRepository folderRepository;
     private final StudyRepository studyRepository;
+    private final ProblemRepository problemRepository;
+    private final ProblemUserRepository problemUserRepository;
 
     public void createStudy(Long teamId, StudyCreateRequest request) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
@@ -88,11 +93,35 @@ public class StudyService {
                 .findFirst()
                 .orElseThrow(FolderNotFoundException::new);
 
+        problemRepository.findByStudy(study)
+                .forEach(problem -> deleteProblem(teamId, studyId, problem));
+
         yearMonthFolder.removeSubFolder(timeFolder);
         folderRepository.delete(timeFolder);
 
+        // 년 월 폴더안에 남은 회차가 없다면
+        if(yearMonthFolder.getSubFolders().isEmpty()) {
+            rootFolder.removeSubFolder(yearMonthFolder);
+            folderRepository.delete(yearMonthFolder);
+        }
+
         // 스터디 객체 삭제
         studyRepository.deleteById(studyId);
+    }
+
+    private void deleteProblem(Long teamId, Long studyId, Problem problem) {
+        problemUserRepository.deleteByProblem(problem);
+
+        Folder studyFolder = findStudyFolder(teamId, studyId);
+        Folder problemFolder = studyFolder.getSubFolders().stream()
+                .filter(subFolder -> subFolder.getProblem().equals(problem))
+                .findFirst()
+                .orElseThrow(FolderNotFoundException::new);
+
+        folderRepository.delete(problemFolder);
+        studyFolder.removeSubFolder(problemFolder);
+
+        problemRepository.delete(problem);
     }
 
     public Folder findStudyFolder(Long teamId, Long studyId) {
