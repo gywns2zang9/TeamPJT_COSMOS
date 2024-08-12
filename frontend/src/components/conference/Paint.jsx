@@ -6,7 +6,11 @@ const Paint = ({ groupId }) => {
   const store = useSyncDemo({ roomId: groupId });
   return (
     <div className="paint-container">
-      <Tldraw store={store} className="tldraw-component" />
+      <Tldraw
+        store={store}
+        className="tldraw-component"
+        disableAssets={true} /* asset 도구 비활성화 */
+      />
     </div>
   );
 };
