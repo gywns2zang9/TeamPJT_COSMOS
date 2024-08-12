@@ -1,7 +1,6 @@
-// src/components/group/groupDetailInfo.jsx
 import React from "react";
-import MainPageTemplates from "./template/mainPageTemplates"; // 메인 페이지 템플릿 컴포넌트를 가져옵니다.
-import MarkdownEditor from "./template/NormalTemplates"; // 마크다운 편집기 컴포넌트를 가져옵니다.
+import MainPageTemplates from "./template/mainPageTemplates"; 
+import MarkdownEditor from "./template/NormalTemplates"; 
 import CodePageTemplates from "./template/codePageTemplates";
 import OverviewPageTemplagtes from "./template/OverviewPageTemplates";
 import NormalTemplates from "./template/NormalTemplates";
