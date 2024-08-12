@@ -1,20 +1,33 @@
 import React, { useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Modal, Button, Form, Spinner } from 'react-bootstrap';
 import useGroupStore from '../store/group';
 
-function CreateProblemModal({ show, handleClose, groupId, studyId }) {
+function CreateProblemModal({ show, handleClose, groupId, studyId, existingProblems }) {
     const [problemSite, setProblemSite] = useState('');
     const [problemNumber, setProblemNumber] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const createProblem = useGroupStore((state) => state.createProblem)
     
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(`Site: ${problemSite}, Number: ${problemNumber}`);
-        // TODO: API 요청 (problemSite, problemNumber)
-        await createProblem({ groupId, problemNumber, studyId });
-        window.location.reload();
-        handleClose();
+
+        const isAlreadyAdded = existingProblems.some(problem => String(problem.number) === problemNumber);
+        if (isAlreadyAdded) {
+            alert('이미 추가된 문제입니다.');
+            return;
+        }
+
+        setIsLoading(true); // 로딩 상태 시작
+        try {
+            await createProblem({ groupId, problemNumber, studyId });
+            window.location.reload();
+            handleClose();
+        } catch (error) {
+            console.error("문제를 추가하는 중 오류가 발생했습니다.", error);
+        } finally {
+            setIsLoading(false); // 로딩 상태 종료
+        }
     };
 
 
@@ -26,16 +39,7 @@ function CreateProblemModal({ show, handleClose, groupId, studyId }) {
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId="problemSite">
-                        <Form.Label>문제 사이트</Form.Label>
-                        <Form.Control as="select" value={problemSite} onChange={(e) =>setProblemSite(e.target.value)}>
-                            <option value="">사이트를 선택하세요</option>
-                            <option value="baekjoon">백준</option>
-                            <option value="programmers">프로그래머스</option>
-                            <option value="swea">스웨아</option>
-                            <option value="etc">기타</option>
-                        </Form.Control>
-                    </Form.Group>
+                    현재는 Baekjoon의 문제만 제공합니다.. 추후 추가 예정
                     <Form.Group controlId="problemNumber" style={{ marginTop: '1rem' }}>
                         <Form.Label>문제 번호</Form.Label>
                         <Form.Control 
@@ -43,10 +47,23 @@ function CreateProblemModal({ show, handleClose, groupId, studyId }) {
                             placeholder="문제 번호를 입력하세요" 
                             value={problemNumber} 
                             onChange={(e) => setProblemNumber(e.target.value)} 
+                            disabled={isLoading}
                         />
                     </Form.Group>
                     <Button variant="primary" type="submit" style={{ marginTop: '1rem' }}>
-                        제출
+                        {isLoading ? (
+                            <>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                /> 문제를 불러오는 중...
+                            </>
+                        ) : (
+                            '제출'
+                        )}
                     </Button>
                 </Form>
             </Modal.Body>
