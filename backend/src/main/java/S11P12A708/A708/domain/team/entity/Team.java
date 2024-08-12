@@ -1,5 +1,6 @@
 package S11P12A708.A708.domain.team.entity;
 
+import S11P12A708.A708.common.database.BaseEntity;
 import S11P12A708.A708.domain.calendar.entity.Calendar;
 import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.team.request.TeamInfoRequest;
@@ -8,17 +9,14 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 지연 로딩 proxy 을 위해서
-public class Team {
+public class Team extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,13 +29,6 @@ public class Team {
 
     @Column(unique = true)
     private String teamCode;
-
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "team")
     private List<TeamUser> TeamUsers = new ArrayList<>();
@@ -52,7 +43,6 @@ public class Team {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.createdAt = LocalDateTime.now();
     }
 
     public Team(String name, String description) {
@@ -75,6 +65,5 @@ public class Team {
         this.id = updateTeam.getId();
         this.name = updateTeam.getName();
         this.description = updateTeam.getDescription();
-        this.modifiedAt = LocalDateTime.now();
     }
 }

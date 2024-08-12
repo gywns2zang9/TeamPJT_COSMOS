@@ -1,19 +1,16 @@
 package S11P12A708.A708.domain.code.entity;
 
 
+import S11P12A708.A708.common.database.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 지연 로딩 proxy 을 위해서
-public class Code {
+public class Code extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,18 +24,9 @@ public class Code {
     @Enumerated(EnumType.STRING)
     private Language language;
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
-
     public Code(String content, Language language) {
         this.content = content;
         this.language = language;
-        this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
     }
 
     public static Code createBasic() {
@@ -48,6 +36,5 @@ public class Code {
     public void update(Code newCode) {
         this.content = newCode.getContent();
         this.language = newCode.getLanguage();
-        this.modifiedAt = LocalDateTime.now();
     }
 }
