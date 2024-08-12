@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/auth";
 import "../../css/accounts/signUp.css";
+import "../../css/accounts/accounts.css";
 import naverIcon from "../../assets/media/navericon.png";
 import kakaoIcon from "../../assets/media/kakaoicon.png";
 
@@ -211,7 +212,7 @@ const handleKakaoSignup = () => {
   return (
     <div id="signup-container">
       <div id="signup-box">
-        <div id="signup-title">회원가입</div>
+        <div className="accounts-title">회원가입</div>
 
         <div id="signup-email-group">
           <label id="signup-email-label" htmlFor="signup-email">
