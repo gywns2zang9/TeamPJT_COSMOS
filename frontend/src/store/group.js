@@ -485,13 +485,13 @@ const useGroupStore = create((set) => ({
     },
 
     // 코드 페이지 수정하기
-    updateCodeFile: async ({ groupId, fileId, name, code, content, language }) => {
+    updateCodeFile: async ({ groupId, pageId, name, code, content, language }) => {
         const accessToken = await useAuthStore.getState().getAccessToken();
         const headers = {
             Authorization: `Bearer ${accessToken}`,
         };
         try {
-            const url = `${BASE_URL}/teams/${groupId}/files/codes/${fileId}`;
+            const url = `${BASE_URL}/teams/${groupId}/files/${pageId}/code`;
             const data = {
                 name,
                 code,
