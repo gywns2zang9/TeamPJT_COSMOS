@@ -132,6 +132,7 @@ function ConferenceView(props) {
             publishCameraStream(); // 화면 공유 종료 시 카메라 스트림으로 전환
           });
       } catch (error) {
+        publishCameraStream(); // 카메라 스트림으로 전환
         console.error("Error starting screen share:", error);
       }
     } else {
@@ -179,17 +180,21 @@ function ConferenceView(props) {
   };
 
   useEffect(() => {
-    window.addEventListener("beforeunload", onbeforeunload);
-    joinSession();
+    const session = joinSession();
+
+    const handleBeforeUnload = (event) => {
+      leaveSession(session);
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
     return () => {
-      window.removeEventListener("beforeunload", onbeforeunload);
-      leaveSession();
+      leaveSession(session);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
-
-  const onbeforeunload = (event) => {
-    leaveSession();
-  };
 
   const handleMainVideoStream = (stream) => {
     setMainStreamManager(stream);
@@ -269,9 +274,12 @@ function ConferenceView(props) {
           );
         });
     });
+
+    return newSession;
   };
 
-  const leaveSession = () => {
+  const leaveSession = (session) => {
+    // console.log("leaveSession : ", session)
     if (session) {
       session.disconnect();
     }

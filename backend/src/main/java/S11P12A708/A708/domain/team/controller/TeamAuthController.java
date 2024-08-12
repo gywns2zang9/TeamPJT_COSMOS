@@ -28,7 +28,6 @@ public class TeamAuthController {
     @GetMapping("/users/{userId}/teams")
     public ResponseEntity<List<TeamResponse>> getTeamList(
             @PathVariable Long userId) {
-
         final List<TeamResponse> teamResponses = teamAuthService.getTeamsByUserId(userId);
         return new ResponseEntity<>(teamResponses, HttpStatus.OK);
     }
@@ -37,7 +36,6 @@ public class TeamAuthController {
     public ResponseEntity<TeamIdResponse> createTeam(
             @PathVariable Long userId,
             @Valid @RequestBody TeamInfoRequest request) {
-
         final TeamIdResponse response = teamAuthService.createTeam(userId, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -46,7 +44,6 @@ public class TeamAuthController {
     public ResponseEntity<TeamResponse> joinTeam(
             @PathVariable Long userId,
             @Valid @RequestBody TeamJoinRequest request) {
-
         final TeamResponse response = teamAuthService.joinTeam(userId, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -71,7 +68,6 @@ public class TeamAuthController {
     @GetMapping("/teams/auth/{teamId}/teamCode")
     public ResponseEntity<TeamCodeResponse> getTeamCode(
             @PathVariable Long teamId) {
-
         final TeamCodeResponse response = teamAuthService.getTeamCode(teamId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
