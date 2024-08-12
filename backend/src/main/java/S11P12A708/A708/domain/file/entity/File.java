@@ -111,4 +111,9 @@ public class File extends BaseEntity {
         this.content = req.getContent();
     }
 
+    public String getName() {
+        if(type == FileType.CODE) return getUser().getNickname() + name;
+        return name;
+    }
+
 }

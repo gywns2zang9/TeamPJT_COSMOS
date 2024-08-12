@@ -85,7 +85,7 @@ public class ProblemService {
             final Code code = codeCrawler.createByCrawler(user, req.getProblemNumber());
             codeRepository.save(code);
 
-            final File UserCodeFile  = File.createCodeFile(user.getNickname() + "님의 풀이", user, individualCodeFolder, code);
+            final File UserCodeFile  = File.createCodeFile("의 풀이", user, individualCodeFolder, code);
             individualCodeFolder.addFile(UserCodeFile);
 
             final ProblemUser problemUser = new ProblemUser(savedProblem, user, UserCodeFile);

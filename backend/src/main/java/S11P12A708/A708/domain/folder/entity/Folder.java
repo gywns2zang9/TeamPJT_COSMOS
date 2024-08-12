@@ -77,6 +77,11 @@ public class Folder extends BaseEntity {
         this.problem = problem;
     }
 
+    public String getName() {
+        if(user == null) return name;
+        else return user.getNickname();
+    }
+
     public Folder(String name, Team team, Folder parentFolder) {
         this(name, null, team, parentFolder, null);
     }
