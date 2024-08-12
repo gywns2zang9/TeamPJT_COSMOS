@@ -267,11 +267,9 @@ function ConferenceView(props) {
           setPublisher(newPublisher);
         })
         .catch((error) => {
-          console.log(
-            "세션에 연결하는 동안 오류가 발생했습니다:",
-            error.code,
-            error.message
-          );
+          console.log("세션에 연결하는 동안 오류가 발생했습니다:", error);
+          // alert("세션에 연결할 수 없습니다.");
+          navigate(`/group`);
         });
     });
 
@@ -315,35 +313,49 @@ function ConferenceView(props) {
 
   async function createSession(sessionId) {
     const accessToken = await useAuthStore.getState().getAccessToken();
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions/teams/" + sessionId,
-      { customSessionId: sessionId },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    return response.data; // The sessionId
+    try {
+      const response = await axios.post(
+        APPLICATION_SERVER_URL + "api/sessions/teams/" + sessionId,
+        { customSessionId: sessionId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data; // sessionId
+    } catch (error) {
+      // 여기서 그룹에 속하지 않은 경우 또는 인증 실패 시 처리
+      alert("접근 권한이 없습니다.");
+      navigate(`/group`); // 그룹 메인 페이지로 이동
+      console.log(error);
+    }
   }
 
   async function createToken(sessionId) {
     const accessToken = await useAuthStore.getState().getAccessToken();
-    const response = await axios.post(
-      APPLICATION_SERVER_URL +
-        "api/sessions/teams/" +
-        sessionId +
-        "/connections",
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    return response.data; // The token
+    try {
+      const response = await axios.post(
+        APPLICATION_SERVER_URL +
+          "api/sessions/teams/" +
+          sessionId +
+          "/connections",
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data; // token
+    } catch (error) {
+      // 토큰 발급 실패 시 처리
+      // alert("토큰을 발급받지 못했습니다.");
+      navigate(`/group`);
+      console.log(error);
+    }
   }
 
   return (
