@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/auth";
 import "../../css/accounts/login.css";
+import "../../css/accounts/accounts.css";
 import naverIcon from "../../assets/media/navericon.png";
 import kakaoIcon from "../../assets/media/kakaoicon.png";
 
@@ -13,15 +14,15 @@ const Login = () => {
   const login = useAuthStore((state) => state.login);
 
   // 이메일 입력 핸들러
-  const handleEmailInput = (event) => {
+  const handleEmailInput = (e) => {
     setLoginErrorMessage(""); 
-    setEmail(event.target.value);
+    setEmail(e.target.value);
   };
   
   // 비밀번호 입력 핸들러
-  const handlePasswordInput = (event) => {
-    setPassword(event.target.value);
+  const handlePasswordInput = (e) => {
     setLoginErrorMessage("");
+    setPassword(e.target.value);
   };
 
   // 로그인 버튼 핸들러
@@ -33,7 +34,7 @@ const Login = () => {
     }
     try {
       await login({ email, password });
-      navigate(`/group`);
+      navigate('/group');
     } catch (error) {
       let errorMessage;
        if (error.response.data.error.auth) {
@@ -73,17 +74,17 @@ const Login = () => {
   };
 
   // 엔터키로 로그인 처리
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault(); 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); 
       handleLoginButton(); 
     }
   };
 
   return (
-    <div id="login-container">
-      <div id="login-box">
-        <div id="login-title">로그인</div>
+    <div className="accounts-container">
+      <div className="accounts-box">
+        <div className="accounts-title">로그인</div>
 
         <div id="login-email-group">
           <label id="login-email-label" htmlFor="login-email">
@@ -122,11 +123,8 @@ const Login = () => {
         {/* 로그인 오류 메시지 표시 */}
         {loginErrorMessage && <p id="login-error-message">{loginErrorMessage}</p>}
 
-        <button
-          id="login-button"
-          onClick={handleLoginButton}
-        >
-          로그인        
+        <button id="login-button" onClick={handleLoginButton}>
+          로그인
         </button>
 
         {/* 구분선 */}
