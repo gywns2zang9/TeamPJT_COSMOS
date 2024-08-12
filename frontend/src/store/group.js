@@ -314,6 +314,9 @@ const useGroupStore = create((set) => ({
             return response
         } catch (err) {
             console.log('문제 생성 실패 -> ', err);
+            if (err.response.data.error.problem === 'problem is not exist.') {
+                window.alert('해당 문제번호는 존재하지 않습니다.')
+            }
         } finally {
             set({ loading: false }); // 로딩 종료
         }
@@ -485,13 +488,13 @@ const useGroupStore = create((set) => ({
     },
 
     // 코드 페이지 수정하기
-    updateCodeFile: async ({ groupId, fileId, name, code, content, language }) => {
+    updateCodeFile: async ({ groupId, pageId, name, code, content, language }) => {
         const accessToken = await useAuthStore.getState().getAccessToken();
         const headers = {
             Authorization: `Bearer ${accessToken}`,
         };
         try {
-            const url = `${BASE_URL}/teams/${groupId}/files/codes/${fileId}`;
+            const url = `${BASE_URL}/teams/${groupId}/files/${pageId}/code`;
             const data = {
                 name,
                 code,

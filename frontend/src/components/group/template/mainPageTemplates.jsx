@@ -52,7 +52,9 @@ const MainPageTemplates = ({ groupId }) => {
                         <span>그룹 소개 : {groupInfo.description}</span>
                     </GroupInfoText>
                 )}
+                <div style={{margin:'15px'}}>
                 <Calendar groupId={groupId} />
+                </div>
             </div>
         </>
     );

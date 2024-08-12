@@ -17,6 +17,7 @@ import S11P12A708.A708.domain.user.request.ChangePwRequest;
 import S11P12A708.A708.domain.user.request.ChangeUserRequest;
 import S11P12A708.A708.domain.user.response.UserInfo;
 import S11P12A708.A708.domain.user.response.UserCode;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional
 public class UserService {
     private final PasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;

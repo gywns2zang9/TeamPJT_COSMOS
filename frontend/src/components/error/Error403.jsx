@@ -1,11 +1,9 @@
 import React from 'react';
 
-const backgroundImageUrl = require('../../assets/error/401error.jpeg');
 
 function Error403(props) {
     const containerStyle = {
-        height: '100vh', 
-        backgroundImage: `url(${backgroundImageUrl})`, 
+        height: '100vh',  
         backgroundSize: 'cover', 
         backgroundPosition: 'center', 
         backgroundRepeat: 'no-repeat', 

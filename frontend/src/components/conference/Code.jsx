@@ -70,9 +70,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const handleExecute = async () => {
     const content = myCode.toString();
     try {
-      const response = await runCode({ content, language, input: [input] });
+      const response = await runCode({ content, language, input: input });
       console.log(response);
-      setOutput(response.results[0]);
+      setOutput(response.results);
     } catch (err) {
       console.error("실행  실패", err);
     }
