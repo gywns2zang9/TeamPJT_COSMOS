@@ -171,7 +171,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                                         <textarea
                                             value={io.input}
                                             onChange={(e) => handleInputChange(index, e.target.value)}
-                                            style={{ width: '100%', height: '100px', backgroundColor:'inherit' }}
+                                            style={{ width: '100%', height: '100px', backgroundColor:'inherit', color:'white' }}
                                         />
                                     </CardText>
                                 </div>
