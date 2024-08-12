@@ -156,7 +156,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                     <textarea 
                         value={codeContent} 
                         onChange={handleCodeChange} // onChange 핸들러 추가
-                        style={{ width: '100%', height: '300px', backgroundColor:'inherit' }} // 스타일 추가
+                        style={{ width: '100%', height: '300px', backgroundColor:'inherit', color:'white' }} // 스타일 추가
                     />
                     <CardText>
                         <Button onClick={addInputOutput}>입력 추가하기</Button>
