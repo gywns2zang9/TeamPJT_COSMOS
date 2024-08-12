@@ -22,14 +22,12 @@ const useAuthStore = create((set) => ({
 
     // 액세스 토큰 재발급
     reissuanceAccessToken: async ({ refreshToken }) => {
-        console.log(`${refreshToken}로 액세스 토큰 재발급을 시도할게`)
         try {
             const url = `${BASE_URL}/auth/refresh`
             const headers = {
                 Authorization: `Bearer ${refreshToken}`,
             };
             const newAccessToken = await get(url, {}, headers);
-            console.log("accessToken 재발급:", newAccessToken)
             localStorage.setItem("accessToken", newAccessToken);
             return newAccessToken
         } catch (error) {
@@ -220,7 +218,6 @@ const useAuthStore = create((set) => ({
             };
             const responseData = await get(url, {}, headers);
             localStorage.setItem("userInfo", JSON.stringify(responseData));
-            console.log("정보가져옴")
             return responseData
         } catch (error) {
             throw error
