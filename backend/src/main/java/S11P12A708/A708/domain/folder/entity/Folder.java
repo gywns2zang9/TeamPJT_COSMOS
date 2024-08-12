@@ -91,7 +91,7 @@ public class Folder extends BaseEntity {
     }
 
     public static Folder createProblemFolder(Team team, Folder parentFolder, Problem problem) {
-        return new Folder(problem.getName(), null, team, parentFolder, problem);
+        return new Folder(problem.getNumber() + ". " + problem.getName(), null, team, parentFolder, problem);
     }
 
     public static Folder createIndividualCodeFolder(Team team, User user,Folder parentFolder, Problem problem) {

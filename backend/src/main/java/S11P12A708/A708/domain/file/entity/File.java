@@ -90,15 +90,15 @@ public class File extends BaseEntity {
     }
 
     public static File createOverViewFile(Folder folder) {
-        return new File("전체 개요", "", FileType.OVERVIEW, folder);
+        return new File("전체 문제목록", "", FileType.OVERVIEW, folder);
     }
 
     public static File createMainFile(Folder folder) {
-        return new File("메인 페이지", "", FileType.MAIN, folder);
+        return new File("그룹 정보", "", FileType.MAIN, folder);
     }
 
     public static File createTimeOverViewFile(Folder folder, Study study) {
-        return new File("스터디 개요", "", FileType.TIME_OVERVIEW, folder, study);
+        return new File("문제목록", "", FileType.TIME_OVERVIEW, folder, study);
     }
 
     public void update(File updateFile) {
