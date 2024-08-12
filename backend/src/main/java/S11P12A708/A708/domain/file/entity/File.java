@@ -2,7 +2,6 @@ package S11P12A708.A708.domain.file.entity;
 
 import S11P12A708.A708.common.database.BaseEntity;
 import S11P12A708.A708.domain.code.entity.Code;
-import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.user.entity.User;
@@ -106,14 +105,9 @@ public class File extends BaseEntity {
         this.content = updateFile.getContent();
     }
 
-    public void update(CodeFileUpdateRequest req) {
-        this.name = req.getName();
-        this.content = req.getContent();
-    }
-
     public String getName() {
-        if(type == FileType.CODE) return getUser().getNickname() + name;
-        return name;
+        if(type != FileType.CODE) return name;
+        return this.user.getNickname() + name + this.code.getLanguage().getExtension();
     }
 
 }
