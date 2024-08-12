@@ -90,16 +90,11 @@ public class CodeService {
     public ExecuteCodeResponse getExecuteResult(ExecuteCodeRequest request) {
         final Language language = request.getLanguage(); // 언어
         final String code = request.getContent(); // 코드
-        final String[] inputs = request.getInputs(); // input 값들
+        final String input = request.getInputs(); // input 값
 
-        int len = inputs.length;
-        String[] results = new String[len];
-        for (int i = 0; i < len; i++) {
-            String result = language.executeCode(code, inputs[i]);
-            results[i] = result;
-        }
+        final String result = language.executeCode(code, input);
 
-        return new ExecuteCodeResponse(results);
+        return new ExecuteCodeResponse(result);
     }
 
 }

@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class ExecuteCodeResponse {
 
     @NotBlank
-    String[] results;
+    String results;
 }
