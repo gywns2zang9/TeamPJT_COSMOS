@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { FaFileAlt } from 'react-icons/fa';
+import { FaFileAlt, FaTrash } from 'react-icons/fa';
 import { MdRefresh } from 'react-icons/md';
 import useGroupStore from '../../../store/group';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import CreateProblemModal from '../../../modals/CreateProblemModal';
+import DeleteStudyModal from '../../../modals/DeleteStudyModal';
 
 const initialHeaderState = {
     year:'',
@@ -19,10 +20,13 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
     const location = useLocation();
     const [problems, setProblems] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+
     const [studyId, setStudyId] = useState('');
     const [header, setHeader] = useState(initialHeaderState)
     const getCode = useGroupStore((state) => state.loadCode);
     const navigate = useNavigate();
+    const deleteProblem = useGroupStore((state) => state.deleteProblem);
 
     useEffect(() => {
         const loadFile = async () => {
@@ -57,6 +61,10 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
     const handleShowModal = () => setShowModal(true)
     const handleCloseModal = () => setShowModal(false)
 
+    const handleShowDeleteModal = () => setShowDeleteModal(true)
+    const handleCloseDeleteModal = () => setShowDeleteModal(false)
+    
+    
     // 코드페이지로 이동
     const navigateCodePage = async (memberStatus) => {
         console.log(memberStatus);
@@ -68,16 +76,29 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
         await getCode({ groupId, userId:memberStatus.userId, problemId})
     }
 
+    // 문제 삭제하기
+    const onDeleteFile = async (problemId) => {
+        await deleteProblem({ groupId, problemId, studyId })
+        window.location.reload()
+    }
+
     return (
         <div style={{ color: 'white' }}>
             <h1>{header.year}년 {header.month}월 {header.order}회차 스터디</h1>
             <Button variant="primary" onClick={handleShowModal}>문제 추가하기</Button> 
+            <Button variant="primary" onClick={handleShowDeleteModal}>스터디 삭제하기</Button> 
             <CreateProblemModal 
                 show={showModal} 
                 handleClose={handleCloseModal} 
                 groupId={groupId}
                 studyId={studyId}
                 existingProblems={problems}
+            />  
+            <DeleteStudyModal 
+                show={showDeleteModal} 
+                handleClose={handleCloseDeleteModal} 
+                groupId={groupId}
+                studyId={studyId}
             />  
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                 <thead>
@@ -100,6 +121,7 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
                                 <a href={`https://www.acmicpc.net/problem/${problem.number}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                                     {problem.name}
                                 </a>
+                                <FaTrash onClick={() => onDeleteFile(problem.problemId)}/>
                             </td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.level}</td>
                             {members.map((member, memberIndex) => (

@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import useStore from './index.js';
 import { deleteRequest, get, patch, post } from '../api/api.js'
 import useAuthStore from './auth.js'
+import axios from 'axios';
+import { useNavigate  } from 'react-router-dom';
 
 const BASE_URL = useStore.getState().BASE_URL;
 const useGroupStore = create((set) => ({
@@ -264,6 +266,22 @@ const useGroupStore = create((set) => ({
         }
     },
 
+    // 스터디 삭제하기
+    deleteStudy: async ({ groupId, studyId }) => {
+        try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const url = `${BASE_URL}/teams/${groupId}/study/${studyId}`;
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            };
+            const response = await deleteRequest(url, {}, headers);
+            return response
+        } catch (err) {
+            console.log('스터디 삭제 실패 -> ', err);
+            throw err;
+        }
+    },
+
     // 문제 추가하기
     createProblem: async ({ groupId, problemNumber, studyId }) => {
         try {
@@ -283,6 +301,28 @@ const useGroupStore = create((set) => ({
         } catch (err) {
             console.log('문제 생성 실패 -> ', err);
 
+        }
+    },
+
+    // 문제 삭제하기
+    deleteProblem: async ({ groupId, problemId, studyId }) => {
+        try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const url = `${BASE_URL}/teams/${groupId}/problems/${problemId}`;
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+                headers: { 'Content-Type': 'application/json' }, 
+            };
+            const data = { studyId }
+            const response = await axios.delete(url, {
+                headers,
+                data
+            })
+            console.log(response);
+            return response
+        } catch (err) {
+            console.log('문제 삭제 실패`1 -> ', err);
+            throw err;
         }
     },
 

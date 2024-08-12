@@ -27,6 +27,7 @@ const NormalTemplates = ({ pageId, groupId }) => {
             toolbar: false,
         });
         setEditor(simpleMDE);
+        simpleMDE.codemirror.setOption('lineNumbers', true);
 
         const { ydoc } = setupYjsDoc(`${groupId}-${pageId}`);
         const yText = ydoc.getText('codemirror');
@@ -128,18 +129,37 @@ const NormalTemplates = ({ pageId, groupId }) => {
         return () => clearInterval(intervalId); 
     }, [title]);
     
+    // 스타일 적용
+    useEffect(() => {
+        const codeMirrorElement = document.querySelector('.CodeMirror');
+        if (codeMirrorElement) {
+            codeMirrorElement.style.background = 'inherit';
+            codeMirrorElement.style.border = '1px solid white';
+            codeMirrorElement.style.color = 'white';
+        }
+        const lineNumbersElement = document.querySelectorAll('.CodeMirror-gutters');
+        lineNumbersElement.forEach((element) => {
+            element.style.background = 'inherit';
+            element.style.color = '#2F95DC';
+        });
+    }, [editor]);
+
     return (
         <>
             <div>
-                <Card>
-                    <Card.Header>
-                        <p>페이지 제목 : </p>
-                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-                        <Button onClick={updateTitle}>변경</Button>
+                <Card style={{ backgroundColor:'inherit'}}>
+                    <Card.Header style={{ backgroundColor:'inherit'}}>
+                        <input 
+                            type="text" 
+                            value={title} 
+                            onChange={(e) => setTitle(e.target.value)} 
+                            style={{ backgroundColor:'inherit', width:'70%', marginRight:'10px' }}
+                        />
+                        <Button onClick={updateTitle}>제목 변경</Button>
                     </Card.Header>
                 </Card>
             </div>
-            <div style={{ height: '100vh', margin: '0', padding: '10px', overflow: 'auto' }}>
+            <div style={{ height: '100vh', margin: '0', padding: '10px', overflow: 'auto', backgroundColor:'inherit', color:'white'}}>
                 <textarea ref={editorRef} />
             </div>
         </>
