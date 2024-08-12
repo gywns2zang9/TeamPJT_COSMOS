@@ -132,6 +132,7 @@ function ConferenceView(props) {
             publishCameraStream(); // 화면 공유 종료 시 카메라 스트림으로 전환
           });
       } catch (error) {
+        publishCameraStream(); // 카메라 스트림으로 전환
         console.error("Error starting screen share:", error);
       }
     } else {
