@@ -25,6 +25,12 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
     setLanguage(event.target.value);
   };
 
+  useEffect(() => {
+    if (isShared) {
+      setShowIO(false); // 공유 코드 모드로 전환 시 인풋/아웃풋 창을 숨김
+    }
+  }, [isShared]);
+
   const switchToPersonalMode = () => {
     setIsShared(false);
   };

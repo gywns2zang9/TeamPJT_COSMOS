@@ -42,6 +42,7 @@
   right: 5px;
   display: flex;
   justify-content: space-between;
+  z-index: 9999;
   /* gap: 5px; */
 }
 
