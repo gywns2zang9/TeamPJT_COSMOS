@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/auth";
 import "../../css/accounts/signUp.css";
+import "../../css/accounts/accounts.css";
 import naverIcon from "../../assets/media/navericon.png";
 import kakaoIcon from "../../assets/media/kakaoicon.png";
 
@@ -211,7 +212,7 @@ const handleKakaoSignup = () => {
   return (
     <div id="signup-container">
       <div id="signup-box">
-        <div id="signup-title">회원가입</div>
+        <div className="accounts-title">회원가입</div>
 
         <div id="signup-email-group">
           <label id="signup-email-label" htmlFor="signup-email">
@@ -234,17 +235,19 @@ const handleKakaoSignup = () => {
               전송
             </button>
           </div>
-          {emailSending && <div id="email-sending-message">인증번호를 전송 중입니다. 잠시만 기다려주세요.</div>}
-          {emailSent && (
-            <div id="email-send-success-message">
-              인증번호를 발송했습니다. {timeMessage && <span>{timeMessage}</span>}
-              <div>
-                인증번호가 오지 않았나요?
-                <b id="email-send-fail-message" onClick={handleResendCode}> 재전송</b>
+          {!authVerified && (<>
+            {emailSending && <div id="email-sending-message">인증번호를 전송 중입니다. 잠시만 기다려주세요.</div>}
+            {emailSent && (
+              <div id="email-send-success-message">
+                인증번호를 발송했습니다. {timeMessage && <span>{timeMessage}</span>}
+                <div>
+                  인증번호가 오지 않았나요?
+                  <b id="email-send-fail-message" onClick={handleResendCode}> 재전송</b>
+                </div>
               </div>
-            </div>
-          )}
-          {emailError && <div id="email-fail-message">{emailError}</div>}
+            )}
+            {emailError && <div id="email-fail-message">{emailError}</div>}
+          </>)}
         </div>
 
         <div id="auth-code-group">

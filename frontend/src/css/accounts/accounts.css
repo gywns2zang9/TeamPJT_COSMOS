@@ -29,6 +29,7 @@
     font-size: 24px; /* 글꼴 크기 설정 */
     font-weight: 500; /* 글꼴 두께 설정 */
     color: #fff; /* 글꼴 색상 설정 */
-    margin-bottom: 24px; /* 하단 여백 설정 */
     text-align: center; /* 중앙 정렬 */
+    margin: 4px;
+    padding: 4px;
   }
