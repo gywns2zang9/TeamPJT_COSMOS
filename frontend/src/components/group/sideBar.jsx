@@ -359,7 +359,7 @@ useEffect(() => {
     const childFiles = structure.files.filter((f) => f.parentId === folder.id);
 
     return (
-      <div key={folder.id} className="folder">
+      <div key={folder.id} className="folder" >
         <div className="d-flex align-items-center">
           <OverlayTrigger
             placement="right"
@@ -370,6 +370,7 @@ useEffect(() => {
               onClick={() => toggleFolderExpansion(folder.id)}
             >
               {isExpanded ? <FaChevronDown /> : <FaChevronRight />}
+              &nbsp;
               <FaFolder className="me-2" />
               {editingItemId === folder.id ? (
                 <input
@@ -385,31 +386,8 @@ useEffect(() => {
               )}
             </div>
           </OverlayTrigger>
-          <div className="folder-actions ms-auto">
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip>폴더 추가</Tooltip>}
-            >
-              <Button
-                variant="link"
-                size="sm"
-                onClick={() => handleAddItemClick("folder", folder.id)}
-              >
-                <FaFolderPlus />
-              </Button>
-            </OverlayTrigger>
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip>파일 추가</Tooltip>}
-            >
-              <Button
-                variant="link"
-                size="sm"
-                onClick={() => handleAddItemClick("file", folder.id)}
-              >
-                <FaFileAlt />
-              </Button>
-            </OverlayTrigger>
+          {/* 폴더 삭제 어떻게 하지 */}
+          {/* <div className="folder-actions ms-auto">
             <OverlayTrigger placement="top" overlay={<Tooltip>삭제</Tooltip>}>
               <Button
                 variant="link"
@@ -419,7 +397,7 @@ useEffect(() => {
                 <FaTrashAlt />
               </Button>
             </OverlayTrigger>
-          </div>
+          </div> */}
         </div>
         {isExpanded && (
           <div className="folder-contents ms-3">
@@ -460,7 +438,8 @@ useEffect(() => {
                 )}
               </div>
             </OverlayTrigger>
-            <div className="file-actions ms-auto">
+            {/* 파일 삭제 어떻게 하지 */}
+            {/* <div className="file-actions ms-auto">
               {(file.type === 'CODE') && (
                 <OverlayTrigger placement="top" overlay={<Tooltip>삭제</Tooltip>}>
                   <Button
@@ -472,7 +451,7 @@ useEffect(() => {
                   </Button>
                 </OverlayTrigger>
               )}
-            </div>
+            </div> */}
           </div>
         ))}
       </div>
@@ -512,32 +491,6 @@ useEffect(() => {
       </div>
       {isOpen && (
         <div className="sidebar-content">
-          <div className="add-items">
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip>폴더 추가</Tooltip>}
-            >
-              <Button
-                variant="link"
-                size="sm"
-                onClick={() => handleAddItemClick("folder", null)}
-              >
-                <FaFolderPlus />
-              </Button>
-            </OverlayTrigger>
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip>파일 추가</Tooltip>}
-            >
-              <Button
-                variant="link"
-                size="sm"
-                onClick={() => handleAddItemClick("file", null)}
-              >
-                <FaFileAlt />
-              </Button>
-            </OverlayTrigger>
-          </div>
           <div className="folders">
           {structure.folders.filter((folder) => folder.parentId === null).map(renderFolder)}
           </div>
