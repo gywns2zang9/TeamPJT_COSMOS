@@ -194,6 +194,7 @@ video {
   overflow-y: auto;
   color: black;
   white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .chat-body .message.current-user {
@@ -216,6 +217,8 @@ video {
   height: 36px;
   resize: none;
   overflow-y: hidden;
+  overflow-x: hidden;
+  word-wrap: break-word;
 }
 
 .chat-footer button {

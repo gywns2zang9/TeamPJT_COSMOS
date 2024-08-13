@@ -313,6 +313,11 @@ function ConferenceView(props) {
         })
         .catch((error) => {
           console.log("세션에 연결하는 동안 오류가 발생했습니다:", error);
+          if (error.name === "DEVICE_ACCESS_DENIED") {
+            alert(
+              "장치 접근이 거부되었습니다. 카메라나 마이크의 사용 권한을 확인하세요"
+            );
+          }
           navigate(`/group`);
         });
     });
