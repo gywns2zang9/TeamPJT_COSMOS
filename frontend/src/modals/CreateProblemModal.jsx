@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form, Spinner } from "react-bootstrap";
 import useGroupStore from "../store/group";
 
@@ -13,6 +13,12 @@ function CreateProblemModal({
   const [problemNumber, setProblemNumber] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const createProblem = useGroupStore((state) => state.createProblem);
+
+  useEffect(() => {
+    if (show) {
+      setProblemNumber("");
+    }
+  }, [show]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

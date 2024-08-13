@@ -11,14 +11,9 @@ import lombok.Getter;
 public class CodeFileUpdateRequest {
 
     @NotBlank
-    private String name;
-
-    @NotBlank
     private String code;
-
-    @NotBlank
-    private String content;
 
     @NotNull
     private Language language;
+
 }

@@ -3,32 +3,53 @@ import { Button, Card, CardText } from 'react-bootstrap';
 import { Light } from 'react-syntax-highlighter';
 import { monokai } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import useGroupStore from '../../../store/group';
-import Editor from "@monaco-editor/react";
 import useAuthStore from '../../../store/auth';
-
-import { Controlled as CodeMirror } from 'react-codemirror2';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/material.css';
-import 'codemirror/mode/javascript/javascript';
 
 const CodePageTemplates = ({ groupId, pageId }) => {
     const [fileName, setFileName] = useState('');
     const [content, setContent] = useState('');
-    const [language, setLanguage] = useState('');
+    const [language, setLanguage] = useState('JAVA');
     const [problemInfo, setProblemInfo] = useState({});
     const [codeContent, setCodeContent] = useState('');
     const [date, setDate] = useState('');
     const [editMode, setEditMode] = useState(false);
     const getFile = useGroupStore((state) => state.getFile);
-    const [ userCodeId, setUserCodeId] = useState('')
-    
+    const [userCodeId, setUserCodeId] = useState('');
     const [compileNumbers, setCompileNumbers] = useState(1);
     const [inputsOutputs, setInputsOutputs] = useState([{ input: '', output: '', isLoading: false }]);
     const executeCode = useGroupStore((state) => state.executeCode);
-    const [, setForceRender] = useState(false); 
+    const [, setForceRender] = useState(false);
     const updateCodeFile = useGroupStore((state) => state.updateCodeFile);
+    const [newCodeContent, setNewCodeContent] = useState('');
 
     const { userId } = useAuthStore.getState().getUserInfo;
+
+    useEffect(() => {
+        loadFile();
+    }, [groupId, pageId]);
+
+    const loadFile = async () => {
+        try {
+            const response = await getFile({ groupId, fileId: pageId });
+            console.log(response);
+            setUserCodeId(response.userId);
+            setProblemInfo({
+                number: response.problems[0].number,
+                name: response.problems[0].name,
+                site: response.problems[0].site,
+            });
+            setFileName(response.fileName);
+            setContent(response.content);
+            if (response.code) {
+                setCodeContent(response.code.content);
+                setDate(new Date(response.code.createdAt).toISOString().split('T')[0]);
+                setLanguage(response.code.language);
+            }
+        } catch (err) {
+            console.error('코드불러오기 실패 -> ', err);
+        }
+    };
+
     const runCode = async (index) => {
         const updatedInputsOutputs = [...inputsOutputs];
         updatedInputsOutputs[index].isLoading = true;
@@ -44,33 +65,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
         } finally {
             updatedInputsOutputs[index].isLoading = false;
             setInputsOutputs(updatedInputsOutputs);
-            setForceRender(prev => !prev);  
-        }
-    };
-
-    useEffect(() => {
-        loadFile();
-    }, [groupId, pageId]);
-
-    const loadFile = async () => {
-        try {
-            const response = await getFile({ groupId, fileId: pageId });
-            console.log(response);
-            setUserCodeId(response.userId)
-            setProblemInfo({
-                number: response.problems[0].number,
-                name: response.problems[0].name,
-                site: response.problems[0].site,
-            });
-            setFileName(response.fileName);
-            setContent(response.content);
-            if (response.code) {
-                setCodeContent(response.code.content);
-                setDate(new Date(response.code.createdAt).toISOString().split('T')[0]);
-                setLanguage(response.code.language);
-            }
-        } catch (err) {
-            console.error('코드불러오기 실패 -> ', err);
+            setForceRender(prev => !prev);
         }
     };
 
@@ -92,29 +87,31 @@ const CodePageTemplates = ({ groupId, pageId }) => {
         setCompileNumbers(compileNumbers + 1);
     };
 
-    const handleCodeContentChange = (value) => {
-        setCodeContent(value);
-    };
-
     const saveCodeContent = async () => {
         try {
-            await updateCodeFile({ groupId, pageId, name:fileName, code:codeContent, content, language })
-            setEditMode(false)
+            await updateCodeFile({ groupId, pageId, name: fileName, code: newCodeContent, content, language });
+            setCodeContent(newCodeContent);  // Update the main codeContent state
+            setEditMode(false);
         } catch (err) {
             console.error('코드 저장 실패 -> ', err);
         }
     };
-    
+
+    const startEdit = () => {
+        setNewCodeContent(codeContent);
+        setEditMode(true);
+    };
+
     return (
         <>
-            <Card style={{ backgroundColor:'inherit', color: 'white', padding: '20px', margin: '10px', maxWidth: '100%', width: '100%' }}>
+            <div style={{ backgroundColor: 'inherit', color: 'white', padding: '20px', margin: '10px', width: '100%' }}>
                 <h3>
-                    <a 
-                        href={`https://www.acmicpc.net/problem/${problemInfo.number}`} 
-                        target="_blank" 
+                    <a
+                        href={`https://www.acmicpc.net/problem/${problemInfo.number}`}
+                        target="_blank"
                         rel="noopener noreferrer"
-                        style={{ 
-                            color: '#63C5DA', 
+                        style={{
+                            color: '#63C5DA',
                             textDecoration: 'none'
                         }}
                         onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
@@ -129,57 +126,57 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                 <Card style={{ backgroundColor: 'black', border: '1px solid white', borderRadius: '10px', margin: '10px', padding: '10px', color: 'white', overflow: 'auto' }}>
                     <div className='d-flex' style={{ justifyContent: 'space-between' }}>
                         <p>{fileName}</p>
-                        <p>{language.toLowerCase()}</p>
+                        <p>
+                            <select
+                                value={language}
+                                onChange={(e) => setLanguage(e.target.value)}
+                                style={{ marginLeft: '10px' }}
+                            >
+                                <option value="PYTHON">Python</option>
+                                <option value="JAVA">Java</option>
+                            </select>
+                        </p>
                     </div>
                     {editMode ? (
                         <div
                             style={{
-                                flex:1,
-                                dispplay: 'flex',
+                                flex: 1,
+                                display: 'flex',
                                 flexDirection: 'column',
                                 overflow: 'hidden',
                                 minHeight: 0,
                                 height: '400px',
-                                width:'100% !important',
-                                position:'relative',
-                                boxSizing:'border-box'
+                                width: '100% !important',
+                                position: 'relative',
+                                boxSizing: 'border-box'
                             }}
                         >
-                            <CodeMirror 
-                                value={codeContent}
-                                options={{
-                                    mode:{language},
-                                    theme: "material",
-                                    lineNumbers: true,
-                                    lineWrapping: true
-                                }}
-                                onBeforeChange={(editor, data, value) => {
-                                    setCodeContent(value)
-                                }}
+                            <textarea
+                                value={newCodeContent}
+                                onChange={(e) => setNewCodeContent(e.target.value)}
+                                style={{ width: '100%', height: '100%', backgroundColor: 'inherit', color: 'white' }}
                             />
-                            <Button onClick={saveCodeContent} style={{backgroundColor:'inherit' }}>저장</Button>
-                            <Button onClick={() => setEditMode(false)} style={{backgroundColor:'inherit'}}>닫기</Button>
+                            <Button onClick={saveCodeContent} style={{ backgroundColor: 'inherit' }}>저장</Button>
+                            <Button onClick={() => setEditMode(false)} style={{ backgroundColor: 'inherit' }}>닫기</Button>
                         </div>
                     ) : (
                         <>
-                            <Button onClick={() => setEditMode(true)} style={{ backgroundColor:'inherit', marginTop: '10px' }}>편집</Button>
+                            <Button onClick={startEdit} style={{ backgroundColor: 'inherit', marginTop: '10px' }}>편집</Button>
                             <Light language={language} style={monokai}>
                                 {codeContent}
                             </Light>
-                            {
-                                (userCodeId === userId) && (
-                                    <>
-                                        <Button onClick={() => setEditMode(true)} style={{ backgroundColor:'inherit', marginTop: '10px' }}>편집</Button>
-                                        <Light language={language} style={monokai}>
-                                            {codeContent}
-                                        </Light>
-                                    </>
-                                )
-                            }
+                            {(userCodeId === userId) && (
+                                <>
+                                    <Button onClick={startEdit} style={{ backgroundColor: 'inherit', marginTop: '10px' }}>편집</Button>
+                                    <Light language={language} style={monokai}>
+                                        {codeContent}
+                                    </Light>
+                                </>
+                            )}
                         </>
                     )}
                     <CardText>
-                        <Button onClick={addInputOutput} style={{backgroundColor:'inherit'}}>입력 추가하기</Button>
+                        <Button onClick={addInputOutput} style={{ backgroundColor: 'inherit' }}>입력 추가하기</Button>
                     </CardText>
 
                     {inputsOutputs.map((io, index) => (
@@ -191,7 +188,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                                         <textarea
                                             value={io.input}
                                             onChange={(e) => handleInputChange(index, e.target.value)}
-                                            style={{ width: '100%', height: '100px', backgroundColor:'inherit', color:'white' }}
+                                            style={{ width: '100%', height: '100px', backgroundColor: 'inherit', color: 'white' }}
                                         />
                                     </CardText>
                                 </div>
@@ -210,7 +207,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                                 <Button
                                     onClick={() => runCode(index)}
                                     disabled={io.isLoading}
-                                    style={{backgroundColor:'inherit'}}
+                                    style={{ backgroundColor: 'inherit' }}
                                 >
                                     {io.isLoading ? (
                                         <>
@@ -222,7 +219,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                                     )}
                                 </Button>
                                 {index !== 0 && (
-                                    <Button  onClick={() => handleRemoveInputOutput(index)} style={{ backgroundColor:'inherit', marginLeft: '10px' }}>
+                                    <Button onClick={() => handleRemoveInputOutput(index)} style={{ backgroundColor: 'inherit', marginLeft: '10px' }}>
                                         삭제
                                     </Button>
                                 )}
@@ -230,11 +227,10 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                         </React.Fragment>
                     ))}
                 </Card>
-            </Card>
+            </div>
         </>
     );
 };
 
 export default CodePageTemplates;
-
 

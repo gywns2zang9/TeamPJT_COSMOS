@@ -40,6 +40,8 @@ public class SecurityConfig {
             "/auth/kakao-login",
             "/auth/naver-login",
             "/auth-codes/**",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
     };
 
     @Bean

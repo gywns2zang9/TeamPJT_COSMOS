@@ -2,6 +2,7 @@ package S11P12A708.A708.domain.file.controller;
 
 import S11P12A708.A708.domain.auth.annotation.AuthUser;
 import S11P12A708.A708.domain.auth.request.AuthUserDto;
+import S11P12A708.A708.domain.file.request.CodeFileCreateRequest;
 import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.file.request.FileCreateRequest;
 import S11P12A708.A708.domain.file.request.FileUpdateRequest;
@@ -42,7 +43,7 @@ public class FileController {
     public ResponseEntity<FileInfoResponse> createCodeFile(
             @AuthUser AuthUserDto authUser,
             @PathVariable("teamId") Long teamId,
-            @Valid @RequestBody FileCreateRequest request) {
+            @Valid @RequestBody CodeFileCreateRequest request) {
         final FileInfoResponse response = fileService.createCodeFile(teamId, authUser, request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

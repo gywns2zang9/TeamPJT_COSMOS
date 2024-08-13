@@ -39,6 +39,33 @@ const UserInfoChange = () => {
   }, [getUserInfo, getAccessToken]);
 
     const handleUpdate = async () => {
+      const nickNamePattern = /^[A-Za-z0-9가-힣]{2,10}$/;
+      if (!nickName) {
+        window.alert("닉네임은 필수입니다.")
+        return;
+      } 
+      else if (!nickNamePattern.test(nickName)) {
+        window.alert("닉네임은 2~10자의 한글, 영문, 숫자만 가능합니다.")
+        setNickName("")
+        return;
+      } else if (description.length > 100) {
+        window.alert("내 소개는 100자를 넘길 수 없습니다.")
+        setDescription("")
+        return;
+      } else if (gitId.length > 255) {
+        window.alert("GitId 내용이 올바르지 않습니다.")
+        setGitId("")
+        return;
+      } else if (repo.length > 100) {
+        window.alert("Repository 내용이 올바르지 않습니다.")
+        setRepo("")
+        return;
+      } else if (branch.length > 200) {
+        window.alert("Branch 내용이 올바르지 않습니다.")
+        setBranch("")
+        return;
+      }
+
       const newUserInfo = {
         nickName,
         description,
@@ -60,6 +87,7 @@ const UserInfoChange = () => {
           }
           window.alert(errorMessage || "다시 시도해주세요.")
         }
+        window.alert("예기치 못한 오류가 발생했습니다.")
       }
     };
     
