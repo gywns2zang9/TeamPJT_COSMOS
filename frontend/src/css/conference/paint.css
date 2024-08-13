@@ -27,3 +27,11 @@ body {
 .tlui-debug-panel {
   display: none;
 }
+
+.tlui-menu-zone {
+  display: none;
+}
+
+.tl-embed {
+  display: none;
+}
