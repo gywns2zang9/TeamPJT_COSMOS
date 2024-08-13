@@ -7,7 +7,7 @@ import useAuthStore from "../../store/auth.js";
 import MyCodeListModal from "../../modals/MyCodeListModal.jsx";
 
 const Code = ({ toggleVideo, isOpen, groupId }) => {
-  const [language, setLanguage] = useState("java");
+  const [language, setLanguage] = useState("JAVA");
   const [isShared, setIsShared] = useState(false);
   const [personalCodeList, setPersonalCodeList] = useState([]);
   const [input, setInput] = useState("");
