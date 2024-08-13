@@ -242,6 +242,13 @@ function ConferenceView(props) {
       deleteSubscriber(event.stream.streamManager);
     });
 
+    newSession.on("sessionDisconnected", (event) => {
+      if (event.reason === "forceDisconnectByServer") {
+        alert("연결이 끊겼습니다.");
+        navigate(`/group/${groupId}/main`);
+      }
+    });
+
     newSession.on("exception", (exception) => {
       console.warn(exception);
     });
@@ -283,7 +290,7 @@ function ConferenceView(props) {
         })
         .catch((error) => {
           console.log("세션에 연결하는 동안 오류가 발생했습니다:", error);
-          // navigate(`/group`);
+          navigate(`/group`);
         });
     });
 
@@ -342,7 +349,7 @@ function ConferenceView(props) {
     } catch (error) {
       // 여기서 그룹에 속하지 않은 경우 또는 인증 실패 시 처리
 
-      // navigate(`/group`); // 그룹 메인 페이지로 이동
+      navigate(`/group`); // 그룹 메인 페이지로 이동
       console.log(error);
     }
   }
@@ -366,8 +373,8 @@ function ConferenceView(props) {
       return response.data; // token
     } catch (error) {
       // 토큰 발급 실패 시 처리
-      // alert("접근 권한이 없습니다.");
-      // navigate(`/group`);
+      alert("접근 권한이 없습니다.");
+      navigate(`/group`);
       console.log(error);
     }
   }

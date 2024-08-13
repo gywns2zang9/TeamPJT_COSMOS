@@ -51,8 +51,9 @@ textarea {
   /* padding: 10px; */
   border: 1px solid #ddd;
   border-radius: 5px;
-  resize: none;
-  overflow-x: auto; /* 가로 스크롤바 자동 표시 */
+  resize: none !important;
+  overflow-x: auto;
+  overflow-y: auto;
   white-space: nowrap; /* 텍스트 줄바꿈 방지 */
 }
 

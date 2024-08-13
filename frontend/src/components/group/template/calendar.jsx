@@ -138,15 +138,29 @@ function Calendar({ groupId }) {
   // 이벤트를 캘린더에 렌더링할 때의 UI를 정의하는 함수
   const renderEventContent = (eventInfo) => {
     const convertTo24HourFormat = (timeText) => {
-        if (timeText.includes('p')) { // 'p'가 포함된 경우 (오후)
-          let [time, minutes] = timeText.replace('p', '').split(':');
-          time = parseInt(time, 10) + 12; // 12시간 더하기
-          return `${time}:${minutes}`;
-        } else if (timeText.includes('a')) { // 'a'가 포함된 경우 (오전)
-          return timeText.replace('a', ''); // 'a' 제거하고 그대로 반환
+      if (timeText.includes('p')) { // 'p'가 포함된 경우 (오후)
+        let [time, minutes] = timeText.replace('p', '').split(':');
+        time = parseInt(time, 10) + 12; // 12시간 더하기
+  
+        // 분이 없으면 기본값으로 "00"을 설정
+        if (!minutes) {
+          minutes = '00';
         }
-        return timeText; // 'a'나 'p'가 없는 경우 그대로 반환
-        };  
+        
+        return `${time}:${minutes}`;
+      } else if (timeText.includes('a')) { // 'a'가 포함된 경우 (오전)
+        let [time, minutes] = timeText.replace('a', '').split(':');
+  
+        // 분이 없으면 기본값으로 "00"을 설정
+        if (!minutes) {
+          minutes = '00';
+        }
+  
+        return `${time}:${minutes}`;
+      }
+      return timeText; // 'a'나 'p'가 없는 경우 그대로 반환
+    };
+  
     const eventTime = convertTo24HourFormat(eventInfo.timeText);
     return (
       <div style={{ cursor: 'pointer' }}> {/* 커서 스타일을 포인터로 설정 */}
