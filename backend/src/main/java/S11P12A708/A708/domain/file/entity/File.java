@@ -30,6 +30,9 @@ public class File extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private FileType type;
 
+    @Column
+    private Integer folderIndex;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -84,8 +87,8 @@ public class File extends BaseEntity {
         return new File(name, "", FileType.NORMAL, folder);
     }
 
-    public static File createCodeFile(String name, User user, Folder folder, Code code) {
-        return new File(name, "", FileType.CODE, user, folder, code);
+    public static File createCodeFile(User user, Folder folder, Code code) {
+        return new File("", "", FileType.CODE, user, folder, code);
     }
 
     public static File createOverViewFile(Folder folder) {
@@ -107,7 +110,16 @@ public class File extends BaseEntity {
 
     public String getName() {
         if(type != FileType.CODE) return name;
-        return this.user.getNickname() + name + this.code.getLanguage().getExtension();
+        return getCodeFileName();
+    }
+
+    private String getCodeFileName() {
+        String fileNum = (this.folderIndex == 0) ? "" : "(" + folderIndex + ")" ;
+        return this.user.getNickname() + "의_풀이" + fileNum + this.code.getLanguage().getExtension();
+    }
+
+    public void setFolderIndex(Integer folderIndex) {
+        this.folderIndex = folderIndex;
     }
 
 }
