@@ -183,7 +183,29 @@ function ConferenceView(props) {
 
   const toggleScreen = () => {
     if (publisher) {
-      publisher.publishVideo(!isVideoEnabled);
+      if (isVideoEnabled) {
+        publisher.publishVideo(false); // 비디오 전송 중지
+        setTimeout(() => {
+          const videoTrack = publisher.stream
+            .getMediaStream()
+            .getVideoTracks()[0];
+          videoTrack.stop(); // 비디오 스트림을 중지
+        }, 150);
+      } else {
+        // 비디오 스트림 재개
+        const videoSource = currentVideoDevice.deviceId;
+        OV.getUserMedia({
+          videoSource,
+        })
+          .then((mediaStream) => {
+            const newVideoTrack = mediaStream.getVideoTracks()[0];
+            publisher.replaceTrack(newVideoTrack);
+            publisher.publishVideo(true); // 비디오 전송 재개
+          })
+          .catch((error) => {
+            console.error("Error restarting video track:", error);
+          });
+      }
       setisVideoEnabled(!isVideoEnabled);
     }
   };
