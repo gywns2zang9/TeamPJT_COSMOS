@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button, Accordion } from 'react-bootstrap';
+import { Modal, Button, Accordion, ListGroup } from 'react-bootstrap';
 
 const MyCodeListModal = ({ show, handleClose, personalCodeList, loadCode }) => {
 
@@ -20,31 +20,29 @@ const MyCodeListModal = ({ show, handleClose, personalCodeList, loadCode }) => {
                             <Accordion.Item eventKey={`${yearIndex}`} key={yearIndex}>
                                 <Accordion.Header>{year.year}년</Accordion.Header>
                                 <Accordion.Body>
-                                    <Accordion>
-                                        {year.months.map((month, monthIndex) => (
-                                            <Accordion.Item eventKey={`${yearIndex}-${monthIndex}`} key={`${yearIndex}-${monthIndex}`}>
-                                                <Accordion.Header>{month.month}월</Accordion.Header>
-                                                <Accordion.Body>
-                                                    <Accordion>
-                                                        {month.times.map((time, timeIndex) => (
-                                                            <Accordion.Item eventKey={`${yearIndex}-${monthIndex}-${timeIndex}`} key={`${yearIndex}-${monthIndex}-${timeIndex}`}>
-                                                                <Accordion.Header>{time.time}회차</Accordion.Header>
-                                                                <Accordion.Body>
-                                                                    <ul>
-                                                                        {time.codes.map((code) => (
-                                                                            <li key={code.codeId} onClick={() => clickCode(code)}>
-                                                                                {code.problemName} - {code.fileName} - {code.codeId}
-                                                                            </li>
-                                                                        ))}
-                                                                    </ul>
-                                                                </Accordion.Body>
-                                                            </Accordion.Item>
-                                                        ))}
-                                                    </Accordion>
-                                                </Accordion.Body>
-                                            </Accordion.Item>
-                                        ))}
-                                    </Accordion>
+                                    {year.months.map((month, monthIndex) => (
+                                        <div key={`${yearIndex}-${monthIndex}`}>
+                                            <h6>{month.month}월</h6>
+                                            <ListGroup>
+                                                {month.times.map((time, timeIndex) => (
+                                                    <ListGroup.Item key={`${yearIndex}-${monthIndex}-${timeIndex}`}>
+                                                        <strong>{time.time}회차</strong>
+                                                        <ListGroup variant="flush">
+                                                            {time.codes.map((code) => (
+                                                                <ListGroup.Item 
+                                                                    key={code.codeId} 
+                                                                    action 
+                                                                    onClick={() => clickCode(code)}
+                                                                >
+                                                                    {code.problemName}
+                                                                </ListGroup.Item>
+                                                            ))}
+                                                        </ListGroup>
+                                                    </ListGroup.Item>
+                                                ))}
+                                            </ListGroup>
+                                        </div>
+                                    ))}
                                 </Accordion.Body>
                             </Accordion.Item>
                         ))}
@@ -54,7 +52,7 @@ const MyCodeListModal = ({ show, handleClose, personalCodeList, loadCode }) => {
                 )}
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button onClick={handleClose} style={{ backgroundColor:'inherit'}}>
                     닫기
                 </Button>
             </Modal.Footer>
