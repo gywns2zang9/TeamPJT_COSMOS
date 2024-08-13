@@ -103,7 +103,7 @@ public class ProblemService {
 
         Folder studyFolder = studyService.findStudyFolder(teamId, request.getStudyId());
         Folder problemFolder = studyFolder.getSubFolders().stream()
-                .filter(subFolder -> problem.getName().equals(subFolder.getName()))
+                .filter(subFolder -> subFolder.getProblem().equals(problem))
                 .findFirst()
                 .orElseThrow(FolderNotFoundException::new);
 
