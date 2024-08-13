@@ -3,6 +3,7 @@ package S11P12A708.A708.domain.problem.controller;
 import S11P12A708.A708.domain.problem.request.CrawlCodeRequest;
 import S11P12A708.A708.domain.problem.request.CreateProblemRequest;
 import S11P12A708.A708.domain.problem.request.DeleteProblemRequest;
+import S11P12A708.A708.domain.problem.response.CrawlCodeResponse;
 import S11P12A708.A708.domain.problem.service.ProblemService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +35,10 @@ public class ProblemController {
     }
 
     @PostMapping("/teams/{teamId}/problems/code")
-    public ResponseEntity<Void> crawlAndSaveCode(@PathVariable Long teamId,
-                                                 @Valid @RequestBody CrawlCodeRequest crawlCodeRequest) {
-        problemService.crawlCode(teamId, crawlCodeRequest);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<CrawlCodeResponse> crawlAndSaveCode(@PathVariable Long teamId,
+                                                              @Valid @RequestBody CrawlCodeRequest crawlCodeRequest) {
+        final CrawlCodeResponse response = problemService.crawlCode(teamId, crawlCodeRequest);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
