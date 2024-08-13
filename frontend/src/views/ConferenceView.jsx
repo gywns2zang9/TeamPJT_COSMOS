@@ -242,6 +242,13 @@ function ConferenceView(props) {
       deleteSubscriber(event.stream.streamManager);
     });
 
+    newSession.on("sessionDisconnected", (event) => {
+      if (event.reason === "forceDisconnectByServer") {
+        alert("연결이 끊겼습니다.");
+        navigate(`/group/${groupId}/main`);
+      }
+    });
+
     newSession.on("exception", (exception) => {
       console.warn(exception);
     });
