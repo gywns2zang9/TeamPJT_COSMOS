@@ -34,18 +34,14 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   };
 
   // 모달 오픈 상태
-  const handleModalShow = () => setShowModal(true);
-  const handleModalClose = () => setShowModal(false);
+  const handleModalShow = async () => {
+    const userInfo = await getUser();
+    const folders = await getCodeList({ groupId, userId: userInfo.userId });
+    setPersonalCodeList(Array.isArray(folders) ? folders : []);
+    setShowModal(true);
+  };
 
-  // 코드 목록 불러오기
-  useEffect(() => {
-    const fetchCodeList = async () => {
-      const userInfo = await getUser();
-      const folders = await getCodeList({ groupId, userId: userInfo.userId });
-      setPersonalCodeList(Array.isArray(folders) ? folders : []);
-    };
-    fetchCodeList();
-  }, [groupId, getCodeList]);
+  const handleModalClose = () => setShowModal(false);
 
   // 코드 선택했을 때 내용 불러오기
   const loadCode = async ({ codeId }) => {
