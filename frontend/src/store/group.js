@@ -474,9 +474,12 @@ const useGroupStore = create((set) => ({
         try {
             const url = `${BASE_URL}/teams/${groupId}/problems/code`;
             const response = await post(url, data, headers);
+            console.log(response);
+            window.alert(`코드 불러오기에 성공하였습니다.`)
             return response
         } catch (err) {
             console.log(err);
+            window.alert(`코드 불러오기에 실패하였습니다.\nGithub을 확인하세요.`)
             throw err;
         } finally {
             set({ loading: false }); // 로딩 종료

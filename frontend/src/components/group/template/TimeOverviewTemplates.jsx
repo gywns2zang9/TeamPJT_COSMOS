@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import CreateProblemModal from '../../../modals/CreateProblemModal';
 import DeleteStudyModal from '../../../modals/DeleteStudyModal';
+import useAuthStore from '../../../store/auth';
 
 const initialHeaderState = {
     year:'',
@@ -28,10 +29,16 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
     const navigate = useNavigate();
     const deleteProblem = useGroupStore((state) => state.deleteProblem);
 
+    const userInfo = useAuthStore.getState().getUserInfo()
+    const userId = userInfo.userId;
+
+    const [haveGit, setHaveGit] = useState(true);
+
     useEffect(() => {
         const loadFile = async () => {
             try {
                 const response = await getFile({groupId, fileId:pageId});
+                console.log(response);
                 console.log(response.problems);
                 setProblems(response.problems);
                 setStudyId(response.study.id);
@@ -48,14 +55,28 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
         const loadMembers = async () => {
             try {
                 const response = await groupMemberListLoad({ groupId });
+                console.log(response);
                 setMembers(response);
             } catch (err) {
                 console.error('멤버 목록 로드 실패 -> ', err);
             }
         };
-
+        const checkGit = async () => {
+            const myUserInfo = useAuthStore.getState().getUserInfo()
+            console.log(myUserInfo);
+            if (myUserInfo.gitId === "") {
+                setHaveGit(false); return
+            }
+            if (myUserInfo.repo === "") {
+                setHaveGit(false); return
+            }
+            if (myUserInfo.branch === "") {
+                setHaveGit(false); return
+            }
+        }
         loadMembers();
-        loadFile();;
+        loadFile();
+        checkGit();
     }, [pageId, groupId, groupMemberListLoad, getFile]);
 
     const handleShowModal = () => setShowModal(true)
@@ -147,8 +168,14 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
                                     {problem.statuses.map((memberStatus, statusIndex) => (
                                         member.userId === memberStatus.userId ? (
                                             <div key={statusIndex}>
-                                                <FaFileAlt onClick={() => navigateCodePage(memberStatus)} title="풀이로 이동" style={{ cursor: 'pointer' }}/> 
-                                                <MdRefresh onClick={() => importCode(memberStatus, problem.problemId)} title="코드 불러오기" style={{ cursor: 'pointer' }}/>
+                                                <FaFileAlt onClick={() => navigateCodePage(memberStatus)} title="풀이로 이동" style={{ cursor: 'pointer' }} />
+                                                {userId === memberStatus.userId ? (
+                                                    haveGit ? (
+                                                        <MdRefresh onClick={() => importCode(memberStatus, problem.problemId)} title="내 풀이 가져오기" style={{ cursor: 'pointer' }} />
+                                                    ) : (
+                                                        <MdRefresh title="Git 정보가 필요합니다." />
+                                                    )
+                                                ) : null}
                                             </div>
                                         ) : <div key={statusIndex}>
                                             </div>
