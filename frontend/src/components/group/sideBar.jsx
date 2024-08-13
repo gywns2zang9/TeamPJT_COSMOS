@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useRef, useEffect } from "react";
 import { Button, Tooltip, OverlayTrigger } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { FaFolderPlus, FaFileAlt, FaTrashAlt, FaCog, FaPlay, FaUserPlus, FaFolder, FaFile, FaAngleDoubleLeft, FaAngleDoubleRight, FaChevronDown, FaChevronRight } from "react-icons/fa";
+import { FaCog, FaPlay, FaUserPlus, FaFolder, FaFile, FaAngleDoubleLeft, FaAngleDoubleRight, FaChevronDown, FaChevronRight } from "react-icons/fa";
 import "../../css/group/sideBar.css";
 import GroupSettingsModal from "../../modals/GroupSettingsModal";
 import InviteGroupModal from "../../modals/InviteGroupModal";
@@ -118,26 +118,9 @@ function SideBar({ groupId }) {
     setShowInviteModal(false);
   };
 
-  // 화상회의 모달
-  const handleOpenVideoStartModal = () => {
-    setShowConfirmVideoStart(true);
-  };
-
-  const handleCloseVideoStartModal = () => {
-    setShowConfirmVideoStart(false);
-  };
-
   const handleStartVideo = () => {
     navigate(`/conference/${groupId}`);
     setShowConfirmVideoStart(false);
-  };
-
-  // 항목 추가
-  const handleAddItemClick = (type, parentId) => {
-    setNewItemType(type); // 타입
-    setNewItemParentId(parentId); // 부모 ID
-    setNewItemName(""); // 이름 입력
-    setShowCreateItemModal(true); // 아이템 생성 모달
   };
 
   // 항목 추가 저장
@@ -186,13 +169,6 @@ function SideBar({ groupId }) {
   // 항목 추가 모달 닫기
   const handleCreateItemClose = () => {
     setShowCreateItemModal(false);
-  };
-
-  // 항목 삭제 모달 
-  const handleDeleteItem = ({id, parentId, type}) => {
-    console.log(id, parentId, type);
-    setItemToDelete({ id, parentId, type });
-    setShowConfirmDelete(true);
   };
 
   // 삭제 실행
@@ -360,7 +336,7 @@ useEffect(() => {
 
     return (
       <div key={folder.id} className="folder" >
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center" style={{cursor:'pointer'}}>
           <OverlayTrigger
             placement="right"
             overlay={<Tooltip>{folder.name}</Tooltip>}
@@ -386,18 +362,6 @@ useEffect(() => {
               )}
             </div>
           </OverlayTrigger>
-          {/* 폴더 삭제 어떻게 하지 */}
-          {/* <div className="folder-actions ms-auto">
-            <OverlayTrigger placement="top" overlay={<Tooltip>삭제</Tooltip>}>
-              <Button
-                variant="link"
-                size="sm"
-                  onClick={() => handleDeleteItem({ id:folder.id, parentId:folder.parentId, type:'folder'})}
-              >
-                <FaTrashAlt />
-              </Button>
-            </OverlayTrigger>
-          </div> */}
         </div>
         {isExpanded && (
           <div className="folder-contents ms-3">
@@ -414,7 +378,7 @@ useEffect(() => {
     return (
       <div className="files">
         {files.map((file) => (
-          <div key={file.id} className="file d-flex align-items-center">
+          <div key={file.id} className="file d-flex align-items-center" style={{cursor:'pointer'}}>
             <OverlayTrigger
               placement="right"
               overlay={<Tooltip>{file.name}</Tooltip>}
@@ -438,20 +402,6 @@ useEffect(() => {
                 )}
               </div>
             </OverlayTrigger>
-            {/* 파일 삭제 어떻게 하지 */}
-            {/* <div className="file-actions ms-auto">
-              {(file.type === 'CODE') && (
-                <OverlayTrigger placement="top" overlay={<Tooltip>삭제</Tooltip>}>
-                  <Button
-                    variant="link"
-                    size="sm"
-                    onClick={() => handleDeleteItem({ id:file.id, parentId:file.parentId, type:'file'})}
-                  >
-                    <FaTrashAlt />
-                  </Button>
-                </OverlayTrigger>
-              )}
-            </div> */}
           </div>
         ))}
       </div>
