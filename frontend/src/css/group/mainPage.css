@@ -1,0 +1,64 @@
+.group-info-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+}
+
+.group-info-text {
+    color: #f0f0f0;
+    font-size: 24px;
+    text-align: center;
+    line-height: 1.6;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.loading-text {
+    font-style: italic;
+    color: #a0a0a0;
+}
+
+.error-text {
+    color: #ff6b6b;
+}
+
+.start-conference {
+    position: relative;
+    width: 30%;
+    height: 100%;
+    color: #5392ce;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    padding: 10px;
+    display: inline-block;
+    overflow: hidden;
+    transition: background-color 0.3s ease;
+}
+
+.start-conference span {
+    position: relative;
+    z-index: 1;
+}
+
+.start-conference::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease; 
+    opacity: 0; 
+    pointer-events: none;
+}
+
+.start-conference:hover::before {
+    opacity: 1;
+}

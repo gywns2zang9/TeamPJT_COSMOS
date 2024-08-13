@@ -28,7 +28,7 @@ function SideBar({ groupId }) {
   const [showSettingsModal, setShowSettingsModal] = useState(false); // 그룹설정
   // 사이드바 크기
   const [isOpen, setIsOpen] = useState(true); // 사이드바 오픈 여부
-  const [sidebarWidth, setSidebarWidth] = useState(250); // 사이드바 너비
+  const [sidebarWidth, setSidebarWidth] = useState(350); // 사이드바 너비
   const [isResizing, setIsResizing] = useState(false); // 사이드바 조절 상태
 
   const sidebarRef = useRef(null); // 사이드바
@@ -53,7 +53,7 @@ function SideBar({ groupId }) {
   // 사이드바 토글
   const toggleSideBar = () => {
     if (sidebarWidth <= 100) {
-      setSidebarWidth(250);
+      setSidebarWidth(350);
     } else {
       setSidebarWidth(100);
     }
@@ -478,17 +478,19 @@ useEffect(() => {
           </OverlayTrigger>
         </Button>
       </div>
-      <div style={{ textAlign: "center" }}>
         <OverlayTrigger placement="top" overlay={<Tooltip>버튼을 눌러 화상회의를 시작하세요</Tooltip>}>
-          <Button
-            variant="link"
-            size="sm"
-            onClick={() => setShowConfirmVideoStart(true)}
-          >
-            <FaPlay />
-          </Button>
+          <div className="conference-hover" style={{ textAlign: "center", cursor:'pointer' }} onClick={() => setShowConfirmVideoStart(true)}>
+          {isOpen && (
+            <span>화상회의 시작하기</span>
+          )}
+            <Button
+              variant="link"
+              size="sm"
+            >
+              <FaPlay />
+            </Button>
+          </div>
         </OverlayTrigger>
-      </div>
       {isOpen && (
         <div className="sidebar-content">
           <div className="folders">

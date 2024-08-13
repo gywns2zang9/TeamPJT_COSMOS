@@ -1,7 +1,7 @@
 /* 사이드바 기본 스타일 */
 .sidebar {
     transition: width 0.2s ease;
-    overflow: hidden;
+    /* overflow: hidden; */
     background: linear-gradient(to right, #175491, #0D0220);
     color: #939cec;
     display: flex;
@@ -64,7 +64,6 @@
 
 .sidebar-head:hover::after {
     display: block;
-    animation: rotate-segment 2s linear infinite;
     background: radial-gradient(circle, transparent 60%, black 60%), transparent;
     mask: conic-gradient(from 0deg at 50% 50%, black 60deg, transparent 60deg 360deg);
     -webkit-mask: conic-gradient(from 0deg at 50% 50%, black 60deg, transparent 60deg 360deg);
@@ -91,14 +90,6 @@
     text-overflow: ellipsis;
 }
 
-@keyframes rotate-segment {
-    0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-    100% {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
-}
 
 /* 사이드바 접기 */
 .sidebar-header {
@@ -116,6 +107,41 @@
     flex-grow: 1;
     overflow-y: auto;
     background-color: transparent;
+    padding-bottom: 20px;
+}
+
+/* 화상회의 시작하기 버튼 */
+.conference-hover {
+    position: relative;
+    text-align: center;
+    cursor: pointer;
+    border-bottom: 1px double #939CEC;
+    margin-bottom: 7px;
+    overflow: hidden; 
+}
+
+.conference-hover::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%; 
+    height: 300%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease; 
+    opacity: 0; 
+    z-index: 0; 
+}
+
+.conference-hover:hover::before {
+    opacity: 1; 
+}
+
+.conference-hover span {
+    position: relative;
+    z-index: 1; 
 }
 
 /* 사이드바 푸터 */
@@ -133,6 +159,7 @@
     display: flex;
     justify-content: space-around;
 }
+
 /* 열기/닫기 버튼 */
 .toggle-btn {
     font-size: 1.5rem;
