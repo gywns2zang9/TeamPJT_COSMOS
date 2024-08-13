@@ -1,7 +1,7 @@
 package S11P12A708.A708.domain.file.entity;
 
+import S11P12A708.A708.common.database.BaseEntity;
 import S11P12A708.A708.domain.code.entity.Code;
-import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.user.entity.User;
@@ -9,15 +9,11 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 지연 로딩 proxy 을 위해서
-public class File {
+public class File extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,12 +30,8 @@ public class File {
     @Enumerated(EnumType.STRING)
     private FileType type;
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
+    @Column
+    private Integer folderIndex;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -57,12 +49,10 @@ public class File {
     @JoinColumn(name = "study_id", unique = true)
     private Study study;
 
-    public File(String name, String content, FileType type, LocalDateTime createdAt, LocalDateTime modifiedAt, User user, Folder folder, Code code, Study study) {
+    public File(String name, String content, FileType type, User user, Folder folder, Code code, Study study) {
         this.name = name;
         this.content = content;
         this.type = type;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
         this.user = user;
         this.folder = folder;
         this.code = code;
@@ -74,8 +64,6 @@ public class File {
         this.content = content;
         this.type = type;
         this.folder = folder;
-        this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
     }
 
     public File(String name, String content, FileType type, Folder folder, Study study) {
@@ -84,8 +72,6 @@ public class File {
         this.type = type;
         this.folder = folder;
         this.study = study;
-        this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
     }
 
     public File(String name, String content, FileType type, User user, Folder folder, Code code) {
@@ -95,40 +81,45 @@ public class File {
         this.folder = folder;
         this.user = user;
         this.code = code;
-        this.createdAt = LocalDateTime.now();
-        this.modifiedAt = LocalDateTime.now();
     }
 
     public static File createNormalFile(String name, Folder folder) {
         return new File(name, "", FileType.NORMAL, folder);
     }
 
-    public static File createCodeFile(String name, User user, Folder folder, Code code) {
-        return new File(name, "", FileType.CODE, user, folder, code);
+    public static File createCodeFile(User user, Folder folder, Code code) {
+        return new File("", "", FileType.CODE, user, folder, code);
     }
 
     public static File createOverViewFile(Folder folder) {
-        return new File("전체 개요", "", FileType.OVERVIEW, folder);
+        return new File("전체 문제목록", "", FileType.OVERVIEW, folder);
     }
 
     public static File createMainFile(Folder folder) {
-        return new File("메인 페이지", "", FileType.MAIN, folder);
+        return new File("그룹 정보", "", FileType.MAIN, folder);
     }
 
     public static File createTimeOverViewFile(Folder folder, Study study) {
-        return new File("스터디 개요", "", FileType.TIME_OVERVIEW, folder, study);
+        return new File("문제목록", "", FileType.TIME_OVERVIEW, folder, study);
     }
 
     public void update(File updateFile) {
         this.name = updateFile.getName();
         this.content = updateFile.getContent();
-        this.modifiedAt = LocalDateTime.now();
     }
 
-    public void update(CodeFileUpdateRequest req) {
-        this.name = req.getName();
-        this.content = req.getContent();
-        this.modifiedAt = LocalDateTime.now();
+    public String getName() {
+        if(type != FileType.CODE) return name;
+        return getCodeFileName();
+    }
+
+    private String getCodeFileName() {
+        String fileNum = (this.folderIndex == 0) ? "" : "(" + folderIndex + ")" ;
+        return this.user.getNickname() + "의_풀이" + fileNum + this.code.getLanguage().getExtension();
+    }
+
+    public void setFolderIndex(Integer folderIndex) {
+        this.folderIndex = folderIndex;
     }
 
 }
