@@ -7,6 +7,7 @@ import S11P12A708.A708.domain.file.entity.File;
 import S11P12A708.A708.domain.file.entity.FileType;
 import S11P12A708.A708.domain.file.exception.*;
 import S11P12A708.A708.domain.file.repository.FileRepository;
+import S11P12A708.A708.domain.file.request.CodeFileCreateRequest;
 import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.file.request.FileCreateRequest;
 import S11P12A708.A708.domain.file.request.FileUpdateRequest;
@@ -61,6 +62,7 @@ public class FileService {
         validateDuplicateFileName(folder, request.getFileName());
 
         final File newFile = File.createNormalFile(request.getFileName(), folder);
+        folder.addFile(newFile);
         fileRepository.save(newFile);
 
         return FileInfoResponse.fromFile(newFile);
@@ -78,16 +80,17 @@ public class FileService {
         return FileInfoResponse.fromFile(file);
     }
 
-    public FileInfoResponse createCodeFile(Long teamId, AuthUserDto authUser, FileCreateRequest request) {
+    public FileInfoResponse createCodeFile(Long teamId, AuthUserDto authUser, CodeFileCreateRequest request) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final Folder folder = folderRepository.findById(request.getFolderId()).orElseThrow(FolderNotFoundException::new);
         final User user = userRepository.findById(authUser.getId()).orElseThrow(UserNotFoundException::new);
         validateTeamFolder(folder, team);
-        validateDuplicateFileName(folder, request.getFileName());
         validateProblemFolder(folder);
 
         final Code code = codeRepository.save(Code.createBasic());
-        final File newFile = File.createCodeFile(request.getFileName(), user, folder, code);
+        final File newFile = File.createCodeFile(user, folder, code);
+
+        folder.addFile(newFile);
         fileRepository.save(newFile);
 
         return FileInfoResponse.fromFile(newFile);
@@ -98,17 +101,14 @@ public class FileService {
         File file = fileRepository.findById(fileId).orElseThrow(FileNotFoundException::new);
         Code code = file.getCode();
         validateTeamFolder(file.getFolder(), team); // 해당 파일이 이 팀의 파일이 맞는 지 확인
-        if (!file.getName().equals(request.getName())) validateDuplicateFileName(file.getFolder(), request.getName());
 
         code.update(new Code(request.getCode(), request.getLanguage()));
-        file.update(request);
-
         return FileInfoResponse.fromFile(file);
     }
 
     public FileInfoResponse getFileInfo(Long teamId, AuthUserDto authUser, Long fileId) {
         final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
-        final User user = userRepository.findById(authUser.getId()).orElseThrow(UserNotFoundException::new);
+        userRepository.findById(authUser.getId()).orElseThrow(UserNotFoundException::new);
         final File file = fileRepository.findById(fileId).orElseThrow(FileNotFoundException::new);
 
         if(file.getType() == FileType.OVERVIEW) {
@@ -189,8 +189,12 @@ public class FileService {
         Optional<ProblemUser> problemUser = problemUserRepository.findProblemUserByFile(file);
         if (problemUser.isPresent()) throw new InvalidDeleteCodeFileException();
 
+        Folder folder = file.getFolder();
+
+        folder.removeFile(file);
         codeRepository.delete(file.getCode());
         fileRepository.delete(file);
+        folderRepository.save(folder);
     }
 
 }

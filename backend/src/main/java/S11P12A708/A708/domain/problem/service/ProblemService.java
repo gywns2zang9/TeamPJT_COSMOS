@@ -14,7 +14,6 @@ import S11P12A708.A708.domain.problem.entity.Problem;
 import S11P12A708.A708.domain.problem.entity.ProblemUser;
 import S11P12A708.A708.domain.problem.exception.ProblemNotExistException;
 import S11P12A708.A708.domain.problem.exception.ProblemNotFoundException;
-import S11P12A708.A708.domain.problem.exception.UserInfoNessaryException;
 import S11P12A708.A708.domain.problem.repository.ProblemRepository;
 import S11P12A708.A708.domain.problem.repository.ProblemUserRepository;
 import S11P12A708.A708.domain.problem.request.CrawlCodeRequest;
@@ -85,7 +84,7 @@ public class ProblemService {
             final Code code = codeCrawler.createByCrawler(user, req.getProblemNumber());
             codeRepository.save(code);
 
-            final File UserCodeFile  = File.createCodeFile(user.getNickname() + "님의 풀이", user, individualCodeFolder, code);
+            final File UserCodeFile  = File.createCodeFile(user, individualCodeFolder, code);
             individualCodeFolder.addFile(UserCodeFile);
 
             final ProblemUser problemUser = new ProblemUser(savedProblem, user, UserCodeFile);

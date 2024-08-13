@@ -75,7 +75,10 @@ public enum ErrorCode {
 
     // Study
     STUDY_NOT_FOUND(UNPROCESSABLE_ENTITY, "study", "This study is not exist"),
-    STUDY_NOT_BELONG_TO_TEAM(UNPROCESSABLE_ENTITY, "study", "study does not belong to the specified team");
+    STUDY_NOT_BELONG_TO_TEAM(UNPROCESSABLE_ENTITY, "study", "study does not belong to the specified team"),
+
+    // Openvidu
+    OPENVIDU_NO_SESSION(UNPROCESSABLE_ENTITY, "openvidu", "session is not exist");
 
     private final HttpStatus code;
     private final String body;

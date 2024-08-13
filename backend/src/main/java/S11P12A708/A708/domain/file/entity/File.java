@@ -2,7 +2,6 @@ package S11P12A708.A708.domain.file.entity;
 
 import S11P12A708.A708.common.database.BaseEntity;
 import S11P12A708.A708.domain.code.entity.Code;
-import S11P12A708.A708.domain.file.request.CodeFileUpdateRequest;
 import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.user.entity.User;
@@ -30,6 +29,9 @@ public class File extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private FileType type;
+
+    @Column
+    private Integer folderIndex;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -85,20 +87,20 @@ public class File extends BaseEntity {
         return new File(name, "", FileType.NORMAL, folder);
     }
 
-    public static File createCodeFile(String name, User user, Folder folder, Code code) {
-        return new File(name, "", FileType.CODE, user, folder, code);
+    public static File createCodeFile(User user, Folder folder, Code code) {
+        return new File("", "", FileType.CODE, user, folder, code);
     }
 
     public static File createOverViewFile(Folder folder) {
-        return new File("전체 개요", "", FileType.OVERVIEW, folder);
+        return new File("전체 문제목록", "", FileType.OVERVIEW, folder);
     }
 
     public static File createMainFile(Folder folder) {
-        return new File("메인 페이지", "", FileType.MAIN, folder);
+        return new File("그룹 정보", "", FileType.MAIN, folder);
     }
 
     public static File createTimeOverViewFile(Folder folder, Study study) {
-        return new File("스터디 개요", "", FileType.TIME_OVERVIEW, folder, study);
+        return new File("문제목록", "", FileType.TIME_OVERVIEW, folder, study);
     }
 
     public void update(File updateFile) {
@@ -106,9 +108,18 @@ public class File extends BaseEntity {
         this.content = updateFile.getContent();
     }
 
-    public void update(CodeFileUpdateRequest req) {
-        this.name = req.getName();
-        this.content = req.getContent();
+    public String getName() {
+        if(type != FileType.CODE) return name;
+        return getCodeFileName();
+    }
+
+    private String getCodeFileName() {
+        String fileNum = (this.folderIndex == 0) ? "" : "(" + folderIndex + ")" ;
+        return this.user.getNickname() + "의_풀이" + fileNum + this.code.getLanguage().getExtension();
+    }
+
+    public void setFolderIndex(Integer folderIndex) {
+        this.folderIndex = folderIndex;
     }
 
 }
