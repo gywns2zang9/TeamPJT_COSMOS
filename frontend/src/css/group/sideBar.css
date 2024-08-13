@@ -146,6 +146,7 @@
 
 /* 사이드바 푸터 */
 .sidebar-footer {
+    height: 100px;
     padding: 10px;
     text-align: center;
     background-color: transparent;
@@ -160,6 +161,17 @@
     justify-content: space-around;
 }
 
+/* 사이드바 푸터 버튼 */
+.sidebar-footer .btn {
+    font-size: 24px; 
+    padding: 10px; 
+}
+
+.sidebar-footer .btn svg {
+    width: 24px;
+    height: 24px; 
+}
+
 /* 열기/닫기 버튼 */
 .toggle-btn {
     font-size: 1.5rem;
@@ -171,16 +183,6 @@
 /* 사이드바의 아이콘 */
 .icon {
     margin-right: 5px;
-}
-
-/* 버튼 스타일 */
-.add-folder-btn,
-.add-page-btn,
-.delete-btn {
-    font-size: 16px;
-    margin: 0 2px;
-    padding: 0;
-    line-height: 1;
 }
 
 /* 사이드바 조절 핸들 스타일 */

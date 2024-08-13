@@ -360,7 +360,7 @@ useEffect(() => {
 
     return (
       <div key={folder.id} className="folder" >
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center" style={{cursor:'pointer'}}>
           <OverlayTrigger
             placement="right"
             overlay={<Tooltip>{folder.name}</Tooltip>}
@@ -414,7 +414,7 @@ useEffect(() => {
     return (
       <div className="files">
         {files.map((file) => (
-          <div key={file.id} className="file d-flex align-items-center">
+          <div key={file.id} className="file d-flex align-items-center" style={{cursor:'pointer'}}>
             <OverlayTrigger
               placement="right"
               overlay={<Tooltip>{file.name}</Tooltip>}
