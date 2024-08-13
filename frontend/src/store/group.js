@@ -242,7 +242,6 @@ const useGroupStore = create((set) => ({
 
     // 그룹 내 폴더 정보 불러오기 id=0이면 최상위폴더
     loadFolderInfo: async ({ groupId, folderId }) => {
-        set({ loading: true });
         try {
             const accessToken = await useAuthStore.getState().getAccessToken();
             const url = `${BASE_URL}/teams/${groupId}/folder/${folderId}`;
@@ -254,9 +253,7 @@ const useGroupStore = create((set) => ({
         } catch (err) {
             console.log('그룹내 폴더정보 불러오기 실패 -> ', err);
             throw err;
-        } finally {
-            set({ loading: false }); // 로딩 종료
-        }
+        } 
     },
 
     // 스터디 생성하기
