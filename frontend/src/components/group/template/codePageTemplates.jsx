@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, CardText } from 'react-bootstrap';
+import { Button, Card, CardText, Form } from 'react-bootstrap';
 import { Light } from 'react-syntax-highlighter';
 import { monokai } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import useGroupStore from '../../../store/group';
@@ -91,9 +91,11 @@ const CodePageTemplates = ({ groupId, pageId }) => {
 
     const saveCodeContent = async () => {
         try {
-            await updateCodeFile({ groupId, pageId, name: fileName, code: newCodeContent, content, language });
-            setCodeContent(newCodeContent);  // Update the main codeContent state
+            console.log(pageId, fileName, newCodeContent, language);
+            await setCodeContent(newCodeContent);
+            await updateCodeFile({ groupId, pageId, code:newCodeContent, language });
             setEditMode(false);
+            
         } catch (err) {
             console.error('코드 저장 실패 -> ', err);
         }
@@ -126,17 +128,27 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                 <h5>언어 : {language}</h5>
 
                 <Card style={{ backgroundColor: 'black', border: '1px solid white', borderRadius: '10px', margin: '10px', padding: '10px', color: 'white', overflow: 'auto' }}>
-                    <div className='d-flex' style={{ justifyContent: 'space-between' }}>
+                    <div className='d-flex' style={{ justifyContent: 'space-between', marginRight:'10px' }}>
                         <p>{fileName}</p>
                         <p>
-                            <select
-                                value={language}
-                                onChange={(e) => setLanguage(e.target.value)}
-                                style={{ marginLeft: '10px' }}
-                            >
-                                <option value="PYTHON">Python</option>
-                                <option value="JAVA">Java</option>
-                            </select>
+                            <Form.Group controlId="languageSelect">
+                                <Form.Select
+                                    value={language}
+                                    onChange={(e) => setLanguage(e.target.value)}
+                                    style={{
+                                        maxWidth: '200px',
+                                        backgroundColor: 'inherit',
+                                        color: 'inherit',
+                                        padding: '5px',
+                                        appearance: 'menulist',
+                                        WebkitAppearance: 'none', 
+                                        MozAppearance: 'none', 
+                                    }}
+                                >
+                                    <option value="PYTHON" style={{ backgroundColor: 'black', color: 'white' }}>Python</option>
+                                    <option value="JAVA" style={{ backgroundColor: 'black', color: 'white' }}>Java</option>
+                                </Form.Select>
+                            </Form.Group>
                         </p>
                     </div>
                     {editMode ? (
@@ -155,10 +167,13 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                         >
                             <CodeWithLineNumbers
                                 value={newCodeContent}
-                                onChange={(e) => setNewCodeContent(e.target.value)}
+                                onChange={(value) => setNewCodeContent(value)}
+                                language={language}
                             />
-                            <Button onClick={saveCodeContent} style={{ backgroundColor: 'inherit' }}>저장</Button>
-                            <Button onClick={() => setEditMode(false)} style={{ backgroundColor: 'inherit' }}>닫기</Button>
+                        <div className='close-edit-page' style={{ display: 'flex' }}>
+                            <Button onClick={saveCodeContent} style={{ backgroundColor: 'inherit', flex: 1 }}>저장</Button>
+                            <Button onClick={() => setEditMode(false)} style={{ backgroundColor: 'inherit', flex: 1 }}>닫기</Button>
+                        </div>
                         </div>
                     ) : (
                         <>
@@ -189,7 +204,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                                         <textarea
                                             value={io.input}
                                             onChange={(e) => handleInputChange(index, e.target.value)}
-                                            style={{ width: '100%', height: '100px', backgroundColor: 'inherit', color: 'white' }}
+                                            style={{ padding:'5px', width: '100%', height: '100px', backgroundColor: 'inherit', color: 'white' }}
                                         />
                                     </CardText>
                                 </div>
@@ -197,7 +212,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                                     <CardText>Output {index + 1}</CardText>
                                     <CardText>
                                         <pre
-                                            style={{ width: '100%', height: '100px', whiteSpace: 'pre-wrap', overflowY: 'auto', border: '1px solid white', borderRadius: '5px' }}
+                                            style={{ padding:'5px', marginwidth: '100%', height: '100px', whiteSpace: 'pre-wrap', overflowY: 'auto', border: '1px solid white', borderRadius: '5px' }}
                                         >
                                             {io.output || ''}
                                         </pre>

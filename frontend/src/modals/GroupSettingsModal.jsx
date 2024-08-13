@@ -166,6 +166,20 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
                         </Button>
                     </>
                 )}
+                {(isLeader && members.length === 1) && (
+                    <>
+                        <Button
+                            variant="danger"
+                            onClick={() => {
+                                if (window.confirm('정말로 그룹을 나가시겠습니까?')) {
+                                    handleLeaveGroup();
+                                }
+                            }}
+                        >
+                            그룹 나가기
+                        </Button>
+                    </>
+                )}
                 {isLeader && (
                     <Button variant="primary" onClick={handleSaveChanges}>
                         변경 내용 저장

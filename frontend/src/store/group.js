@@ -475,7 +475,11 @@ const useGroupStore = create((set) => ({
             const url = `${BASE_URL}/teams/${groupId}/problems/code`;
             const response = await post(url, data, headers);
             console.log(response);
-            window.alert(`코드 불러오기에 성공하였습니다.`)
+            if (response.result === 'success') {
+                window.alert(`코드 불러오기에 성공하였습니다.`)
+            } else {
+                window.alert(`코드 불러오기에 실패하였습니다.\n풀이가 존재하지 않습니다.\nGithub을 확인하세요.`)
+            }
             return response
         } catch (err) {
             console.log(err);
@@ -484,11 +488,10 @@ const useGroupStore = create((set) => ({
         } finally {
             set({ loading: false }); // 로딩 종료
         }
-
     },
 
     // 코드 페이지 수정하기
-    updateCodeFile: async ({ groupId, pageId, name, code, content, language }) => {
+    updateCodeFile: async ({ groupId, pageId, code, language }) => {
         const accessToken = await useAuthStore.getState().getAccessToken();
         const headers = {
             Authorization: `Bearer ${accessToken}`,
@@ -496,13 +499,10 @@ const useGroupStore = create((set) => ({
         try {
             const url = `${BASE_URL}/teams/${groupId}/files/${pageId}/code`;
             const data = {
-                name,
                 code,
-                content,
                 language
             };
             const response = await patch(url, data, headers);
-            console.log(response);
             return response
         } catch (err) {
             console.log(err);
