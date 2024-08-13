@@ -5,6 +5,7 @@ import useGroupStore from "../../../store/group.js";
 import '../../../css/group/mainPage.css'
 import StartVideoModal from "../../../modals/StartVideoModal.jsx";
 import { useNavigate } from "react-router-dom";
+import { Card } from "react-bootstrap";
 
 const GroupInfoText = styled.div`
     color: white;
@@ -53,13 +54,21 @@ const MainPageTemplates = ({ groupId }) => {
         <>
         <div className="group-info-container">
             {groupInfo && (
-                <div className="group-info-text">
-                    <span style={{fontSize:'36px'}}><strong>{groupInfo.name}</strong> 에 오신 것을 환영합니다.</span>
-                    <br />
-                    <span style={{fontSize:'24px'}}>그룹원 : {groupInfo.members.map(member => member.nickName).join(", ")}</span>
-                    <br />
-                    <span style={{fontSize:'20px'}}>{groupInfo.description}</span>
-                </div>
+                <Card style={{ width: '100%', margin: '20px auto', background:'inherit', color:'white' }}>
+                    <Card.Body>
+                        <Card.Title style={{ fontSize: '36px' }}>
+                            <span style={{ color: '#2F95DC' }}>
+                                <strong>{groupInfo.name}</strong>
+                            </span> 
+                        </Card.Title>
+                        <Card.Text style={{ fontSize: '24px' }}>
+                            멤버 : {groupInfo.members.map(member => member.nickName).join(", ")}
+                        </Card.Text>
+                        <Card.Text style={{ fontSize: '20px' }}>
+                            {groupInfo.description}
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
             )}
             <div className="start-conference" onClick={() => setShowConfirmVideoStart(true)} >
                 <span>화상회의<br/>시작하기</span>

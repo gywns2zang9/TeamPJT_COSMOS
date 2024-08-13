@@ -13,9 +13,10 @@ import UserVideoComponent from "../components/conference/UserVideoComponent";
 import LeaveSessionModal from "../modals/LeaveSessionModal";
 import "../css/conference/conference.css";
 import useAuthStore from "../store/auth";
+import useStore from '../store/index.js'
 
-const APPLICATION_SERVER_URL = "https://i11a708.p.ssafy.io/";
-// const APPLICATION_SERVER_URL = "http://localhost:8080/";
+const APPLICATION_SERVER_URL = useStore.getState().BASE_URL;
+
 
 function ConferenceView(props) {
   const [showLeaveModal, setShowLeaveModal] = useState(false);
@@ -389,7 +390,7 @@ function ConferenceView(props) {
     const accessToken = await useAuthStore.getState().getAccessToken();
     try {
       const response = await axios.post(
-        APPLICATION_SERVER_URL + "api/sessions/teams/" + sessionId,
+        APPLICATION_SERVER_URL + "/sessions/teams/" + sessionId,
         { customSessionId: sessionId },
         {
           headers: {
@@ -412,7 +413,7 @@ function ConferenceView(props) {
     try {
       const response = await axios.post(
         APPLICATION_SERVER_URL +
-          "api/sessions/teams/" +
+          "/sessions/teams/" +
           sessionId +
           "/connections",
         {},

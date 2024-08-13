@@ -21,6 +21,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const [showModal, setShowModal] = useState(false);
   const [myCode, setMyCode] = useState("");
   const getCode = useGroupStore((state) => state.loadPersonalCode);
+  const saveCode = useGroupStore((state) => state.updateCodeFile);
 
   const handleLanguageChange = (event) => {
     setLanguage(event.target.value);
@@ -44,6 +45,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const handleModalShow = async () => {
     const userInfo = await getUser();
     const folders = await getCodeList({ groupId, userId: userInfo.userId });
+    console.log(folders);
     setPersonalCodeList(Array.isArray(folders) ? folders : []);
     setShowModal(true);
   };
@@ -53,7 +55,6 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   // 코드 선택했을 때 내용 불러오기
   const loadCode = async ({ codeId }) => {
     const response = await getCode({ groupId, codeId });
-    console.log(response);
     setMyCode(response.content);
     localStorage.setItem("myCode", response.content);
     handleModalClose();
@@ -81,6 +82,16 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
       console.error("실행  실패", err);
     } finally {
       setIsLoading(false); // 실행 완료 후 로딩 상태 해제
+    }
+  };
+
+  // 코드 저장
+  const saveMyCode = async () => {
+    const pageId = 6;
+    try {
+      saveCode({ groupId, pageId, code: myCode, language });
+    } catch (err) {
+      console.log("코드 저장 실패 -> ", err);
     }
   };
 
@@ -154,7 +165,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
                 <button className="button" onClick={handleModalShow}>
                   코드 불러오기
                 </button>
-                <button className="button">코드 저장</button>
+                <button className="button" onClick={saveMyCode}>
+                  코드 저장
+                </button>
               </div>
               <div className="compile-button">
                 <button className="button" onClick={toggleCompiler}>
