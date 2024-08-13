@@ -114,8 +114,9 @@ const ShareCode = ({ groupId, language }) => {
   return (
     <div className="share-code-space">
       <Editor
+        key={language}
         options={{ minimap: { enabled: false } }}
-        language={language}
+        language={language.toLowerCase()}
         onMount={(editor) => {
           setEditor(editor);
         }}

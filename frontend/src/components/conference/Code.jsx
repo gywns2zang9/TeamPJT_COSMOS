@@ -111,11 +111,12 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
         ) : (
           <Editor
             // theme="vs-dark"
+            key={language}
             options={{
               minimap: { enabled: false },
             }}
             className="code-editor"
-            language={language}
+            language={language.toLowerCase()}
             value={myCode}
             onChange={handleEditorChange}
           />
