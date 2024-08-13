@@ -3,8 +3,6 @@ import { Modal, Button, Form } from "react-bootstrap";
 import '../css/group/inviteGroupModal.css'
 import useGroupStore from "../store/group";
 
-// 초대하기버튼에 API요청함수 달기
-
 function InviteGroupModal({ show, handleClose, groupId }) {
     const [inviteMethod, setInviteMethod] = useState('email');
     const [groupCode, setGroupCode] = useState(''); 

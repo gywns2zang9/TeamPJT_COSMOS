@@ -4,6 +4,8 @@ import { Light } from 'react-syntax-highlighter';
 import { monokai } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import useGroupStore from '../../../store/group';
 import useAuthStore from '../../../store/auth';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import CodeWithLineNumbers from './CodeWithLineNumbers';
 
 const CodePageTemplates = ({ groupId, pageId }) => {
     const [fileName, setFileName] = useState('');
@@ -151,10 +153,9 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                                 boxSizing: 'border-box'
                             }}
                         >
-                            <textarea
+                            <CodeWithLineNumbers
                                 value={newCodeContent}
                                 onChange={(e) => setNewCodeContent(e.target.value)}
-                                style={{ width: '100%', height: '100%', backgroundColor: 'inherit', color: 'white' }}
                             />
                             <Button onClick={saveCodeContent} style={{ backgroundColor: 'inherit' }}>저장</Button>
                             <Button onClick={() => setEditMode(false)} style={{ backgroundColor: 'inherit' }}>닫기</Button>
@@ -162,15 +163,15 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                     ) : (
                         <>
                             <Button onClick={startEdit} style={{ backgroundColor: 'inherit', marginTop: '10px' }}>편집</Button>
-                            <Light language={language} style={monokai}>
+                            <SyntaxHighlighter language={language} style={monokai} showLineNumbers>
                                 {codeContent}
-                            </Light>
+                            </SyntaxHighlighter>
                             {(userCodeId === userId) && (
                                 <>
                                     <Button onClick={startEdit} style={{ backgroundColor: 'inherit', marginTop: '10px' }}>편집</Button>
-                                    <Light language={language} style={monokai}>
+                                    <SyntaxHighlighter language={language} style={monokai} showLineNumbers>
                                         {codeContent}
-                                    </Light>
+                                    </SyntaxHighlighter>
                                 </>
                             )}
                         </>
@@ -196,7 +197,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                                     <CardText>Output {index + 1}</CardText>
                                     <CardText>
                                         <pre
-                                            style={{ width: '100%', height: '100px', whiteSpace: 'pre-wrap', overflowY: 'auto' }}
+                                            style={{ width: '100%', height: '100px', whiteSpace: 'pre-wrap', overflowY: 'auto', border: '1px solid white', borderRadius: '5px' }}
                                         >
                                             {io.output || ''}
                                         </pre>
