@@ -14,7 +14,7 @@ import 'codemirror/mode/javascript/javascript';
 const CodePageTemplates = ({ groupId, pageId }) => {
     const [fileName, setFileName] = useState('');
     const [content, setContent] = useState('');
-    const [language, setLanguage] = useState('');
+    const [language, setLanguage] = useState('JAVA');
     const [problemInfo, setProblemInfo] = useState({});
     const [codeContent, setCodeContent] = useState('');
     const [date, setDate] = useState('');
@@ -107,7 +107,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
     
     return (
         <>
-            <Card style={{ backgroundColor:'inherit', color: 'white', padding: '20px', margin: '10px', maxWidth: '100%', width: '100%' }}>
+            <div style={{ backgroundColor:'inherit', color: 'white', padding: '20px', margin: '10px',  width: '100%' }}>
                 <h3>
                     <a 
                         href={`https://www.acmicpc.net/problem/${problemInfo.number}`} 
@@ -124,12 +124,22 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                     </a>
                 </h3>
                 <h5>{date}</h5>
-                <h5>언어 : {language}</h5>
+                <h5>언어 : {language}  </h5>
 
                 <Card style={{ backgroundColor: 'black', border: '1px solid white', borderRadius: '10px', margin: '10px', padding: '10px', color: 'white', overflow: 'auto' }}>
                     <div className='d-flex' style={{ justifyContent: 'space-between' }}>
                         <p>{fileName}</p>
-                        <p>{language.toLowerCase()}</p>
+                        {/* <p>{language.toLowerCase()}</p> */}
+                        <p>
+                            <select 
+                                value={language} 
+                                onChange={(e) => setLanguage(e.target.value)}
+                                style={{ marginLeft: '10px' }}
+                            >
+                                <option value="PYTHON">Python</option>
+                                <option value="JAVA">Java</option>
+                            </select>
+                        </p>
                     </div>
                     {editMode ? (
                         <div
@@ -145,16 +155,20 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                                 boxSizing:'border-box'
                             }}
                         >
+                            {/* <textarea 
+                                value={codeContent}
+                                onChange={handleCodeContentChange(value)}
+                            /> */}
                             <CodeMirror 
                                 value={codeContent}
                                 options={{
                                     mode:{language},
                                     theme: "material",
                                     lineNumbers: true,
-                                    lineWrapping: true
+                                    lineWrapping: true,
                                 }}
                                 onBeforeChange={(editor, data, value) => {
-                                    setCodeContent(value)
+                                    handleCodeContentChange(value)
                                 }}
                             />
                             <Button onClick={saveCodeContent} style={{backgroundColor:'inherit' }}>저장</Button>
@@ -230,11 +244,12 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                         </React.Fragment>
                     ))}
                 </Card>
-            </Card>
+            </div>
         </>
     );
 };
 
 export default CodePageTemplates;
+
 
 
