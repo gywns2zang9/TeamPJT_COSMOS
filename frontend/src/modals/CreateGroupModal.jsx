@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import '../css/group/style.css';
 import useGroupStore from '../store/group';
@@ -12,7 +12,16 @@ function CreateGroupModal({ show, handleClose }) {
     // 그룹이름과 그룹설명 변수 세팅
     const [groupName, setGroupName] = useState('');
     const [description, setDescription] = useState('');
-    
+        
+    // 모달이 열릴 때 groupName과 description을 초기화하는 예제
+    useEffect(() => {
+        if (show) {
+        setGroupName("");
+        setDescription("");
+        }
+    }, [show]);
+
+
     // 그룹생성함수 import
     const makeGroup = useGroupStore((state) => state.makeGroup);
 

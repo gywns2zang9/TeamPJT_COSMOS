@@ -17,6 +17,12 @@ function JoinGroupModal({ show, handleClose, onSuccess }) {
         setTeamCode(e.target.value);
     }
 
+    useEffect(() => {
+        if (show) {
+        setTeamCode("");
+        }
+    }, [show]);
+
     const handleJoinGroup = async () => {
         if (!teamCode) {
             window.alert("참여 코드를 입력하세요.")
