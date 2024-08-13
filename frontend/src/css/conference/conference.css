@@ -171,7 +171,7 @@ video {
   border-radius: 5px;
   overflow: hidden;
   transition: height 0.3s ease-in-out;
-  z-index: 9999;
+  z-index: 999;
 }
 
 .chat-modal.open {

@@ -144,12 +144,15 @@ function ConferenceView(props) {
           .getMediaStream()
           .getVideoTracks()[0]
           .addEventListener("ended", () => {
-            session.unpublish(publisher);
+            // session.unpublish(publisher);
+            session.unpublish(screenPublisher);
             setIsScreenSharing(false);
-            publishCameraStream(); // 화면 공유 종료 시 카메라 스트림으로 전환
+            // publishCameraStream();
+            restoreStream();
           });
       } catch (error) {
-        publishCameraStream(); // 카메라 스트림으로 전환
+        // publishCameraStream();
+        restoreStream();
         console.error("Error starting screen share:", error);
       }
     } else {
@@ -158,17 +161,39 @@ function ConferenceView(props) {
         session.unpublish(publisher);
       }
       setIsScreenSharing(false);
-      publishCameraStream(); // 카메라 스트림으로 전환
+      // publishCameraStream();
+      restoreStream();
     }
   };
 
-  const publishCameraStream = async () => {
+  // const publishCameraStream = async () => {
+  //   try {
+  //     let newPublisher = await OV.initPublisherAsync(undefined, {
+  //       audioSource: undefined,
+  //       videoSource: undefined,
+  //       publishAudio: isMicEnabled, // 현재 마이크 상태 반영
+  //       publishVideo: true,
+  //       resolution: "640x480",
+  //       frameRate: 30,
+  //       insertMode: "APPEND",
+  //       mirror: false,
+  //     });
+
+  //     session.publish(newPublisher);
+  //     setPublisher(newPublisher); // 새 publisher 설정
+  //   } catch (error) {
+  //     console.error("Error publishing camera stream:", error);
+  //   }
+  // };
+
+  const restoreStream = async () => {
     try {
+      // 현재 비디오와 마이크 상태를 확인하여 원상태로 복원
       let newPublisher = await OV.initPublisherAsync(undefined, {
         audioSource: undefined,
         videoSource: undefined,
-        publishAudio: isMicEnabled, // 현재 마이크 상태 반영
-        publishVideo: true,
+        publishAudio: isMicEnabled,
+        publishVideo: isVideoEnabled,
         resolution: "640x480",
         frameRate: 30,
         insertMode: "APPEND",
@@ -178,7 +203,7 @@ function ConferenceView(props) {
       session.publish(newPublisher);
       setPublisher(newPublisher); // 새 publisher 설정
     } catch (error) {
-      console.error("Error publishing camera stream:", error);
+      console.error("Error restoring video and audio streams:", error);
     }
   };
 
