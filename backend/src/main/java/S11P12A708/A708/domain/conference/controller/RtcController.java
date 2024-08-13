@@ -1,5 +1,6 @@
 package S11P12A708.A708.domain.conference.controller;
 
+import S11P12A708.A708.common.error.exception.OpenViduNoSessionException;
 import S11P12A708.A708.domain.auth.annotation.AuthUser;
 import S11P12A708.A708.domain.auth.request.AuthUserDto;
 import io.openvidu.java.client.*;
@@ -74,13 +75,12 @@ public class RtcController {
     private Session createSession(String teamId) throws OpenViduJavaClientException, OpenViduHttpException {
         Map<String, Object> params = Map.of(customSessionId, teamId);
         SessionProperties properties = SessionProperties.fromJson(params).build();
-        Session session = openvidu.createSession(properties);
-        return session;
+        return openvidu.createSession(properties);
     }
 
     private void removeConnection(AuthUserDto authUser, String sessionId) throws Exception {
         Session session = openvidu.getActiveSession(sessionId);
-        if (session == null) throw new Exception("session 업음");
+        if (session == null) throw new OpenViduNoSessionException();
 
         List<Connection> activeConnections = session.getActiveConnections();
         for (Connection connection : activeConnections) {
