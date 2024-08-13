@@ -13,6 +13,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [showIO, setShowIO] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // 코드 불러오기 및 실행
   const getCodeList = useGroupStore((state) => state.loadCodeList);
   const runCode = useGroupStore((state) => state.executeCode);
@@ -71,12 +72,15 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   // 코드 실행
   const handleExecute = async () => {
     const content = myCode.toString();
+    setIsLoading(true);
     try {
       const response = await runCode({ content, language, input: input });
       console.log(response);
       setOutput(response.results);
     } catch (err) {
       console.error("실행  실패", err);
+    } finally {
+      setIsLoading(false); // 실행 완료 후 로딩 상태 해제
     }
   };
 
@@ -157,8 +161,22 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
                   {showIO ? "컴파일러 닫기" : "컴파일러"}
                 </button>
                 {showIO && (
-                  <button className="button" onClick={handleExecute}>
-                    실행
+                  <button
+                    className="button"
+                    onClick={handleExecute}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <i
+                          className="fas fa-spinner fa-spin"
+                          style={{ marginRight: "5px" }}
+                        ></i>
+                        실행중...
+                      </>
+                    ) : (
+                      "실행"
+                    )}
                   </button>
                 )}
               </div>
