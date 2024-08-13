@@ -17,7 +17,17 @@ function JoinGroupModal({ show, handleClose, onSuccess }) {
         setTeamCode(e.target.value);
     }
 
+    useEffect(() => {
+        if (show) {
+        setTeamCode("");
+        }
+    }, [show]);
+
     const handleJoinGroup = async () => {
+        if (!teamCode) {
+            window.alert("참여 코드를 입력하세요.")
+            return;
+        }
         try {
             // const response = await joinGroup({ userId, teamCode});
             // console.log(response);
@@ -31,7 +41,12 @@ function JoinGroupModal({ show, handleClose, onSuccess }) {
             onSuccess(); 
             handleClose();
         } catch (err) {
-            console.error('그룹 참여 중 에러 -> ', err);
+            let errorMessage;
+            if (err.response.data.error.team && err.response.data.error.team === "This Team is not exist") {
+                errorMessage = "존재하지 않는 팀 코드입니다."
+            }
+            window.alert(errorMessage || "예기치 못한 오류입니다.")
+            setTeamCode("")
         }
     };
 
