@@ -56,6 +56,7 @@ function ConferenceView(props) {
   const handleToggleChat = () => {
     setShowChat((prevShowChat) => !prevShowChat);
     setHasNewMessage(false);
+    console.log(showChat);
   };
 
   const handleSendMessage = () => {
@@ -104,8 +105,8 @@ function ConferenceView(props) {
           { from: senderData.clientData, text: event.data, isCurrentUser },
         ]);
 
-        // 새 메시지가 현재 사용자에게서 오지 않은 경우에만 알림을 표시
-        if (!isCurrentUser) {
+        // 채팅창이 열려있지 않고, 새 메시지가 현재 사용자에게서 오지 않은 경우에만 알림을 표시
+        if (!isCurrentUser && !showChat) {
           setHasNewMessage(true);
         }
       });
