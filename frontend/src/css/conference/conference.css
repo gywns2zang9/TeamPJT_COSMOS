@@ -193,6 +193,12 @@ video {
   padding: 10px;
   overflow-y: auto;
   color: black;
+  white-space: pre-wrap;
+}
+
+.chat-body .message.current-user {
+  align-self: flex-end; /* 오른쪽 정렬 */
+  text-align: right; /* 텍스트 오른쪽 정렬 */
 }
 
 .chat-footer {
@@ -201,12 +207,15 @@ video {
   border-top: 1px solid #ddd;
 }
 
-.chat-footer input {
+.chat-footer textarea {
   flex: 1;
   padding: 5px;
   margin-right: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  height: 36px;
+  resize: none;
+  overflow-y: hidden;
 }
 
 .chat-footer button {
@@ -220,6 +229,20 @@ video {
 
 .chat-footer button:hover {
   background-color: #3a6695;
+}
+
+.chat-button {
+  position: relative;
+}
+
+.new-message-indicator {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: red;
+  border-radius: 50%;
+  bottom: -3px;
+  right: -4px;
 }
 
 .code-select {

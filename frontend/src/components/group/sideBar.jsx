@@ -28,7 +28,7 @@ function SideBar({ groupId }) {
   const [showSettingsModal, setShowSettingsModal] = useState(false); // 그룹설정
   // 사이드바 크기
   const [isOpen, setIsOpen] = useState(true); // 사이드바 오픈 여부
-  const [sidebarWidth, setSidebarWidth] = useState(250); // 사이드바 너비
+  const [sidebarWidth, setSidebarWidth] = useState(350); // 사이드바 너비
   const [isResizing, setIsResizing] = useState(false); // 사이드바 조절 상태
 
   const sidebarRef = useRef(null); // 사이드바
@@ -53,7 +53,7 @@ function SideBar({ groupId }) {
   // 사이드바 토글
   const toggleSideBar = () => {
     if (sidebarWidth <= 100) {
-      setSidebarWidth(250);
+      setSidebarWidth(350);
     } else {
       setSidebarWidth(100);
     }
@@ -337,7 +337,6 @@ useEffect(() => {
     const pageMap = {
       MAIN: `/group/${groupId}/main/${id}/`,
       OVERVIEW: `/group/${groupId}/overview/${id}/`,
-      NORMAL: `/group/${groupId}/${id}/`,
       CODE: `/group/${groupId}/code/${id}/`,
       TIME_OVERVIEW: `/group/${groupId}/time-overview/${id}/`,
     };
@@ -360,7 +359,7 @@ useEffect(() => {
     const childFiles = structure.files.filter((f) => f.parentId === folder.id);
 
     return (
-      <div key={folder.id} className="folder">
+      <div key={folder.id} className="folder" >
         <div className="d-flex align-items-center">
           <OverlayTrigger
             placement="right"
@@ -371,6 +370,7 @@ useEffect(() => {
               onClick={() => toggleFolderExpansion(folder.id)}
             >
               {isExpanded ? <FaChevronDown /> : <FaChevronRight />}
+              &nbsp;
               <FaFolder className="me-2" />
               {editingItemId === folder.id ? (
                 <input
@@ -386,31 +386,8 @@ useEffect(() => {
               )}
             </div>
           </OverlayTrigger>
-          <div className="folder-actions ms-auto">
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip>폴더 추가</Tooltip>}
-            >
-              <Button
-                variant="link"
-                size="sm"
-                onClick={() => handleAddItemClick("folder", folder.id)}
-              >
-                <FaFolderPlus />
-              </Button>
-            </OverlayTrigger>
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip>파일 추가</Tooltip>}
-            >
-              <Button
-                variant="link"
-                size="sm"
-                onClick={() => handleAddItemClick("file", folder.id)}
-              >
-                <FaFileAlt />
-              </Button>
-            </OverlayTrigger>
+          {/* 폴더 삭제 어떻게 하지 */}
+          {/* <div className="folder-actions ms-auto">
             <OverlayTrigger placement="top" overlay={<Tooltip>삭제</Tooltip>}>
               <Button
                 variant="link"
@@ -420,7 +397,7 @@ useEffect(() => {
                 <FaTrashAlt />
               </Button>
             </OverlayTrigger>
-          </div>
+          </div> */}
         </div>
         {isExpanded && (
           <div className="folder-contents ms-3">
@@ -461,8 +438,9 @@ useEffect(() => {
                 )}
               </div>
             </OverlayTrigger>
-            <div className="file-actions ms-auto">
-              {(file.type === 'NORMAL' || file.type === 'CODE') && (
+            {/* 파일 삭제 어떻게 하지 */}
+            {/* <div className="file-actions ms-auto">
+              {(file.type === 'CODE') && (
                 <OverlayTrigger placement="top" overlay={<Tooltip>삭제</Tooltip>}>
                   <Button
                     variant="link"
@@ -473,7 +451,7 @@ useEffect(() => {
                   </Button>
                 </OverlayTrigger>
               )}
-            </div>
+            </div> */}
           </div>
         ))}
       </div>
@@ -500,45 +478,21 @@ useEffect(() => {
           </OverlayTrigger>
         </Button>
       </div>
-      <div style={{ textAlign: "center" }}>
         <OverlayTrigger placement="top" overlay={<Tooltip>버튼을 눌러 화상회의를 시작하세요</Tooltip>}>
-          <Button
-            variant="link"
-            size="sm"
-            onClick={() => setShowConfirmVideoStart(true)}
-          >
-            <FaPlay />
-          </Button>
+          <div className="conference-hover" style={{ textAlign: "center", cursor:'pointer' }} onClick={() => setShowConfirmVideoStart(true)}>
+          {isOpen && (
+            <span>화상회의 시작하기</span>
+          )}
+            <Button
+              variant="link"
+              size="sm"
+            >
+              <FaPlay />
+            </Button>
+          </div>
         </OverlayTrigger>
-      </div>
       {isOpen && (
         <div className="sidebar-content">
-          <div className="add-items">
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip>폴더 추가</Tooltip>}
-            >
-              <Button
-                variant="link"
-                size="sm"
-                onClick={() => handleAddItemClick("folder", null)}
-              >
-                <FaFolderPlus />
-              </Button>
-            </OverlayTrigger>
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip>파일 추가</Tooltip>}
-            >
-              <Button
-                variant="link"
-                size="sm"
-                onClick={() => handleAddItemClick("file", null)}
-              >
-                <FaFileAlt />
-              </Button>
-            </OverlayTrigger>
-          </div>
           <div className="folders">
           {structure.folders.filter((folder) => folder.parentId === null).map(renderFolder)}
           </div>

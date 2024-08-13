@@ -45,15 +45,14 @@ const OverviewPageTemplates = ({ groupId, pageId }) => {
     const handleCloseModal = () => setShowModal(false);
 
     return (
-        <div style={{ color: 'white' }}>
-            <h1>스터디가 걸어온 길</h1>
-            <Button onClick={handleShowModal}>스터디 생성하기 버튼</Button>
+        <div style={{ color: 'white', margin:'10px', textAlign:'center' }}>
+            <h1>스터디 종합기록</h1>
+            <Button onClick={handleShowModal} style={{backgroundColor:'inherit' }} >스터디 생성</Button>
             <CreateStudyModal 
                 show={showModal} 
                 handleClose={handleCloseModal} 
                 groupId={groupId}
             />
-            <div>우리가 푼 문제들</div>
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                 <thead>
                     <tr>

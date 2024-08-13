@@ -4,6 +4,7 @@ import "../../css/conference/paint.css";
 
 const Paint = ({ groupId }) => {
   const store = useSyncDemo({ roomId: groupId });
+
   return (
     <div className="paint-container">
       <Tldraw store={store} className="tldraw-component" />
