@@ -19,6 +19,7 @@ import S11P12A708.A708.domain.problem.repository.ProblemUserRepository;
 import S11P12A708.A708.domain.problem.request.CrawlCodeRequest;
 import S11P12A708.A708.domain.problem.request.CreateProblemRequest;
 import S11P12A708.A708.domain.problem.request.DeleteProblemRequest;
+import S11P12A708.A708.domain.problem.response.CrawlCodeResponse;
 import S11P12A708.A708.domain.study.entity.Study;
 import S11P12A708.A708.domain.study.exception.StudyNotFoundException;
 import S11P12A708.A708.domain.study.repository.StudyRepository;
@@ -102,7 +103,7 @@ public class ProblemService {
 
         Folder studyFolder = studyService.findStudyFolder(teamId, request.getStudyId());
         Folder problemFolder = studyFolder.getSubFolders().stream()
-                .filter(subFolder -> problem.getName().equals(subFolder.getName()))
+                .filter(subFolder -> subFolder.getProblem().equals(problem))
                 .findFirst()
                 .orElseThrow(FolderNotFoundException::new);
 
@@ -112,14 +113,14 @@ public class ProblemService {
         problemRepository.delete(problem);
     }
 
-    public void crawlCode(Long teamId, CrawlCodeRequest req) {
+    public CrawlCodeResponse crawlCode(Long teamId, CrawlCodeRequest req) {
         teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
         final User user = userRepository.findById(req.getUserId()).orElseThrow(UserNotFoundException::new);
         final Problem problem = problemRepository.findById(req.getProblemId()).orElseThrow(ProblemNotFoundException::new);
 
         // 업데이트할 코드 가져오기
         final Code newCode = codeCrawler.createByCrawler(user, problem.getNumber());
-        if(newCode.getContent().isEmpty()) return; // 업데이트할 코드가 없다면 업데이트 하지 않음
+        if(newCode.getContent().isEmpty()) return CrawlCodeResponse.createFailure("code is not exist in user's git repository");
 
         final ProblemUser problemUser = problemUserRepository.findByProblemAndUser(problem, user);
         final Code code = problemUser.getFile().getCode();
@@ -128,6 +129,7 @@ public class ProblemService {
         codeRepository.save(code);
 
         if (ProblemStatus.check(user.getGitId(), problem.getNumber())) problemUser.updateStatus();
+        return CrawlCodeResponse.createSuccess();
     }
 
 }
