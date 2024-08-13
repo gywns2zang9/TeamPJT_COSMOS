@@ -17,7 +17,19 @@
     color: lightgray; /* 마우스를 올렸을 때 색상 변경 */
 }
 
+/* .fc-day-past {
+    background-color:  !important;
+} */
 
+.fc-day-today {
+    background-color: #FF8C00 !important;
+}
+.fc-event-today {
+    color: rgb(36, 0, 137);
+}
+/* .fc-day-future {
+    background-color:  !important;
+} */
 .fc-daygrid-day.fc-day-sun .fc-daygrid-day-number,
 .fc-col-header-cell.fc-day.fc-day-sun .fc-scrollgrid-sync-inner .fc-col-header-cell-cushion {
     color: red; /* 일요일 숫자 색상 */
@@ -25,7 +37,7 @@
 
 .fc-daygrid-day.fc-day-sat .fc-daygrid-day-number,
 .fc-col-header-cell.fc-day.fc-day-sat .fc-scrollgrid-sync-inner .fc-col-header-cell-cushion {
-    color: blue; /* 토요일 숫자 색상 */
+    color: rgb(33, 113, 241); /* 토요일 숫자 색상 */
 }
 
 .fc-toolbar-title {
