@@ -41,6 +41,7 @@ const ShareCode = ({ groupId, language }) => {
 
   const getUserInfo = useAuthStore((state) => state.getUserInfo);
   const userInfo = getUserInfo();
+  const MAX_CODE_LENGTH = 50000;
 
   useEffect(() => {
     const provider = new WebsocketProvider(
@@ -71,12 +72,29 @@ const ShareCode = ({ groupId, language }) => {
 
   useEffect(() => {
     if (provider && editor) {
+      const model = editor.getModel();
       const binding = new MonacoBinding(
         ydoc.getText(),
         editor.getModel(),
         new Set([editor]),
         provider.awareness
       );
+
+      // 초기 코드 길이 체크 및 잘라내기
+      const checkAndTruncateText = () => {
+        const text = ydoc.getText().toString();
+        if (text.length > MAX_CODE_LENGTH) {
+          alert("최대 코드 길이를 초과했습니다. 50000자 이하로 입력해 주세요.");
+          ydoc.getText().delete(MAX_CODE_LENGTH, text.length - MAX_CODE_LENGTH);
+        }
+      };
+
+      // 코드 변경 시 길이 체크
+      const onModelContentChanged = () => {
+        checkAndTruncateText();
+      };
+
+      model.onDidChangeContent(onModelContentChanged);
 
       editor.onDidScrollChange(() => {
         const scrollTop = editor.getScrollTop();
