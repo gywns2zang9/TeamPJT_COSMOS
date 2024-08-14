@@ -10,7 +10,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CodeFileUpdateRequest {
 
-    @NotBlank
+    @NotNull
     private String code;
 
     @NotNull
