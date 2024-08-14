@@ -48,7 +48,8 @@ const MainPageTemplates = ({ groupId }) => {
     }
 
     if (error) {
-        return <GroupInfoText className="error-text" >Error........<br/>{error.message}</GroupInfoText>
+        window.alert('없는 그룹입니다.')
+        navigate(`/group`);
     }
 
     return (

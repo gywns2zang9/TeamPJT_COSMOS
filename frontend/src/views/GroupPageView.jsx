@@ -8,6 +8,10 @@ import useGroupStore from "../store/group.js";
 import useAuthStore from "../store/auth.js";
 
 function GroupPageView(props) {
+    const navigate = useNavigate();
+
+    const getIsLogin = useAuthStore.getState().isLogin;
+    
     const { userId } = useAuthStore.getState().getUserInfo();
     const groups = useGroupStore((state) => state.groups) || [];
     const setGroups = useGroupStore((state) => state.setGroups);
@@ -34,7 +38,7 @@ function GroupPageView(props) {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showJoinModal, setShowJoinModal] = useState(false);
 
-    const navigate = useNavigate();
+    
 
     const handleShowCreateModal = () => setShowCreateModal(true);
     const handleCloseCreateModal = () => setShowCreateModal(false);
