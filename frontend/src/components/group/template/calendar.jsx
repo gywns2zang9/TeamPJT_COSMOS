@@ -84,6 +84,12 @@ function Calendar({ groupId }) {
   
   // 이벤트 저장(추가/수정) 시 호출되는 함수
   const handleSaveEvent = async (event) => {
+      // title 또는 description이 비어 있는지 확인
+    if (!event.title || !event.description) {
+      window.alert('제목과 설명을 모두 입력해주세요.');
+      return; // 함수 종료
+    }
+
     try {
       const formattedDate = formatDateToMySQL(event.start);
 
@@ -164,7 +170,15 @@ function Calendar({ groupId }) {
     const eventTime = convertTo24HourFormat(eventInfo.timeText);
     return (
       <div style={{ cursor: 'pointer' }}> {/* 커서 스타일을 포인터로 설정 */}
-        <b>{eventInfo.event.title}</b>
+        <b style={{
+          display: 'inline-block',
+          maxWidth: '100%',      /* 너비를 설정합니다. 필요에 따라 특정 px 또는 %로 설정 */
+          whiteSpace: 'nowrap',  /* 텍스트를 한 줄로 표시하고 줄바꿈을 방지합니다 */
+          overflow: 'hidden',    /* 넘치는 내용을 숨깁니다 */
+          textOverflow: 'ellipsis'  /* 넘치는 텍스트에 ...을 표시합니다 */
+        }}>
+          {eventInfo.event.title}
+        </b>
         <p>({eventTime})</p>
         {eventInfo.view.type !== 'dayGridMonth' && <i>{eventInfo.event.title}</i>}
       </div>

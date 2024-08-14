@@ -64,6 +64,7 @@ function JoinGroupModal({ show, handleClose, onSuccess }) {
                             className="form-control"
                             id="team-code"
                             placeholder="Enter your Code here"
+                            maxLength={10}
                             value={teamCode}
                             onChange={handleTeamCodeChange}
                         />
