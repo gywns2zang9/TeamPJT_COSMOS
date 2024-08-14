@@ -59,7 +59,7 @@ const GroupDetailView = () => {
             <div id="sidebar">
                 <SideBar groupId={groupId} />
             </div>
-            <div id='group-detail-info-page'>
+            <div id='group-detail-info-page' style={{ overflowX: 'hidden', width: '100vw' }}>
                 <GroupDetailInfo pageId={fileId} type={type} groupId={groupId} />
             </div>
         </div>
