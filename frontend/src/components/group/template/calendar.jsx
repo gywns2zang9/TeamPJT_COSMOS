@@ -84,6 +84,12 @@ function Calendar({ groupId }) {
   
   // 이벤트 저장(추가/수정) 시 호출되는 함수
   const handleSaveEvent = async (event) => {
+      // title 또는 description이 비어 있는지 확인
+    if (!event.title || !event.description) {
+      window.alert('제목과 설명을 모두 입력해주세요.');
+      return; // 함수 종료
+    }
+
     try {
       const formattedDate = formatDateToMySQL(event.start);
 
