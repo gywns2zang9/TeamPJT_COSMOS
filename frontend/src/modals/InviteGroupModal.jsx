@@ -180,7 +180,7 @@ function InviteGroupModal({ show, handleClose, groupId }) {
     const [nickName, setNickname] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [findNickName, setFindNickName] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [inviting, setInviting] = useState(false); 
 
     const checkInviteCode = useGroupStore((state) => state.checkInviteCode);
     const invitePossibleUsers = useGroupStore((state) => state.invitePossibleUsers);
@@ -220,7 +220,6 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                         setFindNickName(false);
                     }
                 } catch (err) {
-                    console.error('닉네임으로 초대 실패 -> ', err);
                     setFindNickName(false);
                 }
             } else {
@@ -232,19 +231,33 @@ function InviteGroupModal({ show, handleClose, groupId }) {
     }, [nickName, inviteMethod, groupId, invitePossibleUsers]);
 
     const handleInvite = async () => {
-        setIsLoading(true);
+        if (inviting) {
+            return
+        }
+        setInviting(true)
         try {
             if (inviteMethod === 'email') {
-                await sendInviteEmail({ groupId, emails });
-            } else {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (emails) {
+                    const emailArray = emails.split(',').map(email => email.trim());
+                for (let email of emailArray) {
+                    if (!emailPattern.test(email)) {
+                        window.alert(`${email}은(는) 유효한 이메일 형식이 아닙니다.`);
+                        setInviting(false)
+                        return;
+                    }
+                }
+                    await sendInviteEmail({ groupId, emails });
+                    setInviting(false)
+                }
+            } else { // 닉네임일때
                 const responseData = await invitePossibleUsers({groupId, nickName });
                 const emails = responseData[0].email
-                await sendInviteEmail({ groupId, emails });
+                await sendInviteEmail({ groupId, emails })
+                setInviting(false)
             }
         } catch (err) {
-            console.error('초대 실패 -> ', err.message);
-        } finally {
-            setIsLoading(false);
+            setInviting(false)
         }
     };
 
@@ -289,6 +302,7 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                                 type="email" 
                                 placeholder="이메일 주소를 입력하세요. ( ,로 구분)"
                                 value={emails}
+                                maxLength={255}
                                 onChange={(e) => setEmails(e.target.value)}
                                 disabled={isLoading}
                             />
@@ -301,6 +315,7 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                                 type="text" 
                                 placeholder="닉네임을 입력하세요" 
                                 value={nickName}
+                                maxLength={255}
                                 onChange={(e) => setNickname(e.target.value)}
                                 disabled={isLoading}
                             />
@@ -324,24 +339,31 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose} disabled={isLoading}>
+                <Button
+                    variant="secondary"
+                    onClick={() => {
+                        setInviting(false);  // inviting 상태를 false로 설정
+                        handleClose();       // 닫기 함수 호출
+                    }}
+                >
                     닫기
                 </Button>
-                <Button variant="primary" onClick={handleInvite} disabled={isLoading || (inviteMethod === 'nickName' && !findNickName)}>
-                    {isLoading ? (
-                        <>
-                            <Spinner
-                                as="span"
-                                animation="border"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                            /> 초대중...
-                        </>
-                    ) : (
-                        "초대하기"
-                    )}
-                </Button>
+                { inviteMethod === 'email' && (
+                    <Button
+                        variant="primary"
+                        onClick={handleInvite}
+                        disabled={inviting}  // inviting이 true일 때 버튼 비활성화
+                    >
+                        {inviting ? '초대중...' : '초대하기'}
+                    </Button>
+                )}
+                { inviteMethod === 'nickName' && (
+                    <Button
+                        variant="primary"
+                        onClick={handleInvite}
+                        disabled={!findNickName || inviting}>
+                        {inviting ? '초대중...' : '초대하기'}
+                    </Button>)}
             </Modal.Footer>
         </Modal>
     );
