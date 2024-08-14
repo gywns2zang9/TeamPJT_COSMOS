@@ -13,6 +13,7 @@ import S11P12A708.A708.domain.file.request.FileCreateRequest;
 import S11P12A708.A708.domain.file.request.FileUpdateRequest;
 import S11P12A708.A708.domain.file.response.FileInfoResponse;
 import S11P12A708.A708.domain.file.response.FileProblemResponse;
+import S11P12A708.A708.domain.file.response.OverViewFileProblemResponse;
 import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.folder.exception.FolderNotBelongToTeamException;
 import S11P12A708.A708.domain.folder.exception.FolderNotFoundException;
@@ -113,11 +114,11 @@ public class FileService {
 
         if(file.getType() == FileType.OVERVIEW) {
             final List<Study> studies = studyRepository.findByTeam(team);
-            final List<FileProblemResponse> fileProblems = new ArrayList<>();
+            final List<OverViewFileProblemResponse> fileProblems = new ArrayList<>();
             for(Study study : studies) {
                 for (Problem problem : problemRepository.findByStudy(study)) { // 팀에 소속된 전체 문제들
                     fileProblems.add(
-                            FileProblemResponse.of(problem, problemQueryRepository.findSolveUsersByProblemId(problem.getId())));
+                            OverViewFileProblemResponse.of(problem, study, problemQueryRepository.findSolveUsersByProblemId(problem.getId())));
                 }
             }
 

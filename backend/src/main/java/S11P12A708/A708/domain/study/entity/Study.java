@@ -50,4 +50,10 @@ public class Study extends BaseEntity {
         return new Study( year, month, times, null, team);
     }
 
+    public String getStudyDateInfo() {
+        String shortYear = String.format("%02d", year % 100);
+        String formattedMonth = String.format("%d", month);
+        return shortYear + "년 " + formattedMonth + "월 " + times + "회차";
+    }
+
 }
