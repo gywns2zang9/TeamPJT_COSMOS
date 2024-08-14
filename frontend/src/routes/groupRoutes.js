@@ -11,11 +11,7 @@ const checkLogin = () => {
   return getIsLogin;
 }
 
-const GroupRoutes = () => {
-  const navigate = useNavigate();
-  if (checkLogin()) {
-    navigate('/');
-  }
+const GroupRoutes = () => 
   (
   <Routes>
     <Route path="/" element={<GroupPageView />} />
@@ -26,7 +22,7 @@ const GroupRoutes = () => {
     <Route path="/:groupId/time-overview/:fileId" element={<GroupDetailView />} />
     <Route path="*" element={<Error404 />} />
   </Routes>
-);}
+)
 
 
 export default GroupRoutes;
