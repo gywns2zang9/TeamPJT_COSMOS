@@ -27,6 +27,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
 
     useEffect(() => {
         setEditMode(false);
+        setInputsOutputs([{ input: '', output: '', isLoading: false }])
         loadFile();
     }, [groupId, pageId]);
 
