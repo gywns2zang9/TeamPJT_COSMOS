@@ -97,7 +97,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
     };
 
     return (
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={handleClose} >
             <Modal.Header closeButton>
                 <Modal.Title>{isLeader ? '그룹 설정' : '그룹 정보'}</Modal.Title>
             </Modal.Header>
@@ -144,13 +144,13 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
                                 ))}
                             </Form.Control>
                         </Form.Group>
-                        <Form.Group controlId="formTeamCode">
+                        <Form.Group controlId="formTeamCode" className='team-code'>
                             <Form.Label>팀 코드 {teamCode}</Form.Label>
                         </Form.Group>
                     </Form>
                 ) : (
                     <>
-                        <Form.Group controlId="formTeamCode">
+                        <Form.Group controlId="formTeamCode" className='team-code'>
                             <Form.Label>팀 코드 {teamCode}</Form.Label>
                         </Form.Group>
                     </>
