@@ -13,10 +13,9 @@ import UserVideoComponent from "../components/conference/UserVideoComponent";
 import LeaveSessionModal from "../modals/LeaveSessionModal";
 import "../css/conference/conference.css";
 import useAuthStore from "../store/auth";
-import useStore from '../store/index.js'
+import useStore from "../store/index.js";
 
 const APPLICATION_SERVER_URL = useStore.getState().BASE_URL;
-
 
 function ConferenceView(props) {
   const [showLeaveModal, setShowLeaveModal] = useState(false);
@@ -57,6 +56,7 @@ function ConferenceView(props) {
   const handleToggleChat = () => {
     setShowChat((prevShowChat) => !prevShowChat);
     setHasNewMessage(false);
+    console.log(showChat);
   };
 
   const handleSendMessage = () => {
@@ -105,8 +105,8 @@ function ConferenceView(props) {
           { from: senderData.clientData, text: event.data, isCurrentUser },
         ]);
 
-        // 새 메시지가 현재 사용자에게서 오지 않은 경우에만 알림을 표시
-        if (!isCurrentUser) {
+        // 채팅창이 열려있지 않고, 새 메시지가 현재 사용자에게서 오지 않은 경우에만 알림을 표시
+        if (!isCurrentUser && !showChat) {
           setHasNewMessage(true);
         }
       });
@@ -144,12 +144,15 @@ function ConferenceView(props) {
           .getMediaStream()
           .getVideoTracks()[0]
           .addEventListener("ended", () => {
-            session.unpublish(publisher);
+            // session.unpublish(publisher);
+            session.unpublish(screenPublisher);
             setIsScreenSharing(false);
-            publishCameraStream(); // 화면 공유 종료 시 카메라 스트림으로 전환
+            // publishCameraStream();
+            restoreStream();
           });
       } catch (error) {
-        publishCameraStream(); // 카메라 스트림으로 전환
+        // publishCameraStream();
+        restoreStream();
         console.error("Error starting screen share:", error);
       }
     } else {
@@ -158,17 +161,39 @@ function ConferenceView(props) {
         session.unpublish(publisher);
       }
       setIsScreenSharing(false);
-      publishCameraStream(); // 카메라 스트림으로 전환
+      // publishCameraStream();
+      restoreStream();
     }
   };
 
-  const publishCameraStream = async () => {
+  // const publishCameraStream = async () => {
+  //   try {
+  //     let newPublisher = await OV.initPublisherAsync(undefined, {
+  //       audioSource: undefined,
+  //       videoSource: undefined,
+  //       publishAudio: isMicEnabled, // 현재 마이크 상태 반영
+  //       publishVideo: true,
+  //       resolution: "640x480",
+  //       frameRate: 30,
+  //       insertMode: "APPEND",
+  //       mirror: false,
+  //     });
+
+  //     session.publish(newPublisher);
+  //     setPublisher(newPublisher); // 새 publisher 설정
+  //   } catch (error) {
+  //     console.error("Error publishing camera stream:", error);
+  //   }
+  // };
+
+  const restoreStream = async () => {
     try {
+      // 현재 비디오와 마이크 상태를 확인하여 원상태로 복원
       let newPublisher = await OV.initPublisherAsync(undefined, {
         audioSource: undefined,
         videoSource: undefined,
-        publishAudio: isMicEnabled, // 현재 마이크 상태 반영
-        publishVideo: true,
+        publishAudio: isMicEnabled,
+        publishVideo: isVideoEnabled,
         resolution: "640x480",
         frameRate: 30,
         insertMode: "APPEND",
@@ -177,14 +202,42 @@ function ConferenceView(props) {
 
       session.publish(newPublisher);
       setPublisher(newPublisher); // 새 publisher 설정
+      if (!isVideoEnabled) {
+        const videoTrack = newPublisher.stream
+          .getMediaStream()
+          .getVideoTracks()[0];
+        videoTrack.stop(); // 비디오 스트림을 중지
+      }
     } catch (error) {
-      console.error("Error publishing camera stream:", error);
+      console.error("Error restoring video and audio streams:", error);
     }
   };
 
   const toggleScreen = () => {
     if (publisher) {
-      publisher.publishVideo(!isVideoEnabled);
+      if (isVideoEnabled) {
+        publisher.publishVideo(false); // 비디오 전송 중지
+        setTimeout(() => {
+          const videoTrack = publisher.stream
+            .getMediaStream()
+            .getVideoTracks()[0];
+          videoTrack.stop(); // 비디오 스트림을 중지
+        }, 150);
+      } else {
+        // 비디오 스트림 재개
+        const videoSource = currentVideoDevice.deviceId;
+        OV.getUserMedia({
+          videoSource,
+        })
+          .then((mediaStream) => {
+            const newVideoTrack = mediaStream.getVideoTracks()[0];
+            publisher.replaceTrack(newVideoTrack);
+            publisher.publishVideo(true); // 비디오 전송 재개
+          })
+          .catch((error) => {
+            console.error("Error restarting video track:", error);
+          });
+      }
       setisVideoEnabled(!isVideoEnabled);
     }
   };
@@ -291,6 +344,11 @@ function ConferenceView(props) {
         })
         .catch((error) => {
           console.log("세션에 연결하는 동안 오류가 발생했습니다:", error);
+          if (error.name === "DEVICE_ACCESS_DENIED") {
+            alert(
+              "장치 접근이 거부되었습니다. 카메라나 마이크의 사용 권한을 확인하세요"
+            );
+          }
           navigate(`/group`);
         });
     });
