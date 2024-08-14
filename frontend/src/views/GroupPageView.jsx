@@ -9,8 +9,6 @@ import useAuthStore from "../store/auth.js";
 
 function GroupPageView(props) {
     const navigate = useNavigate();
-
-    const getIsLogin = useAuthStore.getState().isLogin;
     
     const { userId } = useAuthStore.getState().getUserInfo();
     const groups = useGroupStore((state) => state.groups) || [];
