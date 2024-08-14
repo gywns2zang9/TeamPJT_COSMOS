@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, CardText, Form } from 'react-bootstrap';
-import { Light } from 'react-syntax-highlighter';
 import { monokai } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import useGroupStore from '../../../store/group';
 import useAuthStore from '../../../store/auth';
@@ -27,8 +26,14 @@ const CodePageTemplates = ({ groupId, pageId }) => {
     const { userId } = useAuthStore.getState().getUserInfo;
 
     useEffect(() => {
+        setEditMode(false);
+        setInputsOutputs([{ input: '', output: '', isLoading: false }])
         loadFile();
     }, [groupId, pageId]);
+
+    useEffect(() => {
+        console.log('codeContent updated:', codeContent);
+    }, [codeContent]);
 
     const loadFile = async () => {
         try {
@@ -42,11 +47,9 @@ const CodePageTemplates = ({ groupId, pageId }) => {
             });
             setFileName(response.fileName);
             setContent(response.content);
-            if (response.code) {
-                setCodeContent(response.code.content);
-                setDate(new Date(response.code.createdAt).toISOString().split('T')[0]);
-                setLanguage(response.code.language);
-            }
+            setCodeContent(response.code.content); // Ensure response.code.content is valid
+            setDate(new Date(response.code.createdAt).toISOString().split('T')[0]);
+            setLanguage(response.code.language);
         } catch (err) {
             console.error('코드불러오기 실패 -> ', err);
         }
@@ -62,7 +65,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
             const response = await executeCode({ content: codeForSend, language, input: inputsOutputs[index].input });
             updatedInputsOutputs[index].output = response.results;
         } catch (err) {
-            console.error('코드실행실패 -> ', err);
+            console.error('코드 실행 실패 -> ', err);
             updatedInputsOutputs[index].output = '코드 실행에 실패했습니다.';
         } finally {
             updatedInputsOutputs[index].isLoading = false;
@@ -78,13 +81,17 @@ const CodePageTemplates = ({ groupId, pageId }) => {
     };
 
     const handleRemoveInputOutput = (index) => {
-        if (index === 0) return;
+        if (index === 0) return; // 첫 번째 입력/출력은 제거할 수 없음
         const updatedInputsOutputs = inputsOutputs.filter((_, idx) => idx !== index);
         setInputsOutputs(updatedInputsOutputs);
         setCompileNumbers(compileNumbers - 1);
     };
 
     const addInputOutput = () => {
+        if (inputsOutputs.length === 5) {
+            alert('5개 이상의 입출력이 존재할 수 없습니다.');
+            return;
+        }
         setInputsOutputs([...inputsOutputs, { input: '', output: '', isLoading: false }]);
         setCompileNumbers(compileNumbers + 1);
     };
@@ -92,10 +99,13 @@ const CodePageTemplates = ({ groupId, pageId }) => {
     const saveCodeContent = async () => {
         try {
             console.log(pageId, fileName, newCodeContent, language);
-            await setCodeContent(newCodeContent);
-            await updateCodeFile({ groupId, pageId, code:newCodeContent, language });
+            // 상태 업데이트를 보장하기 위해 async/await 사용
+            await new Promise((resolve) => {
+                setCodeContent(newCodeContent);
+                resolve();
+            });
+            await updateCodeFile({ groupId, pageId, code: newCodeContent, language });
             setEditMode(false);
-            
         } catch (err) {
             console.error('코드 저장 실패 -> ', err);
         }
@@ -180,9 +190,12 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                     ) : (
                         <>
                             <Button onClick={startEdit} style={{ backgroundColor: 'inherit', marginTop: '10px' }}>편집</Button>
-                            <SyntaxHighlighter language={language} style={monokai} showLineNumbers>
-                                {codeContent}
-                            </SyntaxHighlighter>
+                            <CodeWithLineNumbers
+                                value={codeContent}
+                                onChange={(value) => setNewCodeContent(value)}
+                                language={language}
+                                readOnly={true}
+                            />
                             {(userCodeId === userId) && (
                                 <>
                                     <Button onClick={startEdit} style={{ backgroundColor: 'inherit', marginTop: '10px' }}>편집</Button>
@@ -251,4 +264,3 @@ const CodePageTemplates = ({ groupId, pageId }) => {
 };
 
 export default CodePageTemplates;
-
