@@ -25,8 +25,9 @@ public class FileInfoResponse {
     private StudyResponse study;
 
     private List<FileProblemResponse> problems;
+    private List<OverViewFileProblemResponse> totalProblems;
 
-    public FileInfoResponse(File file, FileCodeResponse fileCodeResponse, List<FileProblemResponse> fileProblemResponses, StudyResponse studyResponse) {
+    public FileInfoResponse(File file, FileCodeResponse fileCodeResponse, List<FileProblemResponse> fileProblemResponses, StudyResponse studyResponse, List<OverViewFileProblemResponse> totalProblems) {
         this.fileId = file.getId();
         this.fileType = file.getType();
         this.fileName = file.getName();
@@ -34,9 +35,10 @@ public class FileInfoResponse {
         this.code = fileCodeResponse;
         this.problems = fileProblemResponses;
         this.study = studyResponse;
+        this.totalProblems = totalProblems;
     }
 
-    public FileInfoResponse(File file, User user, FileCodeResponse fileCodeResponse, List<FileProblemResponse> fileProblemResponses, StudyResponse studyResponse) {
+    public FileInfoResponse(File file, User user, FileCodeResponse fileCodeResponse, List<FileProblemResponse> fileProblemResponses, StudyResponse studyResponse, List<OverViewFileProblemResponse> totalProblems) {
         this.fileId = file.getId();
         this.fileType = file.getType();
         this.fileName = file.getName();
@@ -45,12 +47,11 @@ public class FileInfoResponse {
         this.code = fileCodeResponse;
         this.problems = fileProblemResponses;
         this.study = studyResponse;
-        // TODO : 기본적으로 파일 이름에 유저의 이름을 추가하는 방식으로 codeFile 네임 생성. 하지만 사용자가 임의로 추가하는 경우는?
-        // TODO : codeFile의 경우는 그냥 이름을 짓지 못하고 1,2,3으로 구분할까?
+        this.totalProblems = totalProblems;
     }
 
     public static FileInfoResponse fromFile(File file) {
-        return new FileInfoResponse(file, null, null, null);
+        return new FileInfoResponse(file, null, null, null, null);
     }
 
     public static FileInfoResponse fromTimeOverViewFile(File file, List<FileProblemResponse> problems, Study study) {
@@ -58,15 +59,15 @@ public class FileInfoResponse {
                 file,
                 null,
                 problems,
-                StudyResponse.of(study));
+                StudyResponse.of(study), null);
     }
 
-    public static FileInfoResponse fromOverViewFile(File file, List<FileProblemResponse> problems) {
+    public static FileInfoResponse fromOverViewFile(File file, List<OverViewFileProblemResponse> totalProblems) {
         return new FileInfoResponse(
                 file,
                 null,
-                problems,
-                null);
+                null,
+                null, totalProblems);
     }
 
     public static FileInfoResponse fromCodeFile(File file, Code code, List<FileProblemResponse> problems) {
@@ -74,7 +75,7 @@ public class FileInfoResponse {
                 file,
                 file.getUser(),
                 FileCodeResponse.of(code),
-                problems, null);
+                problems, null, null);
     }
 
 }
