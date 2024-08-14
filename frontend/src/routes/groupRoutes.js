@@ -1,10 +1,22 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import GroupPageView from "../views/GroupPageView";
 import GroupDetailView from "../views/GroupDetailView";
 import Error404 from "../components/error/Error404";
+import useAuthStore from "../store/auth.js";
+const getLogin = useAuthStore.getState().isLogin
 
-const GroupRoutes = () => (
+const checkLogin = () => {
+  const getIsLogin = getLogin();
+  return getIsLogin;
+}
+
+const GroupRoutes = () => {
+  const navigate = useNavigate();
+  if (checkLogin()) {
+    navigate('/');
+  }
+  (
   <Routes>
     <Route path="/" element={<GroupPageView />} />
     <Route path="/:groupId/main/:fileId" element={<GroupDetailView />} />
@@ -14,6 +26,7 @@ const GroupRoutes = () => (
     <Route path="/:groupId/time-overview/:fileId" element={<GroupDetailView />} />
     <Route path="*" element={<Error404 />} />
   </Routes>
-);
+);}
+
 
 export default GroupRoutes;
