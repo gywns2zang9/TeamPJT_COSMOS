@@ -18,7 +18,7 @@ const OverviewPageTemplates = ({ groupId, pageId }) => {
             try {
                 const response = await getContentsLoad({groupId, fileId:pageId})
                 console.log(response);
-                setProblems(response.problems);
+                setProblems(response.totalProblems);
             } catch (err) {
                 console.error('파일불러오기 실패 -> ', err);
             }
@@ -68,7 +68,7 @@ const OverviewPageTemplates = ({ groupId, pageId }) => {
                 <tbody>
                     {problems.map((problem, index) => (
                         <tr key={index}>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>24년 8월 1회차</td>
+                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.studyDateInfo}</td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.number}</td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>
                                 <a href={`https://www.acmicpc.net/problem/${problem.number}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>

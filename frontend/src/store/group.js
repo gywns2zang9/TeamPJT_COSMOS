@@ -576,8 +576,13 @@ const useGroupStore = create((set) => ({
 
     // 코드 실행하기 
     executeCode: async ({ content, language, input }) => {
+        if (!content || content === '' || content.length === 0 || content === undefined || content === null) {
+            window.alert(`코드를 입력해주세요`)
+            return;
+        }
         try {
             console.log(content, language, input);
+            
             const accessToken = await useAuthStore.getState().getAccessToken();
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
