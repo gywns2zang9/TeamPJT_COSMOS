@@ -144,7 +144,7 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                                 type="text" 
                                 placeholder="닉네임을 입력하세요" 
                                 value={nickName}
-                                maxLength={255}
+                                maxLength={12}
                                 onChange={(e) => setNickname(e.target.value)}
                             />
                             {suggestions.length > 0 && (

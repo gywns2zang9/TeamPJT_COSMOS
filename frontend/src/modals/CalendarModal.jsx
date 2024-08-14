@@ -50,7 +50,7 @@ const CalendarModal = ({
                 <Form.Label>제목 (최대 255자)</Form.Label>
                 <Form.Control
                     type="text"
-                    maxLength={255}
+                    maxLength={20}
                     value={newEvent.title}
                     onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}  // 제목 변경 시 newEvent 업데이트
                 />
