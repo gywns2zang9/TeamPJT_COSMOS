@@ -46,23 +46,7 @@ const UserInfoChange = () => {
       } 
       else if (!nickNamePattern.test(nickName)) {
         window.alert("닉네임은 2~10자의 한글, 영문, 숫자만 가능합니다.")
-        setNickName("")
-        return;
-      } else if (description.length > 255) {
-        window.alert("내 소개는 255자를 넘길 수 없습니다.")
-        setDescription("")
-        return;
-      } else if (gitId.length > 255) {
-        window.alert("GitId는 255자를 넘길 수 없습니다.")
-        setGitId("")
-        return;
-      } else if (repo.length > 100) {
-        window.alert("Repository는 100자를 넘길 수 없습니다.")
-        setRepo("")
-        return;
-      } else if (branch.length > 200) {
-        window.alert("Branch는 200자를 넘길 수 없습니다.")
-        setBranch("")
+        setNickName(userInfo.nickName)
         return;
       }
 
