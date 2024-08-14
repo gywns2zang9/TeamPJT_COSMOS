@@ -24,6 +24,8 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const saveCode = useGroupStore((state) => state.editCode);
   const [codeId, setCodeId] = useState("");
   const [problemName, setProblemName] = useState("");
+  const [editor, setEditor] = useState(null);
+  const MAX_CODE_LENGTH = 50000; // 코드 최대 길이
 
   const handleLanguageChange = (event) => {
     setLanguage(event.target.value);
@@ -63,6 +65,17 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   };
 
   const handleEditorChange = (value) => {
+    if (value.length > MAX_CODE_LENGTH) {
+      alert("최대 코드길이를 초과했습니다. 50000자 이하로 입력해 주세요.");
+      value = value.slice(0, MAX_CODE_LENGTH);
+      if (editor) {
+        const position = editor.getPosition(); // 현재 커서 위치 저장
+        const newValue = value.slice(0, MAX_CODE_LENGTH); // 코드 잘라내기
+        editor.setValue(newValue); // 잘라낸 코드 설정
+        editor.setPosition(position); // 저장한 커서 위치로 복원
+      }
+      return;
+    }
     console.log(value);
     setMyCode(value);
     localStorage.setItem("myCode", value);
@@ -137,8 +150,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
             }}
             className="code-editor"
             language={language.toLowerCase()}
-            value={myCode}
             onChange={handleEditorChange}
+            value={myCode}
+            onMount={(editorInstance) => setEditor(editorInstance)}
           />
         )}
         {showIO && (
