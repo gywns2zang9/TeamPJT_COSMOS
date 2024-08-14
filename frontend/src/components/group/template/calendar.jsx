@@ -230,6 +230,7 @@ function Calendar({ groupId }) {
         dayMaxEventRows={false} // 최대 이벤트 행 수 제한 해제
         dayMaxEvents={false} // 최대 이벤트 수 제한 해제
         dayCellContent={renderDayCellContent} // 날짜 셀 콘텐츠 렌더링
+        
       />
 
       {/* 일정 추가/수정 및 삭제 모달 */}
