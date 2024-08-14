@@ -58,6 +58,11 @@ textarea {
   white-space: nowrap; /* 텍스트 줄바꿈 방지 */
 }
 
+#output {
+  overflow-x: hidden;
+  white-space: pre-wrap;
+}
+
 .code-lower-space {
   min-height: 34px;
   margin-top: 10px;
