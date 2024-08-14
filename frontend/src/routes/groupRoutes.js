@@ -1,17 +1,18 @@
-import React, { useEffect } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import React from "react";
+import { Route, Routes } from "react-router-dom";
 import GroupPageView from "../views/GroupPageView";
 import GroupDetailView from "../views/GroupDetailView";
 import Error404 from "../components/error/Error404";
 import useAuthStore from "../store/auth.js";
-import HomeView from "../views/HomeView.jsx";
-import useStore from "../store/index.js";
+
+// const BASE_URL = `http://localhost:3000`
+const BASE_URL = `https://i11a708.p.ssafy.io/`
 
 const GroupRoutes = () => {
   const isLogin = useAuthStore((state) => state.isLogin);
   console.log(isLogin());
   if (!isLogin()) {
-    window.location.href = `http://localhost:3000`;
+    window.location.href = BASE_URL;
     return null;
   }
 
