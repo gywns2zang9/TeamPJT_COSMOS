@@ -1,28 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import GroupPageView from "../views/GroupPageView";
 import GroupDetailView from "../views/GroupDetailView";
 import Error404 from "../components/error/Error404";
 import useAuthStore from "../store/auth.js";
-const getLogin = useAuthStore.getState().isLogin
+import HomeView from "../views/HomeView.jsx";
+import useStore from "../store/index.js";
 
-const checkLogin = () => {
-  const getIsLogin = getLogin();
-  return getIsLogin;
-}
+const GroupRoutes = () => {
+  const isLogin = useAuthStore((state) => state.isLogin);
+  console.log(isLogin());
+  if (!isLogin()) {
+    window.location.href = `http://localhost:3000`;
+    return null;
+  }
 
-const GroupRoutes = () => 
-  (
-  <Routes>
-    <Route path="/" element={<GroupPageView />} />
-    <Route path="/:groupId/main/:fileId" element={<GroupDetailView />} />
-    <Route path="/:groupId/overview/:fileId" element={<GroupDetailView />} />
-    <Route path="/:groupId/:fileId" element={<GroupDetailView />} />
-    <Route path="/:groupId/code/:fileId" element={<GroupDetailView />} />
-    <Route path="/:groupId/time-overview/:fileId" element={<GroupDetailView />} />
-    <Route path="*" element={<Error404 />} />
-  </Routes>
-)
-
+  return (
+    <Routes>
+      <Route path="/" element={<GroupPageView />} />
+      <Route path="/:groupId/main/:fileId" element={<GroupDetailView />} />
+      <Route path="/:groupId/overview/:fileId" element={<GroupDetailView />} />
+      <Route path="/:groupId/:fileId" element={<GroupDetailView />} />
+      <Route path="/:groupId/code/:fileId" element={<GroupDetailView />} />
+      <Route path="/:groupId/time-overview/:fileId" element={<GroupDetailView />} />
+      <Route path="*" element={<Error404 />} />
+    </Routes>
+  );
+};
 
 export default GroupRoutes;
