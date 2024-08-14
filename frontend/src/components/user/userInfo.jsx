@@ -64,35 +64,35 @@ const UserInfo = () => {
             <label className="info-label" htmlFor="nickname">
               닉네임:
             </label>
-            <span className="info-contents">{nickName} </span>
+            <span className="info-contents">{nickName || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>} </span>
           </div>
           {/* description */}
           <div className="info-box">
             <label className="info-label" htmlFor="description">
               내 소개:
             </label>
-            <span className="info-contents">{description || <span style={{ color: 'gray', fontSize: '16px' }}>내용을 추가해주세요.</span>}</span>
+            <span className="info-contents">{description || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
           </div>
           {/* gitId */}
           <div className="info-box">
             <label className="info-label" htmlFor="gitId">
               Git Id:
             </label>
-            <span className="info-contents">{gitId || <span style={{ color: 'gray', fontSize: '16px' }}>내용을 추가해주세요.</span>}</span>
+            <span className="info-contents">{gitId || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
           </div>
           {/* repository */}
           <div className="info-box"> 
             <label className="info-label" htmlFor="repository">
               Repository:
             </label>
-            <span className="info-contents">{repo || <span style={{ color: 'gray', fontSize: '16px' }}>내용을 추가해주세요.</span>}</span>
+            <span className="info-contents">{repo || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
           </div>
           {/* branch */}
           <div className="info-box"> 
             <label className="info-label" htmlFor="branch">
               Branch:
             </label>
-            <span className="info-contents">{branch || <span style={{ color: 'gray', fontSize: '16px' }}>내용을 추가해주세요.</span>}</span>
+            <span className="info-contents">{branch || <span style={{ color: 'gray', fontSize: '16px' }}>정보가 없습니다.</span>}</span>
           </div>
         </div>
 

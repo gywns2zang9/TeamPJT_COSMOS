@@ -105,22 +105,30 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
                 {isLeader ? (
                     <Form>
                         <Form.Group controlId="formGroupName">
-                            <Form.Label>그룹 이름</Form.Label>
+                            <Form.Label>그룹 이름 (최대 20자)</Form.Label>
                             <Form.Control 
                                 type="text" 
                                 placeholder={groupName} 
                                 value={groupName}
+                                maxLength={20}
                                 onChange={(e) => setGroupName(e.target.value)} 
                             />
                         </Form.Group>
                         <Form.Group controlId="formGroupDescription">
-                            <Form.Label>그룹 소개</Form.Label>
+                            <Form.Label>그룹 소개 (최대 255자)</Form.Label>
                             <Form.Control 
                                 as="textarea" 
                                 rows={3} 
                                 placeholder={groupDescription}
                                 value={groupDescription}
                                 onChange={(e) => setGroupDescription(e.target.value)} 
+                                maxLength={255}
+                                style={{
+                                    whiteSpace: "pre-wrap", 
+                                    overflowWrap: "break-word", 
+                                    wordBreak: "break-word",
+                                    width: "100%", 
+                                    }}
                             />
                         </Form.Group>
                         <Form.Group controlId="formNewLeader">
@@ -153,6 +161,20 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
                     {isLeader ? '그룹 페이지로 돌아가기' : '닫기'}
                 </Button>
                 {!isLeader && (
+                    <>
+                        <Button
+                            variant="danger"
+                            onClick={() => {
+                                if (window.confirm('정말로 그룹을 나가시겠습니까?')) {
+                                    handleLeaveGroup();
+                                }
+                            }}
+                        >
+                            그룹 나가기
+                        </Button>
+                    </>
+                )}
+                {(isLeader && members.length === 1) && (
                     <>
                         <Button
                             variant="danger"

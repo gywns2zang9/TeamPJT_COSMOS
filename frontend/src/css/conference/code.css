@@ -42,6 +42,7 @@
   right: 5px;
   display: flex;
   justify-content: space-between;
+  z-index: 999;
   /* gap: 5px; */
 }
 
@@ -55,6 +56,11 @@ textarea {
   overflow-x: auto;
   overflow-y: auto;
   white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
+#output {
+  overflow-x: hidden;
+  white-space: pre-wrap;
 }
 
 .code-lower-space {

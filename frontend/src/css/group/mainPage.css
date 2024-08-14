@@ -37,6 +37,19 @@
     display: inline-block;
     overflow: hidden;
     transition: background-color 0.3s ease;
+    margin-right: 80px;
+    border: 1px solid white;
+}
+
+@keyframes blink {
+    0% { background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 70%); }
+    50% { background: radial-gradient(circle, rgba(255, 255, 255, 0.466), rgba(255, 255, 255, 0) 70%) }
+    100% { background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 70%) }
+}
+
+.start-conference:hover {
+    animation: blink 0.6s infinite; /* 애니메이션의 지속 시간과 속도 설정 */
+    color: white;
 }
 
 .start-conference span {
