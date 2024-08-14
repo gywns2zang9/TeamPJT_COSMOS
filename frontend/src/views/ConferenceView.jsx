@@ -44,6 +44,7 @@ function ConferenceView(props) {
 
   const VideoToggleIcon = isVideoEnabled ? VideocamIcon : VideocamOffIcon;
   const MicToggleIcon = isMicEnabled ? MicIcon : MicOffIcon;
+  const MAX_MESSAGE_LENGTH = 200;
 
   const toggleVideo = () => {
     setIsOpen(!isOpen);
@@ -79,7 +80,12 @@ function ConferenceView(props) {
   };
 
   const handleNewMessageChange = (e) => {
-    setNewMessage(e.target.value);
+    const message = e.target.value;
+    if (message.length > 200) {
+      alert("메시지의 최대 길이를 초과했습니다. 200자 이하로 입력해주세요.");
+      return; // 메시지 입력을 중지합니다.
+    }
+    setNewMessage(message);
   };
 
   const handleKeyPress = (e) => {
@@ -125,7 +131,7 @@ function ConferenceView(props) {
         // 새로운 화면 공유 스트림 생성
         const screenPublisher = await OV.initPublisherAsync(undefined, {
           videoSource: "screen",
-          publishAudio: true, // 필요시 오디오 포함 여부 설정
+          publishAudio: isMicEnabled, // 필요시 오디오 포함 여부 설정
           mirror: false,
         });
 
@@ -518,13 +524,22 @@ function ConferenceView(props) {
                 onChange={handleNewMessageChange}
                 onKeyDown={handleKeyPress}
                 placeholder="메시지를 입력하세요..."
+                maxLength={MAX_MESSAGE_LENGTH}
               />
               <button onClick={handleSendMessage}>전송</button>
             </div>
           </div>
           <div className="paint-lower-space">
-            <div className="conference-control">
-              <button className="button" onClick={toggleScreen}>
+            <div
+              className={`conference-control ${
+                isScreenSharing ? "hidden" : ""
+              }`}
+            >
+              <button
+                className={`button ${isScreenSharing ? "disabled" : ""}`}
+                onClick={toggleScreen}
+                disabled={isScreenSharing}
+              >
                 <VideoToggleIcon style={{ cursor: "pointer" }} />
                 <span>{isVideoEnabled ? " 비디오 종료" : " 비디오 시작"}</span>
               </button>
@@ -535,7 +550,7 @@ function ConferenceView(props) {
             </div>
             <div className="share-quit-buttons">
               <button className="button-share" onClick={toggleScreenShare}>
-                화면 공유하기
+                {isScreenSharing ? "공유 중지하기" : "화면 공유하기"}
               </button>
               <button className="button-quit" onClick={handleLeaveButtonClick}>
                 나가기

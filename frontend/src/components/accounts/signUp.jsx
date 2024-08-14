@@ -56,6 +56,10 @@ const SignUp = () => {
   
   // 코드 전송 버튼 핸들러
   const handleSendCode = async () => {
+    if (emailSending) {
+      return
+    }
+
     setEmailError("");
     setEmailSending(true);
     setEmailSent(false);

@@ -46,23 +46,7 @@ const UserInfoChange = () => {
       } 
       else if (!nickNamePattern.test(nickName)) {
         window.alert("닉네임은 2~10자의 한글, 영문, 숫자만 가능합니다.")
-        setNickName("")
-        return;
-      } else if (description.length > 100) {
-        window.alert("내 소개는 100자를 넘길 수 없습니다.")
-        setDescription("")
-        return;
-      } else if (gitId.length > 255) {
-        window.alert("GitId 내용이 올바르지 않습니다.")
-        setGitId("")
-        return;
-      } else if (repo.length > 100) {
-        window.alert("Repository 내용이 올바르지 않습니다.")
-        setRepo("")
-        return;
-      } else if (branch.length > 200) {
-        window.alert("Branch 내용이 올바르지 않습니다.")
-        setBranch("")
+        setNickName(userInfo.nickName)
         return;
       }
 
@@ -116,6 +100,7 @@ const UserInfoChange = () => {
           <input
             className="info-input"
             type="text"
+            maxLength={10}
             value={nickName}
             onChange={(e) => setNickName(e.target.value)}
           />
@@ -125,9 +110,10 @@ const UserInfoChange = () => {
           <label className="info-label" htmlFor="description">
             내 소개:
           </label>
-          <input
-            className="info-input"
-            type="text"
+          <textarea
+            id="info-textarea"
+            maxLength={255}
+            wrap="soft"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
@@ -140,6 +126,7 @@ const UserInfoChange = () => {
           <input
             className="info-input"
             type="text"
+            maxLength={255}
             value={gitId}
             onChange={(e) => setGitId(e.target.value)}
           />
@@ -152,6 +139,7 @@ const UserInfoChange = () => {
           <input
             className="info-input"
             type="text"
+            maxLength={100}
             value={repo}
             onChange={(e) => setRepo(e.target.value)}
           />
@@ -164,6 +152,7 @@ const UserInfoChange = () => {
           <input
             className="info-input"
             type="text"
+            maxLength={200}
             value={branch}
             onChange={(e) => setBranch(e.target.value)}
             />

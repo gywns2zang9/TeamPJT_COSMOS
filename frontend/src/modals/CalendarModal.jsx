@@ -47,19 +47,22 @@ const CalendarModal = ({
             <Modal.Body>
             <Form>
                 <Form.Group controlId="formEventTitle">
-                <Form.Label>제목</Form.Label>
+                <Form.Label>제목 (최대 20자)</Form.Label>
                 <Form.Control
                     type="text"
+                    maxLength={20}
                     value={newEvent.title}
                     onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}  // 제목 변경 시 newEvent 업데이트
                 />
                 </Form.Group>
                 <Form.Group controlId="formEventDescription">
-                <Form.Label>내용</Form.Label>
+                <Form.Label>내용 (최대 255자)</Form.Label>
                 <Form.Control
-                    type="text"
-                    value={newEvent.description}
-                    onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}  // 설명 변경 시 newEvent 업데이트
+                as="textarea"  // 내용 부분을 textarea로 변경
+                style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
+                maxLength={255}
+                value={newEvent.description}
+                onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}  // 설명 변경 시 newEvent 업데이트
                 />
                 </Form.Group>
                 <Form.Group controlId="formEventStart">

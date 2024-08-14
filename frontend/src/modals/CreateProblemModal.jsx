@@ -61,6 +61,7 @@ function CreateProblemModal({
             <Form.Control
               type="text"
               placeholder="문제 번호를 입력하세요"
+              maxLength={9}
               value={problemNumber}
               onChange={(e) => setProblemNumber(e.target.value)}
               disabled={isLoading}

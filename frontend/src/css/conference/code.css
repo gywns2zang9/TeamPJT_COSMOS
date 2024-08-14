@@ -13,6 +13,11 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+  align-items: center;
+}
+
+.problem-name {
+  margin-right: 5px;
 }
 
 .code-space {

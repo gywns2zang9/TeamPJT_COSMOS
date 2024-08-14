@@ -47,7 +47,7 @@
   padding: 4px;
   font-size: 24px;
   overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-x: auto;
 }
 
 .info-input {
@@ -59,6 +59,33 @@
   border-radius: 8px;
   font-size: 24px; /* 폰트 크기 */
   color: #000;
+}
+
+#info-description {
+  width: 350px;
+  height: 110px;
+  margin-left: 20px;
+  padding: 4px;
+  font-size: 24px;
+  overflow: hidden; /* 넘치는 내용 숨김 */
+  white-space: pre-wrap; /* 자동 줄바꿈 */
+  word-wrap: break-word; /* 단어 단위로 줄바꿈 */
+  overflow-y: auto;
+}
+
+#info-textarea {
+  width: 350px;
+  height: 110px;
+  margin-left: 20px;
+  padding: 4px;
+  background-color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 24px; /* 폰트 크기 */
+  color: #000;
+  resize: none;
+  white-space: normal; /* 자동 줄바꿈 */
+  word-wrap: break-word; /* 단어가 넘치면 줄바꿈 */
 }
 
 /* 버튼 스타일 */
