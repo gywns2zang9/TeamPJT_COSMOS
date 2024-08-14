@@ -170,7 +170,15 @@ function Calendar({ groupId }) {
     const eventTime = convertTo24HourFormat(eventInfo.timeText);
     return (
       <div style={{ cursor: 'pointer' }}> {/* 커서 스타일을 포인터로 설정 */}
-        <b>{eventInfo.event.title}</b>
+        <b style={{
+          display: 'inline-block',
+          maxWidth: '100%',      /* 너비를 설정합니다. 필요에 따라 특정 px 또는 %로 설정 */
+          whiteSpace: 'nowrap',  /* 텍스트를 한 줄로 표시하고 줄바꿈을 방지합니다 */
+          overflow: 'hidden',    /* 넘치는 내용을 숨깁니다 */
+          textOverflow: 'ellipsis'  /* 넘치는 텍스트에 ...을 표시합니다 */
+        }}>
+          {eventInfo.event.title}
+        </b>
         <p>({eventTime})</p>
         {eventInfo.view.type !== 'dayGridMonth' && <i>{eventInfo.event.title}</i>}
       </div>
