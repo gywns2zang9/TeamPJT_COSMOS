@@ -597,6 +597,25 @@ const useGroupStore = create((set) => ({
         }
     },
 
+    // 코드 수정 하기
+    editCode: async ({ groupId, codeId, content, language }) => {
+        try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            }
+            const url = `${BASE_URL}/teams/${groupId}/codes/${codeId}`;
+            const data = {
+                content,
+                language
+            }
+            const response = await patch(url, data, headers);
+            return response
+        } catch (err) {
+            console.log('코드 수정 실패 -> ', err);
+        }
+    },
+
     // 코드 목록 불러오기
     loadCodeList: async ({ groupId, userId }) => {
         try {

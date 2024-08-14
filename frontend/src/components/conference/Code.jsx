@@ -20,7 +20,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const [showModal, setShowModal] = useState(false);
   const [myCode, setMyCode] = useState("");
   const getCode = useGroupStore((state) => state.loadPersonalCode);
-  const saveCode = useGroupStore((state) => state.updateCodeFile);
+  const saveCode = useGroupStore((state) => state.editCode);
+  const [codeId, setCodeId] = useState('');
+  const [problemName, setProblemName] = useState('')
 
   const handleLanguageChange = (event) => {
     setLanguage(event.target.value);
@@ -48,7 +50,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   // 코드 선택했을 때 내용 불러오기
   const loadCode = async ({ codeId }) => {
     const response = await getCode({ groupId, codeId });
+    console.log(response);
     setMyCode(response.content);
+    setCodeId(response.id)
     localStorage.setItem("myCode", response.content);
     handleModalClose();
   };
@@ -77,9 +81,8 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
 
   // 코드 저장
   const saveMyCode = async () => {
-    const pageId = 6
     try {
-      saveCode({ groupId, pageId, code:myCode, language })
+      saveCode({ groupId, codeId, content:myCode, language })
     } catch (err) {
       console.log('코드 저장 실패 -> ', err);
     }
@@ -105,6 +108,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
             <option value="JAVA">Java</option>
             <option value="PYTHON">Python</option>
           </select>
+          <div>
+            현재 내 코드 : {problemName}
+          </div>
         </div>
         <div>
           {/* <button className="button" onClick={toggleVideo}>
@@ -157,6 +163,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
                 </button>
                 <button className="button" onClick={saveMyCode}>코드 저장</button>
               </div>
+              
               <div className="compile-button">
                 <button className="button" onClick={toggleCompiler}>
                   {showIO ? "컴파일러 닫기" : "컴파일러"}
@@ -178,6 +185,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
         handleClose={handleModalClose}
         personalCodeList={personalCodeList}
         loadCode={loadCode}
+        setProblemName={setProblemName}
       />
     </div>
   );

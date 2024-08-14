@@ -56,7 +56,7 @@ const OverviewPageTemplates = ({ groupId, pageId }) => {
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
                 <thead>
                     <tr>
-                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>사이트</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>스터디 정보</th>
                         <th style={{ border: '1px solid #ddd', padding: '8px' }}>문제번호</th>
                         <th style={{ border: '1px solid #ddd', padding: '8px' }}>문제제목</th>
                         <th style={{ border: '1px solid #ddd', padding: '8px' }}>난이도</th>
@@ -68,7 +68,7 @@ const OverviewPageTemplates = ({ groupId, pageId }) => {
                 <tbody>
                     {problems.map((problem, index) => (
                         <tr key={index}>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.site}</td>
+                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>24년 8월 1회차</td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>{problem.number}</td>
                             <td style={{ border: '1px solid #ddd', padding: '8px' }}>
                                 <a href={`https://www.acmicpc.net/problem/${problem.number}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
