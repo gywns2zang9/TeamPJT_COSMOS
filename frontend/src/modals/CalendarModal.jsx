@@ -47,7 +47,7 @@ const CalendarModal = ({
             <Modal.Body>
             <Form>
                 <Form.Group controlId="formEventTitle">
-                <Form.Label>제목 (최대 255자)</Form.Label>
+                <Form.Label>제목 (최대 20자)</Form.Label>
                 <Form.Control
                     type="text"
                     maxLength={20}

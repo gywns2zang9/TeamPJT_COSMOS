@@ -304,7 +304,6 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                                 value={emails}
                                 maxLength={255}
                                 onChange={(e) => setEmails(e.target.value)}
-                                disabled={isLoading}
                             />
                         </Form.Group>
                     )}
@@ -317,7 +316,6 @@ function InviteGroupModal({ show, handleClose, groupId }) {
                                 value={nickName}
                                 maxLength={12}
                                 onChange={(e) => setNickname(e.target.value)}
-                                disabled={isLoading}
                             />
                             {suggestions.length > 0 && (
                                 <ul id="suggestions">
