@@ -131,24 +131,26 @@ const CodePageTemplates = ({ groupId, pageId }) => {
                     <div className='d-flex' style={{ justifyContent: 'space-between', marginRight:'10px' }}>
                         <p>{fileName}</p>
                         <p>
-                            <Form.Group controlId="languageSelect">
-                                <Form.Select
-                                    value={language}
-                                    onChange={(e) => setLanguage(e.target.value)}
-                                    style={{
-                                        maxWidth: '200px',
-                                        backgroundColor: 'inherit',
-                                        color: 'inherit',
-                                        padding: '5px',
-                                        appearance: 'menulist',
-                                        WebkitAppearance: 'none', 
-                                        MozAppearance: 'none', 
-                                    }}
-                                >
-                                    <option value="PYTHON" style={{ backgroundColor: 'black', color: 'white' }}>Python</option>
-                                    <option value="JAVA" style={{ backgroundColor: 'black', color: 'white' }}>Java</option>
-                                </Form.Select>
-                            </Form.Group>
+                            { editMode && 
+                                <Form.Group controlId="languageSelect">
+                                    <Form.Select
+                                        value={language}
+                                        onChange={(e) => setLanguage(e.target.value)}
+                                        style={{
+                                            maxWidth: '200px',
+                                            backgroundColor: 'inherit',
+                                            color: 'inherit',
+                                            padding: '5px',
+                                            appearance: 'menulist',
+                                            WebkitAppearance: 'none', 
+                                            MozAppearance: 'none', 
+                                        }}
+                                    >
+                                        <option value="PYTHON" style={{ backgroundColor: 'black', color: 'white' }}>Python</option>
+                                        <option value="JAVA" style={{ backgroundColor: 'black', color: 'white' }}>Java</option>
+                                    </Form.Select>
+                                </Form.Group>
+                            }
                         </p>
                     </div>
                     {editMode ? (
