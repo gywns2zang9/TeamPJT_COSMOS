@@ -13,10 +13,9 @@ import UserVideoComponent from "../components/conference/UserVideoComponent";
 import LeaveSessionModal from "../modals/LeaveSessionModal";
 import "../css/conference/conference.css";
 import useAuthStore from "../store/auth";
-import useStore from '../store/index.js'
+import useStore from "../store/index.js";
 
 const APPLICATION_SERVER_URL = useStore.getState().BASE_URL;
-
 
 function ConferenceView(props) {
   const [showLeaveModal, setShowLeaveModal] = useState(false);
@@ -203,6 +202,12 @@ function ConferenceView(props) {
 
       session.publish(newPublisher);
       setPublisher(newPublisher); // 새 publisher 설정
+      if (!isVideoEnabled) {
+        const videoTrack = newPublisher.stream
+          .getMediaStream()
+          .getVideoTracks()[0];
+        videoTrack.stop(); // 비디오 스트림을 중지
+      }
     } catch (error) {
       console.error("Error restoring video and audio streams:", error);
     }
