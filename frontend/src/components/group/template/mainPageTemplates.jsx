@@ -13,6 +13,7 @@ const GroupInfoText = styled.div`
     margin: 20px;
 `;
 
+
 const MainPageTemplates = ({ groupId }) => {
     const { groupDetailLoad } = useGroupStore();
     const [groupInfo, setGroupInfo] = useState(null);
@@ -54,17 +55,17 @@ const MainPageTemplates = ({ groupId }) => {
         <>
         <div className="group-info-container">
             {groupInfo && (
-                <Card style={{ width: '100%', margin: '20px auto', background:'inherit', color:'white' }}>
+                <Card style={{ width: '100%', margin: '20px auto', background:'inherit', color:'white', maxWidth:'100%' }}>
                     <Card.Body>
-                        <Card.Title style={{ fontSize: '36px' }}>
+                        <Card.Title style={{ fontSize: '36px', width:'80%' }}>
                             <span style={{ color: '#2F95DC' }}>
                                 <strong>{groupInfo.name}</strong>
                             </span> 
                         </Card.Title>
-                        <Card.Text style={{ fontSize: '24px' }}>
+                        <Card.Text style={{ fontSize: '24px', width:'80%' }}>
                             멤버 : {groupInfo.members.map(member => member.nickName).join(", ")}
                         </Card.Text>
-                        <Card.Text style={{ fontSize: '20px' }}>
+                        <Card.Text style={{ fontSize: '20px', width:'80%' }}>
                             {groupInfo.description}
                         </Card.Text>
                     </Card.Body>
