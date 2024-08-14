@@ -143,7 +143,7 @@ const PasswordFind = () => {
     }
     try {
       await changePassword({ email, newPassword }); 
-      await login({ email, newPassword });
+      await login({ email, password: newPassword });
       const userInfo = getUserInfo();
       navigate(`/users/${userInfo.userId}`);
     } catch (error) {
