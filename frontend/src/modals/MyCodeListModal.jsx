@@ -1,9 +1,10 @@
 import React from 'react';
 import { Modal, Button, Accordion, ListGroup } from 'react-bootstrap';
 
-const MyCodeListModal = ({ show, handleClose, personalCodeList, loadCode }) => {
+const MyCodeListModal = ({ show, handleClose, personalCodeList, loadCode, setProblemName }) => {
 
     const clickCode = (code) => {
+        setProblemName(code.problemName);
         loadCode({ codeId: code.codeId });
         handleClose();
     };

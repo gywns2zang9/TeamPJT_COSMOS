@@ -576,8 +576,13 @@ const useGroupStore = create((set) => ({
 
     // 코드 실행하기 
     executeCode: async ({ content, language, input }) => {
+        if (!content || content === '' || content.length === 0 || content === undefined || content === null) {
+            window.alert(`코드를 입력해주세요`)
+            return;
+        }
         try {
             console.log(content, language, input);
+            
             const accessToken = await useAuthStore.getState().getAccessToken();
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
@@ -594,6 +599,25 @@ const useGroupStore = create((set) => ({
         } catch (err) {
             console.log('코드 실행 실패 -> ', err);
             throw err;
+        }
+    },
+
+    // 코드 수정 하기
+    editCode: async ({ groupId, codeId, content, language }) => {
+        try {
+            const accessToken = await useAuthStore.getState().getAccessToken();
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+            }
+            const url = `${BASE_URL}/teams/${groupId}/codes/${codeId}`;
+            const data = {
+                content,
+                language
+            }
+            const response = await patch(url, data, headers);
+            return response
+        } catch (err) {
+            console.log('코드 수정 실패 -> ', err);
         }
     },
 
