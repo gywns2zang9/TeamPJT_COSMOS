@@ -22,8 +22,8 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const [myCode, setMyCode] = useState("");
   const getCode = useGroupStore((state) => state.loadPersonalCode);
   const saveCode = useGroupStore((state) => state.editCode);
-  const [codeId, setCodeId] = useState('');
-  const [problemName, setProblemName] = useState('')
+  const [codeId, setCodeId] = useState("");
+  const [problemName, setProblemName] = useState("");
 
   const handleLanguageChange = (event) => {
     setLanguage(event.target.value);
@@ -59,7 +59,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
     const response = await getCode({ groupId, codeId });
     console.log(response);
     setMyCode(response.content);
-    setCodeId(response.id)
+    setCodeId(response.id);
     localStorage.setItem("myCode", response.content);
     handleModalClose();
   };
@@ -92,7 +92,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   // 코드 저장
   const saveMyCode = async () => {
     try {
-      saveCode({ groupId, codeId, content:myCode, language })
+      saveCode({ groupId, codeId, content: myCode, language });
     } catch (err) {
       console.log("코드 저장 실패 -> ", err);
     }
@@ -101,7 +101,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   return (
     <div className="left-space">
       <div className="code-upper-space">
-        <div>
+        <div className="actions">
           <button
             className={`mode-button ${!isShared ? "active" : ""}`}
             onClick={switchToPersonalMode}
@@ -118,11 +118,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
             <option value="JAVA">Java</option>
             <option value="PYTHON">Python</option>
           </select>
-          <div>
-            현재 내 코드 : {problemName}
-          </div>
         </div>
-        <div>
+        <div className="problem-name">
+          <span>{problemName ? problemName : null}</span>
           {/* <button className="button" onClick={toggleVideo}>
             {isOpen ? "⇑" : "⇓"}
           </button> */}
@@ -175,7 +173,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
                   코드 저장
                 </button>
               </div>
-              
+
               <div className="compile-button">
                 <button className="button" onClick={toggleCompiler}>
                   {showIO ? "컴파일러 닫기" : "컴파일러"}

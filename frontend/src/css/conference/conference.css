@@ -263,3 +263,8 @@ video {
   border: 1px solid #ddd;
   /* background-color: #3a6695; */
 }
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
