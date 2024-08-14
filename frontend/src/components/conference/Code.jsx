@@ -22,8 +22,8 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const [myCode, setMyCode] = useState("");
   const getCode = useGroupStore((state) => state.loadPersonalCode);
   const saveCode = useGroupStore((state) => state.editCode);
-  const [codeId, setCodeId] = useState('');
-  const [problemName, setProblemName] = useState('');
+  const [codeId, setCodeId] = useState("");
+  const [problemName, setProblemName] = useState("");
 
   const handleLanguageChange = (event) => {
     setLanguage(event.target.value);
@@ -101,7 +101,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   return (
     <div className="left-space">
       <div className="code-upper-space">
-        <div>
+        <div className="actions">
           <button
             className={`mode-button ${!isShared ? "active" : ""}`}
             onClick={switchToPersonalMode}
@@ -118,9 +118,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
             <option value="JAVA">Java</option>
             <option value="PYTHON">Python</option>
           </select>
-          <div>현재 내 코드 : {problemName}</div>
         </div>
-        <div>
+        <div className="problem-name">
+          <span>{problemName ? problemName : null}</span>
           {/* <button className="button" onClick={toggleVideo}>
             {isOpen ? "⇑" : "⇓"}
           </button> */}
