@@ -57,7 +57,6 @@ function ConferenceView(props) {
   const handleToggleChat = () => {
     setShowChat((prevShowChat) => !prevShowChat);
     setHasNewMessage(false);
-    console.log(showChat);
   };
 
   const handleSendMessage = () => {
@@ -69,14 +68,12 @@ function ConferenceView(props) {
           type: "my-chat",
         })
         .then(() => {
-          console.log("Message successfully sent");
           setNewMessage("");
         })
         .catch((error) => {
           console.error(error);
         });
     }
-    console.log(newMessage);
   };
 
   const handleNewMessageChange = (e) => {
@@ -159,7 +156,7 @@ function ConferenceView(props) {
       } catch (error) {
         // publishCameraStream();
         restoreStream();
-        console.error("Error starting screen share:", error);
+        console.error(error);
       }
     } else {
       // 화면 공유 중지
@@ -171,26 +168,6 @@ function ConferenceView(props) {
       restoreStream();
     }
   };
-
-  // const publishCameraStream = async () => {
-  //   try {
-  //     let newPublisher = await OV.initPublisherAsync(undefined, {
-  //       audioSource: undefined,
-  //       videoSource: undefined,
-  //       publishAudio: isMicEnabled, // 현재 마이크 상태 반영
-  //       publishVideo: true,
-  //       resolution: "640x480",
-  //       frameRate: 30,
-  //       insertMode: "APPEND",
-  //       mirror: false,
-  //     });
-
-  //     session.publish(newPublisher);
-  //     setPublisher(newPublisher); // 새 publisher 설정
-  //   } catch (error) {
-  //     console.error("Error publishing camera stream:", error);
-  //   }
-  // };
 
   const restoreStream = async () => {
     try {
@@ -215,7 +192,7 @@ function ConferenceView(props) {
         videoTrack.stop(); // 비디오 스트림을 중지
       }
     } catch (error) {
-      console.error("Error restoring video and audio streams:", error);
+      console.error(error);
     }
   };
 
@@ -241,7 +218,7 @@ function ConferenceView(props) {
             publisher.publishVideo(true); // 비디오 전송 재개
           })
           .catch((error) => {
-            console.error("Error restarting video track:", error);
+            console.error(error);
           });
       }
       setisVideoEnabled(!isVideoEnabled);
@@ -349,7 +326,7 @@ function ConferenceView(props) {
           setPublisher(newPublisher);
         })
         .catch((error) => {
-          console.log("세션에 연결하는 동안 오류가 발생했습니다:", error);
+          console.log(error);
           if (error.name === "DEVICE_ACCESS_DENIED") {
             alert(
               "장치 접근이 거부되었습니다. 카메라나 마이크의 사용 권한을 확인하세요"
@@ -363,7 +340,6 @@ function ConferenceView(props) {
   };
 
   const leaveSession = (session) => {
-    // console.log("leaveSession : ", session)
     if (session) {
       session.disconnect();
     }

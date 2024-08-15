@@ -27,13 +27,6 @@ function JoinGroupModal({ show, handleClose, onSuccess }) {
             return;
         }
         try {
-            // const response = await joinGroup({ userId, teamCode});
-            // console.log(response);
-            // if (response === 'success') {
-            //     navigate(`/group/${response.team.id}/0`);
-            // } else {
-            //     console.error('그룹 참여 실패 -> ', response);
-            // }
             const userId = getUserInfo().userId;
             await joinGroup({ userId, teamCode});
             onSuccess(); 

@@ -43,12 +43,11 @@ function CreateGroupModal({ show, handleClose }) {
         }
         try {
             const response = await makeGroup({ userId, groupName, description });
-            console.log('그룹 생성 완료', response);
             handleClose(); // 모달 닫기
             const groupId = response.teamId;
             navigate(`/group/${groupId}/main/`)
         } catch (err) {
-            console.log('그룹 생성 실패', err);
+            console.log(err);
         }
     }
 

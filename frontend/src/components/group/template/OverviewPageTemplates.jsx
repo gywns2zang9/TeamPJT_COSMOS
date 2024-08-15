@@ -17,10 +17,9 @@ const OverviewPageTemplates = ({ groupId, pageId }) => {
         const getContents = async () => {
             try {
                 const response = await getContentsLoad({groupId, fileId:pageId})
-                console.log(response);
                 setProblems(response.totalProblems);
             } catch (err) {
-                console.error('파일불러오기 실패 -> ', err);
+                console.error(err);
             }
         }
         const loadMembers = async () => {
@@ -28,7 +27,7 @@ const OverviewPageTemplates = ({ groupId, pageId }) => {
                 const response = await groupMemberListLoad({ groupId });
                 setMembers(response);
             } catch (err) {
-                console.error('멤버 목록 로드 실패 -> ', err);
+                console.error(err);
             }
         };
         getContents();
@@ -37,7 +36,6 @@ const OverviewPageTemplates = ({ groupId, pageId }) => {
 
     // 코드페이지로 이동
     const navigateCodePage = async (memberStatus) => {
-        console.log(memberStatus);
         navigate(`/group/${groupId}/code/${memberStatus.fileId}`);
     }
 

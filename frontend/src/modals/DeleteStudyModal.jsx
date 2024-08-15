@@ -14,7 +14,7 @@ function DeleteStudyModal({ show, handleClose, groupId, studyId }) {
             navigate(`/group/${groupId}/main/`);
             window.location.reload();  
         } catch (err) {
-            console.error('삭제 실패 -> ', err);
+            console.error(err);
         }
     }
     return (
