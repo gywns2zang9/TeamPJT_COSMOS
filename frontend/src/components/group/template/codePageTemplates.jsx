@@ -32,13 +32,11 @@ const CodePageTemplates = ({ groupId, pageId }) => {
     }, [groupId, pageId]);
 
     useEffect(() => {
-        console.log('codeContent updated:', codeContent);
     }, [codeContent]);
 
     const loadFile = async () => {
         try {
             const response = await getFile({ groupId, fileId: pageId });
-            console.log(response);
             setUserCodeId(response.userId);
             setProblemInfo({
                 number: response.problems[0].number,
@@ -51,7 +49,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
             setDate(new Date(response.code.createdAt).toISOString().split('T')[0]);
             setLanguage(response.code.language);
         } catch (err) {
-            console.error('코드불러오기 실패 -> ', err);
+            console.error(err);
         }
     };
 
@@ -65,7 +63,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
             const response = await executeCode({ content: codeForSend, language, input: inputsOutputs[index].input });
             updatedInputsOutputs[index].output = response.results;
         } catch (err) {
-            console.error('코드 실행 실패 -> ', err);
+            console.error(err);
             updatedInputsOutputs[index].output = '코드 실행에 실패했습니다.';
         } finally {
             updatedInputsOutputs[index].isLoading = false;
@@ -98,7 +96,6 @@ const CodePageTemplates = ({ groupId, pageId }) => {
 
     const saveCodeContent = async () => {
         try {
-            console.log(pageId, fileName, newCodeContent, language);
             // 상태 업데이트를 보장하기 위해 async/await 사용
             await new Promise((resolve) => {
                 setCodeContent(newCodeContent);
@@ -107,7 +104,7 @@ const CodePageTemplates = ({ groupId, pageId }) => {
             await updateCodeFile({ groupId, pageId, code: newCodeContent, language });
             setEditMode(false);
         } catch (err) {
-            console.error('코드 저장 실패 -> ', err);
+            console.error(err);
         }
     };
 

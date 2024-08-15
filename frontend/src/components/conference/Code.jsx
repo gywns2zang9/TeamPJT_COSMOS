@@ -48,7 +48,6 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
   const handleModalShow = async () => {
     const userInfo = await getUser();
     const folders = await getCodeList({ groupId, userId: userInfo.userId });
-    console.log(folders);
     setPersonalCodeList(Array.isArray(folders) ? folders : []);
     setShowModal(true);
   };
@@ -57,7 +56,6 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
 
   const loadCode = async ({ codeId }) => {
     const response = await getCode({ groupId, codeId });
-    console.log(response);
     setMyCode(response.content);
     setCodeId(response.id);
     localStorage.setItem("myCode", response.content);
@@ -76,7 +74,6 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
       }
       return;
     }
-    console.log(value);
     setMyCode(value);
     localStorage.setItem("myCode", value);
   };
@@ -90,10 +87,9 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
     setIsLoading(true);
     try {
       const response = await runCode({ content, language, input: input });
-      console.log(response);
       setOutput(response.results);
     } catch (err) {
-      console.error("실행 실패", err);
+      console.error(err);
     } finally {
       setIsLoading(false); // 실행 완료 후 로딩 상태 해제
     }
@@ -105,7 +101,7 @@ const Code = ({ toggleVideo, isOpen, groupId }) => {
       await saveCode({ groupId, codeId, content: myCode, language });
       window.alert("코드 저장 성공!");
     } catch (err) {
-      console.log("코드 저장 실패 -> ", err);
+      console.log(err);
     } finally {
       setIsSaving(false); // 저장 완료 후 로딩 상태 해제
     }

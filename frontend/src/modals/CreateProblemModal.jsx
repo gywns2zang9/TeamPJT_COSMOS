@@ -61,7 +61,7 @@ function CreateProblemModal({
       window.location.reload();
       handleClose();
     } catch (error) {
-      console.error("문제를 추가하는 중 오류가 발생했습니다.", error);
+      console.error(error);
     } finally {
       setIsLoading(false); // 로딩 상태 종료
     }

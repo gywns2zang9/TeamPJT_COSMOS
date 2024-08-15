@@ -174,8 +174,6 @@ function SideBar({ groupId }) {
   // 삭제 실행
   const handleConfirmDelete = async () => {
     const { id, parentId, type } = itemToDelete;
-    console.log(itemToDelete);
-    console.log(id, parentId, type);
     try {
 
       if (type === 'folder') {
@@ -189,9 +187,8 @@ function SideBar({ groupId }) {
         files: prev.files.filter((file) => file.id !== id),
       }));
       setShowConfirmDelete(false);
-      console.log('삭제 성공');
     } catch (err) {
-      console.error('삭제 실패 -> ', err);
+      console.error(err);
     }
   };
 
@@ -241,7 +238,7 @@ useEffect(() => {
             files: files,
         });
     } catch (err) {
-        console.error('루트폴더 로드 실패 -> ', err);
+        console.error(err);
     }
   };
 
@@ -265,7 +262,7 @@ useEffect(() => {
           ],
       }));
     } catch (err) {
-        console.error('Failed to load subfolders:', err);
+        console.error(err);
     }
   };
   

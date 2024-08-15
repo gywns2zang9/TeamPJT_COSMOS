@@ -33,7 +33,7 @@ const CalendarModal = ({
             setShowDeleteModal(false);
             setShowModal(false);
         } catch (error) {
-            console.error('일정 삭제 실패', error);  // 오류 발생 시 콘솔에 출력
+            console.error(error);  // 오류 발생 시 콘솔에 출력
         }
     };
 

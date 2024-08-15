@@ -25,7 +25,6 @@ function AppContent() {
 
   useEffect(() => {
     const isLogin = getIsLogin();
-    console.log(isLogin);
     if (!isLogin && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/password-find" && location.pathname !== "/") {
       // 비로그인 상태에서 다른 경로로 접근 시 홈 화면으로 리다이렉트
       window.alert('로그인이 필요합니다')

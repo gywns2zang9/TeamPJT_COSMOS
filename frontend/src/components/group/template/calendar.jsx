@@ -34,7 +34,7 @@ function Calendar({ groupId }) {
         }));
         setEvents(formattedEvents);
       } catch (err) {
-        console.error('일정 불러오기 실패 -> ', err);
+        console.error(err);
       }
     };
     fetchEvents();
@@ -122,7 +122,7 @@ function Calendar({ groupId }) {
       setShowModal(false);
       setCurrentEvent({ title: '', start: '', description: '' });
     } catch (err) {
-      console.error('일정 저장 실패', err);
+      console.error(err);
     }
   };
 
@@ -134,7 +134,7 @@ function Calendar({ groupId }) {
       setShowDeleteModal(false); // 삭제 모달 닫기
       setShowModal(false); // 이벤트 모달 닫기
     } catch (err) {
-      console.error('일정 삭제 실패', err);
+      console.error(err);
     }
   };
 

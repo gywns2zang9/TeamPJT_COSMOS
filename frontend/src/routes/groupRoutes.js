@@ -5,7 +5,6 @@ import GroupDetailView from "../views/GroupDetailView";
 import Error404 from "../components/error/Error404";
 import useAuthStore from "../store/auth.js";
 
-// const BASE_URL = `http://localhost:3000`
 const BASE_URL = `https://i11a708.p.ssafy.io/`
 
 const GroupRoutes = () => {

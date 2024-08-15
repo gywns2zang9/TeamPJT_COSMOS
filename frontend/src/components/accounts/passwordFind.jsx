@@ -65,7 +65,6 @@ const PasswordFind = () => {
             totalTime--;
           } else {
             clearInterval(intervalId);
-            console.log("타이머 종료");
             setTimeMessage("인증시간 만료");
           }
         }, 1000);

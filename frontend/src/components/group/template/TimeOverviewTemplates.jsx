@@ -38,8 +38,6 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
         const loadFile = async () => {
             try {
                 const response = await getFile({groupId, fileId:pageId});
-                console.log(response);
-                console.log(response.problems);
                 setProblems(response.problems);
                 setStudyId(response.study.id);
                 const headerState = {
@@ -49,21 +47,19 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
                 }
                 setHeader(headerState)
             } catch (err) {
-                console.error('파일 로드 실패 -> ', err);
+                console.error(err);
             }
         };
         const loadMembers = async () => {
             try {
                 const response = await groupMemberListLoad({ groupId });
-                console.log(response);
                 setMembers(response);
             } catch (err) {
-                console.error('멤버 목록 로드 실패 -> ', err);
+                console.error(err);
             }
         };
         const checkGit = async () => {
             const myUserInfo = useAuthStore.getState().getUserInfo()
-            console.log(myUserInfo);
             if (myUserInfo.gitId === "") {
                 setHaveGit(false); return
             }
@@ -88,7 +84,6 @@ const TimeOverviewTemplates = ({ groupId, pageId }) => {
     
     // 코드페이지로 이동
     const navigateCodePage = async (memberStatus) => {
-        console.log(memberStatus);
         navigate(`/group/${groupId}/code/${memberStatus.fileId}`);
     }
     

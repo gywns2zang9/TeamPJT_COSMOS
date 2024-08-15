@@ -20,7 +20,6 @@ function CreateStudyModal({ show, handleClose, groupId }) {
     const handleCreateStudy = () => {
         const createStudy = async () => {
             const response = await createStudyOverview({ groupId, year, month });
-            console.log(response);
             window.location.reload();
         }
         createStudy();
