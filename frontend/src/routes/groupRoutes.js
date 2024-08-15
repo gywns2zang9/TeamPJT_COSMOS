@@ -9,7 +9,6 @@ const BASE_URL = `https://i11a708.p.ssafy.io/`
 
 const GroupRoutes = () => {
   const isLogin = useAuthStore((state) => state.isLogin);
-  console.log(isLogin());
   if (!isLogin()) {
     window.location.href = BASE_URL;
     return null;
