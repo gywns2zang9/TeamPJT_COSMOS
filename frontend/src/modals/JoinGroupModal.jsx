@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import useGroupStore from '../store/group';
 import useAuthStore from '../store/auth';
 
-// 참여버튼 누르면 코드 확인 api 요청 -> 코드 일치하면, 그룹페이지로 이동
-
 function JoinGroupModal({ show, handleClose, onSuccess }) {
     // 참여 코드 보내기
     const [teamCode, setTeamCode] = useState('');

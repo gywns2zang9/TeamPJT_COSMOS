@@ -1,5 +1,3 @@
-// src/views/AccountPageView.jsx
-
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Login from "../components/accounts/login";
@@ -12,7 +10,6 @@ const AccountPageView = () => {
       <Route path="/" element={<Login />} />
       <Route path="/password-find" element={<PasswordFind />} />
       <Route path="/password-change" element={<PasswordChange />} />
-      {/* 다른 라우트들 */}
     </Routes>
   );
 };
