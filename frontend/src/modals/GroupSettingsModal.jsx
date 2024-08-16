@@ -27,7 +27,6 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
     useEffect(() => {
         const getMyId = async () => {
             const response = await useAuthStore.getState().getUserInfo();
-            // console.log(response);
             setMyUserId(response.userId);
         }
         getMyId();
@@ -44,7 +43,6 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
                     
                     // 멤버 목록 로드
                     const memberList = await groupMemberListLoad({ groupId });
-                    console.log(memberList);
                     setMembers(memberList);
 
                     // 초대 코드 체크
@@ -55,7 +53,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
                     const leaderResponse = await checkGroupLeader({ groupId });
                     setIsLeader(leaderResponse); 
                 } catch (err) {
-                    console.error('그룹 정보 로드 실패 -> ', err);
+                    console.error(err);
                 }
             };
 
@@ -80,7 +78,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
             window.location.reload();
             handleClose();
         } catch (err) {
-            console.error('변경 내용 저장 실패 -> ', err);
+            console.error(err);
         }
     };
 
@@ -92,7 +90,7 @@ function GroupSettingsModal({ show, handleClose, groupId }) {
             handleClose();
             navigate("../")
         } catch (err) {
-            console.error('그룹 탈퇴 실패 -> ', err);
+            console.error(err);
         }
     };
 

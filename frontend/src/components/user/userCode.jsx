@@ -30,10 +30,9 @@ const UserCode = () => {
                 id: team.id,
                 name: team.name,
             }));
-            console.log(transformedData)
             setGroups(transformedData);
       }catch (error) {
-            console.error('그룹 목록 불러오기 중 오류 발생:', error);
+            console.error(error);
         }
     };
 
@@ -41,10 +40,9 @@ const UserCode = () => {
     const fetchMyCodes = async () => {
       try {
         const codes = await getMyCodes({ accessToken, userId });
-        console.log(codes)
         setMyCodes(codes); // 전체 코드 정보를 저장
       } catch (error) {
-        console.error("코드를 가져오는 중 오류 발생:", error);
+        console.error(error);
       }
     };
 

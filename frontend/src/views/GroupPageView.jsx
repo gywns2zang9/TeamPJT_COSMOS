@@ -25,7 +25,7 @@ function GroupPageView(props) {
             }));
             setGroups(transformedData);
         } catch (error) {
-            console.error('그룹 목록 불러오기 에러:', error);
+            console.error(error);
         }
     };
 

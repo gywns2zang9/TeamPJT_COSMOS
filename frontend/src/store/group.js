@@ -23,7 +23,6 @@ const useGroupStore = create((set) => ({
             const response = await get(url, {}, headers);
             return response;
         } catch (err) {
-            console.log('그룹 목록 불러오기 실패 -> ', err);
             throw err;
         }
     },
@@ -49,7 +48,6 @@ const useGroupStore = create((set) => ({
             const response = await post(url, data, headers);
             return response
         } catch (err) {
-            console.log('그룹 생성 실패 -> ', err);
             throw err;
         } finally {
             set({ loading: false }); // 로딩 종료
@@ -72,7 +70,6 @@ const useGroupStore = create((set) => ({
             return 'success'
 
         } catch (err) {
-            console.log('그룹 참여 실패 -> ', err);
             throw err;
         }
     },
@@ -88,7 +85,6 @@ const useGroupStore = create((set) => ({
             const response = await get(url, {}, headers);
             return response
         } catch (err) {
-            console.log('그룹 상세 정보 불러오기 실패 -> ', err);
             throw err;
         }
     },
@@ -104,7 +100,6 @@ const useGroupStore = create((set) => ({
             const response = await get(url, {}, headers);
             return response
         } catch (err) {
-            console.log('그룹 멤버 목록 불러오기 실패 -> ', err);
             throw err;
         }
     },
@@ -122,10 +117,8 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await patch(url, data, headers);
-            console.log(response);
             return response
         } catch (err) {
-            console.log('그룹 정보 변경 실패 -> ', err);
             throw err;
         }
     },
@@ -142,10 +135,8 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await patch(url, data, headers);
-            console.log(response);
             return response
         } catch (err) {
-            console.log('그룹장 위임 실패 -> ', err);
             throw err;
         }
     },
@@ -161,7 +152,6 @@ const useGroupStore = create((set) => ({
             const response = await get(url, {}, headers);
             return response
         } catch (err) {
-            console.log('그룹장 확인 실패-> ', err);
             throw err;
         }
     },
@@ -177,7 +167,6 @@ const useGroupStore = create((set) => ({
             const response = await deleteRequest(url, {}, headers);
             return response
         } catch (err) {
-            console.log('그룹 탈퇴 실패 -> ', err);
             throw err;
         }
     },
@@ -196,7 +185,6 @@ const useGroupStore = create((set) => ({
             const responseData = await post(url, data, headers);
             return responseData
         } catch (err) {
-            console.log('그룹 초대 가능한 회원 조회하기 실패 -> ', err);
             throw err;
         }
     },
@@ -212,7 +200,6 @@ const useGroupStore = create((set) => ({
             const response = await get(url, {}, headers);
             return response
         } catch (err) {
-            console.log('그룹 참여코드 확인하기 실패 -> ', err);
             throw err;
         }
     },
@@ -233,7 +220,6 @@ const useGroupStore = create((set) => ({
             await post(url, data, headers);
             window.alert(`${emailArray}로 발송 완료!`)
         } catch (err) {
-            console.log('그룹 참여 이메일 발송하기 실패-> ', err);
             throw err;
         } finally {
             set({ loading: false }); // 로딩 종료
@@ -251,9 +237,8 @@ const useGroupStore = create((set) => ({
             const response = await get(url, {}, headers);
             return response
         } catch (err) {
-            console.log('그룹내 폴더정보 불러오기 실패 -> ', err);
             throw err;
-        } 
+        }
     },
 
     // 스터디 생성하기
@@ -271,7 +256,6 @@ const useGroupStore = create((set) => ({
             const response = await post(url, data, headers);
             return response
         } catch (err) {
-            console.log('스터디 생성 실패 -> ', err);
             throw err;
         }
     },
@@ -287,7 +271,6 @@ const useGroupStore = create((set) => ({
             const response = await deleteRequest(url, {}, headers);
             return response
         } catch (err) {
-            console.log('스터디 삭제 실패 -> ', err);
             throw err;
         }
     },
@@ -305,12 +288,9 @@ const useGroupStore = create((set) => ({
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
             };
-            console.log(url, data, headers);
             const response = await post(url, data, headers);
-            console.log('문제 생성 성공');
             return response
         } catch (err) {
-            console.log('문제 생성 실패 -> ', err);
             if (err.response.data.error.problem === 'problem is not exist.') {
                 window.alert('해당 문제번호는 존재하지 않습니다.')
             }
@@ -334,10 +314,8 @@ const useGroupStore = create((set) => ({
                 headers,
                 data
             })
-            console.log(response);
             return response
         } catch (err) {
-            console.log('문제 삭제 실패`1 -> ', err);
             throw err;
         }
     },
@@ -357,7 +335,6 @@ const useGroupStore = create((set) => ({
             const response = await post(url, data, headers);
             return response
         } catch (err) {
-            console.log('폴더 생성 실패 -> ', err);
             throw err;
         }
     },
@@ -371,10 +348,8 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await deleteRequest(url, {}, headers);
-            console.log(response);
             return response
         } catch (err) {
-            console.log('폴더 삭제 실패 -> ', err);
             throw err;
         }
     },
@@ -397,10 +372,8 @@ const useGroupStore = create((set) => ({
                 fileName,
             };
             const response = await post(url, data, headers);
-            console.log(response);
             return response
         } catch (err) {
-            console.log('파일 생성 실패 -> ', err);
             throw err;
         }
     },
@@ -415,10 +388,8 @@ const useGroupStore = create((set) => ({
             const url = `${BASE_URL}/teams/${groupId}/files/${fileId}`;
 
             const response = await deleteRequest(url, {}, headers);
-            console.log(response);
             return response
         } catch (err) {
-            console.log('파일 삭제 실패 -> ', err);
             throw err;
         }
     },
@@ -434,7 +405,6 @@ const useGroupStore = create((set) => ({
             const response = await get(url, {}, headers);
             return response
         } catch (err) {
-            console.log(err.message);
             alert('페이지를 찾을 수 없습니다')
             window.history.back();
         }
@@ -455,7 +425,6 @@ const useGroupStore = create((set) => ({
             const response = await patch(url, data, headers);
             return response
         } catch (err) {
-            console.log(err);
             throw err;
         }
     },
@@ -474,7 +443,6 @@ const useGroupStore = create((set) => ({
         try {
             const url = `${BASE_URL}/teams/${groupId}/problems/code`;
             const response = await post(url, data, headers);
-            console.log(response);
             if (response.result === 'success') {
                 window.alert(`코드 불러오기에 성공하였습니다.`)
             } else {
@@ -482,7 +450,6 @@ const useGroupStore = create((set) => ({
             }
             return response
         } catch (err) {
-            console.log(err);
             window.alert(`코드 불러오기에 실패하였습니다.\nGithub을 확인하세요.`)
             throw err;
         } finally {
@@ -505,7 +472,6 @@ const useGroupStore = create((set) => ({
             const response = await patch(url, data, headers);
             return response
         } catch (err) {
-            console.log(err);
             throw err;
         }
     },
@@ -520,7 +486,6 @@ const useGroupStore = create((set) => ({
             const response = await get(url, {}, headers);
             return response
         } catch (err) {
-            console.log('캘린더 일정 목록 불러오기 실패 -> ', err);
             throw err;
         }
     },
@@ -566,10 +531,8 @@ const useGroupStore = create((set) => ({
                 Authorization: `Bearer ${accessToken}`,
             };
             const response = await deleteRequest(url, {}, headers);
-            console.log(response);
             return response
         } catch (err) {
-            console.log('캘린더 일정 삭제 실패 -> ', err);
             throw err;
         }
     },
@@ -581,8 +544,6 @@ const useGroupStore = create((set) => ({
             return;
         }
         try {
-            console.log(content, language, input);
-            
             const accessToken = await useAuthStore.getState().getAccessToken();
             const headers = {
                 Authorization: `Bearer ${accessToken}`,
@@ -593,11 +554,9 @@ const useGroupStore = create((set) => ({
                 language,
                 inputs: input
             };
-            console.log(data);
             const response = await post(url, data, headers);
             return response
         } catch (err) {
-            console.log('코드 실행 실패 -> ', err);
             throw err;
         }
     },
@@ -617,7 +576,7 @@ const useGroupStore = create((set) => ({
             const response = await patch(url, data, headers);
             return response
         } catch (err) {
-            console.log('코드 수정 실패 -> ', err);
+            throw (err)
         }
     },
 
@@ -632,8 +591,7 @@ const useGroupStore = create((set) => ({
             const response = await get(url, {}, headers);
             return response
         } catch (err) {
-            console.log('코드 목록 불러오기 실패 -> ', err);
-            // throw err;
+            throw err;
         }
     },
 
@@ -648,7 +606,7 @@ const useGroupStore = create((set) => ({
             const response = await get(url, {}, headers)
             return response
         } catch (err) {
-            console.log('코드 불러오기 실패 -> ', err);
+            throw (err)
         }
     }
 }));

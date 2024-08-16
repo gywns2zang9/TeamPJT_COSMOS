@@ -9,7 +9,6 @@ import KakaoRedirect from "./components/accounts/kakaoRedirect.jsx";
 import NaverRedirect from "./components/accounts/naverRedirect.jsx";
 import SignUp from "./components/accounts/signUp.jsx";
 import PasswordFind from "./components/accounts/passwordFind.jsx";
-import HomeRoutes from "./routes/homeRoutes.js";
 import GroupRoutes from "./routes/groupRoutes.js";
 import UserRouters from "./routes/userRouters.js";
 import "./App.css";
@@ -26,7 +25,7 @@ function AppContent() {
   useEffect(() => {
     const isLogin = getIsLogin();
     console.log(isLogin);
-    if (!isLogin && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/password-find" && location.pathname !== "/") {
+    if (!isLogin && location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/password-find" && location.pathname !== "/" && location.pathname !== "/auth/kakao" && location.pathname !== "/auth/naver") {
       // 비로그인 상태에서 다른 경로로 접근 시 홈 화면으로 리다이렉트
       window.alert('로그인이 필요합니다')
       navigate("/", { replace: true });
