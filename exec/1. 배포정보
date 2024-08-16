@@ -1,0 +1,28 @@
+1) correto - 17 , nginx - https 사용 , IntelliJ IDEA 2024.1.4(IDE) , Gradle 
+
+2) 빌드 환경변수  :
+DB_PASSWORD={로컬db 비밀번호};
+DB_URL=jdbc:mysql://localhost:3306/A708?serverTimezone=UTC&characterEncoding=UTF-8;
+DB_USER_NAME={로컬db 이름};
+EMAIL=cosmosa708@gmail.com;
+EMAIL_PASSWORD=wjsz tewx cpix lpgv;
+JWT_SECRET_KEY=Hbux/bF2qu2ti3LRBONk1r1OwmfVkxbvIaNP0PWJHyg=;KAKAO_CLIENT_ID=5dc1b39c3ec1e01e34200896d28b756f;
+MAIL_PORT=465;
+NAVER_CLIENT_ID=6yuLNhBVLUEs87FgWVLO;
+NAVER_SECRET=PHuFkNpuoZ;
+OPENVIDU_PORT=8443;
+OPENVIDU_SECRET=MY_SECRET;
+SERVER_PORT=8080
+
+3) 배포 특이사항 
+각 로컬 db에 맞게 아이디와 비밀번호 변경 필요. 
+각 로컬 db에 a708테이블 따로 생성 필요.
+계정 생성후 각자가 사용하는 백준허브 연동 아이디 + 레포지토리 + 브랜치를 계정 사이트내의 프로필에서 변경해주어야함
+서버에서 하단의 포트를 모두 열어두어야함
+HTTP_PORT=8081(80)
+HTTPS_PORT=8443(443, 22)
+8080,3000,5000 9090 3306, 80, 443
+
+4) DB접속 정보 주요 계정 및 프로퍼티가 정의 된 항목
+테스트 계정 1 : 아이디 - test , 비밀번호 - test
+테스트 계정 2 : 아이디 - test1 , 비밀번호 - test1
