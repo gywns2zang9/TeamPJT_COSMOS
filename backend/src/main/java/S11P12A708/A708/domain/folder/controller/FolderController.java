@@ -26,6 +26,13 @@ public class FolderController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/teams/{teamId}/allFolders")
+    public ResponseEntity<AllFolderInfoResponse> getAllFolders(
+            @PathVariable("teamId") Long teamId) {
+        final AllFolderInfoResponse response = folderService.getAllFolderInfo(teamId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PostMapping("/teams/{teamId}/folders")
     public ResponseEntity<FolderResponse> createFolder(
             @PathVariable("teamId") Long teamId,

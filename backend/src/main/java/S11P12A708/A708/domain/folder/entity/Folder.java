@@ -10,8 +10,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Entity
@@ -63,16 +62,7 @@ public class Folder extends BaseEntity {
     }
 
     public void addFile(File file) {
-        file.setFolderIndex(extractFolderIndex());  // 0-based index
         files.add(file);
-    }
-
-    private int extractFolderIndex() {
-        int folderIndex = 0;
-        if(!files.isEmpty()) {
-                folderIndex = files.get(files.size()-1).getFolderIndex() + 1;
-        }
-        return folderIndex;
     }
 
     public void removeFile(File file) {

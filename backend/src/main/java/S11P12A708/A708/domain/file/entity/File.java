@@ -114,8 +114,7 @@ public class File extends BaseEntity {
     }
 
     private String getCodeFileName() {
-        String fileNum = (this.folderIndex == 0) ? "" : "(" + folderIndex + ")" ;
-        return this.user.getNickname() + "의_풀이" + fileNum;
+        return this.user.getNickname() + "의_풀이";
     }
 
     public void setFolderIndex(Integer folderIndex) {

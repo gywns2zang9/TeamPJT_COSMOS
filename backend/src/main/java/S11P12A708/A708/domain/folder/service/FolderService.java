@@ -25,6 +25,13 @@ public class FolderService {
     private final FolderQueryRepository folderQueryRepository;
     private final TeamRepository teamRepository;
 
+    public AllFolderInfoResponse getAllFolderInfo(Long teamId) {
+        final Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
+        final Folder folder = folderQueryRepository.findRootFolderByTeam(teamId).orElseThrow(FolderNotFoundException::new);
+        validateTeamFolder(folder, team);
+
+        return AllFolderInfoResponse.fromFolder(folder);
+    }
     public FolderInfoResponse getFolderInfo(Long teamId, Long folderId) {
         if(folderId == 0) return getRootFolderInfo(teamId);
         else return getNormalFolderInfo(teamId, folderId);
