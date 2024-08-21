@@ -1,6 +1,7 @@
 package S11P12A708.A708.domain.folder.controller;
 
 import S11P12A708.A708.domain.folder.request.FolderCreateRequest;
+import S11P12A708.A708.domain.folder.response.AllFolderInfoResponse;
 import S11P12A708.A708.domain.folder.response.FolderInfoResponse;
 import S11P12A708.A708.domain.folder.response.FolderResponse;
 import S11P12A708.A708.domain.folder.service.FolderService;

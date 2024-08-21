@@ -7,6 +7,7 @@ import S11P12A708.A708.domain.folder.exception.FolderNotFoundException;
 import S11P12A708.A708.domain.folder.repository.FolderRepository;
 import S11P12A708.A708.domain.folder.repository.query.FolderQueryRepository;
 import S11P12A708.A708.domain.folder.request.FolderCreateRequest;
+import S11P12A708.A708.domain.folder.response.AllFolderInfoResponse;
 import S11P12A708.A708.domain.folder.response.FolderInfoResponse;
 import S11P12A708.A708.domain.folder.response.FolderResponse;
 import S11P12A708.A708.domain.team.entity.Team;
