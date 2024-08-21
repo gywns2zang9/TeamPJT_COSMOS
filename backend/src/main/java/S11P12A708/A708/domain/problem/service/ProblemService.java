@@ -9,7 +9,6 @@ import S11P12A708.A708.domain.file.entity.File;
 import S11P12A708.A708.domain.folder.entity.Folder;
 import S11P12A708.A708.domain.folder.exception.FolderNotFoundException;
 import S11P12A708.A708.domain.folder.repository.FolderRepository;
-import S11P12A708.A708.domain.folder.service.FolderService;
 import S11P12A708.A708.domain.problem.entity.Problem;
 import S11P12A708.A708.domain.problem.entity.ProblemUser;
 import S11P12A708.A708.domain.problem.exception.ProblemNotExistException;
@@ -33,6 +32,7 @@ import S11P12A708.A708.domain.user.exception.UserNotFoundException;
 import S11P12A708.A708.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +59,8 @@ public class ProblemService {
     private final CodeRepository codeRepository;
     private final FolderRepository folderRepository;
 
+
+    @CacheEvict(value = "allFoldersCache", key = "#teamId")
     public void createProblem(Long teamId, CreateProblemRequest req) {
         Team team = teamRepository.findById(teamId).orElseThrow(TeamNotFoundException::new);
 
