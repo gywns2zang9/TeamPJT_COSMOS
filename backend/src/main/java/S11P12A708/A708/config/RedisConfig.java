@@ -18,7 +18,7 @@ import java.time.Duration;
 @EnableCaching
 public class RedisConfig {
 
-    private String redisHost = "http://i11a708.p.ssafy.io";
+    private String redisHost = "host.docker.internal";
 
     private String redisPort = "6379";
 
