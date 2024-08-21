@@ -18,11 +18,9 @@ import java.time.Duration;
 @EnableCaching
 public class RedisConfig {
 
-    @Value("${spring.data.redis.host}")
-    private String redisHost;
+    private String redisHost = "http://i11a708.p.ssafy.io";
 
-    @Value("${spring.data.redis.port}")
-    private String redisPort;
+    private String redisPort = "6379";
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
