@@ -93,27 +93,27 @@
      <summary>관련 화면</summary>
 
      <li><p>로그인 화면</p></li>
-     <img src="imgs/accounts/login.png" alt="" style="max-width: 100%; height: auto;"/>
+     <img src="./imgs/accounts/login.png" alt="" style="max-width: 100%; height: auto;"/>
      <P>일반 로그인, 네이버 로그인, 카카오 로그인</P>
 
      <li><p>회원가입 화면</p></li>
-     <img src="imgs/accounts/signup.png" alt="" style="max-width: 100%; height: auto;"/>
+     <img src="./imgs/accounts/signup.png" alt="" style="max-width: 100%; height: auto;"/>
      <P>이메일 인증 후,  일반 회원가입, 네이버 회원가입, 카카오 회원가입</P>
 
      <li><p>비밀번호 찾기 화면</p></li>
-     <img src="imgs/accounts/passwordfind.png" alt="" style="max-width: 100%; height: auto;"/>
+     <img src=".imgs/accounts/passwordfind.png" alt="" style="max-width: 100%; height: auto;"/>
      <P>이메일 인증 후, 비밀번호 변경</P>
 
      <li><p>비밀번호 변경 화면</p></li>
-     <img src="imgs/accounts/passwordchange.png" alt="" style="max-width: 100%; height: auto;"/>
+     <img src="./imgs/accounts/passwordchange.png" alt="" style="max-width: 100%; height: auto;"/>
      <P>기존 비밀번호 입력 후, 비밀번호 변경</P>
 
      <li><p>유저정보 화면</p></li>
-     <img src="imgs/accounts/userinfo.png" alt="" style="max-width: 100%; height: auto;"/>
+     <img src="./imgs/accounts/userinfo.png" alt="" style="max-width: 100%; height: auto;"/>
      <P>가입 정보와 이메일, 닉네임, 자기소개, Git Repo Branch 정보</P>
 
      <li><p>유저정보 변경 화면</p></li>
-     <img src="imgs/accounts/userinfochange.png" alt="" style="max-width: 100%; height: auto;"/>
+     <img src="./imgs/accounts/userinfochange.png" alt="" style="max-width: 100%; height: auto;"/>
      <P>가입 정보와 이메일, 닉네임, 자기소개, Git Repo Branch 정보 변경</P>
 
      </details>
